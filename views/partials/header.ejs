@@ -27,4 +27,13 @@
     <link rel="shortcut icon" href="/asserts/images/favicon.png" />
   </head>
   <body>
+    <% if(admin){ %>
+    <div class="container-scroller">
+      <%- include('../partials/sidebar.ejs') %>
+      <div class="container-fluid page-body-wrapper dynamic_content">
+        <%- include('../partials/navbar.ejs') %>
+        <div class="main-panel">
+          <div class="content-wrapper" id="dynamic_page">
+    <% } %>
+    
     
