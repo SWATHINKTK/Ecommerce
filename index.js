@@ -12,7 +12,9 @@ const hostname = '127.0.0.1';
 app.set('view engine','ejs');
 
 // Server Path Setting 
-app.use('/asserts',express.static(path.join(__dirname,'./public/assets')));
+app.use('/asserts',express.static(path.join(__dirname,'./public/admin/assets')));
+app.use('/public',express.static(path.join(__dirname,'./public')));
+
 
 
 // Mongoose Connect 

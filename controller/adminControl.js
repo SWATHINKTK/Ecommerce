@@ -20,11 +20,12 @@ const verifyLogin = async(req,res) => {
     try{
         const username = req.body.username;
         const password = req.body.password;
-        console.log(username,password)
         const adminData = await adminModel.findOne({username:username});
         if(adminData){
             const passwordMatch = await bcrypt.compare(password,adminData.password)
             if(passwordMatch){
+                
+                req.session.admin_id = adminData._id;
                 res.redirect('admin/home');
             }else{
                 res.send("Invalid Data");
