@@ -67,7 +67,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 contentPlaceholder.innerHTML = html;
                 const script = document.createElement('script'); 
                 document.body.appendChild(script);
-
+                const submitButton = container.querySelector('#editbtn'); // Replace with the actual button selector
+                submitButton.addEventListener('click', function () {
+                
+                alert('Submit button clicked!');
+                });
                 
             })
             .catch((error) => {

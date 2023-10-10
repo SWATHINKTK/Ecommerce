@@ -6,25 +6,28 @@
         <div class="col align-items-center flex-col sign-up">
             <div class="form-wrapper align-items-center">
                 <div class="form sign-up">
+                    <div class="pt-3 pb-3">
+                        <h2>Sign up</h2>
+                    </div>
                     <div class="input-group ">
-                        <span class="text-muted">Username</span>
-                        <input type="text" placeholder="Username" class="rounded-4">
+                        <span class="text-muted hint">Username</span>
+                        <input type="text" placeholder="Username" class="rounded-4" name="username">
                     </div>
                     <div class="input-group">
-                        <i class='bx bx-mail-send'></i>
-                        <input type="email" placeholder="Email" class="rounded-4">
+                        <span class="text-muted hint">Email</span>
+                        <input type="email" placeholder="Email" class="rounded-4" name="email">
                     </div>
                     <div class="input-group">
-                        <i class='bx bxs-lock-alt'></i>
-                        <input type="password" placeholder="Password" class="rounded-4">
+                        <span class="text-muted hint">Password</span>
+                        <input type="password" placeholder="Password" class="rounded-4" name="password">
                     </div>
                     <div class="input-group">
-                        <i class='bx bxs-lock-alt'></i>
-                        <input type="password" placeholder="Confirm password" class="rounded-4">
+                        <span class="text-muted hint">Confirm Password</span>
+                        <input type="password" placeholder="Confirm password" class="rounded-4" name="cnfrmpassword">
                     </div>
-                    <button>
-                        Sign up
-                    </button>
+                    <a class="button" href="">
+                        Sign Up
+                    </a>
                     <p>
                         <span>
                             Already have an account?
@@ -41,18 +44,22 @@
         <!-- SIGN IN -->
         <div class="col align-items-center flex-col sign-in">
             <div class="form-wrapper align-items-center">
+                
                 <div class="form sign-in">
-                    <div class="input-group">
-                        <i class='bx bxs-user'></i>
-                        <input type="text" placeholder="Username" class="rounded-4">
+                    <div class="pt-3 pb-3">
+                        <h2>Sign in</h2>
                     </div>
                     <div class="input-group">
-                        <i class='bx bxs-lock-alt'></i>
-                        <input type="password" placeholder="Password" class="rounded-4">
+                        <span class="text-muted hint">Username</span>
+                        <input type="text" placeholder="Username" class="rounded-4" name="username">
                     </div>
-                    <button>
+                    <div class="input-group">
+                        <span class="text-muted hint">Password</span>
+                        <input type="password" placeholder="Password" class="rounded-4" >
+                    </div>
+                    <a class="button" href="">
                         Sign in
-                    </button>
+                    </a>
                     <p>
                         <b>
                             Forgot password?
@@ -118,4 +125,4 @@ setTimeout(() => {
 	container.classList.add('sign-in')
 }, 200)
 </script>
-  <%- include('../partials/header.ejs') %>
+<%- include('../partials/footer.ejs') %>

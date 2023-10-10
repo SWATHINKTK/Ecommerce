@@ -12,7 +12,6 @@ async function strong(pass){
 
 // Load Admin Login Page 
 const loadAdminLogin = (req,res) =>{
-    // res.render('admin/login',{admin:false});
     res.render('admin/login',{admin:false,style:true});
 
 }
