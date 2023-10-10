@@ -2,19 +2,24 @@
   <div class="card">
     <div class="card-body">
       <h4 class="card-title mb-4">Add Category</h4>
-      <!-- <p class="card-description"></p> -->
-      <form class="forms-sample">
+      <p class="card-description" id="categorysuccess"></p>
+      <form class="forms-sample" id="addCategoryForm" method="POST">
+        <p id="response"></p>
         <div class="form-group">
           <label for="exampleInputName1">Category Name</label>
-          <input type="text" class="form-control" id="exampleInputName1" placeholder="Name">
+          <input type="text" class="form-control" id="categoryname" placeholder="Category Name" name="categoryname">
         </div>
         <div class="form-group">
           <label for="exampleTextarea1">Description</label>
-          <textarea class="form-control" id="exampleTextarea1" rows="4"></textarea>
+          <textarea class="form-control" id="description" rows="4" name="description" ></textarea>
         </div>
-        <button type="submit" class="btn btn-primary mr-2">Submit</button>
-        <button class="btn btn-dark">Cancel</button>
+        <button type="submit" class="btn btn-primary mr-2" id="categorysubmit">Submit</button>
+        <button class="btn btn-dark" >Cancel</button>
+        
+        <!-- <input type="button" value="submit" id="swathin"> -->
+
       </form>
     </div>
   </div>
 </div>
+

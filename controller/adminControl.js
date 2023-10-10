@@ -69,8 +69,14 @@ const loadEditProductPage = (req,res) => {
 
 
 // Load Product List Window
-const loadCategoryList = (req,res) => {
-    res.render('admin/viewCategorys',{admin:true});
+const loadCategoryList = async(req,res) => {
+    try{
+        const categoryData = await category.find({}).sort({list:-1});
+        console.log(categoryData);
+        res.render('admin/viewCategorys',{admin:true,data:categoryData});       
+    }catch(error){
+        console.log(error.message);
+    }
 }
 
 // Load Add Product page 

@@ -1,7 +1,7 @@
 <div class="col-12 grid-margin stretch-card">
     <div class="card">
       <div class="card-body  mt-5">
-        <h4 class="card-title text-center">Category View&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+        <h4 class="card-title text-center">Category View &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
         <!-- <p class="card-description"> Add class <code>.table-hover</code> -->
         </p>
         <div class="table-responsive">
@@ -9,51 +9,50 @@
             <thead>
               <tr>
                 <th>#</th>
-                <th>User</th>
-                <th>Product</th>
-                <th>Sale</th>
-                <th>Status</th>
+                <th>Category Name</th>
+                <th>Edit</th>
+                <th>List/Unlist</th>
+                <th>Delete/Retrieve</th>
+                <!-- <td class="text-danger"> 28.76% <i class="mdi mdi-arrow-down"></i></td>
+                <td><label class="badge badge-danger">Pending</label></td> -->
               </tr>
             </thead>
             <tbody class="text-white">
-              <tr>
-                <td>1</td>
-                <td>Jacob</td>
-                <td>Photoshop</td>
-                <td class="text-danger"> 28.76% <i class="mdi mdi-arrow-down"></i></td>
-                <td><label class="badge badge-danger">Pending</label></td>
-              </tr>
-              <tr>
-                <td>1</td>
-                <td>Messsy</td>
-                <td>Flash</td>
-                <td class="text-danger"> 21.06% <i class="mdi mdi-arrow-down"></i></td>
-                <td><label class="badge badge-warning">In progress</label></td>
-              </tr>
-              <tr>
-                <td>1</td>
-                <td>John</td>
-                <td>Premier</td>
-                <td class="text-danger"> 35.00% <i class="mdi mdi-arrow-down"></i></td>
-                <td><label class="badge badge-info">Fixed</label></td>
-              </tr>
-              <tr>
-                <td>1</td>
-                <td>Peter</td>
-                <td>After effects</td>
-                <td class="text-success"> 82.00% <i class="mdi mdi-arrow-up"></i></td>
-                <td><label class="badge badge-success">Completed</label></td>
-              </tr>
-              <tr>
-                <td>1</td>
-                <td>Dave</td>
-                <td>53275535</td>
-                <td class="text-success"> 98.05% <i class="mdi mdi-arrow-up"></i></td>
-                <td><label class="badge badge-warning">In progress</label></td>
-              </tr>
+              <% if(data.length > 0) { %>
+                <% for(let i=0;i<data.length;i++) { %>
+                <tr>
+                  <td><%= i+1 %></td>
+                  <td><%= data[i].categoryname %></td>
+                  <td><button class="btn btn-transparent" value="<%= data[i]._id %>" id="editbtn" ><i class="bi bi-pencil-square"></i>Edit</button></td>
+
+                  <% if(data[i].list && !(data[i].delete) ) {%>
+                    <td><button class="btn btn-warning"><i class="bi bi-x-circle"></i>Unlist</button></label></td>
+                  <% } else if(!(data[i].delete)) { %>
+                    <td><button class="btn btn-primary"><i class="bi bi-check2-circle"></i>list</button></label></td>
+                  <% } else { %>
+                    <td></td>
+                  <% } %>
+
+                  <% if(!(data[i].delete) ) {%>
+                    <td><button class="btn btn-danger"><i class="bi bi-trash3"></i>Delete</button></label></td>
+                  <% } else { %>
+                    <td><button class="btn btn-danger"><i class="bi bi-plus-square-dotted"></i>Retrieve</button></label></td>
+                  <% } %>
+
+                </tr>
+                <% } } else{ %>
+                  <tr class="bg-danger">
+                    <th class="text-dark" colspan="5">DATA IS NOT FOUND</th>
+                  </tr> 
+                <% } %>
             </tbody>
           </table>
         </div>
       </div>
     </div>
   </div>
+  <script>
+    document.getElementById('editbtn').addEventListener('click',()=>{
+      alert('hello')
+    })
+  </script>
