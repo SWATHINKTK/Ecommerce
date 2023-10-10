@@ -82,6 +82,11 @@ document.addEventListener("DOMContentLoaded", function () {
             .then((html) => {
                 // Update the content of the placeholder with the fetched HTML
                 contentPlaceholder.innerHTML = html;
+                
+                // Add a script tag dynamically
+                const script = document.createElement('script');
+                script.src = '/public/admin/js/form.js'; // Replace with the actual script URL
+                document.body.appendChild(script);
             })
             .catch((error) => {
                 console.error("Fetch error:", error);
@@ -142,3 +147,4 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 });
+

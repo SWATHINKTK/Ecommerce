@@ -11,6 +11,7 @@ const adminController = require('../controller/adminControl');
 
 // Application Middlewares
 adminRouter.use(express.urlencoded({extended:true}))
+adminRouter.use(express.json());
 adminRouter.use(session({
     secret:'key',
     resave : false,
@@ -37,6 +38,9 @@ adminRouter.get('/orderlist',adminController.loadOrderList);
 // All POST request in Admin Panel 
 adminRouter.post('/',adminController.verifyLogin);
 adminRouter.post('/logout',adminController.logoutAdmin);
+adminRouter.post('/addCategory',adminController.addCategory);
+
+
 
 
 

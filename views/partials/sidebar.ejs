@@ -13,7 +13,7 @@
             <span class="count bg-success"></span>
           </div>
           <div class="profile-name">
-            <h5 class="mb-0 font-weight-normal">Henry Klein</h5>
+            <h5 class="mb-0 font-weight-normal"><%= locals.name ? name :'' %></h5>
             <span>Gold Member</span>
           </div>
         </div>
@@ -138,10 +138,12 @@
 
           <li class="nav-item menu-items">
             <button class="nav-link bg-dark w-100" id="add-category">
+              <!-- <a href="/admin/addcategory"> -->
               <span class="menu-icon">
                 <i class="mdi mdi-library-plus"></i>
               </span>
               <span class="menu-title">Add Category</span>
+            <!-- </a> -->
             </button>
           </li>
       

@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt');
-const adminModel = require('../models/adminModel');
+const {loginData,category} = require('../models/adminModel');
 async function strong(pass){
     try{
         const x = await bcrypt.hash(pass,10)
@@ -12,7 +12,9 @@ async function strong(pass){
 
 // Load Admin Login Page 
 const loadAdminLogin = (req,res) =>{
-    res.render('admin/login',{admin:false});
+    // res.render('admin/login',{admin:false});
+    res.render('admin/login',{admin:false,style:true});
+
 }
 
 // Verify the Admin Credential and Redirect Admin Homepage
@@ -20,11 +22,11 @@ const verifyLogin = async(req,res) => {
     try{
         const username = req.body.username;
         const password = req.body.password;
-        const adminData = await adminModel.findOne({username:username});
+        const adminData = await loginData.findOne({username:username});
         if(adminData){
             const passwordMatch = await bcrypt.compare(password,adminData.password)
             if(passwordMatch){
-                
+                req.session.name = adminData.adminname;
                 req.session.admin_id = adminData._id;
                 res.redirect('admin/home');
             }else{
@@ -39,7 +41,8 @@ const verifyLogin = async(req,res) => {
 
 // Load Admin Home Window 
 const loadAdminHomepage = (req,res) => {
-    res.render('admin/main',{admin:true});
+    // const name = req.params.adminData.name;
+    res.render('admin/main',{admin:true,name:req.session.name});
 }
 
 
@@ -75,6 +78,38 @@ const loadAddCategoryPage = (req,res) => {
     res.render('admin/addCategory',{admin:true});
 }
 
+// ADD Data To Database 
+const addCategory = async(req,res) => {
+    try{
+        const name = req.body.categoryname;
+        const description = req.body.description;
+        if(name && description){
+            const checkData = await category.findOne({categoryname:{ $regex: new RegExp(`^${name}`, 'i') }})
+            if(!checkData){
+                const categoryData = category({
+                    categoryname : name,
+                    description : description
+                })
+                const dataSend = await categoryData.save();
+                if(dataSend){
+                    res.json({'message':'Category Sucessfullly Added','status':true});
+                }else{
+                    res.json({'message':'Category is not added try again'});
+                }
+                
+            }else{
+                res.json({'message':'Category is Already Exist'});
+            }
+        }else{
+            res.json({'message':'Please Enter the Category and Description'});
+        }
+    }catch(error){
+        console.log(error.message);
+    }
+
+    
+}
+
 // Load Edit Product page 
 const loadEditCategoryPage = (req,res) => {
     res.render('admin/editCategory',{admin:true});
@@ -104,7 +139,18 @@ const loadOrderList = (req,res) => {
 
 
 const logoutAdmin = (req,res) => {
-    res.redirect('/admin/');
+    try{
+        req.session.destroy((error) => {
+            if(error){
+                console.error(message.error);
+            }else{
+                res.redirect('/admin/');
+            }
+        })
+    }catch(error){
+        console.error(error.message);
+    }
+    
 }
 module.exports = {
     loadAdminLogin,
@@ -121,5 +167,6 @@ module.exports = {
     loadCouponList,
     loadAddCouponPage,
     loadOrderList,
-    logoutAdmin
+    logoutAdmin,
+    addCategory
 }

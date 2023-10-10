@@ -27,7 +27,11 @@ mongoose.connect('mongodb://127.0.0.1:27017/ecommerce')
 
 // Admin Router 
 const adminRouter = require('./routers/adminRouter');
-app.use('/admin',adminRouter)
+app.use('/admin',adminRouter);
+
+// User Router 
+const userRouter = require('./routers/userRouter');
+app.use('/',userRouter);
 
 app.listen(5000,()=>{
     console.log(`server is runnning @ http://${hostname}:${port}/`)
