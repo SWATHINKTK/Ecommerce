@@ -12,7 +12,7 @@
                 <th>Category Name</th>
                 <th>Edit</th>
                 <th>List/Unlist</th>
-                <th>Delete/Retrieve</th>
+                <!-- <th>Delete/Retrieve</th> -->
                 <!-- <td class="text-danger"> 28.76% <i class="mdi mdi-arrow-down"></i></td>
                 <td><label class="badge badge-danger">Pending</label></td> -->
               </tr>
@@ -22,22 +22,21 @@
                 <% for(let i=0;i<data.length;i++) { %>
                 <tr>
                   <td><%= i+1 %></td>
-                  <td><%= data[i].categoryname %></td>
-                  <td><button class="btn btn-transparent" value="<%= data[i]._id %>" id="editbtn" ><i class="bi bi-pencil-square"></i>Edit</button></td>
-
+                  <td data-category-id="<%= data[i]._id %>"><%= data[i].categoryname %></td>
+                  <td><button class="btn btn-transparent" onclick="editCategory(this)"><i class="bi bi-pencil-square"></i>Edit</button></td>
                   <% if(data[i].list && !(data[i].delete) ) {%>
-                    <td><button class="btn btn-warning"><i class="bi bi-x-circle"></i>Unlist</button></label></td>
+                    <td><button class="btn btn-warning pl-3 pr-3" onclick="categoryList(this)"><i class="bi bi-x-circle"></i>Unlist</button></td>
                   <% } else if(!(data[i].delete)) { %>
-                    <td><button class="btn btn-primary"><i class="bi bi-check2-circle"></i>list</button></label></td>
+                    <td><button class="btn btn-primary pl-4 pr-4"><i class="bi bi-check2-circle"> </i>list</button><input type="hidden" value="<%= data[i]._id %>"></td>
                   <% } else { %>
                     <td></td>
                   <% } %>
 
-                  <% if(!(data[i].delete) ) {%>
+                  <!-- <% if(!(data[i].delete) ) {%>
                     <td><button class="btn btn-danger"><i class="bi bi-trash3"></i>Delete</button></label></td>
                   <% } else { %>
                     <td><button class="btn btn-danger"><i class="bi bi-plus-square-dotted"></i>Retrieve</button></label></td>
-                  <% } %>
+                  <% } %> -->
 
                 </tr>
                 <% } } else{ %>

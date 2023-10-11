@@ -41,13 +41,13 @@ const verifyLogin = async(req,res) => {
 // Load Admin Home Window 
 const loadAdminHomepage = (req,res) => {
     // const name = req.params.adminData.name;
-    res.render('admin/main',{admin:true,name:req.session.name});
+    res.render('admin/main',{admin:true,name:req.session.name,title:'AdminHome'});
 }
 
 
 // Load User List Window
 const loadUserList = (req,res) => {
-    res.render('admin/viewUsers',{admin:true});
+    res.render('admin/viewUsers',{admin:true,title:'userlist'});
 }
 
 // Load Product List Window
@@ -71,16 +71,27 @@ const loadEditProductPage = (req,res) => {
 const loadCategoryList = async(req,res) => {
     try{
         const categoryData = await category.find({}).sort({list:-1});
-        console.log(categoryData);
-        res.render('admin/viewCategorys',{admin:true,data:categoryData});       
+        res.render('admin/viewCategorys',{admin:true,data:categoryData,title:'Categorylist'});       
     }catch(error){
         console.log(error.message);
     }
 }
 
+// Category Status Update (List/Unlist)
+const categorySatusUpdate = async(req,res) => {
+    try{
+        const name = req.body;
+        console.log(name)
+        console.log('')
+    }catch(error){
+        console.log(error.message);
+    }
+}
+
+
 // Load Add Product page 
 const loadAddCategoryPage = (req,res) => {
-    res.render('admin/addCategory',{admin:true});
+    res.render('admin/addCategory',{admin:true,title:'AddCategory'});
 }
 
 // ADD Data To Database 
@@ -166,6 +177,7 @@ module.exports = {
     loadAddProductPage,
     loadEditProductPage,
     loadCategoryList,
+    categorySatusUpdate,
     loadAddCategoryPage,
     loadEditCategoryPage,
     loadAddBannerPage,

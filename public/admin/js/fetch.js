@@ -63,15 +63,16 @@ document.addEventListener("DOMContentLoaded", function () {
                 return response.text();
             })
             .then((html) => {
-                // Update the content of the placeholder with the fetched HTML
+                // Update the content of the Category List with the fetched HTML
                 contentPlaceholder.innerHTML = html;
-                const script = document.createElement('script'); 
-                document.body.appendChild(script);
-                const submitButton = container.querySelector('#editbtn'); // Replace with the actual button selector
-                submitButton.addEventListener('click', function () {
-                
-                alert('Submit button clicked!');
-                });
+
+                // Dynamically Script tag is created to Linked url based
+                const existingScript = document.querySelector('script[src="/public/admin/js/category.js"]');
+                if(!(existingScript)){
+                    const script = document.createElement('script');
+                    script.src = '/public/admin/js/category.js'; 
+                    document.body.appendChild(script);
+                }
                 
             })
             .catch((error) => {
@@ -92,9 +93,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 contentPlaceholder.innerHTML = html;
                 
                 // Add a script tag dynamically
-                const script = document.createElement('script');
-                script.src = '/public/admin/js/form.js'; 
-                document.body.appendChild(script);
+                const existingScript = document.querySelector('script[src="/public/admin/js/category.js"]');
+                if(!(existingScript)){
+                    const script = document.createElement('script');
+                    script.src = '/public/admin/js/category.js'; 
+                    document.body.appendChild(script);
+                }
+                
             })
             .catch((error) => {
                 console.error("Fetch error:", error);
@@ -112,6 +117,14 @@ document.addEventListener("DOMContentLoaded", function () {
             .then((html) => {
                 // Update the content of the placeholder with the fetched HTML
                 contentPlaceholder.innerHTML = html;
+                
+                // Dynamically Script tag is created to Linked url based
+                const existingScript = document.querySelector('script[src="/public/admin/js/category.js"]');
+                if(!(existingScript)){
+                    const script = document.createElement('script');
+                    script.src = '/public/admin/js/category.js'; 
+                    document.body.appendChild(script);
+                }
             })
             .catch((error) => {
                 console.error("Fetch error:", error);
