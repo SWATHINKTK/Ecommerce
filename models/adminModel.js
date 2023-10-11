@@ -33,7 +33,7 @@ const addCategory = mongoose.Schema({
         type : Boolean,
         default : false
     },
-    deletedate : {
+    listedDate : {
         type : Date
     }
 })

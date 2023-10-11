@@ -1,3 +1,4 @@
+const { response } = require("../../../routers/adminRouter");
 
 document.getElementById('addCategoryForm').addEventListener('submit', function (event) {
     event.preventDefault(); // Prevent the default form submission
@@ -44,16 +45,22 @@ function editCategory(value){
 }
 
 async function categoryList(value){
+    const contentPlaceholder = document.getElementById("dynamic_page");
     const row = value.parentElement.parentElement;
     const categoryName = row.cells[1].textContent;
-    console.log(categoryName);
-    const data = {
-        category: categoryName
-    }
-    const jsonData = JSON.stringify(data);
-    console.log(jsonData);
-    const response = await fetch('/categorystatusupdate',{
-        method: 'PATCH',
-        body: jsonData
+    const status = row.cells[3].textContent;
+    const element = document.querySelector('td[data-category-id]');
+    const category = element.getAttribute('data-category-id');
+
+    fetch('/admin/categorystatusupdate',{
+        method: 'POST',
+        body: JSON.stringify({'category':`${categoryName}`,'status':`${status}`}),
+        headers: {'Content-Type':'application/json'}
     })
+    .then((response) => response.text())
+    .then((data) => {
+        document.getElementById("dynamic_page")innerHTML=data;.
+        
+    })
+    
 }

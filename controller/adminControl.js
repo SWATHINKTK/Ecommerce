@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const {loginData,category} = require('../models/adminModel');
+const { query } = require('express');
 async function strong(pass){
     try{
         const x = await bcrypt.hash(pass,10)
@@ -79,10 +80,36 @@ const loadCategoryList = async(req,res) => {
 
 // Category Status Update (List/Unlist)
 const categorySatusUpdate = async(req,res) => {
+    console.log(req.body)
     try{
-        const name = req.body;
-        console.log(name)
-        console.log('')
+        const name = req.body.category;
+        const status = req.body.status;
+        // const categoryData = await category.findOne({categoryname:name});
+        // console.log(categoryData);
+        if(status == 'Unlist'){
+            const storeData = await category.findOneAndUpdate(
+                {categoryname:name},
+                {$set:{list:false,listedDate:new Date()}},
+                {new:true});
+            console.log(storeData);
+            if(storeData){
+                // res.render('admin/viewCategorys',{admin:true,data:storeData,title:'Categorylist'}); 
+                res.json()      
+            }else{
+                res.status(500).render('partials/error-500')
+            }
+        }else{
+            const storeData = await category.findOneAndUpdate(
+                {categoryname:name},
+                {$set:{list:true,listedDate:new Date()}},
+                {new:true});
+            console.log(storeData);
+            if(storeData){
+                res.render('admin/viewCategorys',{admin:true,data:storeData,title:'Categorylist'});       
+            }else{
+                res.status(500).render('partials/error-500')
+            }
+        }
     }catch(error){
         console.log(error.message);
     }
