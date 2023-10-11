@@ -34,6 +34,37 @@ body {
     overflow: hidden;
 }
 
+.otp-div{
+    margin-top: 5rem;
+    padding: 1rem;
+    background-color: var(--secondary-color);
+    border-radius: 0.5rem;
+    width: 100%;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+.otp-div input {
+    width: 100%;
+    padding: 0.1rem 1rem;
+    font-size: 1rem;
+    background-color: var(--gray);
+    border-radius: 0.5rem;
+    border: 0.5rem solid var(--secondary-color);
+    outline: none;
+}
+.otp-div button {
+    cursor: pointer;
+    margin-bottom: 2rem;
+    width: 80%;
+    padding: .1rem ;
+    border-radius: 2rem;
+    border: none;
+    background-color: var(--white);
+    color: var(--secondary-color);
+    font-size: 1.5rem;
+    font-weight: 600;
+    outline: none;
+}
+
 .container {
     position: relative;
     min-height: 100vh;
@@ -108,20 +139,17 @@ body {
     border: 0.5rem solid var(--primary-color);
 }
 
-.button {
+.form button {
     cursor: pointer;
-    width: 100%;
-    padding:0.6rem 10.1rem 0.6rem 10.1rem;
-    /* padding: 0.8rem 1rem; */
-    /* padding: .5rem 0; */
+    width: 95%;
+    padding: .3rem 0;
     border-radius: 0.5rem;
     border: none;
     background-color: var(--white);
     color: var(--secondary-color);
     font-size: 1.5rem;
-    font-weight: bold;
+    font-weight: 600;
     outline: none;
-    text-decoration: none;
 }
 
 .form p {
@@ -294,6 +322,7 @@ body {
 /* RESPONSIVE */
 
 @media only screen and (max-width: 768px) {
+    
 
     .container::before,
     .container.sign-in::before,
@@ -354,7 +383,7 @@ body {
         display: none;
     }
 
-    .text h2 {
+    .text h2{
         margin: .5rem;
         font-size: 2rem;
     }
