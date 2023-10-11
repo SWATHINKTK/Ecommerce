@@ -32,7 +32,7 @@ async function sendEmail(name,email,otp){
         from : 'swathinktk10@gmail.com',
         to : email,
         subject : 'For Verification OTP',
-        html : '<p> Welcome '+name+' .<br> veficatiion OTP : '+otp+' </p>'
+        html : '<h2> Welcome <span style="color:blue">'+name+'<span> .</h2>'+'<h4>Your OTP :<b>'+otp+'</b></h4>'+'<h3>Thank You For Joinig...</h3>'
     }
 
     transporter.sendMail(mailOptions, (error, info) => {
@@ -70,20 +70,20 @@ const storeSignupData = async(req,res) => {
             if(req.body.password === req.body.confirmPassword){
                 const strongPassword = await securePassword(password);
                 const user = {
-                    username : req.body.username,
-                    email : req.body.email,
-                    phonenumber : req.body.phonenumber,
-                    password : strongPassword,
+                    username: req.body.username,
+                    email: req.body.email,
+                    phonenumber: req.body.phonenumber,
+                    password: strongPassword,
                 }
                 // user data added to session 
                 req.session.userData = user;
-
+                console.log(req.session.userData)
                 if(req.session.userData){
                     //generate otp and send mail
                     const otp = await generateRandomOtp(6);
                     req.session.otp = otp;
                     await sendEmail(user.username,user.email,otp);
-                    req.session.startTime = new Date().getMinutes();
+                    req.session.startTime = Date.now();
                     res.redirect('/otpVerification');
                 }else{
                     res.status(500).render('partials/error-500');
@@ -111,27 +111,28 @@ const resendOTP = async(req,res) => {
     const otp = await generateRandomOtp(6);
     req.session.otp = otp;
     await sendEmail(user.username,user.email,otp)
-    req.session.startTime = new Date().getMinutes();
+    req.session.startTime = Date.now();
     res.redirect('/otpVerification');
 }
 
 
 // OTP Verification and Go For the Home Window 
 const OTPCheck = async(req,res) => {
-    const endTime = new Date().getMinutes();
+    const endTime = Date.now();
     const startTime = req.session.startTime;
     const sessionOTP = req.session.otp;
     const data = req.session.userData;
+    console.log(data)
     const user = userData({
-        username : data.username,
-        email : data.email,
-        phonenumber : data.phonenumber,
-        password : data.password,
-        _isVerified : true,
-        joined_date : new Date()
+        username: data.username,
+        email: data.email,
+        phonenumber: data.phonenumber,
+        password: data.password,
+        _isVerified: true,
+        joined_date: new Date()
     })
-    const takenTime = endTime - startTime;
-    if(takenTime < 1.5){
+    const takenTime = (endTime - startTime)/1000;
+    if(takenTime < 120){
         if(sessionOTP == req.body.otp)
         {
             const sendData = await user.save();
@@ -140,12 +141,15 @@ const OTPCheck = async(req,res) => {
             }else{
                 res.status(500).json({message:'error'});
             }
+            delete req.session.startTime;
+            delete req.session.otp;
+            delete req.session.userData;
 
         }else{
             res.status(400).json({message:'Invalid OTP &#10071'});
         }
     }else{
-        req.session.otp = null;
+        delete req.session.otp;
         res.status(200).json({message:'OTP Expired &#10060'});
     }
 }

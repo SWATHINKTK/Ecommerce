@@ -11,7 +11,7 @@
                 <span class="text-muted hint">Enter OTP</span>
                 <input type="text" placeholder="6 Digit OTP" class="rounded-4" name="otp" id="otp">
             </div>
-            <button type="submit" id="signupBtn">
+            <button type="submit" id="verifyBtn">
                 Verify
             </button>
         </form>
@@ -34,10 +34,12 @@
         .then(data => {
             if(data.message == 'success'){
 
+                document.getElementById('verifyBtn').reset();
                 window.location.href = '/home';
 
             }else if(data.message == 'error'){
 
+                document.getElementById('verifyBtn').reset();
                 window.location.href = '/error';
 
             }else{
@@ -53,7 +55,7 @@
 
 
     // timer loading 
-    let second = 90;
+    let second = 120;
     function timer(){
         second--;
         document.getElementById('timer').innerText = second;
