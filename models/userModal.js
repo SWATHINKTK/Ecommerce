@@ -19,10 +19,11 @@ const userRegistration = moongose.Schema({
     },
     _isVerified : {
         type : Boolean,
-        default : false
+        require : true
     },
     joined_date : {
-        type : Date, 
+        type : Date,
+        require : true 
     }
 })
 

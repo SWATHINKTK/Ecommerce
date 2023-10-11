@@ -20,7 +20,9 @@ userRouter.use(session({
 // GET Request For User 
 userRouter.get('/login',userController.loadUserLogin);
 userRouter.get('/otpverification',userController.loadOTPVerification);
-// userRouter.get('/home',userController.loadHomePage);
+userRouter.get('/home',userController.loadHomePage);
+userRouter.get('/resendotp',userController.resendOTP);
+userRouter.get('/error',userController.loadErrorPage);
 
 // POST Request For User 
 userRouter.post('/signup',userController.storeSignupData);

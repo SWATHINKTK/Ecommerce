@@ -1,11 +1,12 @@
 <%- include('../partials/header.ejs') %>
-<div class="container-fluid col-md-12 col-lg-3 text-center">
+<div class="container-fluid col-sm-8 col-md-6 col-lg-3 text-center">
     <div class="otp-div">
         <form method="POST" id="verificationOTP">
             <div class="pt-3 pb-3 ">
-                <h3><%= name %></h3>
-                <h2>Verify Your Account</h2>
+                <h1>Verify Your Account</h1>
+                <p>To continue, complete this verification step. We've sent an OTP to the email <span class="text-primary"><%= data.email %></span>. Please enter it below to complete verification.</p>
             </div>
+            <p id="result" class="text-danger"></p>
             <div class="input-group ">
                 <span class="text-muted hint">Enter OTP</span>
                 <input type="text" placeholder="6 Digit OTP" class="rounded-4" name="otp" id="otp">
@@ -14,7 +15,58 @@
                 Verify
             </button>
         </form>
+        <p class="text-center">Not Receive the Code? <span id="timer"></span><span id="resend" style="display:none;"><a href='/resendotp' class="text-primary"> Resend OTP </a></span></p>
     </div>
 </div>
+<script>
+    document.getElementById('verificationOTP').addEventListener('submit',(event)=>{
+        event.preventDefault();
+        const otp ={
+            otp : document.getElementById('otp').value
+        } 
+        const jsonData = JSON.stringify(otp)
+        fetch('/otpverification', {
+        method: 'POST',
+        body: jsonData,
+        headers :{'Content-Type':'application/json'}
+        })
+        .then(response =>  response.json())
+        .then(data => {
+            if(data.message == 'success'){
 
+                window.location.href = '/home';
+
+            }else if(data.message == 'error'){
+
+                window.location.href = '/error';
+
+            }else{
+                document.getElementById('result').innerHTML = data.message;
+            }
+            
+        })
+        .catch((error) => {
+            console.log();('Error:', error.message);
+        });
+    })
+
+
+
+    // timer loading 
+    let second = 90;
+    function timer(){
+        second--;
+        document.getElementById('timer').innerText = second;
+
+        if(second == 0){
+            document.getElementById('timer').innerText = '';
+            document.getElementById('resend').style.display = 'block';
+            // document.getElementById('timer').innerHTML = '<a href='/resendotp'> Resend Otp </a>';
+            clearInterval(start);
+            
+        } 
+    }
+    const start = setInterval(timer,1000);
+    start();
+</script>
 <%- include('../partials/footer.ejs') %>

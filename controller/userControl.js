@@ -69,18 +69,21 @@ const storeSignupData = async(req,res) => {
         if(Object.keys(req.body).length == 5){
             if(req.body.password === req.body.confirmPassword){
                 const strongPassword = await securePassword(password);
-                const user = userData({
+                const user = {
                     username : req.body.username,
                     email : req.body.email,
                     phonenumber : req.body.phonenumber,
                     password : strongPassword,
-                    joined_date : new Date()
-                })
+                }
+                // user data added to session 
                 req.session.userData = user;
+
                 if(req.session.userData){
+                    //generate otp and send mail
                     const otp = await generateRandomOtp(6);
-                    console.log(otp);
-                    sendEmail(user.username,user.email,otp)
+                    req.session.otp = otp;
+                    await sendEmail(user.username,user.email,otp);
+                    req.session.startTime = new Date().getMinutes();
                     res.redirect('/otpVerification');
                 }else{
                     res.status(500).render('partials/error-500');
@@ -98,29 +101,82 @@ const storeSignupData = async(req,res) => {
 
 // Load OTP Verification Page 
 const loadOTPVerification = (req,res) =>{
-    const data = req.session.userData;
-    res.render('user/otpVerification',{admin:false,title:'User OTP',name:data.username});
+    const userdata = req.session.userData;
+    res.render('user/otpVerification',{admin:false,title:'User OTP',data:userdata});
+}
+
+// Resend OTP 
+const resendOTP = async(req,res) => {
+    const user = req.session.userData;
+    const otp = await generateRandomOtp(6);
+    req.session.otp = otp;
+    await sendEmail(user.username,user.email,otp)
+    req.session.startTime = new Date().getMinutes();
+    res.redirect('/otpVerification');
 }
 
 
 // OTP Verification and Go For the Home Window 
-const OTPCheck = (req,res) => {
-    // console.log(req.body)
+const OTPCheck = async(req,res) => {
+    const endTime = new Date().getMinutes();
+    const startTime = req.session.startTime;
+    const sessionOTP = req.session.otp;
+    const data = req.session.userData;
+    const user = userData({
+        username : data.username,
+        email : data.email,
+        phonenumber : data.phonenumber,
+        password : data.password,
+        _isVerified : true,
+        joined_date : new Date()
+    })
+    const takenTime = endTime - startTime;
+    if(takenTime < 1.5){
+        if(sessionOTP == req.body.otp)
+        {
+            const sendData = await user.save();
+            if(sendData){
+                res.status(200).json({message:'success'});
+            }else{
+                res.status(500).json({message:'error'});
+            }
+
+        }else{
+            res.status(400).json({message:'Invalid OTP &#10071'});
+        }
+    }else{
+        req.session.otp = null;
+        res.status(200).json({message:'OTP Expired &#10060'});
+    }
 }
 
 
 // Verify Login 
 const verifyUser = (req,res) => {
-    res.send('sucess');
+    // console.log("working")
+    // res.status(200);
 }
 
-// Load Home Page 
+
+// Load Home Page
+const loadHomePage = (req,res) => {
+    res.send("HOME");
+}
+
+
+
+const loadErrorPage = (req,res) =>{
+    res.render('partials/error-500')
+}
 module.exports = {
     loadUserLogin,
     storeSignupData,
     loadOTPVerification,
+    resendOTP,
     OTPCheck,
-    verifyUser
+    verifyUser,
+    loadHomePage,
+    loadErrorPage
 }
 
 
