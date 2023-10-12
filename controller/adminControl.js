@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const {loginData,category} = require('../models/adminModel');
+const { query } = require('express');
 async function strong(pass){
     try{
         const x = await bcrypt.hash(pass,10)
@@ -41,13 +42,13 @@ const verifyLogin = async(req,res) => {
 // Load Admin Home Window 
 const loadAdminHomepage = (req,res) => {
     // const name = req.params.adminData.name;
-    res.render('admin/main',{admin:true,name:req.session.name});
+    res.render('admin/main',{admin:true,name:req.session.name,title:'AdminHome'});
 }
 
 
 // Load User List Window
 const loadUserList = (req,res) => {
-    res.render('admin/viewUsers',{admin:true});
+    res.render('admin/viewUsers',{admin:true,title:'userlist'});
 }
 
 // Load Product List Window
@@ -71,16 +72,53 @@ const loadEditProductPage = (req,res) => {
 const loadCategoryList = async(req,res) => {
     try{
         const categoryData = await category.find({}).sort({list:-1});
-        console.log(categoryData);
-        res.render('admin/viewCategorys',{admin:true,data:categoryData});       
+        res.render('admin/viewCategorys',{admin:true,data:categoryData,title:'Categorylist'});       
     }catch(error){
         console.log(error.message);
     }
 }
 
+// Category Status Update (List/Unlist)
+const categorySatusUpdate = async(req,res) => {
+    console.log(req.body)
+    try{
+        const name = req.body.category;
+        const categoryData = await category.findOne({categoryname:name});
+        console.log('aaa',categoryData.list);
+        if(categoryData.list){
+            const storeData = await category.findOneAndUpdate(
+                {categoryname:name},
+                {$set:{list:false,listedDate:new Date()}},
+                {new:true});
+            if(storeData){
+                console.log('true',storeData);
+                // res.render('admin/viewCategorys',{admin:true,data:storeData,title:'Categorylist'}); 
+                res.json({'list':false});    
+            }else{
+                res.status(500).render('partials/error-500')
+            }
+        }else{
+            const storeData = await category.findOneAndUpdate(
+                {categoryname:name},
+                {$set:{list:true,listedDate:new Date()}},
+                {new:true});
+            if(storeData){
+                console.log('false',storeData);
+                res.json({'list':true});
+                // res.render('admin/viewCategorys',{admin:true,data:storeData,title:'Categorylist'});  
+            }else{
+                res.status(500).render('partials/error-500')
+            }
+        }
+    }catch(error){
+        console.log(error.message);
+    }
+}
+
+
 // Load Add Product page 
 const loadAddCategoryPage = (req,res) => {
-    res.render('admin/addCategory',{admin:true});
+    res.render('admin/addCategory',{admin:true,title:'AddCategory'});
 }
 
 // ADD Data To Database 
@@ -117,7 +155,7 @@ const addCategory = async(req,res) => {
 
 // Load Edit Product page 
 const loadEditCategoryPage = (req,res) => {
-    res.render('admin/editCategory',{admin:true});
+    res.render('admin/addCategory',{admin:true});
 }
 
 // Load Add Banner page 
@@ -166,6 +204,7 @@ module.exports = {
     loadAddProductPage,
     loadEditProductPage,
     loadCategoryList,
+    categorySatusUpdate,
     loadAddCategoryPage,
     loadEditCategoryPage,
     loadAddBannerPage,

@@ -41,6 +41,10 @@ adminRouter.post('/logout',adminController.logoutAdmin);
 adminRouter.post('/addCategory',adminController.addCategory);
 
 
+// All Patch Request Handle Admin
+adminRouter.patch('/categorystatusupdate',adminController.categorySatusUpdate)
+
+
 
 
 
