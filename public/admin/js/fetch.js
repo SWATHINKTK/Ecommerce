@@ -65,7 +65,6 @@ document.addEventListener("DOMContentLoaded", function () {
             .then((html) => {
                 // Update the content of the Category List with the fetched HTML
                 contentPlaceholder.innerHTML = html;
-                console.log(html)
 
                 // Dynamically Script tag is created to Linked url based
                 const existingScript = document.querySelector('script[src="/public/admin/js/category.js"]');

@@ -168,9 +168,13 @@ const loadHomePage = (req,res) => {
 }
 
 
-
-const loadErrorPage = (req,res) =>{
+// ERROR Page Loading 
+const load500ErrorPage = (req,res) =>{
     res.render('partials/error-500')
+}
+
+const load404ErrorPage = (req,res) =>{
+    res.render('partials/error-404')
 }
 module.exports = {
     loadUserLogin,
@@ -180,7 +184,8 @@ module.exports = {
     OTPCheck,
     verifyUser,
     loadHomePage,
-    loadErrorPage
+    load500ErrorPage,
+    load404ErrorPage
 }
 
 

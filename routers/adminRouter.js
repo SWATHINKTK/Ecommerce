@@ -42,7 +42,7 @@ adminRouter.post('/addCategory',adminController.addCategory);
 
 
 // All Patch Request Handle Admin
-adminRouter.post('/categorystatusupdate',adminController.categorySatusUpdate)
+adminRouter.patch('/categorystatusupdate',adminController.categorySatusUpdate)
 
 
 

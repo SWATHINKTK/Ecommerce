@@ -27,25 +27,24 @@ document.getElementById('addCategoryForm').addEventListener('submit', function (
         if(data.status){document.getElementById('addCategoryForm').reset()}
     })
     .catch((error) => {
-        console.log();('Error:', error.message);
+        console.log('Error:', error.message);
     });
 });
 
 
-function editCategory(value){
+async function editCategory(value){
     const row = value.parentElement.parentElement;
     const id = row.cells[1].textContent;
-    const element = document.querySelector('td[data-category-id]');
-    const category = element.getAttribute('data-category-id');
-    alert(row);
-    console.log(row);
-    console.log(id);
-    console.log(element);
-    console.log(category);
+    
+    fetch('/admin/editcategory')
+        .then((response) => {
+            if(!(response.ok)){
+                
+            }
+        })
 }
 
 async function categoryList(value){
-    const contentPlaceholder = document.getElementById("dynamic_page");
     const row = value.parentElement.parentElement;
     const categoryName = row.cells[1].textContent;
     const status = row.cells[3].textContent;
@@ -53,13 +52,17 @@ async function categoryList(value){
     const category = element.getAttribute('data-category-id');
 
     fetch('/admin/categorystatusupdate',{
-        method: 'POST',
-        body: JSON.stringify({'category':`${categoryName}`,'status':`${status}`}),
+        method: 'PATCH',
+        body: JSON.stringify({'category':`${categoryName}`}),
         headers: {'Content-Type':'application/json'}
     })
-    .then((response) => response.text())
+    .then((response) => response.json())
     .then((data) => {
-        document.getElementById("dynamic_page")innerHTML=data;.
+        if(data.list){
+                row.cells[3].innerHTML = '<button class="btn btn-warning pl-3 pr-3" onclick="categoryList(this)"><i class="bi bi-x-circle"></i>Unlist</button>';
+        }else{
+            row.cells[3].innerHTML = '<button class="btn btn-primary pl-4 pr-4" onclick="categoryList(this)"><i class="bi bi-check2-circle"> </i>list</button>';
+        }
         
     })
     

@@ -22,7 +22,8 @@ userRouter.get('/login',userController.loadUserLogin);
 userRouter.get('/otpverification',userController.loadOTPVerification);
 userRouter.get('/home',userController.loadHomePage);
 userRouter.get('/resendotp',userController.resendOTP);
-userRouter.get('/error',userController.loadErrorPage);
+userRouter.get('/error500',userController.load500ErrorPage);
+userRouter.get('/error404',userController.load404ErrorPage);
 
 // POST Request For User 
 userRouter.post('/signup',userController.storeSignupData);

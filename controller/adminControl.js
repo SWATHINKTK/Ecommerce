@@ -83,18 +83,17 @@ const categorySatusUpdate = async(req,res) => {
     console.log(req.body)
     try{
         const name = req.body.category;
-        const status = req.body.status;
-        // const categoryData = await category.findOne({categoryname:name});
-        // console.log(categoryData);
-        if(status == 'Unlist'){
+        const categoryData = await category.findOne({categoryname:name});
+        console.log('aaa',categoryData.list);
+        if(categoryData.list){
             const storeData = await category.findOneAndUpdate(
                 {categoryname:name},
                 {$set:{list:false,listedDate:new Date()}},
                 {new:true});
-            console.log(storeData);
             if(storeData){
+                console.log('true',storeData);
                 // res.render('admin/viewCategorys',{admin:true,data:storeData,title:'Categorylist'}); 
-                res.json()      
+                res.json({'list':false});    
             }else{
                 res.status(500).render('partials/error-500')
             }
@@ -103,9 +102,10 @@ const categorySatusUpdate = async(req,res) => {
                 {categoryname:name},
                 {$set:{list:true,listedDate:new Date()}},
                 {new:true});
-            console.log(storeData);
             if(storeData){
-                res.render('admin/viewCategorys',{admin:true,data:storeData,title:'Categorylist'});       
+                console.log('false',storeData);
+                res.json({'list':true});
+                // res.render('admin/viewCategorys',{admin:true,data:storeData,title:'Categorylist'});  
             }else{
                 res.status(500).render('partials/error-500')
             }
@@ -155,7 +155,7 @@ const addCategory = async(req,res) => {
 
 // Load Edit Product page 
 const loadEditCategoryPage = (req,res) => {
-    res.render('admin/editCategory',{admin:true});
+    res.render('admin/addCategory',{admin:true});
 }
 
 // Load Add Banner page 

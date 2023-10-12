@@ -27,7 +27,7 @@
                   <% if(data[i].list) {%>
                     <td><button class="btn btn-warning pl-3 pr-3" onclick="categoryList(this)"><i class="bi bi-x-circle"></i>Unlist</button></td>
                   <% } else { %>
-                    <td><button class="btn btn-primary pl-4 pr-4" onclick="categoryList(this)"><i class="bi bi-check2-circle"> </i>list</button><input type="hidden" value="<%= data[i]._id %>"></td>
+                    <td><button class="btn btn-primary pl-4 pr-4" onclick="categoryList(this)"><i class="bi bi-check2-circle"> </i>list</button></td>
                   <% } %>
 
                   <!-- <% if(!(data[i].delete) ) {%>
