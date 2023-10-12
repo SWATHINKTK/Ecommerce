@@ -124,6 +124,7 @@ const loadAddCategoryPage = (req,res) => {
 // ADD Data To Database 
 const addCategory = async(req,res) => {
     try{
+        console.log('hello');
         const name = req.body.categoryname;
         const description = req.body.description;
         if(name && description){
@@ -154,8 +155,10 @@ const addCategory = async(req,res) => {
 }
 
 // Load Edit Product page 
-const loadEditCategoryPage = (req,res) => {
-    res.render('admin/addCategory',{admin:true});
+const loadEditCategoryPage = async(req,res) => {
+    const categoryname = req.params.id;
+    const CategoryData = await category.findOne({categoryname:categoryname})
+    res.render('admin/editCategory',{admin:true,name:CategoryData.categoryname,description:CategoryData.description});
 }
 
 // Load Add Banner page 
@@ -195,6 +198,17 @@ const logoutAdmin = (req,res) => {
     }
     
 }
+
+
+// ERROR Page Loading 
+const load500ErrorPage = (req,res) =>{
+    res.render('partials/error-500',{link:'/admin'})
+}
+
+const load404ErrorPage = (req,res) =>{
+    res.render('partials/error-404',{link:'/admin'})
+}
+
 module.exports = {
     loadAdminLogin,
     verifyLogin,
@@ -212,5 +226,7 @@ module.exports = {
     loadAddCouponPage,
     loadOrderList,
     logoutAdmin,
-    addCategory
+    addCategory,
+    load500ErrorPage,
+    load404ErrorPage
 }

@@ -170,11 +170,11 @@ const loadHomePage = (req,res) => {
 
 // ERROR Page Loading 
 const load500ErrorPage = (req,res) =>{
-    res.render('partials/error-500')
+    res.render('partials/error-500',{link:'/user'})
 }
 
 const load404ErrorPage = (req,res) =>{
-    res.render('partials/error-404')
+    res.render('partials/error-404',{link:'/user'})
 }
 module.exports = {
     loadUserLogin,

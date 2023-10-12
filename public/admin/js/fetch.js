@@ -92,7 +92,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 // Update the content of the placeholder with the fetched HTML
                 contentPlaceholder.innerHTML = html;
                 
-                // Add a script tag dynamically
+                // Dynamically Script tag is created to Linked url based
                 const existingScript = document.querySelector('script[src="/public/admin/js/category.js"]');
                 if(!(existingScript)){
                     const script = document.createElement('script');

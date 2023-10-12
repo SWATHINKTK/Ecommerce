@@ -33,6 +33,8 @@ adminRouter.get('/addbanner',adminController.loadAddBannerPage);
 adminRouter.get('/couponlist',adminController.loadCouponList);
 adminRouter.get('/addcoupon',adminController.loadAddCouponPage);
 adminRouter.get('/orderlist',adminController.loadOrderList);
+adminRouter.get('/error500',adminController.load500ErrorPage);
+adminRouter.get('/error404',adminController.load404ErrorPage);
 
 
 // All POST request in Admin Panel 
