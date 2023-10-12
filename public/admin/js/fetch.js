@@ -65,13 +65,9 @@ document.addEventListener("DOMContentLoaded", function () {
             .then((html) => {
                 // Update the content of the placeholder with the fetched HTML
                 contentPlaceholder.innerHTML = html;
-                const script = document.createElement('script'); 
+                const script = document.createElement('script');
+                script.src = '/public/admin/js/editcategory.js'; 
                 document.body.appendChild(script);
-                const submitButton = container.querySelector('#editbtn'); // Replace with the actual button selector
-                submitButton.addEventListener('click', function () {
-                
-                alert('Submit button clicked!');
-                });
                 
             })
             .catch((error) => {
@@ -93,7 +89,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 
                 // Add a script tag dynamically
                 const script = document.createElement('script');
-                script.src = '/public/admin/js/form.js'; 
+                script.src = '/public/admin/js/addcategory.js'; 
                 document.body.appendChild(script);
             })
             .catch((error) => {

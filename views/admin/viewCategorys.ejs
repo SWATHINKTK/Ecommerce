@@ -1,58 +1,50 @@
 <div class="col-12 grid-margin stretch-card">
-    <div class="card">
-      <div class="card-body  mt-5">
-        <h4 class="card-title text-center">Category View &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
-        <!-- <p class="card-description"> Add class <code>.table-hover</code> -->
-        </p>
-        <div class="table-responsive">
-          <table class="table table-hover">
-            <thead>
+  <div class="card">
+    <div class="card-body  mt-5">
+      <h4 class="card-title text-center">Category View &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+      <!-- <p class="card-description"> Add class <code>.table-hover</code> -->
+      </p>
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Category Name</th>
+              <th>Edit</th>
+              <th>List/Unlist</th>
+              <!-- <th>Delete/Retrieve</th> -->
+              <!-- <td class="text-danger"> 28.76% <i class="mdi mdi-arrow-down"></i></td>
+              <td><label class="badge badge-danger">Pending</label></td> -->
+            </tr>
+          </thead>
+          <tbody class="text-white">
+            <% if(data.length > 0) { %>
+              <% for(let i=0;i<data.length;i++) { %>
               <tr>
-                <th>#</th>
-                <th>Category Name</th>
-                <th>Edit</th>
-                <th>List/Unlist</th>
-                <th>Delete/Retrieve</th>
-                <!-- <td class="text-danger"> 28.76% <i class="mdi mdi-arrow-down"></i></td>
-                <td><label class="badge badge-danger">Pending</label></td> -->
-              </tr>
-            </thead>
-            <tbody class="text-white">
-              <% if(data.length > 0) { %>
-                <% for(let i=0;i<data.length;i++) { %>
-                <tr>
-                  <td><%= i+1 %></td>
-                  <td><%= data[i].categoryname %></td>
-                  <td><button class="btn btn-transparent" value="<%= data[i]._id %>" id="editbtn" ><i class="bi bi-pencil-square"></i>Edit</button></td>
-
-                  <% if(data[i].list && !(data[i].delete) ) {%>
-                    <td><button class="btn btn-warning"><i class="bi bi-x-circle"></i>Unlist</button></label></td>
-                  <% } else if(!(data[i].delete)) { %>
-                    <td><button class="btn btn-primary"><i class="bi bi-check2-circle"></i>list</button></label></td>
-                  <% } else { %>
-                    <td></td>
-                  <% } %>
-
-                  <% if(!(data[i].delete) ) {%>
-                    <td><button class="btn btn-danger"><i class="bi bi-trash3"></i>Delete</button></label></td>
-                  <% } else { %>
-                    <td><button class="btn btn-danger"><i class="bi bi-plus-square-dotted"></i>Retrieve</button></label></td>
-                  <% } %>
-
-                </tr>
-                <% } } else{ %>
-                  <tr class="bg-danger">
-                    <th class="text-dark" colspan="5">DATA IS NOT FOUND</th>
-                  </tr> 
+                <td><%= i+1 %></td>
+                <td data-category-id="<%= data[i]._id %>"><%= data[i].categoryname %></td>
+                <td><button class="btn btn-transparent" onclick="editCategory(this)"><i class="bi bi-pencil-square"></i>Edit</button></td>
+                <% if(data[i].list) {%>
+                  <td><button class="btn btn-warning pl-3 pr-3" onclick="categoryList(this)"><i class="bi bi-x-circle"></i>Unlist</button></td>
+                <% } else { %>
+                  <td><button class="btn btn-primary pl-4 pr-4" onclick="categoryList(this)"><i class="bi bi-check2-circle"> </i>list</button></td>
                 <% } %>
-            </tbody>
-          </table>
-        </div>
+
+                <!-- <% if(!(data[i].delete) ) {%>
+                  <td><button class="btn btn-danger"><i class="bi bi-trash3"></i>Delete</button></label></td>
+                <% } else { %>
+                  <td><button class="btn btn-danger"><i class="bi bi-plus-square-dotted"></i>Retrieve</button></label></td>
+                <% } %> -->
+
+              </tr>
+              <% } } else{ %>
+                <tr class="bg-danger">aq
+                  <th class="text-dark" colspan="5">DATA IS NOT FOUND</th>
+                </tr> 
+              <% } %>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
-  <script>
-    document.getElementById('editbtn').addEventListener('click',()=>{
-      alert('hello')
-    })
-  </script>
+</div>
