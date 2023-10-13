@@ -121,7 +121,7 @@ const loadAddCategoryPage = (req,res) => {
     res.render('admin/addCategory',{admin:true,title:'AddCategory'});
 }
 
-// ADD Data To Database 
+//Category Data Added to Database 
 const addCategory = async(req,res) => {
     try{
         const name = req.body.categoryname;
@@ -148,14 +148,44 @@ const addCategory = async(req,res) => {
         }
     }catch(error){
         console.log(error.message);
-    }
-
-    
+    } 
 }
 
 // Load Edit Product page 
-const loadEditCategoryPage = (req,res) => {
-    res.render('admin/addCategory',{admin:true});
+const loadEditCategoryPage = async(req,res) => {
+    const name = req.params.id;
+    const categoryData = await category.findOne({categoryname:name});
+    res.render('admin/editCategory',{admin:true,data:categoryData});
+}
+
+// Update the Category Values
+const editCategory = async(req,res) => {
+    try{
+        const name = req.body.categoryname;
+        const description = req.body.description;
+        const id = req.body.categoryId;
+        if(name && description){
+           
+            const dataCheck =await category.findOne({categoryname:name});
+
+            if(dataCheck){
+                res.json({'message':'Category is Already Exist'});
+
+            }else{
+
+                const dataSend = await category.updateOne({_id:id},{$set:{categoryname:name,description:description}});
+                if(dataSend){
+                    res.json({'message':'Category Sucessfullly Added','status':true});
+                }else{
+                    res.json({'message':'Category is not Updated try again'});
+                }
+            }
+        }else{
+            res.json({'message':'Please Enter the Category and Description'});
+        }
+    }catch(error){
+        console.log(error.message);
+    } 
 }
 
 // Load Add Banner page 
@@ -195,6 +225,17 @@ const logoutAdmin = (req,res) => {
     }
     
 }
+
+
+// ERROR Page Loading 
+const load500ErrorPage = (req,res) =>{
+    res.render('partials/error-500',{link:'/admin'})
+}
+
+const load404ErrorPage = (req,res) =>{
+    res.render('partials/error-404',{link:'/admin'})
+}
+
 module.exports = {
     loadAdminLogin,
     verifyLogin,
@@ -207,10 +248,13 @@ module.exports = {
     categorySatusUpdate,
     loadAddCategoryPage,
     loadEditCategoryPage,
+    editCategory,
     loadAddBannerPage,
     loadCouponList,
     loadAddCouponPage,
     loadOrderList,
     logoutAdmin,
-    addCategory
+    addCategory,
+    load500ErrorPage,
+    load404ErrorPage
 }

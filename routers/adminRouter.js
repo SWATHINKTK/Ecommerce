@@ -28,17 +28,20 @@ adminRouter.get('/addproduct',adminController.loadAddProductPage);
 adminRouter.get('/editproduct',adminController.loadEditProductPage);
 adminRouter.get('/categorylist',adminController.loadCategoryList);
 adminRouter.get('/addcategory',adminController.loadAddCategoryPage);
-adminRouter.get('/editcategory',adminController.loadEditCategoryPage);
+adminRouter.get('/editcategory:id',adminController.loadEditCategoryPage);
 adminRouter.get('/addbanner',adminController.loadAddBannerPage);
 adminRouter.get('/couponlist',adminController.loadCouponList);
 adminRouter.get('/addcoupon',adminController.loadAddCouponPage);
 adminRouter.get('/orderlist',adminController.loadOrderList);
+adminRouter.get('/error500',adminController.load500ErrorPage);
+adminRouter.get('/error404',adminController.load404ErrorPage);
 
 
 // All POST request in Admin Panel 
 adminRouter.post('/',adminController.verifyLogin);
 adminRouter.post('/logout',adminController.logoutAdmin);
-adminRouter.post('/addCategory',adminController.addCategory);
+adminRouter.post('/addcategory',adminController.addCategory);
+adminRouter.post('/editcategory',adminController.editCategory);
 
 
 // All Patch Request Handle Admin

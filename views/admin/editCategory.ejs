@@ -1,23 +1,20 @@
 <div class="col-12 grid-margin stretch-card">
   <div class="card">
     <div class="card-body">
-      <h4 class="card-title mb-4">Add Category</h4>
-      <p class="card-description" id="categorysuccess"></p>
-      <form class="forms-sample" id="addCategoryForm" method="POST">
-        <p id="response"></p>
+      <h4 class="card-title mb-4">Edit Category</h4>
+      <p class="card-description" id="UpdateStatus"></p>
+      <form class="forms-sample" id="editCategoryForm" method="POST">
         <div class="form-group">
           <label for="exampleInputName1">Category Name</label>
-          <input type="text" class="form-control" id="categoryname" placeholder="Category Name" name="categoryname">
+          <input type="text" class="form-control" id="categoryname" placeholder="Category Name" name="categoryname" value="<%= data.categoryname %>">
         </div>
         <div class="form-group">
           <label for="exampleTextarea1">Description</label>
-          <textarea class="form-control" id="description" rows="4" name="description" ></textarea>
+          <textarea class="form-control" id="description" rows="4" name="description" ><%= data.description %></textarea>
         </div>
+        <input type="hidden" id="categoryid" name="categoryid" value="<%= data._id %>">
         <button type="submit" class="btn btn-primary mr-2" id="categorysubmit">Submit</button>
         <button class="btn btn-dark" >Cancel</button>
-        
-        <!-- <input type="button" value="submit" id="swathin"> -->
-
       </form>
     </div>
   </div>

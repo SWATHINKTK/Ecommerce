@@ -22,12 +22,12 @@
               <% for(let i=0;i<data.length;i++) { %>
               <tr>
                 <td><%= i+1 %></td>
-                <td data-category-id="<%= data[i]._id %>"><%= data[i].categoryname %></td>
+                <td><%= data[i].categoryname %></td>
                 <td><button class="btn btn-transparent" onclick="editCategory(this)"><i class="bi bi-pencil-square"></i>Edit</button></td>
                 <% if(data[i].list) {%>
-                  <td><button class="btn btn-warning pl-3 pr-3" onclick="categoryList(this)"><i class="bi bi-x-circle"></i>Unlist</button></td>
+                  <td id="<%= data[i]._id %>"><button class="btn btn-warning pl-3 pr-3" id="<%= data[i]._id %>" onclick="categoryList(this)"><i class="bi bi-x-circle"></i>Unlist</button></td>
                 <% } else { %>
-                  <td><button class="btn btn-primary pl-4 pr-4" onclick="categoryList(this)"><i class="bi bi-check2-circle"> </i>list</button></td>
+                  <td id="<%= data[i]._id %>"><button class="btn btn-primary pl-4 pr-4" id="<%= data[i]._id %>" onclick="categoryList(this)"><i class="bi bi-check2-circle"> </i>list</button></td>
                 <% } %>
 
                 <!-- <% if(!(data[i].delete) ) {%>
@@ -44,6 +44,25 @@
               <% } %>
           </tbody>
         </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  <div class="modal" id="modal" style="display: none; width: 23rem;margin-right: 50%;margin-left: 40%; margin-top:3rem;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Category List/Unlist</h5>
+        <button class="btn btn-transparent" onclick="back()"><i class="bi bi-x"></i></button>
+      </div>
+      <div class="modal-body">
+        Are you sure?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="cancel" onclick="back()">Cancel</button>
+        <button type="button" class="btn btn-primary" id="sucess" data-category-id="true" data-category-name="">OK</button>
       </div>
     </div>
   </div>

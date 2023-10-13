@@ -4,13 +4,12 @@ document.getElementById('addCategoryForm').addEventListener('submit', function (
 
     const categoryname = document.getElementById('addCategoryForm').categoryname.value;
     const description = document.getElementById('addCategoryForm').description.value;
-    console.log(categoryname,description)
+    
     const formData = {
         categoryname,
         description
     };
-    const jsonData = JSON.stringify(formData)
-    console.log(jsonData)
+    const jsonData = JSON.stringify(formData);
     
     fetch('/admin/addcategory', {
         method: 'POST',
@@ -28,6 +27,3 @@ document.getElementById('addCategoryForm').addEventListener('submit', function (
 });
 
 
-document.getElementById('editbtn').addEventListener('click',()=>{
-    alert('hello')
-  })

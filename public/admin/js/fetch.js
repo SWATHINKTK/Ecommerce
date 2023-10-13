@@ -65,8 +65,16 @@ document.addEventListener("DOMContentLoaded", function () {
             .then((html) => {
                 // Update the content of the placeholder with the fetched HTML
                 contentPlaceholder.innerHTML = html;
+
+                // Script exit checking code 
+                const scriptSrc = '/public/admin/js/listCategory.js';
+                const scriptExist = document.querySelector(`script[src="${scriptSrc}"]`);
+
+                if(scriptExist){
+                    scriptExist.parentNode.removeChild(scriptExist);
+                }
                 const script = document.createElement('script');
-                script.src = '/public/admin/js/editcategory.js'; 
+                script.src = scriptSrc; 
                 document.body.appendChild(script);
                 
             })
@@ -87,27 +95,17 @@ document.addEventListener("DOMContentLoaded", function () {
                 // Update the content of the placeholder with the fetched HTML
                 contentPlaceholder.innerHTML = html;
                 
-                // Add a script tag dynamically
-                const script = document.createElement('script');
-                script.src = '/public/admin/js/addcategory.js'; 
-                document.body.appendChild(script);
-            })
-            .catch((error) => {
-                console.error("Fetch error:", error);
-            });
-    });
-    document.getElementById("edit-category").addEventListener("click", function () {
-        // // Make a Fetch GET request to retrieve the EJS-rendered page
-        fetch("/admin/editcategory")
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error("Network response was not ok");
+                // Add a script tag dynamically And check exist or not
+                const scriptSrc = '/public/admin/js/addCategory.js';
+                const scriptExist = document.querySelector(`script[src="${scriptSrc}"]`);
+
+                if(scriptExist){
+                    scriptExist.parentNode.removeChild(scriptExist);
                 }
-                return response.text();
-            })
-            .then((html) => {
-                // Update the content of the placeholder with the fetched HTML
-                contentPlaceholder.innerHTML = html;
+
+                const script = document.createElement('script');
+                script.src = scriptSrc; 
+                document.body.appendChild(script);
             })
             .catch((error) => {
                 console.error("Fetch error:", error);
