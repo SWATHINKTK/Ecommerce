@@ -23,6 +23,7 @@ adminRouter.use(session({
 adminRouter.get('/',adminController.loadAdminLogin);
 adminRouter.get('/home',adminController.loadAdminHomepage);
 adminRouter.get('/userlist',adminController.loadUserList);
+adminRouter.get('/searchuser',adminController.searchUser);
 adminRouter.get('/productlist',adminController.loadProductList);
 adminRouter.get('/addproduct',adminController.loadAddProductPage);
 adminRouter.get('/editproduct',adminController.loadEditProductPage);
@@ -43,7 +44,6 @@ adminRouter.post('/logout',adminController.logoutAdmin);
 adminRouter.post('/addcategory',adminController.addCategory);
 adminRouter.post('/editcategory',adminController.editCategory);
 adminRouter.post('/searchcategory',adminController.searchCategory);
-adminRouter.get('/searchuser',adminController.searchUser);
 
 // All Patch Request Handle Admin
 adminRouter.patch('/categorystatusupdate',adminController.categorySatusUpdate)

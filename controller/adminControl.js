@@ -103,8 +103,7 @@ const blockUser = async(req,res) => {
 
 // User Search
 const searchUser = async(req,res) => {
-    const search = req.body.search;
-    console.log(search)
+    const search = req.query.search;
     const regex = new RegExp(`^${search}.*`, 'i');
     const searchData = await userData.find({username:{$regex:regex}});
     console.log(searchData)

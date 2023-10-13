@@ -1,10 +1,10 @@
 <%- include('../partials/header.ejs') %>
-    <div class="col-12 grid-margin stretch-card">
+    <div class="col-12 grid-margin stretch-card" id="userview">
     <div class="card">
       <div class="card-body  mt-5">
         <h4 class="card-title text-center">View Users&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
         <div class="d-grid gap-4 d-md-flex justify-content-md-end mb-2">
-          <input type="text" class="form-control col-3 mr-2" id="categorySearch" placeholder="Category Search" name="categorySearch" value=" ">
+          <input type="text" class="form-control col-3 mr-2" id="categorySearch" placeholder="Category Search" name="categorySearch">
           <button type="button" class="btn btn-outline-primary" onclick="search()"><i class="bi bi-search"></i></button>
         </div>
         <div class="table-responsive ">
@@ -38,7 +38,7 @@
               </tr>
               <% } }else {%>
                 <tr class="bg-danger">
-                  <th class="text-dark" colspan="5">USER IS NOT FOUND</th>
+                  <th class="text-dark" colspan="7">USER IS NOT FOUND</th>
                 </tr> 
               <% } %>
             </tbody>

@@ -50,9 +50,7 @@ document.getElementById('sucess').addEventListener('click',() => {
 // Searching the User Based on name
 function search(){
 
-    const  searchData = document.getElementById('categorySearch').value;
-    alert(searchData);
-    console.log(searchData);
+    const  searchData = document.getElementById('categorySearch').value; 
     window.location.href = `/admin/searchuser?search=${searchData}`;
    
     // const url = '/admin/searchuser';
@@ -72,7 +70,13 @@ function search(){
     // })
 
     // .then((data) => {
-    //     document.getElementById("dynamic_page").innerHTML = data;
+    //     console.log(data)
+    //     var parser = new DOMParser();
+    //     var doc = parser.parseFromString(data, 'text/html');
+    //     var html = doc.querySelector('#userview')
+    //     console.log(html)
+
+    //     document.getElementById("dynamic_page").innerHTML = html;
     // }).catch((error) => {
     //     console.log(error.message)
     // })
