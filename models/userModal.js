@@ -21,6 +21,13 @@ const userRegistration = moongose.Schema({
         type : Boolean,
         require : true
     },
+    block : {
+        type: Boolean,
+        default : false
+    },
+    block_date : {
+        type : Date
+    },
     joined_date : {
         type : Date,
         require : true 

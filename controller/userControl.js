@@ -3,8 +3,12 @@ const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const {userData} = require('../models/userModal');
 
-// Random bytes for OTP create using crypto Module 
+
+/*--------------------------Router Access Functions in User Side --------------------------------- */
+
+// Random Bytes for OTP Create Using Crypto Module 
 async function generateRandomOtp(length){
+
     if(length % 2 != 0){
         throw new Error('Length must be even For OTP Generation.');
     }
@@ -12,11 +16,12 @@ async function generateRandomOtp(length){
     const randomBytes = crypto.randomBytes(length/2);
     const otp = randomBytes.toString('hex')
     return otp;
-
 }
 
+
 // Email Sending Using NodeMailer 
-async function sendEmail(name,email,otp){
+async function sendEmail(name,email,otp,html){
+
     const transporter = nodemailer.createTransport({
         host : 'smtp.gmail.com',
         port : 465,
@@ -32,7 +37,8 @@ async function sendEmail(name,email,otp){
         from : 'swathinktk10@gmail.com',
         to : email,
         subject : 'For Verification OTP',
-        html : '<h2> Welcome <span style="color:blue">'+name+'<span> .</h2>'+'<h4>Your OTP :<b>'+otp+'</b></h4>'+'<h3>Thank You For Joinig...</h3>'
+        // html : '<h2> Welcome <span style="color:blue">'+name+'<span> .</h2>'+'<h4>Your OTP :<b>'+otp+'</b></h4>'+'<h3>Thank You For Joinig...</h3>'
+        html : html
     }
 
     transporter.sendMail(mailOptions, (error, info) => {
@@ -42,13 +48,12 @@ async function sendEmail(name,email,otp){
             console.log("Email is to be sented",info.response);
         }
     })
-
-
 }
 
 
 // PassWord Secure Using bcrypt Module 
 async function securePassword(password){
+
     try{
         const secure = await bcrypt.hash(password,10);
         return secure;
@@ -57,34 +62,49 @@ async function securePassword(password){
     }
 }
 
-// Load User Login Page 
+
+/*------------------------------------------------------------Router Handling Functions -------------------------------------------*/
+
+/*-------------------------------------- User Login & Register-------------------------------------------------- */
+// View User Login Page 
 const loadUserLogin = (req,res) => {
     res.render('user/userAuthentication',{admin:false,title:'User'});
 }
 
-// Store Register Data to Session 
+// Storing User Register Data to Session 
 const storeSignupData = async(req,res) => {
+
     try{
         const password = req.body.password;
+
+        // Checking Register All field Data Present
         if(Object.keys(req.body).length == 5){
+
+            // Check Two Password Column Data Same
             if(req.body.password === req.body.confirmPassword){
+
                 const strongPassword = await securePassword(password);
                 const user = {
                     username: req.body.username,
                     email: req.body.email,
                     phonenumber: req.body.phonenumber,
-                    password: strongPassword,
+                    password: strongPassword
                 }
+
                 // user data added to session 
                 req.session.userData = user;
-                console.log(req.session.userData)
+
+                //Check the Session And generate OTP
                 if(req.session.userData){
+
                     //generate otp and send mail
                     const otp = await generateRandomOtp(6);
                     req.session.otp = otp;
-                    await sendEmail(user.username,user.email,otp);
+                    const html = `<div style="width: 100%;background: #F5FEFD;text-align:center"><h2>${user.username} Welcome Our Shopping Website</h2><h6>Verification OTP</h6><h3 style="color: red;">${otp}</h3><h2>Thank You For Joining...</h2></div>`
+                    await sendEmail(user.username,user.email,otp,html);
                     req.session.startTime = Date.now();
                     res.redirect('/otpVerification');
+
                 }else{
                     res.status(500).render('partials/error-500');
                 }
@@ -99,13 +119,13 @@ const storeSignupData = async(req,res) => {
 }
 
 
-// Load OTP Verification Page 
+// View OTP Verification Page 
 const loadOTPVerification = (req,res) =>{
     const userdata = req.session.userData;
     res.render('user/otpVerification',{admin:false,title:'User OTP',data:userdata});
 }
 
-// Resend OTP 
+// Resend OTP In Verification Page
 const resendOTP = async(req,res) => {
     const user = req.session.userData;
     const otp = await generateRandomOtp(6);
@@ -116,13 +136,14 @@ const resendOTP = async(req,res) => {
 }
 
 
-// OTP Verification and Go For the Home Window 
+// OTP Verificatied and Go For the Home Window 
 const OTPCheck = async(req,res) => {
+
     const endTime = Date.now();
     const startTime = req.session.startTime;
     const sessionOTP = req.session.otp;
     const data = req.session.userData;
-    console.log(data)
+    console.log(data,sessionOTP)
     const user = userData({
         username: data.username,
         email: data.email,
@@ -131,16 +152,23 @@ const OTPCheck = async(req,res) => {
         _isVerified: true,
         joined_date: new Date()
     })
+
     const takenTime = (endTime - startTime)/1000;
+
+    // Checking OTP Expired OR Not
     if(takenTime < 120){
+
+        // Checking OTP
         if(sessionOTP == req.body.otp)
         {
             const sendData = await user.save();
+            // Sucess Result
             if(sendData){
-                res.status(200).json({message:'success'});
+                res.redirect('/home');
             }else{
-                res.status(500).json({message:'error'});
+                res.status(500).redirect('/error500');
             }
+
             delete req.session.startTime;
             delete req.session.otp;
             delete req.session.userData;
@@ -148,7 +176,9 @@ const OTPCheck = async(req,res) => {
         }else{
             res.status(400).json({message:'Invalid OTP &#10071'});
         }
+
     }else{
+
         delete req.session.otp;
         res.status(200).json({message:'OTP Expired &#10060'});
     }
@@ -162,11 +192,13 @@ const verifyUser = (req,res) => {
 }
 
 
-// Load Home Page
+// View Home Page
 const loadHomePage = (req,res) => {
     res.send("HOME");
 }
 
+
+/*--------------------------------------------Error Handling Pages---------------------------------------------------------------- */
 
 // ERROR Page Loading 
 const load500ErrorPage = (req,res) =>{
@@ -176,6 +208,8 @@ const load500ErrorPage = (req,res) =>{
 const load404ErrorPage = (req,res) =>{
     res.render('partials/error-404')
 }
+
+/*--------------------------------------------Module Exports ----------------------------------------------------------------------*/ 
 module.exports = {
     loadUserLogin,
     storeSignupData,

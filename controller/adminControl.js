@@ -1,6 +1,10 @@
 const bcrypt = require('bcrypt');
 const {loginData,category} = require('../models/adminModel');
+const {userData} = require('../models/userModal');
 const { query } = require('express');
+
+
+/*---------------------------------------ADMIN ROUTER ACCESSING FUNCTIONS----------------------------------------------------------*/
 async function strong(pass){
     try{
         const x = await bcrypt.hash(pass,10)
@@ -11,7 +15,10 @@ async function strong(pass){
     
 }
 
-// Load Admin Login Page 
+
+/*---------------------------------------ADMIN LOGIN & HOME PAGE LOAD FUNTIONS---------------------------------------------------------*/
+
+// VIEW Admin Login Page 
 const loadAdminLogin = (req,res) =>{
     res.render('admin/login',{admin:false,style:true});
 
@@ -39,16 +46,21 @@ const verifyLogin = async(req,res) => {
     
 }
 
-// Load Admin Home Window 
+// VIEW Admin Home Window 
 const loadAdminHomepage = (req,res) => {
     // const name = req.params.adminData.name;
     res.render('admin/main',{admin:true,name:req.session.name,title:'AdminHome'});
 }
 
 
-// Load User List Window
-const loadUserList = (req,res) => {
-    res.render('admin/viewUsers',{admin:true,title:'userlist'});
+
+/*---------------------------------------ADMIN USER MANAGE ROUTE FUNCTIONS---------------------------------------------------------*/
+
+// VIEW User List Window
+const loadUserList = async(req,res) => {
+    const user = await userData.find({});
+    console.log(user)
+    res.render('admin/viewUsers',{admin:true,title:'userlist',data:user});
 }
 
 // Load Product List Window
@@ -69,7 +81,7 @@ const loadEditProductPage = (req,res) => {
 
 
 
-/*------------------ Category Section--------------------*/
+/*----------------------------------------- CATEGORY SECTION-----------------------------------------------------------*/
 
 //View Categorys 
 const loadCategoryList = async(req,res) => {

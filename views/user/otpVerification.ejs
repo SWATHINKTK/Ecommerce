@@ -4,7 +4,7 @@
         <form method="POST" id="verificationOTP">
             <div class="pt-3 pb-3 ">
                 <h1>Verify Your Account</h1>
-                <p>To continue, complete this verification step. We've sent an OTP to the email <span class="text-primary"><%= data.email %></span>. Please enter it below to complete verification.</p>
+                <p>To continue, complete this verification step. We've sent an OTP to the email <span class="text-primary"><%= locals.data.email ? data.email : '' %></span>. Please enter it below to complete verification.</p>
             </div>
             <p id="result" class="text-danger"></p>
             <div class="input-group ">
@@ -72,3 +72,4 @@
     start();
 </script>
 <%- include('../partials/footer.ejs') %>
+

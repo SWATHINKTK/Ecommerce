@@ -90,22 +90,24 @@ async function editCategory(value){
 function search(){
 
     const  searchData = document.getElementById('categorySearch').value;
+    
     const url = '/admin/searchcategory';
     const post = {
         method:'POST',
         body: JSON.stringify({'search':`${searchData}`}),
         headers:{'Content-Type':'application/json'}
     }
+
     fetch(url,post)
+
     .then((response) => {
         if(!(response.ok)){
             window.location.href = '/admin/error500';
         }
         return response.text();
     })
+
     .then((data) => {
-        
-        
         document.getElementById("dynamic_page").innerHTML = data;
     }).catch((error) => {
         console.log(error.message)
