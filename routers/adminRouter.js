@@ -43,9 +43,11 @@ adminRouter.post('/logout',adminController.logoutAdmin);
 adminRouter.post('/addcategory',adminController.addCategory);
 adminRouter.post('/editcategory',adminController.editCategory);
 adminRouter.post('/searchcategory',adminController.searchCategory);
+adminRouter.get('/searchuser',adminController.searchUser);
 
 // All Patch Request Handle Admin
 adminRouter.patch('/categorystatusupdate',adminController.categorySatusUpdate)
+adminRouter.patch('/blockuser',adminController.blockUser);
 
 
 

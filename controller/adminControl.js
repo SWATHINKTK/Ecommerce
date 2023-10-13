@@ -59,9 +59,61 @@ const loadAdminHomepage = (req,res) => {
 // VIEW User List Window
 const loadUserList = async(req,res) => {
     const user = await userData.find({});
-    console.log(user)
     res.render('admin/viewUsers',{admin:true,title:'userlist',data:user});
 }
+
+// USER BLOCK / UNBLOCK FEATURE
+const blockUser = async(req,res) => {
+
+    const id = req.body.id;
+        const user = await userData.findOne({_id:id});
+
+        // in this case checking the category Unlisted or not
+        if(user.block){
+
+            const storeData = await userData.findOneAndUpdate(
+                {_id:id},
+                {$set:{block:false,block_date:new Date()}},
+                {new:true});
+
+            // Store Data and send result
+            if(storeData){
+    
+                res.json({'user':false});  
+
+            }else{
+                res.status(500).render('partials/error-500')
+            }
+
+        }else{
+
+            const storeData = await userData.findOneAndUpdate(
+                {_id:id},
+                {$set:{block:true,block_date:new Date()}},
+                {new:true});
+            if(storeData){
+
+                res.json({'user':true});
+                
+            }else{
+                res.status(500).render('partials/error-500')
+            }
+        }
+}
+
+// User Search
+const searchUser = async(req,res) => {
+    const search = req.body.search;
+    console.log(search)
+    const regex = new RegExp(`^${search}.*`, 'i');
+    const searchData = await userData.find({username:{$regex:regex}});
+    console.log(searchData)
+    res.render('admin/viewUsers',{admin:true,data:searchData,title:'Users'});    
+}
+
+
+/*----------------------------------------- PRODUCT SECTION-----------------------------------------------------------*/
+
 
 // Load Product List Window
 const loadProductList = (req,res) => {
@@ -101,7 +153,7 @@ const loadCategoryList = async(req,res) => {
 const searchCategory = async(req,res) => {
 
     const search = req.body.search;
-    const regex = new RegExp(`^${search}.*`, 'i');
+    const regex = new RegExp(`^${search}`, 'i');
     const searchData = await category.find({categoryname:{$regex:regex}});
     res.render('admin/viewCategorys',{admin:true,data:searchData,title:'Categorylist'});    
 
@@ -304,6 +356,8 @@ module.exports = {
     verifyLogin,
     loadAdminHomepage ,
     loadUserList,
+    searchUser,
+    blockUser,
     loadProductList,
     loadAddProductPage,
     loadEditProductPage,

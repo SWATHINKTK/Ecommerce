@@ -5,6 +5,7 @@ function categoryList(value){
     // Button preset Row to taken the Categoryname for uniqueness
     const row = value.parentElement.parentElement;
     const id = row.cells[3]
+    console.log(id)
     const categoryName = row.cells[1].textContent;
 
     // Adding Data to the Ok button 

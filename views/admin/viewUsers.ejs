@@ -4,10 +4,10 @@
       <div class="card-body  mt-5">
         <h4 class="card-title text-center">View Users&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
         <div class="d-grid gap-4 d-md-flex justify-content-md-end mb-2">
-          <input type="text" class="form-control col-3 mr-2" id="categorySearch" placeholder="Category Search" name="categorySearch" value="<%= locals.search ? search : '' %>">
+          <input type="text" class="form-control col-3 mr-2" id="categorySearch" placeholder="Category Search" name="categorySearch" value=" ">
           <button type="button" class="btn btn-outline-primary" onclick="search()"><i class="bi bi-search"></i></button>
         </div>
-        <div class="table-responsive">
+        <div class="table-responsive ">
           <table class="table table-hover">
             <thead>
               <tr>
@@ -31,9 +31,9 @@
                 <td><%= data[i].joined_date %></td>
                 <td><%= data[i]._isVerified ? 'Verfied' : 'NotVerified'%></td>
                 <% if(data[i].block) {%>
-                  <td id="<%= data[i]._id %>"><button class="btn  btn-outline-danger pl-3 pr-3" id="<%= data[i]._id %>" onclick="categoryList(this)">Block</button></td>
+                  <td id="<%= data[i]._id %>"><button class="btn  btn-outline-danger pl-4 pr-4" id="<%= data[i]._id %>" onclick="userList(this)">Block</button></td>
                 <% } else { %>
-                  <td id="<%= data[i]._id %>"><button class="btn btn-outline-success pl-4 pr-4" id="<%= data[i]._id %>" onclick="categoryList(this)">Unblock</button></td>
+                  <td id="<%= data[i]._id %>"><button class="btn btn-outline-success pl-3 pr-3" id="<%= data[i]._id %>" onclick="userList(this)">Unblock</button></td>
                 <% } %>
               </tr>
               <% } }else {%>
@@ -46,5 +46,21 @@
         </div>
       </div>
     </div>
+  </div>
+  <div class="modal" id="modal" style="display: none; width: 23rem;margin-right: 50%;margin-left: 40%; margin-top:3rem;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">User Block/Unblock</h5>
+        <button class="btn btn-transparent" onclick="back()"><i class="bi bi-x"></i></button>
+      </div>
+      <div class="modal-body">
+        Are you sure?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="cancel" onclick="back()">Cancel</button>
+        <button type="button" class="btn btn-primary" id="sucess" data-category-id="">OK</button>
+      </div>
+    </div>
+  </div>
   </div>
 <%- include('../partials/footer.ejs') %>
