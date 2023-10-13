@@ -80,18 +80,17 @@ const loadCategoryList = async(req,res) => {
 
 // Category Status Update (List/Unlist)
 const categorySatusUpdate = async(req,res) => {
-    console.log(req.body)
     try{
         const name = req.body.category;
         const categoryData = await category.findOne({categoryname:name});
-        console.log('aaa',categoryData.list);
+        // console.log('aaa',categoryData.list);
         if(categoryData.list){
             const storeData = await category.findOneAndUpdate(
                 {categoryname:name},
                 {$set:{list:false,listedDate:new Date()}},
                 {new:true});
             if(storeData){
-                console.log('true',storeData);
+                // console.log('true',storeData);
                 // res.render('admin/viewCategorys',{admin:true,data:storeData,title:'Categorylist'}); 
                 res.json({'list':false});    
             }else{
@@ -103,7 +102,7 @@ const categorySatusUpdate = async(req,res) => {
                 {$set:{list:true,listedDate:new Date()}},
                 {new:true});
             if(storeData){
-                console.log('false',storeData);
+                // console.log('false',storeData);
                 res.json({'list':true});
                 // res.render('admin/viewCategorys',{admin:true,data:storeData,title:'Categorylist'});  
             }else{

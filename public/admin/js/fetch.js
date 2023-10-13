@@ -54,7 +54,8 @@ document.addEventListener("DOMContentLoaded", function () {
             });
     });
     document.getElementById("category-list").addEventListener("click", function () {
-        // // Make a Fetch GET request to retrieve the EJS-rendered page
+
+        // Category View Page Rendering using Fetch
         fetch("/admin/categorylist")
             .then((response) => {
                 if (!response.ok) {
@@ -63,10 +64,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 return response.text();
             })
             .then((html) => {
-                // Update the content of the placeholder with the fetched HTML
+
+                // Update The Part Of The HTML & View Categorys
                 contentPlaceholder.innerHTML = html;
 
-                // Script exit checking code 
+                //View Category Page Inside js Functionality Working add Js File
                 const scriptSrc = '/public/admin/js/listCategory.js';
                 const scriptExist = document.querySelector(`script[src="${scriptSrc}"]`);
 
@@ -83,7 +85,8 @@ document.addEventListener("DOMContentLoaded", function () {
             });
     });
     document.getElementById("add-category").addEventListener("click", function () {
-        // // Make a Fetch GET request to retrieve the EJS-rendered page
+
+         // Adding a New Category Page Rendering using Fetch
         fetch("/admin/addcategory")
             .then((response) => {
                 if (!response.ok) {
@@ -92,10 +95,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 return response.text();
             })
             .then((html) => {
-                // Update the content of the placeholder with the fetched HTML
+
+                // // Update The Part Of The HTML & View AddCategoryPage
                 contentPlaceholder.innerHTML = html;
                 
-                // Add a script tag dynamically And check exist or not
+                //View Category Page Inside js Functionality Like Submit Data That Type Of Event are Handle Using
                 const scriptSrc = '/public/admin/js/addCategory.js';
                 const scriptExist = document.querySelector(`script[src="${scriptSrc}"]`);
 
