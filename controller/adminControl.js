@@ -68,97 +68,146 @@ const loadEditProductPage = (req,res) => {
 }
 
 
-// Load Product List Window
+
+/*------------------ Category Section--------------------*/
+
+//View Categorys 
 const loadCategoryList = async(req,res) => {
     try{
+
         const categoryData = await category.find({}).sort({list:-1});
-        res.render('admin/viewCategorys',{admin:true,data:categoryData,title:'Categorylist'});       
+        res.render('admin/viewCategorys',{admin:true,data:categoryData,title:'Categorylist'}); 
+
     }catch(error){
+
         console.log(error.message);
+
     }
 }
 
-// Category Status Update (List/Unlist)
+// Searching Category Using Category Name
+const searchCategory = async(req,res) => {
+
+    const search = req.body.search;
+    const regex = new RegExp(`^${search}.*`, 'i');
+    const searchData = await category.find({categoryname:{$regex:regex}});
+    res.render('admin/viewCategorys',{admin:true,data:searchData,title:'Categorylist'});    
+
+}
+
+// List/Unlist The Category Functionality and Change the CAtegoroy field "list" then Provide a message
 const categorySatusUpdate = async(req,res) => {
+
     try{
         const name = req.body.category;
         const categoryData = await category.findOne({categoryname:name});
-        // console.log('aaa',categoryData.list);
+
+        // in this case checking the category Unlisted or not
         if(categoryData.list){
+
             const storeData = await category.findOneAndUpdate(
                 {categoryname:name},
                 {$set:{list:false,listedDate:new Date()}},
                 {new:true});
+
+            // Store Data and send result
             if(storeData){
-                // console.log('true',storeData);
-                // res.render('admin/viewCategorys',{admin:true,data:storeData,title:'Categorylist'}); 
-                res.json({'list':false});    
+    
+                res.json({'list':false});  
+
             }else{
                 res.status(500).render('partials/error-500')
             }
+
         }else{
+
             const storeData = await category.findOneAndUpdate(
                 {categoryname:name},
                 {$set:{list:true,listedDate:new Date()}},
                 {new:true});
             if(storeData){
-                // console.log('false',storeData);
+
                 res.json({'list':true});
-                // res.render('admin/viewCategorys',{admin:true,data:storeData,title:'Categorylist'});  
+                
             }else{
+
                 res.status(500).render('partials/error-500')
             }
         }
     }catch(error){
+
         console.log(error.message);
+
     }
 }
 
 
-// Load Add Product page 
+// View the Add Category Page
 const loadAddCategoryPage = (req,res) => {
     res.render('admin/addCategory',{admin:true,title:'AddCategory'});
 }
 
-//Category Data Added to Database 
+
+// Add Category Page to Retrive Data And Store to The Database and provide the message
 const addCategory = async(req,res) => {
+
     try{
         const name = req.body.categoryname;
         const description = req.body.description;
+
+        // Checking name & description is present
         if(name && description){
-            const checkData = await category.findOne({categoryname:{ $regex: new RegExp(`^${name}`, 'i') }})
+
+            const checkData = await category.findOne({categoryname:{ $regex: new RegExp(`^${name}`, 'i') }});
+
+            // Checking edit Category name is present in the Category database
             if(!checkData){
+
                 const categoryData = category({
                     categoryname : name,
                     description : description
-                })
+                });
+
                 const dataSend = await categoryData.save();
+
                 if(dataSend){
+
                     res.json({'message':'Category Sucessfullly Added','status':true});
+
                 }else{
+
                     res.json({'message':'Category is not added try again'});
+
                 }
                 
             }else{
+
                 res.json({'message':'Category is Already Exist'});
             }
         }else{
+
             res.json({'message':'Please Enter the Category and Description'});
+
         }
     }catch(error){
+
         console.log(error.message);
     } 
 }
 
-// Load Edit Product page 
+// View the Edit Page and Load the Details
 const loadEditCategoryPage = async(req,res) => {
+
     const name = req.params.id;
     const categoryData = await category.findOne({categoryname:name});
     res.render('admin/editCategory',{admin:true,data:categoryData});
+
 }
+
 
 // Update the Category Values
 const editCategory = async(req,res) => {
+
     try{
         const name = req.body.categoryname;
         const description = req.body.description;
@@ -168,11 +217,13 @@ const editCategory = async(req,res) => {
             const dataCheck =await category.findOne({categoryname:name});
 
             if(dataCheck){
+
                 res.json({'message':'Category is Already Exist'});
 
             }else{
 
                 const dataSend = await category.updateOne({_id:id},{$set:{categoryname:name,description:description}});
+
                 if(dataSend){
                     res.json({'message':'Category Sucessfullly Added','status':true});
                 }else{
@@ -182,6 +233,7 @@ const editCategory = async(req,res) => {
         }else{
             res.json({'message':'Please Enter the Category and Description'});
         }
+        
     }catch(error){
         console.log(error.message);
     } 
@@ -244,6 +296,7 @@ module.exports = {
     loadAddProductPage,
     loadEditProductPage,
     loadCategoryList,
+    searchCategory,
     categorySatusUpdate,
     loadAddCategoryPage,
     loadEditCategoryPage,
