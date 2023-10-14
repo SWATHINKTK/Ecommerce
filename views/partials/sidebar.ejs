@@ -57,7 +57,7 @@
     <li class="nav-item nav-category">
       <span class="nav-link">Navigation</span>
     </li>
-    <li class="nav-item menu-items">
+    <li class="nav-item menu-items" id="dashboard">
       <a class="nav-link" href="/admin/home">
         <span class="menu-icon">
           <i class="mdi mdi-speedometer"></i>
@@ -66,7 +66,7 @@
       </a>
     </li>
 
-    <li class="nav-item menu-items">
+    <li class="nav-item menu-items" id="users">
       <a class="nav-link" href="/admin/userlist">
         <span class="menu-icon">
           <i class="mdi mdi-account-multiple"></i>
@@ -85,7 +85,7 @@
       </a>
       <div class="collapse" id="product">
         <ul class="nav flex-column sub-menu">
-          <li class="nav-item"> 
+          <li class="nav-item" id="products"> 
             <button class="nav-link bg-dark w-100" id="view-productlist">
               <span class="menu-icon">
                 <i class="mdi mdi-cart"></i>
@@ -93,7 +93,7 @@
               <span class="menu-title">Products</span>
             </button>
           </li>
-          <li class="nav-item menu-items">
+          <li class="nav-item menu-items" id="addproduct">
             <!-- <a class="nav-link" href="/admin/addproduct"> -->
               <button class="nav-link bg-dark w-100" id="add-product">
               <span class="menu-icon">
@@ -104,7 +104,7 @@
             <!-- </a> -->
           </li>
       
-          <li class="nav-item menu-items">
+          <li class="nav-item menu-items" id="editproduct">
             <button class="nav-link bg-dark w-100" id="edit-product">
               <span class="menu-icon">
                 <i class="mdi mdi-pencil-box-outline"></i>
@@ -127,7 +127,7 @@
       </a>
       <div class="collapse" id="category">
         <ul class="nav flex-column sub-menu">
-          <li class="nav-item menu-items">
+          <li class="nav-item menu-items" id="category">
             <button class="nav-link bg-dark w-100" id="category-list">
               <span class="menu-icon">
                 <i class="mdi mdi-view-grid"></i>
@@ -136,7 +136,7 @@
             </button>
           </li>
 
-          <li class="nav-item menu-items">
+          <li class="nav-item menu-items" id="add-category">
             <button class="nav-link bg-dark w-100" id="add-category">
               <!-- <a href="/admin/addcategory"> -->
               <span class="menu-icon">
@@ -151,42 +151,9 @@
       </div>
     </li>
 
-
-    <!-- <li class="nav-item menu-items">
-      <a class="nav-link" href="/admin/productlist">
-        <span class="menu-icon">
-          <i class="mdi mdi-cart"></i>
-        </span>
-        <span class="menu-title">Products</span>
-      </a>
-    </li>
-
-    <li class="nav-item menu-items">
-      <a class="nav-link" href="/admin/addproduct">
-        <span class="menu-icon">
-          <i class="mdi mdi-cart-plus"></i>
-        </span>
-        <span class="menu-title">Add Products</span>
-      </a>
-    </li>
-
-    <li class="nav-item menu-items">
-      <a class="nav-link" href="/admin/editproduct">
-        <span class="menu-icon">
-          <i class="mdi mdi-pencil-box-outline"></i>
-        </span>
-        <span class="menu-title">Edit Products</span>
-      </a>
-    </li> -->
-
     
 
-    
-
-    
-    
-
-    <li class="nav-item menu-items">
+    <li class="nav-item menu-items" id="addbanner">
       <a class="nav-link" href="/admin/addbanner">
         <span class="menu-icon">
           <i class="mdi mdi-paperclip"></i>
@@ -206,7 +173,7 @@
       </a>
       <div class="collapse" id="coupon">
         <ul class="nav flex-column sub-menu">
-          <li class="nav-item menu-items">
+          <li class="nav-item menu-items" id="coupon">
             <button class="nav-link bg-dark w-100" id="coupon-list">
               <span class="menu-icon">
                 <i class="mdi mdi-gift"></i>
@@ -215,7 +182,7 @@
             </a>
           </li>
 
-          <li class="nav-item menu-items">
+          <li class="nav-item menu-items" id="addcoupon">
             <button class="nav-link bg-dark w-100" id="add-coupon">
               <span class="menu-icon">
                 <i class="mdi mdi-library-plus"></i>
@@ -232,7 +199,7 @@
 
 
 
-    <li class="nav-item menu-items">
+    <li class="nav-item menu-items" id="order">
       <a class="nav-link" href="/admin/orderlist">
         <span class="menu-icon">
           <i class="mdi mdi-truck-delivery"></i>
