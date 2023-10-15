@@ -8996,6 +8996,118 @@ textarea.tt-hint {
   display: block;
   margin-top: 0.25rem; }
 
+
+
+
+
+
+
+  /* Style the options container
+  .options-container {
+    display: none;
+    position: absolute;
+    z-index: 1;
+    width: 100%;
+  }
+.option{
+  width: 100%;
+  height: 2.875rem;
+  padding: 0.56rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1;
+  color: #495057;
+  background-color: #2A3038;
+  background-clip: padding-box;
+  border: 1px solid #2c2e33;
+  border-radius: 2px;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out; 
+} */
+  
+
+
+
+/* -------------------------------------------------------------------------------------------------------------------- */
+.multiselect {
+  position: relative;
+}
+
+/* Style the select box */
+.select-box {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.select-box:hover {
+  border-color: #666;
+}
+
+/* Style the selected options display */
+.selected-options {
+  flex: 1;
+}
+
+/* Style the arrow icon */
+.arrow {
+  font-size: 20px;
+}
+
+/* Style the options container */
+.options-container {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  border: 1px solid #ffffff1a;
+  border-top: 0;
+  border-radius: 0 0 5px 5px;
+   background-color: #2A3038;
+  z-index: 1;
+}
+
+/* Style individual options */
+.option {
+  padding: 10px;
+  border-top: 1px solid #ccc;
+}
+
+/* Style the checkbox label */
+.option label {
+  display: flex;
+  align-items: center;
+}
+
+/* Style the checkbox input */
+.option-input {
+  margin-right: 10px;
+}
+
+/* Hover effect for options */
+.option:hover {
+  background-color: #1e1e1ed0;
+}
+.image-addproduct{
+  width: 100px; 
+  height: 100px; 
+  /* background-color:#00ff37; */
+  object-fit: contain;
+  display: none;
+}
+
+.color-addproduct{
+  border-radius: 50%;
+}
+
+
+
+
+
+
 .form-row {
   display: flex;
   flex-wrap: wrap;
@@ -15716,7 +15828,7 @@ body,
 html {
   overflow-x: hidden;
   padding-right: 0 !important;
-  background-color: #191c24; }
+  background-color: #F5F5F9; }
 
 *:-moz-full-screen,
 *:-webkit-full-screen,
@@ -20338,9 +20450,10 @@ div.tagsinput {
     text-decoration: underline; }
 
 /* Navbar */
+
 .navbar {
   font-weight: normal;
-  background: #191c24;
+  background: #f6f6f6;
   left: 244px;
   transition: left 0.25s ease;
   -webkit-transition: left 0.25s ease;
@@ -20623,7 +20736,7 @@ div.tagsinput {
 /* Sidebar */
 .sidebar {
   min-height: calc(100vh - 70px);
-  background: #191c24;
+  background: #ffffff;
   font-weight: normal;
   padding: 0;
   width: 244px;
@@ -21126,7 +21239,7 @@ div.tagsinput {
       width: 100%; } }
 
 .content-wrapper {
-  background: #ffffff;
+  background: #F5F5F9;
   padding: 1.875rem 1.75rem;
   width: 100%;
   -webkit-flex-grow: 1;

@@ -67,6 +67,7 @@ const blockUser = async(req,res) => {
 
     const id = req.body.id;
         const user = await userData.findOne({_id:id});
+        console.log(user)
 
         // in this case checking the category Unlisted or not
         if(user.block){
@@ -106,7 +107,7 @@ const searchUser = async(req,res) => {
     const search = req.query.search;
     const regex = new RegExp(`^${search}.*`, 'i');
     const searchData = await userData.find({username:{$regex:regex}});
-    console.log(searchData)
+    // console.log(searchData)
     res.render('admin/viewUsers',{admin:true,data:searchData,title:'Users'});    
 }
 
@@ -115,14 +116,16 @@ const searchUser = async(req,res) => {
 
 
 // Load Product List Window
-const loadProductList = (req,res) => {
+const loadProductList = async(req,res) => {
     res.render('admin/viewProducts',{admin:true});
 
 }
 
 // Load Add Product page 
-const loadAddProductPage = (req,res) => {
-    res.render('admin/addProduct',{admin:true});
+const loadAddProductPage = async(req,res) => {
+
+    const categoryData = await category.find({});
+    res.render('admin/addProduct',{admin:true,data:categoryData});
 }
 
 // Load Edit Product page 

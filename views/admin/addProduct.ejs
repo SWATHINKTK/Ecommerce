@@ -16,23 +16,19 @@
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label class="col-sm-3 col-form-label">Category</label>
+                <label class="col-sm-3 col-form-label" onclick="hello()">Category</label>
                 <div class="col-sm-12">
                   <div class="multiselect">
-                    <div class="select-box" onclick="showOptions()">
+                    <div class="select-box form-control" id="select-box">
                         <div class="selected-options">Select options</div>
                         <div class="arrow">&#9660;</div>
                     </div>
                     <div class="options-container" id="options-container">
+                        <% for(let i=0;i<data.length;i++){ %>
                         <div class="option">
-                            <label><input type="checkbox" class="option-input" value="Option 1"> Option 1</label>
+                            <label><input type="checkbox" class="option-input" value="<%= data[i].categoryname %>"><%= data[i].categoryname %></label>
                         </div>
-                        <div class="option">
-                            <label><input type="checkbox" class="option-input" value="Option 2"> Option 2</label>
-                        </div>
-                        <div class="option">
-                            <label><input type="checkbox" class="option-input" value="Option 3"> Option 3</label>
-                        </div>
+                        <% } %>
                     </div>
                 </div>
             
@@ -100,7 +96,7 @@
               <div class="form-group ">
                 <label class="col-sm-3 col-form-label">Color</label>
                 <div class="col-sm-2 rounded-3">
-                  <input type="color" class="form-control form-control-color pt-2 pb-2" id="productColor" value="#ffffff" title="Choose product color" name="color">
+                  <input type="color" class="form-control pt-2 pb-2 color-addproduct" id="productColor" value="#00ff37" title="Choose product color" name="color">
                 </div>
               </div>
             </div>
@@ -109,11 +105,11 @@
             <div class="col-md-6">
               <div class="form-group ">
                 <label class="col-sm-3 col-form-label">Image</label>
-                <div  class="ml-3" style="width: 100px; height: 100px; background-color: aqua;">
-
+                <div  class="ml-3 image-addproduct-div" >
+                    <img class="image-addproduct" src="/public/admin/assets/images/screenshots/tinted-sidebar.jpg" alt="Reupload the file">
                 </div>
                 <div class="col-sm-12">
-                  <input type="file" class="form-control" id="customFile" name="image1">
+                  <input type="file" class="form-control" id="product-image-1" name="product-image-1" onchange="producImage(this)">
                 </div>
                 
               </div>
@@ -121,12 +117,15 @@
             <div class="col-md-6">
               <div class="form-group ">
                 <label class="col-sm-3 col-form-label"></label>
-                <div class="ml-3" style="width: 100px; height: 100px; background-color: aqua;">
 
+                <div class="ml-3 image-addproduct" >
+                  <img class="image-addproduct" src="/public/admin/assets/images/screenshots/tinted-sidebar.jpg" alt="Reupload the file">
                 </div>
+
                 <div class="col-sm-12">
-                  <input type="file" class="form-control" id="customFile" name="image2">
+                  <input type="file" class="form-control" id="product-image-2" name="product-image-2" onchange="producImage(this)">
                 </div>
+
               </div>
             </div>
           </div>
@@ -134,11 +133,13 @@
             <div class="col-md-6">
               <div class="form-group ">
                 <label class="col-sm-3 col-form-label">Image</label>
-                <div class="ml-3" style="width: 100px; height: 100px; background-color: aqua;">
 
+                <div class="ml-3 image-addproduct">
+                  <img class="image-addproduct" src="/public/admin/assets/images/screenshots/tinted-sidebar.jpg" alt="Reupload the file">
                 </div>
+
                 <div class="col-sm-12">
-                  <input type="file" class="form-control" id="customFile" name="image3">
+                  <input type="file" class="form-control" id="product-image-3" name="product-image-3" onchange="producImage(this)">
                 </div>
                 
               </div>
@@ -146,12 +147,15 @@
             <div class="col-md-6">
               <div class="form-group ">
                 <label class="col-sm-3 col-form-label"></label>
-                <div class="ml-3" style="width: 100px; height: 100px; background-color: aqua;">
 
+                <div class="ml-3 image-addproduct">
+                  <img class="image-addproduct" src="/public/admin/assets/images/screenshots/tinted-sidebar.jpg" alt="Reupload the file">
                 </div>
+
                 <div class="col-sm-12">
-                  <input type="file" class="form-control" id="customFile" name="3">
+                  <input type="file" class="form-control" id="product-image-4" name="product-image-4" onchange="producImage(this)">
                 </div>
+
               </div>
             </div>
           </div>

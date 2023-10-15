@@ -70,7 +70,7 @@ async function editCategory(value){
             document.getElementById("dynamic_page").innerHTML = data;
 
             // Edit Category Page Inside js Functionality Working add Js File 
-            const scriptSrc = '/public/admin/js/editCategory.js';
+            const scriptSrc = '/public/admin/js/category/editCategory.js';
             const scriptExist = document.querySelector(`script[src="${scriptSrc}"]`);
 
             if(scriptExist){
@@ -88,7 +88,7 @@ async function editCategory(value){
 
 
 // Searching the Category Based on name
-function search(){
+function searchCategory(){
 
     const  searchData = document.getElementById('categorySearch').value;
     
