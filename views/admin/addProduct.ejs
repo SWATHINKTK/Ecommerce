@@ -3,14 +3,14 @@
       <div class="card-body">
         <h4 class="card-title">Add Product</h4>
       <div class="">
-        <form class="form-sample">
+        <form id="addProduct-form">
           <p class="card-description">  </p>
           <div class="row">
             <div class="col-md-6">
               <div class="form-group">
                 <label class="col-sm-3 col-form-label">Product Name</label>
                 <div class="col-sm-12">
-                  <input type="text" class="form-control" name="product-name">
+                  <input type="text" class="form-control" name="product_name">
                 </div>
               </div>
             </div>
@@ -20,7 +20,7 @@
                 <div class="col-sm-12">
                   <div class="multiselect">
                     <div class="select-box form-control" id="select-box">
-                        <div class="selected-options">Select options</div>
+                        <div class="selected-options" id="categorys">Select options</div>
                         <div class="arrow">&#9660;</div>
                     </div>
                     <div class="options-container" id="options-container">
@@ -70,7 +70,7 @@
               <div class="form-group ">
                 <label class="col-sm-3 col-form-label">Price</label>
                 <div class="col-sm-12">
-                  <input type="text" class="form-control" name="price">
+                  <input type="number" class="form-control" name="price">
                 </div>
               </div>
             </div>
@@ -101,29 +101,29 @@
               </div>
             </div>
           </div>
+          <div id="image-product-data">
           <div class="row">
             <div class="col-md-6">
               <div class="form-group ">
                 <label class="col-sm-3 col-form-label">Image</label>
-                <div  class="ml-3 image-addproduct-div" >
-                    <img class="image-addproduct" src="/public/admin/assets/images/screenshots/tinted-sidebar.jpg" alt="Reupload the file">
-                </div>
                 <div class="col-sm-12">
-                  <input type="file" class="form-control" id="product-image-1" name="product-image-1" onchange="producImage(this)">
+                  <input type="file" class="form-control" id="productImage_1" name="productImage" accept="image/*">
+                </div>
+                <div  class="ml-3 image-addproduct-div" >
+                  <img class="image-addproduct" id="imageProduct-1" src="" alt="Upload the file">
                 </div>
                 
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group ">
-                <label class="col-sm-3 col-form-label"></label>
-
-                <div class="ml-3 image-addproduct" >
-                  <img class="image-addproduct" src="/public/admin/assets/images/screenshots/tinted-sidebar.jpg" alt="Reupload the file">
-                </div>
+                <label class="col-sm-3 col-form-label">*</label>
 
                 <div class="col-sm-12">
-                  <input type="file" class="form-control" id="product-image-2" name="product-image-2" onchange="producImage(this)">
+                  <input type="file" class="form-control" id="productImage_2" name="productImage" accept="image/*">
+                </div>
+                <div class="ml-3 image-addproduct-div" >
+                  <img class="image-addproduct" id="imageProduct-2" src="" alt="Upload the file">
                 </div>
 
               </div>
@@ -134,42 +134,43 @@
               <div class="form-group ">
                 <label class="col-sm-3 col-form-label">Image</label>
 
-                <div class="ml-3 image-addproduct">
-                  <img class="image-addproduct" src="/public/admin/assets/images/screenshots/tinted-sidebar.jpg" alt="Reupload the file">
+                <div class="col-sm-12">
+                  <input type="file" class="form-control" id="productImage_3" name="productImage" accept="image/*">
                 </div>
 
-                <div class="col-sm-12">
-                  <input type="file" class="form-control" id="product-image-3" name="product-image-3" onchange="producImage(this)">
+                <div class="ml-3 image-addproduct-div">
+                  <img class="image-addproduct"id="imageProduct-3" src="" alt="Upload the file">
                 </div>
                 
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group ">
-                <label class="col-sm-3 col-form-label"></label>
-
-                <div class="ml-3 image-addproduct">
-                  <img class="image-addproduct" src="/public/admin/assets/images/screenshots/tinted-sidebar.jpg" alt="Reupload the file">
-                </div>
+                <label class="col-sm-3 col-form-label">*</label>
 
                 <div class="col-sm-12">
-                  <input type="file" class="form-control" id="product-image-4" name="product-image-4" onchange="producImage(this)">
+                  <input type="file" class="form-control" id="productImage_4" name="productImage" accept="image/*">
+                </div>
+
+                <div class="ml-3 image-addproduct-div">
+                  <img class="image-addproduct" id="imageProduct-4" src="" alt="Upload the file">
                 </div>
 
               </div>
             </div>
+          </div>
           </div>
           <div class="row">
             <div class="col-md-12">
               <div class="form-group">
                 <label class="col-sm-12 col-form-label">Specifications</label>
                 <div class="col-sm-12">
-                  <textarea class="form-control" id="exampleTextarea1" rows="4" name="Specifications" placeholder="*specifications seprated using commas"></textarea>
+                  <textarea class="form-control" id="exampleTextarea1" rows="4" name="specifications" placeholder="*specifications seprated using commas"></textarea>
                 </div>
               </div>
             </div>
           </div>
-          <button type="submit" class="btn btn-primary mr-3 ml-3">Submit</button>
+          <button type="click" class="btn btn-primary mr-3 ml-3" id="product-submit">Submit</button>
           <button class="btn btn-dark">Cancel</button>
         </form>
       </div>

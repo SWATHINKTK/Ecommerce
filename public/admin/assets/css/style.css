@@ -9096,15 +9096,24 @@ textarea.tt-hint {
   height: 100px; 
   /* background-color:#00ff37; */
   object-fit: contain;
-  display: none;
 }
 
 .color-addproduct{
   border-radius: 50%;
 }
 
-
-
+#imageProduct-1{
+  display: none;
+}
+#imageProduct-2{
+  display: none;
+}
+#imageProduct-3{
+  display: none;
+}
+#imageProduct-4{
+  display: none;
+}
 
 
 

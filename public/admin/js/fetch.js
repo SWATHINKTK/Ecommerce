@@ -24,6 +24,8 @@ document.getElementById('sidebar').addEventListener('click', async function(even
 
     }else if(id == 'add-product'){
 
+        /*------------------------Fetch View Page------------------ */
+
         // View the Add a New Product Form Page
         const response = await fetch("/admin/addproduct");
 
@@ -38,8 +40,13 @@ document.getElementById('sidebar').addEventListener('click', async function(even
         const html = await response.text();
         contentPlaceholder.innerHTML = html;
 
-        /*Fetch the Data and Render the Page at that time Drop down to view the 
-        Category That Category Multiple Select Taken Script Code*/
+        /*----------------------End of the Fetch--------------------- */
+
+
+
+        /*---------Fetch the Data and Render the Page at that time Drop down to view the Category 
+        That Category Multiple Select Taken Script Code----------------------------------------*/
+
 
         // Drop Down Dispalay view and hidden using
         document.getElementById('select-box').addEventListener('click',function(){
@@ -52,6 +59,7 @@ document.getElementById('sidebar').addEventListener('click', async function(even
             }
         })
         
+
         // Selecting the Each input field
         const optionInputs = document.querySelectorAll('.option-input');
         const selectedOptions = document.querySelector('.selected-options');
@@ -65,60 +73,106 @@ document.getElementById('sidebar').addEventListener('click', async function(even
                 selectedOptions.textContent = selected.length > 0 ? selected.join(', ') : 'Select options';
             });
         });
+
+        /*------------------------------End of view Category------------------------------------------ */
+
+
         
-
-       
-       
-       
-                // fetch("/admin/addproduct")
-        //     .then((response) => {
-        //         if (!response.ok) {
-        //             throw new Error("Network response was not ok");
-        //         }
-        //         return response.text();
-        //     })
-        //     .then((html) => {
-        //         // Update the content of the placeholder with the fetched HTML
-        //         contentPlaceholder.innerHTML = html;
-
-
-        //         /*Fetch the Data and Render the Page at that time Drop down to view the 
-        //                  Category That Category Multiple Select Taken Script Code*/
-
-        //         // Drop Down Dispalay view and hidden using
-        //         document.getElementById('select-box').addEventListener('click',function(){
-        //             const optionsContainer = document.getElementById('options-container');
-
-        //             if (optionsContainer.style.display == 'block') {
-        //                 optionsContainer.style.display = 'none';
-        //             } else {
-        //                 optionsContainer.style.display = 'block';
-        //             }
-        //         })
-                
-        //         // Selecting the Each input field
-        //         const optionInputs = document.querySelectorAll('.option-input');
-        //         const selectedOptions = document.querySelector('.selected-options');
         
-        //         // view the Selecting input Field
-        //         optionInputs.forEach((input) => {
-        //             input.addEventListener('change', function () {
-        //                 const selected = Array.from(optionInputs)
-        //                     .filter((input) => input.checked)
-        //                     .map((input) => input.value);
-        //                 selectedOptions.textContent = selected.length > 0 ? selected.join(', ') : 'Select options';
-        //             });
-        //         });
+        /*-------------------------- Event Deligation for view images --------------------------------*/
 
-        //     })
-        //     .catch((error) => {
-        //         console.error("Fetch error:", error);
-        //     });
+        // this event deligation for selcting image and  view that image imediatly
+        document.getElementById('image-product-data').addEventListener('change',(event)=>{
+            const image = event.target;
 
+            // this funcation view the images
+            function imageView(imageProduct,imageTag){
 
+                const imagePreview = document.getElementById(`${imageProduct}`);
+                const file = image.files[0];
+    
+                    if(file){
+    
+                        const reader = new FileReader();
+    
+                        reader.onload = function(e) {
+                            imageTag.src = e.target.result;
+                        }
+    
+                        reader.readAsDataURL(file);
+                        imageTag.style.display = 'block';
+    
+                    }else{
+                        imageTag.style.display = 'none';
+                        imageTag.src = '';
+                    }
+    
+            }
+
+            if(image.id == 'productImage_1'){
+
+                const image1 = document.getElementById('imageProduct-1');
+                imageView('imageProduct-1',image1);
             
-    
-    
+            }else if(image.id == 'productImage_2'){
+
+                const image2 = document.getElementById('imageProduct-2');
+                imageView('imageProduct-2',image2);
+
+            }else if(image.id == 'productImage_3'){
+
+                const image3 = document.getElementById('imageProduct-3');
+                imageView('imageProduct-3',image3);
+
+            }else if(image.id == 'productImage_4'){
+
+                const image4 = document.getElementById('imageProduct-4');
+                imageView('imageProduct-4',image4);
+
+            }
+        });
+
+        /*------------------ End Of The Event Deligation for view images-----------------------*/
+
+
+
+        /*----------------------Form Data to send to the Server--------------------------------*/
+
+        document.getElementById('product-submit').addEventListener('click',(event) => {
+            event.preventDefault();
+
+            // Form data taken form element & Creating Form object
+            const form = document.getElementById('addProduct-form');
+            const formData = new FormData(form);
+            
+            const formDataObject = {};
+            for (const [key, value] of formData) {
+                formDataObject[key] = value;
+            }
+
+
+            // Multiple images taken product name sett all fields taken as array and store it object
+            const imageFiles = formData.getAll("productImage");
+            const imageName = []; 
+            
+            for (let i = 0; i < imageFiles.length; i++) {
+                imageName[i] = imageFiles[i].name;
+            }
+            formDataObject.productImage = imageName;
+
+
+            // Retriev the data from category and storing it as a array
+            const categorylist = document.getElementById('categorys').innerHTML;
+            let category = categorylist.split(', ');
+            formDataObject.categorys = category;
+        
+            // converting the data in to json
+            const jsonData = JSON.stringify(formDataObject);
+
+        })
+       
+       
+        
 
     }else if(id == 'view-categorylist'){
 
