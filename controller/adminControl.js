@@ -124,12 +124,13 @@ const loadProductList = async(req,res) => {
 // Load Add Product page 
 const loadAddProductPage = async(req,res) => {
 
-    const categoryData = await category.find({});
+    const categoryData = await category.find({list:true},{categoryname:1});
     res.render('admin/addProduct',{admin:true,data:categoryData});
 }
 
 const productAdd = async(req,res)=>{
      console.log(req.body);
+     console.log(req.files[0].originalname);
 
 }
 

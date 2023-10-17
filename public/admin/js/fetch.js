@@ -2,7 +2,7 @@
 document.getElementById('sidebar').addEventListener('click', async function(event){
     const contentPlaceholder = document.getElementById("dynamic_page");
     const id = event.target.id;
-
+    console.log(id);
 
     // Fetch is used to load the Product,Category, & Coupon Pages
     if(id == 'view-productlist'){
@@ -26,21 +26,25 @@ document.getElementById('sidebar').addEventListener('click', async function(even
     }else if(id == 'add-product'){
 
         /*------------------------Fetch View Page------------------ */
+        try{
+            // View the Add a New Product Form Page
+            const response = await fetch("/admin/addproduct");
 
-        // View the Add a New Product Form Page
-        const response = await fetch("/admin/addproduct");
+            // Response Check Field
+            if(!response.ok){
 
-        // Response Check Field
-        if(!response.ok){
+                window.location.href = '/admin/error500';
+                return;
+            }
 
-            window.location.href = '/admin/error500';
-            return;
+            //Response Convert to text and view
+            const html = await response.text();
+            contentPlaceholder.innerHTML = html;
+
+        }catch(error){
+            console.log(error.message)
         }
-
-        //Response Convert to text and view
-        const html = await response.text();
-        contentPlaceholder.innerHTML = html;
-
+        
         /*----------------------End of the Fetch--------------------- */
 
 
@@ -138,43 +142,142 @@ document.getElementById('sidebar').addEventListener('click', async function(even
 
 
         /*----------------------Form Data to send to the Server--------------------------------*/
+        const images = new Array(4);
+        document.getElementById("productImage_1").addEventListener("change", function () {
+            const imagePreview = document.getElementById("productImage_1");
+            const input = this;
+            
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.readAsDataURL(input.files[0]);
+                images[0] = input.files[0]
+            }
+        });
+
+        document.getElementById("productImage_2").addEventListener("change", function () {
+            const imagePreview = document.getElementById("productImage_2");
+            const input = this;
+            
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.readAsDataURL(input.files[0]);
+                images[1] = input.files[0]
+            }
+        });
+
+        document.getElementById("productImage_3").addEventListener("change", function () {
+            const imagePreview = document.getElementById("productImage_3");
+            const input = this;
+            
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.readAsDataURL(input.files[0]);
+                images[2] = input.files[0]
+            }
+        });
+
+        document.getElementById("productImage_4").addEventListener("change", function () {
+            const imagePreview = document.getElementById("productImage_4");
+            const input = this;
+            
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.readAsDataURL(input.files[0]);
+                images[3] = input.files[0]
+            }
+        });
 
         document.getElementById('product-submit').addEventListener('click',async(event) => {
             event.preventDefault();
 
-            // Form data taken form element & Creating Form object
-            const form = document.getElementById('addProduct-form');
-            const formData = new FormData(form);
-            
+            const formData = new FormData();
 
-            // Multiple images taken product name sett all fields taken as array and store it object
-            const imageFiles = formData.getAll("productImage");
-            const imageName = []; 
-            
-            for (let i = 0; i < imageFiles.length; i++) {
-                imageName[i] = imageFiles[i].name;
-            }
-           
-            console.log(...formData);
-
-            // Retriev the data from category and storing it as a array
-            const categorylist = document.getElementById('categorys').innerHTML;
-            let category = categorylist.split(', ');
-            formData.append('categorys',category);
-        
-            // converting the data in to json
-
-            const SendData = await fetch('/admin/productadd',{
-                method:'POST',
-                body:formData,
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded",
-                    "Content-Type": "multipart/form-data",
-                },
-
+            const productname = document.getElementById('productname').value;
+            const category = document.getElementById('productcategory').innerHTML;
+            const description = document.getElementById('productdescription').value;
+            const brandname = document.getElementById('productbrandname').value;
+            const stock = document.getElementById('productstock').value;
+            const price = document.getElementById('productprice').value;
+            const size = document.getElementById('productsize').value;
+            const material = document.getElementById('productmaterial').value;
+            const color = document.getElementById('productcolor').value;
+            const specification = document.getElementById('productspecification').value ;
+            console.log(productname,category,description,brandname,stock,price,size,material,color,specification);;
+            console.log(images);
+            images.forEach((val,i)=>{
+                formData.append('productimages',images[i]);
             })
 
+            formData.append('productname',productname);
+            formData.append('category',category);
+            formData.append('description',description);
+            formData.append('brandname',brandname);
+            formData.append('stock',stock);
+            formData.append('price',price);
+            formData.append('color',color);
+            formData.append('specification',specification);
+            
+            try{
+                const SendData = await fetch('/admin/productadd',{
+                    method:'POST',
+                    body:formData
+    
+                })
+            }catch(error){
+                console.log(error.message)
+            }
+
+
+
+            
+            
         })
+
+
+
+
+
+
+
+
+
+
+
+    //     document.getElementById('product-submit').addEventListener('click',async(event) => {
+    //         event.preventDefault();
+
+    //         // Form data taken form element & Creating Form object
+    //         const form = document.getElementById('addProduct-form');
+    //         const formData = new FormData(form);
+            
+
+    //         // // Multiple images taken product name sett all fields taken as array and store it object
+    //         // const imageFiles = formData.getAll("productImage");
+    //         // const imageName = []; 
+            
+    //         // for (let i = 0; i < imageFiles.length; i++) {
+    //         //     formData.append('productimage',imageFiles[i]);
+    //         // }
+           
+    //         console.log(...formData);
+
+    //         // Retriev the data from category and storing it as a array
+    //         const categorylist = document.getElementById('categorys').innerHTML;
+    //         let category = categorylist.split(', ');
+    //         for (let i = 0; i < category.length; i++) {
+    //             formData.append('categorys',category[i]);
+    //         }
+            
+        
+    //         // converting the data in to json
+
+    //         const SendData = await fetch('/admin/productadd',{
+    //             method:'POST',
+    //             body:formData
+
+    //         })
+
+    //     })
        
        
         

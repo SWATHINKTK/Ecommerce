@@ -2,6 +2,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const session = require('express-session');
+const multer = require('multer');
+const path = require('path');
 const adminRouter = express();
 
 
@@ -18,6 +20,20 @@ adminRouter.use(session({
     resave : false,
     saveUninitialized : true
 }))
+
+
+
+// multer is used to upload file 
+const storage = multer.diskStorage({
+    destination:(req,file,cb) => {
+        cb(null,path.join(__dirname,'../public/admin/assets/productImages'));
+    },
+    filename:(req,file,cb) => {
+        const name = Date.now()+'-'+file.originalname;
+        cb(null,name)
+    }
+});
+const upload = multer({storage:storage})
 
 
 // All GET request in Admin Panel 
@@ -45,7 +61,7 @@ adminRouter.post('/logout',adminController.logoutAdmin);
 adminRouter.post('/addcategory',adminController.addCategory);
 adminRouter.post('/editcategory',adminController.editCategory);
 adminRouter.post('/searchcategory',adminController.searchCategory);
-adminRouter.post('/productadd',adminController.productAdd);
+adminRouter.post('/productadd',upload.array('productimages',4),adminController.productAdd);
 
 // All Patch Request Handle Admin
 adminRouter.patch('/categorystatusupdate',adminController.categorySatusUpdate)
