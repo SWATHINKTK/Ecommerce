@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt');
-const {loginData,category} = require('../models/adminModel');
+const {loginData,category,productInfo} = require('../models/adminModel');
 const {userData} = require('../models/userModal');
 const { query } = require('express');
 
@@ -117,9 +117,13 @@ const searchUser = async(req,res) => {
 
 // Load Product List Window
 const loadProductList = async(req,res) => {
-    res.render('admin/viewProducts',{admin:true});
+    const product = await productInfo.find({});
+    console.log(product)
+
+    res.render('admin/viewProducts',{admin:true,data:product});
 
 }
+
 
 // Load Add Product page 
 const loadAddProductPage = async(req,res) => {
@@ -128,9 +132,58 @@ const loadAddProductPage = async(req,res) => {
     res.render('admin/addProduct',{admin:true,data:categoryData});
 }
 
+
+// Adding the Product Data into Database
 const productAdd = async(req,res)=>{
-     console.log(req.body);
-     console.log(req.files[0].originalname);
+
+    // Taken Data Come Form Clent 
+    const data = req.body;
+    const images = [];
+    console.log(req.files)
+    req.files.forEach((file)=> {
+        images.push(file.filename)
+    });
+    
+    
+    const length =  Object.keys(data).length;
+
+    // checking All Field entered or not 
+    if(length == 10 && images.length == 4){
+
+        const productData = productInfo({
+            productName: data.productname,
+            categorys: data.categorys,
+            description: data.description,
+            brandname: data.brandname,
+            stock: data.stock,
+            price: data.price,
+            size: data.size,
+            material: data.material ,
+            color: data.color,
+            productImages: images,
+            specifications: data.specification,
+            addDate: new Date(),
+        })
+
+        console.log(productData)
+        const product = await productData.save();
+
+        // Sucess result Checking
+        if(product){
+            res.status(200).json({status:true,message:'Succesfully Added Product'});
+        }else{
+            res.status(500).render('/admin/error500');
+        }
+
+    }else{
+        // Error message and Eror staus code
+        if(length < 10){
+            res.json({status:false,message:'Enter All Field'});
+            
+        }else{
+            res.json({status:false,message:'Upload All Images'});
+        }
+    }
 
 }
 
@@ -138,6 +191,8 @@ const productAdd = async(req,res)=>{
 const loadEditProductPage = (req,res) => {
     res.render('admin/editProduct',{admin:true});
 }
+
+
 
 
 

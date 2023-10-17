@@ -9,51 +9,72 @@
             <thead>
               <tr>
                 <th>#</th>
-                <th>User</th>
-                <th>Product</th>
-                <th>Sale</th>
-                <th>Status</th>
+                <th>Product Name</th>
+                <th>Color</th>
+                <th>Brand Name</th>
+                <th>Stock</th>
+                <th>Price</th>
+                <th>Rate</th>
+                <th>View More</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody class="text-white">
+              <% if(data.length) { %>
+                <% for(let i = 0; i < data.length ; i++) { %>
               <tr>
-                <td>1</td>
-                <td>Jacob</td>
-                <td>Photoshop</td>
-                <td class="text-danger"> 28.76% <i class="mdi mdi-arrow-down"></i></td>
-                <td><label class="badge badge-danger">Pending</label></td>
+                <td><%= i+1 %></td>
+                <td ><%= data[i].productName %></td>
+                <td >
+                    <% for(let j = 0; j < data[i].categorys.length ; j++) { %>
+                    <%= data[i].categorys[j] %><br>
+                    <% } %>
+                </td>
+                <td><%= data[i].brandname %></td>
+                <td><%= data[i].stock %></td>
+                <td><%= data[i].price %></td>
+                <td><%= data[i].rating %></td>
+                <td><a href="#">View More <i class="bi bi-chevron-double-right"></i></a></td>
+                <% if(data[i].status) {%>
+                  <td id="<%= data[i]._id %>"><button class="btn  btn-outline-danger pl-4 pr-4" id="<%= data[i]._id %>" onclick="userList(this)">Block</button></td>
+                <% } else { %>
+                  <td id="<%= data[i]._id %>"><button class="btn btn-outline-success pl-3 pr-3" id="<%= data[i]._id %>" onclick="userList(this)">Unblock</button></td>
+                <% } %>
+                <!-- <td class="text-danger"> 28.76% <i class="mdi mdi-arrow-down"></i></td>
+                <td><label class="badge badge-danger">Pending</label></td> -->
               </tr>
-              <tr>
-                <td>1</td>
-                <td>Messsy</td>
-                <td>Flash</td>
-                <td class="text-danger"> 21.06% <i class="mdi mdi-arrow-down"></i></td>
-                <td><label class="badge badge-warning">In progress</label></td>
-              </tr>
-              <tr>
-                <td>1</td>
-                <td>John</td>
-                <td>Premier</td>
-                <td class="text-danger"> 35.00% <i class="mdi mdi-arrow-down"></i></td>
-                <td><label class="badge badge-info">Fixed</label></td>
-              </tr>
-              <tr>
-                <td>1</td>
-                <td>Peter</td>
-                <td>After effects</td>
-                <td class="text-success"> 82.00% <i class="mdi mdi-arrow-up"></i></td>
-                <td><label class="badge badge-success">Completed</label></td>
-              </tr>
-              <tr>
-                <td>1</td>
-                <td>Dave</td>
-                <td>53275535</td>
-                <td class="text-success"> 98.05% <i class="mdi mdi-arrow-up"></i></td>
-                <td><label class="badge badge-warning">In progress</label></td>
-              </tr>
+              <% } } else { %>
+                <tr class="bg-danger">
+                  <th class="text-dark text-center" colspan="7">PRODUCT IS NOT FOUND</th>
+                </tr>
+              <% } %>
             </tbody>
           </table>
         </div>
       </div>
     </div>
+  </div>
+
+
+  <div class="moda productmoreinfo-modal" id="productmoreinfo-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">More Information</h5>
+        <button class="btn btn-transparent" onclick="back()"><i class="bi bi-x"></i></button>
+      </div>
+      <div class="modal-body">
+        Images:
+        <div class="modal-productimage">
+          <div class="image-modal"></div>
+          <div class="image-modal"></div>
+          <div class="image-modal"></div>
+          <div class="image-modal"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="cancel" onclick="back()">Cancel</button>
+        <button type="button" class="btn btn-primary" id="user-sucess" data-category-id="" onclick="userBlock()">OK</button>
+      </div>
+    </div>
+  </div>
   </div>

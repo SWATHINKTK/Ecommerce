@@ -9091,6 +9091,8 @@ textarea.tt-hint {
 .option:hover {
   background-color: #1e1e1ed0;
 }
+
+/* product side */
 .image-addproduct{
   width: 100px; 
   height: 100px; 
@@ -9113,6 +9115,19 @@ textarea.tt-hint {
 }
 #imageProduct-4{
   display: none;
+}
+
+#productTable-productname{
+  white-space: pre-wrap;
+  max-width: 150px;
+}
+
+.modal-productimage{
+  background-color: #00a045;
+}
+
+.productmoreinfo-modal{
+  width: 40rem;
 }
 
 
