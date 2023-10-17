@@ -128,6 +128,11 @@ const loadAddProductPage = async(req,res) => {
     res.render('admin/addProduct',{admin:true,data:categoryData});
 }
 
+const productAdd = async(req,res)=>{
+     console.log(req.body);
+
+}
+
 // Load Edit Product page 
 const loadEditProductPage = (req,res) => {
     res.render('admin/editProduct',{admin:true});
@@ -362,6 +367,7 @@ module.exports = {
     blockUser,
     loadProductList,
     loadAddProductPage,
+    productAdd,
     loadEditProductPage,
     loadCategoryList,
     searchCategory,

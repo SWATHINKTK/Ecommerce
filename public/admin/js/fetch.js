@@ -1,3 +1,4 @@
+
 document.getElementById('sidebar').addEventListener('click', async function(event){
     const contentPlaceholder = document.getElementById("dynamic_page");
     const id = event.target.id;
@@ -138,18 +139,13 @@ document.getElementById('sidebar').addEventListener('click', async function(even
 
         /*----------------------Form Data to send to the Server--------------------------------*/
 
-        document.getElementById('product-submit').addEventListener('click',(event) => {
+        document.getElementById('product-submit').addEventListener('click',async(event) => {
             event.preventDefault();
 
             // Form data taken form element & Creating Form object
             const form = document.getElementById('addProduct-form');
             const formData = new FormData(form);
             
-            const formDataObject = {};
-            for (const [key, value] of formData) {
-                formDataObject[key] = value;
-            }
-
 
             // Multiple images taken product name sett all fields taken as array and store it object
             const imageFiles = formData.getAll("productImage");
@@ -158,16 +154,25 @@ document.getElementById('sidebar').addEventListener('click', async function(even
             for (let i = 0; i < imageFiles.length; i++) {
                 imageName[i] = imageFiles[i].name;
             }
-            formDataObject.productImage = imageName;
-
+           
+            console.log(...formData);
 
             // Retriev the data from category and storing it as a array
             const categorylist = document.getElementById('categorys').innerHTML;
             let category = categorylist.split(', ');
-            formDataObject.categorys = category;
+            formData.append('categorys',category);
         
             // converting the data in to json
-            const jsonData = JSON.stringify(formDataObject);
+
+            const SendData = await fetch('/admin/productadd',{
+                method:'POST',
+                body:formData,
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "Content-Type": "multipart/form-data",
+                },
+
+            })
 
         })
        

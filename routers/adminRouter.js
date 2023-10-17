@@ -10,8 +10,9 @@ const adminController = require('../controller/adminControl');
 
 
 // Application Middlewares
-adminRouter.use(express.urlencoded({extended:true}))
 adminRouter.use(express.json());
+adminRouter.use(express.urlencoded({extended:true}))
+
 adminRouter.use(session({
     secret:'key',
     resave : false,
@@ -44,6 +45,7 @@ adminRouter.post('/logout',adminController.logoutAdmin);
 adminRouter.post('/addcategory',adminController.addCategory);
 adminRouter.post('/editcategory',adminController.editCategory);
 adminRouter.post('/searchcategory',adminController.searchCategory);
+adminRouter.post('/productadd',adminController.productAdd);
 
 // All Patch Request Handle Admin
 adminRouter.patch('/categorystatusupdate',adminController.categorySatusUpdate)
