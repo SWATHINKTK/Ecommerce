@@ -64,7 +64,7 @@ adminRouter.post('/addcategory',adminController.addCategory);
 adminRouter.post('/editcategory',adminController.editCategory);
 adminRouter.post('/searchcategory',adminController.searchCategory);
 adminRouter.post('/productadd',upload.array('productimages',4),adminController.productAdd);
-// adminRouter.post('/editproduct',adminController.editProduct);
+adminRouter.post('/editproduct',upload.array('productimages',4),adminController.editProduct);
 
 
 // All Patch Request Handle Admin

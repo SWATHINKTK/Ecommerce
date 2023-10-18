@@ -172,6 +172,14 @@ const productStatusUpdate = async(req,res) => {
 
 
 
+const editProduct = async(req,res) => {
+    const data = req.body;
+    console.log(data)
+}
+
+
+
+
 // Load Add Product page 
 const loadAddProductPage = async(req,res) => {
 
@@ -480,6 +488,7 @@ module.exports = {
     loadProductList,
     loadProductMoreData,
     productStatusUpdate,
+    editProduct,
     loadAddProductPage,
     productAdd,
     loadEditProductPage,
