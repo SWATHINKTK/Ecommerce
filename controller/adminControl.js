@@ -159,7 +159,7 @@ const productStatusUpdate = async(req,res) => {
 
     }else{
 
-        const update = await productInfo.updateOne({_id:id},{$set:{status:true}});
+        const update = await productInfo.updateOne({_id:id},{$set:{status:true,listDate:new Date()}},{upsert:true});
 
         if(update.acknowledged){
             res.status(200).json({message:true,id:data._id});
@@ -235,9 +235,17 @@ const productAdd = async(req,res)=>{
 
 }
 
+
+
 // Load Edit Product page 
-const loadEditProductPage = (req,res) => {
-    res.render('admin/editProduct',{admin:true});
+const loadEditProductPage = async(req,res) => {
+
+    const id = req.params.id;
+    const productData = await productInfo.findOne({_id:id});
+
+    const Data = await category.find({},{categoryname:1});
+    console.log(Data)
+    res.render('admin/editProduct',{admin:true,dataCategory:Data,data:productData});
 }
 
 

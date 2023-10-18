@@ -4,20 +4,19 @@ document.getElementById('sidebar').addEventListener('click', async function(even
     const id = event.target.id;
     console.log(id);
 
-    // Fetch is used to load the Product,Category, & Coupon Pages
+    /*========================================Product Page Loading Section ============================== */
     if(id == 'view-productlist'){
 
-        // View the Product Into a table
+        // ********* View the Product Into a table ************
         const response = await fetch("/admin/productlist");
 
         if(!response.ok){
             window.location.href = '/admin/error500';
-            return
+            return;
         }
 
         const data = await response.text();
         contentPlaceholder.innerHTML = data;
-
 
       
         /*--------------------------------------------View More Data--------------------------------------------- */
@@ -28,10 +27,18 @@ document.getElementById('sidebar').addEventListener('click', async function(even
                 viewMore(target)
 
             }else if(target.tagName == 'BUTTON' && target.classList.contains('l-u-button')){
-                productStatus(target)
-                // console.log(target)
+                productStatus(target);
+
+            }else if(target.tagName == 'BUTTON' && target.classList.contains('product-edit-button')){
+                loadEditProductPage(target);
+                console.log(target)
+
             }
+
+
+
         })
+
 
         /* --------------------------------------------Back Button for View More Data------------------------------------------------- */
         document.getElementById('product-cancel').addEventListener('click',()=>{
@@ -40,7 +47,7 @@ document.getElementById('sidebar').addEventListener('click', async function(even
         })
 
 
-        
+
         /*------------------------------------------Sucess Button for list unllist Product------------------------------------------- */
         document.getElementById('list-confirmation-sucess').addEventListener('click',()=>{
             productStatusSucess();
@@ -59,9 +66,12 @@ document.getElementById('sidebar').addEventListener('click', async function(even
         })
 
 
+       
+
+
     }else if(id == 'add-product'){
 
-        /*------------------------Fetch View Page------------------ */
+        /*------------------------Fetch View Add Product Page------------------ */
         try{
             // View the Add a New Product Form Page
             const response = await fetch("/admin/addproduct");
@@ -85,8 +95,8 @@ document.getElementById('sidebar').addEventListener('click', async function(even
 
 
 
-        /*---------Fetch the Data and Render the Page at that time Drop down to view the Category 
-        That Category Multiple Select Taken Script Code----------------------------------------*/
+        /* ====================Fetch the Data and Render the Page at that time Drop down to view the Category 
+                             That Category Multiple Select Taken Script Code=======================================================*/
 
 
         // Drop Down Dispalay view and hidden using

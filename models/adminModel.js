@@ -99,7 +99,7 @@ const productData = mongoose.Schema({
         type : Date,
         require : true
     },
-    blockDate : {
+    listDate : {
         type : Date,
         require : true
     }

@@ -1,143 +1,183 @@
-<div class="col-12 grid-margin mt-5">
-    <div class="card">
-      <div class="card-body">
-        <h4 class="card-title">Edit Product</h4>
-        <form class="form-sample">
-          <p class="card-description"> Personal info </p>
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group row">
-                <label class="col-sm-3 col-form-label">First Name</label>
-                <div class="col-sm-9">
-                  <input type="text" class="form-control" />
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group row">
-                <label class="col-sm-3 col-form-label">Last Name</label>
-                <div class="col-sm-9">
-                  <input type="text" class="form-control" />
-                </div>
+<div class="col-12 grid-margin mt-5 addproductpage">
+  <div class="card">
+    <div class="card-body">
+      <h4 class="card-title">Edit Product</h4>
+      <%= dataCategory[0].categoryname %>
+      <p id="product-sucess"></p>
+    <div class="">
+      <form id="editProduct-form">
+        <p class="card-description">  </p>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="col-sm-3 col-form-label">Product Name</label>
+              <div class="col-sm-12">
+                <input type="text" class="form-control" name="editproductname" id="editproductname" value="<%= data.productName %>">
               </div>
             </div>
           </div>
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group row">
-                <label class="col-sm-3 col-form-label">Gender</label>
-                <div class="col-sm-9">
-                  <select class="form-control">
-                    <option>Male</option>
-                    <option>Female</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group row">
-                <label class="col-sm-3 col-form-label">Date of Birth</label>
-                <div class="col-sm-9">
-                  <input class="form-control" placeholder="dd/mm/yyyy" />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group row">
-                <label class="col-sm-3 col-form-label">Category</label>
-                <div class="col-sm-9">
-                  <select class="form-control">
-                    <option>Category1</option>
-                    <option>Category2</option>
-                    <option>Category3</option>
-                    <option>Category4</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group row">
-                <label class="col-sm-3 col-form-label">Membership</label>
-                <div class="col-sm-4">
-                  <div class="form-check">
-                    <label class="form-check-label">
-                      <input type="radio" class="form-check-input" name="membershipRadios" id="membershipRadios1" value="" checked> Free </label>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="col-sm-3 col-form-label">Category</label>
+              <div class="col-sm-12">
+                <div class="multiselect">
+                  <div class="select-box form-control" id="select-box">
+                      <div class="selected-options" id="editproductcategory">Select options</div>
+                      <div class="arrow">&#9660;</div>
                   </div>
-                </div>
-                <div class="col-sm-5">
-                  <div class="form-check">
-                    <label class="form-check-label">
-                      <input type="radio" class="form-check-input" name="membershipRadios" id="membershipRadios2" value="option2"> Professional </label>
+                  <div class="options-container" id="options-container" >
+                      <% for(let j=0;j<dataCategory.length;j++){ %>
+                      <div class="option">
+                        
+                          <label><input type="checkbox" class="option-input" value="<%= dataCategory[j].categoryname %>"><%= dataCategory[j].categoryname %></label>
+                      </div>
+                      <% } %>
                   </div>
-                </div>
+              </div>
+          
               </div>
             </div>
           </div>
-          <p class="card-description"> Address </p>
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group row">
-                <label class="col-sm-3 col-form-label">Address 1</label>
-                <div class="col-sm-9">
-                  <input type="text" class="form-control" />
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group row">
-                <label class="col-sm-3 col-form-label">State</label>
-                <div class="col-sm-9">
-                  <input type="text" class="form-control" />
-                </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label class="col-sm-12 col-form-label">Description</label>
+              <div class="col-sm-12">
+                <textarea class="form-control" id="editproductdescription" rows="4" name="editdescription"><%= data.description %></textarea>
               </div>
             </div>
           </div>
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group row">
-                <label class="col-sm-3 col-form-label">Address 2</label>
-                <div class="col-sm-9">
-                  <input type="text" class="form-control" />
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group row">
-                <label class="col-sm-3 col-form-label">Postcode</label>
-                <div class="col-sm-9">
-                  <input type="text" class="form-control" />
-                </div>
+        </div>
+         
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group ">
+              <label class="col-sm-3 col-form-label">Brand Name</label>
+              <div class="col-sm-12">
+                <input type="text" class="form-control" name="editbrandname" id="editproductbrandname" value="<%= data.brandname %>">
               </div>
             </div>
           </div>
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group row">
-                <label class="col-sm-3 col-form-label">City</label>
-                <div class="col-sm-9">
-                  <input type="text" class="form-control" />
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group row">
-                <label class="col-sm-3 col-form-label">Country</label>
-                <div class="col-sm-9">
-                  <select class="form-control">
-                    <option>America</option>
-                    <option>Italy</option>
-                    <option>Russia</option>
-                    <option>Britain</option>
-                  </select>
-                </div> 
+          <div class="col-md-6">
+            <div class="form-group ">
+              <label class="col-sm-3 col-form-label">Stock</label>
+              <div class="col-sm-12">
+                <input type="text" class="form-control" name="stock" id="editproductstock" value="<%= data.stock %>">
               </div>
             </div>
           </div>
-          <button type="submit" class="btn btn-primary mr-2">Submit</button>
-          <button class="btn btn-dark">Cancel</button>
-        </form>
-      </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group ">
+              <label class="col-sm-3 col-form-label">Price</label>
+              <div class="col-sm-12">
+                <input type="number" class="form-control" name="editprice" id="editproductprice" value="<%= data.price %>">
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group ">
+              <label class="col-sm-3 col-form-label">Size</label>
+              <div class="col-sm-12">
+                <input type="text" class="form-control" name="editsize" id="editproductsize" value="<%= data.size %>">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group ">
+              <label class="col-sm-3 col-form-label">Material</label>
+              <div class="col-sm-12">
+                <input type="text" class="form-control" name="editmaterial" id="editproductmaterial" value="<%= data.material %>">
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group ">
+              <label class="col-sm-3 col-form-label">Color</label>
+              <div class="col-sm-2 rounded-3">
+                <input type="color" class="form-control pt-2 pb-2 color-addproduct" id="editproductcolor" value="<%= data.color %>" title="Choose product color" name="editcolor">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="image-product-data">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group ">
+              <label class="col-sm-3 col-form-label">Image</label>
+              <div class="col-sm-12">
+                <input type="file" class="form-control" id="editproductImage_1" name="editproductImage" accept="image/*">
+              </div>
+              <div  class="ml-3 image-addproduct-div" >
+                <img class="image-addproduct" id="editimageProduct-1" src="/public/admin/assets/productImages/<%= data.productImages[0] %>" alt="Upload the file">
+              </div>
+              
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group ">
+              <label class="col-sm-3 col-form-label">*</label>
+
+              <div class="col-sm-12">
+                <input type="file" class="form-control" id="editproductImage_2" name="editproductImage" accept="image/*">
+              </div>
+              <div class="ml-3 image-addproduct-div" >
+                <img class="image-addproduct" id="editimageProduct-2" src="/public/admin/assets/productImages/<%= data.productImages[1] %>"" alt="Upload the file">
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group ">
+              <label class="col-sm-3 col-form-label">Image</label>
+
+              <div class="col-sm-12">
+                <input type="file" class="form-control" id="editproductImage_3" name="editproductImage" accept="image/*">
+              </div>
+
+              <div class="ml-3 image-addproduct-div">
+                <img class="image-addproduct"id="editimageProduct-3" src="/public/admin/assets/productImages/<%= data.productImages[2] %>"" alt="Upload the file">
+              </div>
+              
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group ">
+              <label class="col-sm-3 col-form-label">*</label>
+
+              <div class="col-sm-12">
+                <input type="file" class="form-control" id="editproductImage_4" name="editproductImage" accept="image/*">
+              </div>
+
+              <div class="ml-3 image-addproduct-div">
+                <img class="image-addproduct" id="editimageProduct-4" src="/public/admin/assets/productImages/<%= data.productImages[3] %>"" alt="Upload the file">
+              </div>
+
+            </div>
+          </div>
+        </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label class="col-sm-12 col-form-label">Specifications</label>
+              <div class="col-sm-12">
+                <textarea class="form-control" id="editproductspecification" rows="4" name="specifications" placeholder="*specifications seprated using commas"><%= data.specifications %></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="btn btn-primary mr-3 ml-3" id="product-submit">Submit</button>
+        <button class="btn btn-dark">Cancel</button>
+      </form>
     </div>
   </div>
+  </div>
+</div>
+

@@ -39,7 +39,7 @@
                 <% } else { %>
                   <td id="<%= data[i]._id %>"><button class="btn btn-outline-success pl-3 pr-3 l-u-button" name="l-u-button" data-button-id="<%= data[i]._id %>">UnList</button></td>
                 <% } %>
-                <td ><button class="btn btn-transparent" onclick="editCategory(this)"><i class="bi bi-pencil-square"></i>Edit</button></td>
+                <td ><button class="btn btn-transparent product-edit-button" data-edit-id="<%= data[i]._id %>"><i class="bi bi-pencil-square"></i>Edit</button></td>
                
               </tr>
               <% } } else { %>

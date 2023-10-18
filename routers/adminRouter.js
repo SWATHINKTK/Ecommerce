@@ -45,7 +45,7 @@ adminRouter.get('/productlist',adminController.loadProductList);
 adminRouter.get('/productmoredata:id',adminController.loadProductMoreData);
 adminRouter.get('/productstausupdate:id',adminController.productStatusUpdate);
 adminRouter.get('/addproduct',adminController.loadAddProductPage);
-adminRouter.get('/editproduct',adminController.loadEditProductPage);
+adminRouter.get('/editproduct:id',adminController.loadEditProductPage);
 adminRouter.get('/categorylist',adminController.loadCategoryList);
 adminRouter.get('/addcategory',adminController.loadAddCategoryPage);
 adminRouter.get('/editcategory:id',adminController.loadEditCategoryPage);
@@ -64,6 +64,8 @@ adminRouter.post('/addcategory',adminController.addCategory);
 adminRouter.post('/editcategory',adminController.editCategory);
 adminRouter.post('/searchcategory',adminController.searchCategory);
 adminRouter.post('/productadd',upload.array('productimages',4),adminController.productAdd);
+// adminRouter.post('/editproduct',adminController.editProduct);
+
 
 // All Patch Request Handle Admin
 adminRouter.patch('/categorystatusupdate',adminController.categorySatusUpdate)
