@@ -24,7 +24,7 @@
                 <% for(let i = 0; i < data.length ; i++) { %>
               <tr>
                 <td><%= i+1 %></td>
-                <td ><%= data[i].productName %></td>
+                <td id="productTable-productname"><%= data[i].productName %></td>
                 <td >
                     <% for(let j = 0; j < data[i].categorys.length ; j++) { %>
                     <%= data[i].categorys[j] %><br>
@@ -56,7 +56,11 @@
   </div>
 
 
-  <div class="moda productmoreinfo-modal" id="productmoreinfo-modal">
+
+
+
+  <div class="modl productmoreinfo-modal" id="productmoreinfo-modal">
+    <div class="modal-dialog modal-dialog-scrollable"></div>
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="staticBackdropLabel">More Information</h5>
@@ -65,16 +69,38 @@
       <div class="modal-body">
         Images:
         <div class="modal-productimage">
-          <div class="image-modal"></div>
-          <div class="image-modal"></div>
-          <div class="image-modal"></div>
-          <div class="image-modal"></div>
+          <div class="image-modal"><img class="modal-image" src="/public/admin/assets/productImages/1697554220865-img3.webp" alt=""></div>
+          <div class="image-modal"><img class="modal-image" src="/public/admin/assets/productImages/1697554220865-img3.webp" alt=""></div>
+          <div class="image-modal"><img class="modal-image" src="/public/admin/assets/productImages/1697554220865-img3.webp" alt=""></div>
+          <div class="image-modal"><img class="modal-image" src="/public/admin/assets/productImages/1697554220865-img3.webp" alt=""></div>
         </div>
+        <div class="product-description">
+          Description:<br><span >Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis unde similique amet, enim tempora nam exercitationem mollitia hic inventore dolorum, accusantium ratione praesentium, sapiente totam at iusto nulla. Dignissimos, corporis!</span>
+        </div>
+        <div >
+          Product Added Date : 
+        </div> 
+        <div >
+          Feedback : 
+        </div>
+        <div >
+          color : <div></div>
+        </div> 
+        <div >
+          Material : <div></div>
+        </div> 
+        <div >
+          size : <div></div>
+        </div> 
+        <div >
+          specification : <div></div>
+        </div> 
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" id="cancel" onclick="back()">Cancel</button>
-        <button type="button" class="btn btn-primary" id="user-sucess" data-category-id="" onclick="userBlock()">OK</button>
+        <!-- <button type="button" class="btn btn-primary" id="user-sucess" data-category-id="" onclick="userBlock()">OK</button> -->
       </div>
     </div>
+  </div>
   </div>
   </div>

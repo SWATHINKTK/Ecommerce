@@ -9119,16 +9119,36 @@ textarea.tt-hint {
 
 #productTable-productname{
   white-space: pre-wrap;
-  max-width: 150px;
+  max-width: 18rem;
+}
+
+
+.productmoreinfo-modal{
+  max-width: 38rem;
+  margin: auto;
 }
 
 .modal-productimage{
-  background-color: #00a045;
+  margin-top: 0.7rem;
+  margin-left: 0.8rem;
+  margin-bottom: 1.4rem;
+  display: flex;
+  gap: 15px;
 }
 
-.productmoreinfo-modal{
-  width: 40rem;
+.image-modal{
+  object-fit: cover;
+  color: white;
+  text-align: center;
 }
+.modal-image{
+  width: 7rem;
+}
+
+.product-description{
+  margin-bottom: 1.4rem;
+}
+
 
 
 
