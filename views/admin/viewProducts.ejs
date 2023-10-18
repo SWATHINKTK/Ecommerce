@@ -4,7 +4,7 @@
         <h4 class="card-title text-center">Product View&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
         <!-- <p class="card-description"> Add class <code>.table-hover</code> -->
         </p>
-        <div class="table-responsive">
+        <div class="table-responsive" id="table-product">
           <table class="table table-hover">
             <thead>
               <tr>
@@ -14,9 +14,9 @@
                 <th>Brand Name</th>
                 <th>Stock</th>
                 <th>Price</th>
-                <th>Rate</th>
                 <th>View More</th>
                 <th>Action</th>
+                <th>Edit</th>
               </tr>
             </thead>
             <tbody class="text-white">
@@ -32,16 +32,15 @@
                 </td>
                 <td><%= data[i].brandname %></td>
                 <td><%= data[i].stock %></td>
-                <td><%= data[i].price %></td>
-                <td><%= data[i].rating %></td>
-                <td><a href="#">View More <i class="bi bi-chevron-double-right"></i></a></td>
+                <td>	&#8377; <%= data[i].price %></td>
+                <div id="product-viewmore"><td><a href="#" class="product-viewmore" data-viewmore-id="<%= data[i]._id %>">View More <i class="bi bi-chevron-double-right"></i></a></td></div>
                 <% if(data[i].status) {%>
-                  <td id="<%= data[i]._id %>"><button class="btn  btn-outline-danger pl-4 pr-4" id="<%= data[i]._id %>" onclick="userList(this)">Block</button></td>
+                  <td id="<%= data[i]._id %>"><button class="btn  btn-outline-danger pl-4 pr-4 l-u-button" name="l-u-button" data-button-id="<%= data[i]._id %>">List</button></td>
                 <% } else { %>
-                  <td id="<%= data[i]._id %>"><button class="btn btn-outline-success pl-3 pr-3" id="<%= data[i]._id %>" onclick="userList(this)">Unblock</button></td>
+                  <td id="<%= data[i]._id %>"><button class="btn btn-outline-success pl-3 pr-3 l-u-button" name="l-u-button" data-button-id="<%= data[i]._id %>">UnList</button></td>
                 <% } %>
-                <!-- <td class="text-danger"> 28.76% <i class="mdi mdi-arrow-down"></i></td>
-                <td><label class="badge badge-danger">Pending</label></td> -->
+                <td ><button class="btn btn-transparent" onclick="editCategory(this)"><i class="bi bi-pencil-square"></i>Edit</button></td>
+               
               </tr>
               <% } } else { %>
                 <tr class="bg-danger">
@@ -57,50 +56,34 @@
 
 
 
-
-
-  <div class="modl productmoreinfo-modal" id="productmoreinfo-modal">
-    <div class="modal-dialog modal-dialog-scrollable"></div>
+<div class="modal productmoreinfo-modal" id="modal-total-div">
+  <div class="modal-dialog modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">More Information</h5>
-        <button class="btn btn-transparent" onclick="back()"><i class="bi bi-x"></i></button>
+          <h5 class="modal-title" id="staticBackdropLabel">More Information</h5>
+          <button class="btn btn-transparent" id="product-cancel"><i class="bi bi-x cancel"></i></button>
       </div>
-      <div class="modal-body">
-        Images:
-        <div class="modal-productimage">
-          <div class="image-modal"><img class="modal-image" src="/public/admin/assets/productImages/1697554220865-img3.webp" alt=""></div>
-          <div class="image-modal"><img class="modal-image" src="/public/admin/assets/productImages/1697554220865-img3.webp" alt=""></div>
-          <div class="image-modal"><img class="modal-image" src="/public/admin/assets/productImages/1697554220865-img3.webp" alt=""></div>
-          <div class="image-modal"><img class="modal-image" src="/public/admin/assets/productImages/1697554220865-img3.webp" alt=""></div>
-        </div>
-        <div class="product-description">
-          Description:<br><span >Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis unde similique amet, enim tempora nam exercitationem mollitia hic inventore dolorum, accusantium ratione praesentium, sapiente totam at iusto nulla. Dignissimos, corporis!</span>
-        </div>
-        <div >
-          Product Added Date : 
-        </div> 
-        <div >
-          Feedback : 
-        </div>
-        <div >
-          color : <div></div>
-        </div> 
-        <div >
-          Material : <div></div>
-        </div> 
-        <div >
-          size : <div></div>
-        </div> 
-        <div >
-          specification : <div></div>
-        </div> 
+      <div class="modal-body" id="product-modal-content">
+        
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" id="cancel" onclick="back()">Cancel</button>
-        <!-- <button type="button" class="btn btn-primary" id="user-sucess" data-category-id="" onclick="userBlock()">OK</button> -->
       </div>
     </div>
   </div>
+</div>
+
+<div class="modal confirmation-modal" id="product-confirmation-modal" style="display: none; width: 23rem;margin-right: 50%;margin-left: 40%; margin-top:3rem;">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="staticBackdropLabel">User Block/Unblock</h5>
+      <button class="btn btn-transparent" id="list-confirmation-cancel1"><i class="bi bi-x cancel"></i></button>
+    </div>
+    <div class="modal-body">
+      Are you sure?
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" id="list-confirmation-cancel2">Cancel</button>
+      <button type="button" class="btn btn-primary" id="list-confirmation-sucess" data-product-id="">OK</button>
+    </div>
   </div>
-  </div>
+</div>
+</div>

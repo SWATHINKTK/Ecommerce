@@ -42,6 +42,8 @@ adminRouter.get('/home',adminController.loadAdminHomepage);
 adminRouter.get('/userlist',adminController.loadUserList);
 adminRouter.get('/searchuser',adminController.searchUser);
 adminRouter.get('/productlist',adminController.loadProductList);
+adminRouter.get('/productmoredata:id',adminController.loadProductMoreData);
+adminRouter.get('/productstausupdate:id',adminController.productStatusUpdate);
 adminRouter.get('/addproduct',adminController.loadAddProductPage);
 adminRouter.get('/editproduct',adminController.loadEditProductPage);
 adminRouter.get('/categorylist',adminController.loadCategoryList);

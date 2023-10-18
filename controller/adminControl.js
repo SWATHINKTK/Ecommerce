@@ -117,12 +117,59 @@ const searchUser = async(req,res) => {
 
 // Load Product List Window
 const loadProductList = async(req,res) => {
-    const product = await productInfo.find({});
-    console.log(product)
 
+    const product = await productInfo.find({});
     res.render('admin/viewProducts',{admin:true,data:product});
 
 }
+
+
+// Load Product More Data and view in a modal
+const loadProductMoreData = async(req,res) => {
+    const id = req.params.id
+    console.log(id)
+    const data = await productInfo.findOne({_id:id});
+
+    if(data){
+            res.status(200).render('admin/productDetailModal',{modaldata:data});
+
+    }else{
+        res.status(500).redirect('/admin/error500');
+    }
+}
+
+
+
+// Product Staus Update and show list and unlist button
+const productStatusUpdate = async(req,res) => {
+
+    const id = req.params.id;
+    const data = await productInfo.findOne({_id:id});
+    
+    if(data.status){
+
+        const update = await productInfo.updateOne({_id:id},{$set:{status:false}});
+        
+        if(update.acknowledged){
+            res.status(200).json({message:false,id:data._id});
+
+        }else{
+            res.redirect('/admin/error404');
+        }
+
+    }else{
+
+        const update = await productInfo.updateOne({_id:id},{$set:{status:true}});
+
+        if(update.acknowledged){
+            res.status(200).json({message:true,id:data._id});
+
+        }else{
+            res.redirect('/admin/error404');
+        }
+    }
+}
+
 
 
 // Load Add Product page 
@@ -131,6 +178,7 @@ const loadAddProductPage = async(req,res) => {
     const categoryData = await category.find({list:true},{categoryname:1});
     res.render('admin/addProduct',{admin:true,data:categoryData});
 }
+
 
 
 // Adding the Product Data into Database
@@ -422,6 +470,8 @@ module.exports = {
     searchUser,
     blockUser,
     loadProductList,
+    loadProductMoreData,
+    productStatusUpdate,
     loadAddProductPage,
     productAdd,
     loadEditProductPage,

@@ -8,20 +8,56 @@ document.getElementById('sidebar').addEventListener('click', async function(even
     if(id == 'view-productlist'){
 
         // View the Product Into a table
-        fetch("/admin/productlist")
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error("Network response was not ok");
-                }
-                return response.text();
-            })
-            .then((html) => {
-                // Update the content of the placeholder with the fetched HTML
-                contentPlaceholder.innerHTML = html;
-            })
-            .catch((error) => {
-                console.error("Fetch error:", error);
-            });
+        const response = await fetch("/admin/productlist");
+
+        if(!response.ok){
+            window.location.href = '/admin/error500';
+            return
+        }
+
+        const data = await response.text();
+        contentPlaceholder.innerHTML = data;
+
+
+      
+        /*--------------------------------------------View More Data--------------------------------------------- */
+        document.getElementById('table-product').addEventListener('click',function(event) {
+            const target = event.target;
+            
+            if(target.tagName == 'A' && target.classList.contains('product-viewmore')){
+                viewMore(target)
+
+            }else if(target.tagName == 'BUTTON' && target.classList.contains('l-u-button')){
+                productStatus(target)
+                // console.log(target)
+            }
+        })
+
+        /* --------------------------------------------Back Button for View More Data------------------------------------------------- */
+        document.getElementById('product-cancel').addEventListener('click',()=>{
+            const modal_div = document.getElementById('modal-total-div');
+            modal_div.style.display = "none";
+        })
+
+
+        
+        /*------------------------------------------Sucess Button for list unllist Product------------------------------------------- */
+        document.getElementById('list-confirmation-sucess').addEventListener('click',()=>{
+            productStatusSucess();
+        })
+
+
+
+        /*------------------------------------------ 2 Back Button for confiramation modal-------------------------------------------- */
+        document.getElementById('list-confirmation-cancel1').addEventListener('click',()=>{
+            const modal = document.getElementById('product-confirmation-modal');
+            modal.style.display = 'none';
+        })
+        document.getElementById('list-confirmation-cancel2').addEventListener('click',()=>{
+            const modal = document.getElementById('product-confirmation-modal');
+            modal.style.display = 'none';
+        })
+
 
     }else if(id == 'add-product'){
 
@@ -269,6 +305,9 @@ document.getElementById('sidebar').addEventListener('click', async function(even
             }catch(error){
                 console.log(error.message)
             }
+            /*-----------------------------------------Submit data complete------------------------------------------ */
+
+          
  
         })
 
@@ -375,5 +414,4 @@ document.getElementById('sidebar').addEventListener('click', async function(even
 
     }
 })
-
 

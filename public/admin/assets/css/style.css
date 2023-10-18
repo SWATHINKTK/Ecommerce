@@ -9125,15 +9125,34 @@ textarea.tt-hint {
 
 .productmoreinfo-modal{
   max-width: 38rem;
-  margin: auto;
+  margin-left: 30rem;
+  display: none;
+}
+
+.cancel{
+  font-size: 20px;
+  background-color: #0056b3;
 }
 
 .modal-productimage{
+  max-width: 38rem;
   margin-top: 0.7rem;
-  margin-left: 0.8rem;
   margin-bottom: 1.4rem;
   display: flex;
   gap: 15px;
+}
+
+.modal-content {
+  overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent; 
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: transparent;
+  }
 }
 
 .image-modal{
@@ -9146,6 +9165,9 @@ textarea.tt-hint {
 }
 
 .product-description{
+  margin-bottom: 1.4rem;
+}
+.product-Data{
   margin-bottom: 1.4rem;
 }
 

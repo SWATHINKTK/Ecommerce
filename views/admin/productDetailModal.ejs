@@ -1,0 +1,38 @@
+<div>
+  Images:
+  <div class="modal-productimage">
+    <div class="image-modal"><img class="modal-image" src="/public/admin/assets/productImages/<%= modaldata.productImages[0]%>" alt=""></div>
+    <div class="image-modal"><img class="modal-image" src="/public/admin/assets/productImages/<%= modaldata.productImages[1]%>" alt=""></div>
+    <div class="image-modal"><img class="modal-image" src="/public/admin/assets/productImages/<%= modaldata.productImages[2]%>" alt=""></div>
+    <div class="image-modal"><img class="modal-image" src="/public/admin/assets/productImages/<%= modaldata.productImages[3]%>" alt=""></div>
+  </div>
+  <div class="product-description">
+    Description:<br><span ><%= modaldata.description %></span>
+  </div>
+  <div class="product-Data">
+    Product Added Date : <%= modaldata.addDate %>
+  </div> 
+  <div class="product-Data">
+    Rating : <%= modaldata.rating %>
+  </div>
+  <div class="product-Data">
+    Feedback : <%= modaldata.feedback %>
+  </div>
+  <div class="product-Data">
+    color : <div><%= modaldata.color %></div>
+  </div> 
+  <div class="product-Data">
+    Material : <%= modaldata.material %>
+  </div> 
+  <div class="product-Data">
+    size : <%= modaldata.size %>
+  </div> 
+  <div class="product-Data">
+    specification : <%= modaldata.specifications %>
+  </div> 
+  </div>
+  <div class="modal-footer">
+  <!-- <button type="button" class="btn btn-secondary" id="product-cancel" >Cancel</button> -->
+  <!-- <button type="button" class="btn btn-primary" id="user-sucess" data-category-id="" onclick="userBlock()">OK</button> -->
+  </div>
+</div>
