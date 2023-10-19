@@ -214,9 +214,17 @@ const guestPage = async(req,res) => {
     }
 }
 
-const loadProductDetailPage = (req,res) => {
-    const id = req.query.id;
-    console.log(id);
+const loadProductDetailPage = async(req,res) => {
+    try{
+        const id = req.query.id;
+        const data = await productInfo.findOne({_id:id});
+        const productData = await productInfo.find({});
+        res.render('user/productDetails',{user:true,data:productData,product:data})
+
+    }catch(error){
+        res.status(500).redirect('/error500')
+    }
+    
 }
 
 

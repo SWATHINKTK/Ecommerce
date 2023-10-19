@@ -20816,7 +20816,7 @@ div.tagsinput {
     -webkit-transition: width 0.25s ease, background 0.25s ease;
     -moz-transition: width 0.25s ease, background 0.25s ease;
     -ms-transition: width 0.25s ease, background 0.25s ease;
-    background: #191c24;
+    background: #fff;
     width: 244px;
     height: 70px; }
     @media (max-width: 991px) {
