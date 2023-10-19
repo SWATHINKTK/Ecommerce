@@ -65,6 +65,16 @@ async function securePassword(password){
 
 /*------------------------------------------------------------Router Handling Functions -------------------------------------------*/
 
+const guestPage = async(req,res) => {
+
+    try{
+        res.render('user/index',{user:true})
+    }catch(error){
+        console.log(error.message)
+    }
+}
+
+
 /*-------------------------------------- User Login & Register-------------------------------------------------- */
 // View User Login Page 
 const loadUserLogin = (req,res) => {
@@ -202,7 +212,7 @@ const loadHomePage = (req,res) => {
 
 // ERROR Page Loading 
 const load500ErrorPage = (req,res) =>{
-    res.render('partials/error-500')
+    res.render('partials/error-500',{admin:true})
 }
 
 const load404ErrorPage = (req,res) =>{
@@ -211,6 +221,7 @@ const load404ErrorPage = (req,res) =>{
 
 /*--------------------------------------------Module Exports ----------------------------------------------------------------------*/ 
 module.exports = {
+    guestPage,
     loadUserLogin,
     storeSignupData,
     loadOTPVerification,

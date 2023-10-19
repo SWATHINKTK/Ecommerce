@@ -18,17 +18,20 @@ userRouter.use(session({
 
 
 // GET Request For User 
+userRouter.get('/',userController.guestPage)
 userRouter.get('/login',userController.loadUserLogin);
 userRouter.get('/otpverification',userController.loadOTPVerification);
 userRouter.get('/home',userController.loadHomePage);
 userRouter.get('/resendotp',userController.resendOTP);
 userRouter.get('/error500',userController.load500ErrorPage);
 userRouter.get('/error404',userController.load404ErrorPage);
+userRouter.get('/*',userController.load500ErrorPage)
 
 // POST Request For User 
 userRouter.post('/signup',userController.storeSignupData);
 userRouter.post('/signin',userController.verifyUser);
-userRouter.post('/otpverification',userController.OTPCheck)
+userRouter.post('/otpverification',userController.OTPCheck);
+
 
 
 module.exports = userRouter;

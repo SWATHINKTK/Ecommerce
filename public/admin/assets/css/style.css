@@ -13041,7 +13041,7 @@ button.bg-light:focus {
   background-color: #e6e6e6 !important; }
 
 .bg-dark {
-  background-color: #0d0d0d !important; }
+  background-color: #fff !important; }
 
 a.bg-dark:hover, a.bg-dark:focus,
 button.bg-dark:hover,
@@ -20569,7 +20569,7 @@ div.tagsinput {
     box-shadow: 20px 19px 34px -15px rgba(0, 0, 0, 0.5);
     -webkit-box-shadow: 20px 19px 34px -15px rgba(0, 0, 0, 0.5);
     -moz-box-shadow: 20px 19px 34px -15px rgba(0, 0, 0, 0.5);
-    color: #ffffff;
+    color: #000;
     padding-left: 15px;
     padding-right: 15px;
     width: 100%;
@@ -21076,6 +21076,7 @@ div.tagsinput {
           color: #6c7293;
           padding: 0.5rem 0.35rem;
           position: relative;
+          border-color: #F5F5F9;
           font-size: 0.855rem;
           line-height: 1;
           height: auto;
