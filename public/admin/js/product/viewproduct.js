@@ -294,7 +294,8 @@ async function loadEditProductPage(target){
             
 
             // Appending the category into array 
-            const productCategorys = category.split(', ');
+            const productCategorys = category.split(',');
+            console.log(productCategorys)
             productCategorys.forEach((val,i)=>{
                 formData.append('categorys',productCategorys[i]);
             })

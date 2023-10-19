@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const {userData} = require('../models/userModal');
+const {productInfo} = require('../models/adminModel')
 
 
 /*--------------------------Router Access Functions in User Side --------------------------------- */
@@ -65,14 +66,7 @@ async function securePassword(password){
 
 /*------------------------------------------------------------Router Handling Functions -------------------------------------------*/
 
-const guestPage = async(req,res) => {
 
-    try{
-        res.render('user/index',{user:true})
-    }catch(error){
-        console.log(error.message)
-    }
-}
 
 
 /*-------------------------------------- User Login & Register-------------------------------------------------- */
@@ -208,6 +202,26 @@ const loadHomePage = (req,res) => {
 }
 
 
+/*------------------------------------------------Product Details Handling ------------------------------------------------------*/
+const guestPage = async(req,res) => {
+
+    try{
+        const productData = await productInfo.find({});
+        // console.log(productData)
+        res.render('user/index',{user:true,data:productData})
+    }catch(error){
+        console.log(error.message)
+    }
+}
+
+const loadProductDetailPage = (req,res) => {
+    const id = req.query.id;
+    console.log(id);
+}
+
+
+
+
 /*--------------------------------------------Error Handling Pages---------------------------------------------------------------- */
 
 // ERROR Page Loading 
@@ -229,6 +243,7 @@ module.exports = {
     OTPCheck,
     verifyUser,
     loadHomePage,
+    loadProductDetailPage,
     load500ErrorPage,
     load404ErrorPage
 }
