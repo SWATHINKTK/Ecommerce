@@ -2,7 +2,7 @@
   <div class="card">
     <div class="card-body">
       <h4 class="card-title">Edit Product</h4>
-      <p id="edit-product-sucess"></p>
+   
     <div class="">
       <form id="editProduct-form">
         <p class="card-description">  </p>
@@ -177,11 +177,13 @@
             </div>
           </div>
         </div>
+        <input type="hidden" id="productId" value="<%= data._id %>">
         <button type="button" class="btn btn-primary mr-3 ml-3" id="edit-product-submit">Submit</button>
         <button class="btn btn-dark">Cancel</button>
       </form>
     </div>
   </div>
   </div>
+  <p id="edit-product-sucess"></p>
 </div>
 

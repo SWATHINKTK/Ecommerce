@@ -2,7 +2,7 @@
 document.getElementById('sidebar').addEventListener('click', async function(event){
     const contentPlaceholder = document.getElementById("dynamic_page");
     const id = event.target.id;
-    console.log(id);
+    // console.log(id);
 
     /*========================================Product Page Loading Section ============================== */
     if(id == 'view-productlist'){
@@ -31,7 +31,7 @@ document.getElementById('sidebar').addEventListener('click', async function(even
 
             }else if(target.tagName == 'BUTTON' && target.classList.contains('product-edit-button')){
                 loadEditProductPage(target);
-                console.log(target)
+                // console.log(target)
 
             }
 

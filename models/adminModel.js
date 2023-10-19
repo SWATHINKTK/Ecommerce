@@ -101,7 +101,9 @@ const productData = mongoose.Schema({
     },
     listDate : {
         type : Date,
-        require : true
+    },
+    updateDate : {
+        type : Date,
     }
 });
 

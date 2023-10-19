@@ -272,11 +272,26 @@ async function loadEditProductPage(target){
             const material = document.getElementById('editProductMaterial').value;
             const color = document.getElementById('editProductColor').value;
             const specification = document.getElementById('editProductSpecification').value ;
-         
+            const oldImages = document.getElementById('oldImages').value;
+            const id = document.getElementById('productId').value;
+            
+            // Old Images are Append the form data
+            const old = oldImages.split(',');
+            old.forEach((val,i) => {
+                formData.append('imageOld',old[i])
+            })
+
+
+            // console.log(images);
+            const update = []
             // images are append into the formData using a array
             images.forEach((val,i)=>{
                 formData.append('productimages',images[i]);
+                if(images[i]){
+                    formData.append('imageUpdatePosition',i);
+                }
             })
+            
 
             // Appending the category into array 
             const productCategorys = category.split(', ');
@@ -299,8 +314,9 @@ async function loadEditProductPage(target){
             formData.append('size',size);
             formData.append('material',material);
             formData.append('color',color);
+            formData.append('id',id);
 
-            console.log(...formData)
+            // console.log(...formData)
 
 
             // Sending the Data to Sever using fetch 
@@ -322,19 +338,19 @@ async function loadEditProductPage(target){
 
                 const result = document.getElementById('edit-product-sucess')
 
-                // if(data.status){
-                //     result.innerHTML = data.message + " &#9989";
-                //     result.style.color = "green";
+                if(data.status){
+                    result.innerHTML = "Sucessfully Updated &#9989";
+                    result.style.color = "green";
 
-                // }else{
-                //     result.innerHTML = data.message + " &#10071;";
-                //     result.style.color = "red"
+                }else{
+                    result.innerHTML = "Enter All Field &#10071;";
+                    result.style.color = "red"
 
-                // }
+                }
 
-                // setTimeout(()=>{
-                //     result.innerHTML = '';
-                // },2000)
+                setTimeout(()=>{
+                    result.innerHTML = '';
+                },2000)
 
             }catch(error){
                 console.log(error.message)

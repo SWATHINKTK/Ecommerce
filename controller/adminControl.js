@@ -1,7 +1,9 @@
 const bcrypt = require('bcrypt');
+const fs = require('fs');
 const {loginData,category,productInfo} = require('../models/adminModel');
 const {userData} = require('../models/userModal');
 const { query } = require('express');
+const { connected } = require('process');
 
 
 /*---------------------------------------ADMIN ROUTER ACCESSING FUNCTIONS----------------------------------------------------------*/
@@ -172,13 +174,6 @@ const productStatusUpdate = async(req,res) => {
 
 
 
-const editProduct = async(req,res) => {
-    const data = req.body;
-    console.log(data)
-}
-
-
-
 
 // Load Add Product page 
 const loadAddProductPage = async(req,res) => {
@@ -192,54 +187,63 @@ const loadAddProductPage = async(req,res) => {
 // Adding the Product Data into Database
 const productAdd = async(req,res)=>{
 
-    // Taken Data Come Form Clent 
-    const data = req.body;
-    const images = [];
-    console.log(req.files)
-    req.files.forEach((file)=> {
-        images.push(file.filename)
-    });
-    
-    
-    const length =  Object.keys(data).length;
+    try{
 
-    // checking All Field entered or not 
-    if(length == 10 && images.length == 4){
+         // Taken Data Come Form Clent 
+        const data = req.body;
 
-        const productData = productInfo({
-            productName: data.productname,
-            categorys: data.categorys,
-            description: data.description,
-            brandname: data.brandname,
-            stock: data.stock,
-            price: data.price,
-            size: data.size,
-            material: data.material ,
-            color: data.color,
-            productImages: images,
-            specifications: data.specification,
-            addDate: new Date(),
-        })
+        const images = [];
+        req.files.forEach((file)=> {
+            images.push(file.filename)
+        });
+        
+        
+        const length =  Object.keys(data).length;
 
-        console.log(productData)
-        const product = await productData.save();
+        let condition = (data.productname !== '' && data.categorys !== '' && data.description !== '' && data.brandname !== '' && data.stock !== '' && data.price !== '' && data.size !== '' && data.material !== '' &&  data.color !== '' && data.specification !== '' ) ;
+        // checking All Field entered or not 
+        if( condition && images.length == 4){
 
-        // Sucess result Checking
-        if(product){
-            res.status(200).json({status:true,message:'Succesfully Added Product'});
+            const productData = productInfo({
+                productName: data.productname,
+                categorys: data.categorys,
+                description: data.description,
+                brandname: data.brandname,
+                stock: data.stock,
+                price: data.price,
+                size: data.size,
+                material: data.material ,
+                color: data.color,
+                productImages: images,
+                specifications: data.specification,
+                addDate: new Date(),
+            })
+
+            console.log(productData)
+            const product = await productData.save();
+
+            // Sucess result Checking
+            if(product){
+                res.status(200).json({status:true,message:'Succesfully Added Product'});
+            }else{
+                res.status(500).render('/admin/error500');
+            }
+
         }else{
-            res.status(500).render('/admin/error500');
+            // Error message and Eror staus code
+            if(!condition){
+                res.json({status:false,message:'Enter All Field'});
+                
+            }else{
+                res.json({status:false,message:'Upload All Images'});
+            }
         }
 
-    }else{
-        // Error message and Eror staus code
-        if(length < 10){
-            res.json({status:false,message:'Enter All Field'});
-            
-        }else{
-            res.json({status:false,message:'Upload All Images'});
-        }
+    }catch(error){
+        console.log(error.meassge);
     }
+
+   
 
 }
 
@@ -248,12 +252,104 @@ const productAdd = async(req,res)=>{
 // Load Edit Product page 
 const loadEditProductPage = async(req,res) => {
 
-    const id = req.params.id;
-    const productData = await productInfo.findOne({_id:id});
+    try{
+        const id = req.params.id;
+        const productData = await productInfo.findOne({_id:id});
 
-    const Data = await category.find({},{categoryname:1});
-    console.log(Data)
-    res.render('admin/editProduct',{admin:true,dataCategory:Data,data:productData});
+        const Data = await category.find({},{categoryname:1});
+        res.render('admin/editProduct',{admin:true,dataCategory:Data,data:productData});
+
+    }catch(error){
+        console.log(error.message)
+    }
+
+    
+}
+
+
+
+const editProduct = async(req,res) => {
+
+    try{
+        const data = req.body;
+        const file = req.files;
+
+        console.log(data)
+
+        // Updating the Images and Deleting the old images
+        let image = [];
+        let j = 0;
+
+        // Admin Update the image it will be working other wise else to store the old image values.
+        if(data.imageUpdatePosition){
+
+            data.imageOld.forEach((val,i) => {
+                if(data.imageUpdatePosition.includes(i)){
+
+                    // Deleting the old images from my file.
+                    let filePath = `../public/admin/assets/productImages/${image[i]}`;
+                    fs.unlink(filePath,(error) => {
+                        if(error){
+                            console.log(error.message);
+                        }else{
+                            console.log('sucess')
+                        }
+                    })
+
+                    image[i] = file[j].filename
+                    j++;
+
+                }else{
+                    image[i] = data.imageOld[i]
+                }
+            })
+        }else{
+            image = [...(data.imageOld)]
+        }
+
+        // Checking Length of the body data
+        // const length =  Object.keys(data).length;
+        // console.log(length);
+
+        let condition = (data.productname !== '' && data.categorys !== '' && data.description !== '' && data.brandname !== '' && data.stock !== '' && data.price !== '' && data.size !== '' && data.material !== '' &&  data.color !== '' && data.specification !== '' ) ;
+
+
+        // checking All Field entered or not 
+        if( condition && image.length == 4){
+
+            const updateProduct = await productInfo.updateOne({_id:data.id},{
+                productName: data.productname,
+                categorys: data.categorys,
+                description: data.description,
+                brandname: data.brandname,
+                stock: data.stock,
+                price: data.price,
+                size: data.size,
+                material: data.material ,
+                color: data.color,
+                productImages: image,
+                specifications: data.specification,
+                updateDate: new Date()
+
+            })
+            if(updateProduct.acknowledged){
+                res.status(200).json({'status':true});
+
+            }else{
+                res.status(500).redirect('/admin/error500');
+            }
+
+        }else{
+            // Error message and Eror staus code
+            res.json({status:false});
+                
+        }
+
+    }catch(error){
+        console.log(error.message)
+    }
+ 
+
 }
 
 
