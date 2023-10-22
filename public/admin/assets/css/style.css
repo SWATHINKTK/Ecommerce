@@ -11611,6 +11611,10 @@ input[type="button"].btn-block {
 }
 
 
+.modal-content .modal-header,
+.modal-content .modal-footer{
+    border: none; 
+}
 
 .modal-header,.modal-body,.modal-footer{
   background-color:	#f9f9f9;
@@ -11624,11 +11628,20 @@ input[type="button"].btn-block {
   color: #006d2f;
 }
 
-.category-image-div{
+#brand-img-view{
+  object-fit: contain;
+  width: 20rem;
+  height: 20rem;
+  background-color: #000;
+  display: none;
+}
+
+.category-image-div, .brand-image-div{
   width: 20rem;
   height: 20rem;
   background-color: #000;
 }
+
 
 /* Style the search button */
 button.btn-search {

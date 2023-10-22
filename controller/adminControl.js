@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const fs = require('fs');
-const { loginData, category, productInfo } = require('../models/adminModel');
+const { loginData, category, productInfo,brandInfo } = require('../models/adminModel');
 const { userData } = require('../models/userModal');
 const { query } = require('express');
 const { connected } = require('process');
@@ -447,9 +447,9 @@ const categorySatusUpdate = async (req, res) => {
 
                 res.status(500).render('partials/error-500')
             }
-            
-        }
 
+        }
+        
     } catch (error) {
 
         console.log(error.message);
@@ -586,9 +586,72 @@ const editCategory = async (req, res) => {
 
 
 /*===============================================View New Brand & Functionality Working Routes=========================================== */
-const loadBrandAddPage = async (req, res) => {
+const loadBrandViewPage = async (req, res) => {
     res.render('admin/viewBrand', { admin: true, title: 'Brand Data' });
 }
+
+const loadBrandAddPage = async (req, res) => {
+    res.render('admin/addBrand', { admin: true,title:'Add Brand'});
+}
+
+const addBrand = async(req,res) => {
+    try{
+
+        // console.log(req.body,req.file)
+        const name = req.body.brandName;
+        const img = req.file.filename;
+        console.log(name,img)
+
+        
+
+        if(name && img){
+
+            const brands = await brandInfo.findOne({brand_name:name});
+            console.log(brands)
+
+            if(!brands){
+                console.log('hello')
+                const brandData = brandInfo({
+                    brand_name: name,
+                    brand_logo: img,
+                    brand_addDate: new Date()
+                });
+                console.log(brandData)
+
+                const sendData = await brandData.save();
+                
+                if(sendData){
+
+                    res.json({'status':true,'message': '&#9989; Brand Sucessfullly Added'});
+
+                }else{
+
+                    res.json({'status':false,'message': '&#10071; Brand Added Failed, Try Again'});
+
+                }
+
+            }else{
+         
+                res.json({'status':false,'message': '&#10071; Brand is Already Exist' });
+
+            }
+
+        }else{
+
+            res.json({'status':false,'message': '&#10071; Enter All Fields Then Submit' });
+
+        }
+        
+
+    }catch(error){
+
+        console.log(error.message);
+        res.redirect('adimin/error500')
+
+    }
+       
+
+};
 
 
 
@@ -664,7 +727,9 @@ module.exports = {
     loadAddCategoryPage,
     loadEditCategoryPage,
     editCategory,
+    loadBrandViewPage,
     loadBrandAddPage,
+    addBrand,
     loadAddBannerPage,
     loadCouponList,
     loadAddCouponPage,

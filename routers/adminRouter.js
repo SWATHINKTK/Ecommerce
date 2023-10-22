@@ -24,7 +24,7 @@ adminRouter.use(session({
 
 
 // multer is used to upload file 
-const storage = multer.diskStorage({
+const uploadProductImg = multer.diskStorage({
     destination:(req,file,cb) => {
         cb(null,path.join(__dirname,'../public/admin/assets/productImages'));
     },
@@ -33,7 +33,20 @@ const storage = multer.diskStorage({
         cb(null,name)
     }
 });
-const upload = multer({storage:storage})
+
+const uploadBrandImg = multer.diskStorage({
+    destination:(req,file,cb) => {
+        cb(null,path.join(__dirname,'../public/admin/assets/brandImages'));
+    },
+    filename:(req,file,cb) => {
+        const name = Date.now()+'-'+file.originalname;
+        cb(null,name)
+    }
+});
+
+
+const uploadProductImage = multer({storage:uploadProductImg});
+const uploadBrandImage = multer({storage:uploadBrandImg})
 
 
 // All GET request in Admin Panel 
@@ -50,7 +63,8 @@ adminRouter.get('/editproduct:id',adminController.loadEditProductPage);
 adminRouter.get('/categorylist',adminController.loadCategoryList);
 adminRouter.get('/addcategory',adminController.loadAddCategoryPage);
 adminRouter.get('/editcategory:id',adminController.loadEditCategoryPage);
-adminRouter.get('/viewbrand',adminController.loadBrandAddPage);
+adminRouter.get('/viewbrand',adminController.loadBrandViewPage);
+adminRouter.get('/addbrand',adminController.loadBrandAddPage);
 adminRouter.get('/addbanner',adminController.loadAddBannerPage);
 adminRouter.get('/couponlist',adminController.loadCouponList);
 adminRouter.get('/addcoupon',adminController.loadAddCouponPage);
@@ -65,8 +79,9 @@ adminRouter.post('/logout',adminController.logoutAdmin);
 adminRouter.post('/addcategory',adminController.addCategory);
 adminRouter.post('/editcategory',adminController.editCategory);
 adminRouter.post('/searchcategory',adminController.searchCategory);
-adminRouter.post('/productadd',upload.array('productimages',4),adminController.productAdd);
-adminRouter.post('/editproduct',upload.array('productimages',4),adminController.editProduct);
+adminRouter.post('/productadd',uploadProductImage.array('productimages',4),adminController.productAdd);
+adminRouter.post('/editproduct',uploadProductImage.array('productimages',4),adminController.editProduct);
+adminRouter.post('/addbrand',uploadBrandImage.single('brandImage'),adminController.addBrand);
 
 
 // All Patch Request Handle Admin

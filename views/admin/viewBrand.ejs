@@ -3,10 +3,12 @@
     <div class="col-12 grid-margin stretch-card" id="userview">
     <div class="card card-div">
       <div class="card-body  mt-5">
-        <div class="d-grid gap-4 d-md-flex justify-content-md-end mb-2 search align-items-center">
-          <a href="" target="_self" rel="noopener noreferrer" class="btn btn-primary" ><span>Add Brand</span></a>
-          <input type="text" class="form-control col-3 mr-2 " id="categorySearch" placeholder="User Search" name="categorySearch">
-          <button type="button" class="btn btn-search p-2" onclick="searchUser()"><i class="bi bi-search"></i></button>
+        <div class="d-flex justify-content-between align-items-center mb-2 search">
+          <a href="/admin/addbrand" target="_self" rel="noopener noreferrer" class="btn btn-primary"><span>Add Brand</span></a>
+          <div class="d-flex">
+            <input type="text" class="form-control col-10" id="categorySearch" placeholder="User Search" name="categorySearch">
+            <button type="button" class="btn btn-search p-2" onclick="searchUser()"><i class="bi bi-search"></i></button>
+          </div>
         </div>
         <div class="table-responsive">
           <table class="table table-hover">
@@ -16,7 +18,7 @@
                 <th>Brand Name</th>
                 <th>Logo</th>
                 <th>Edit</th>
-                
+      
               </tr>
             </thead>
             <tbody class="text-white">

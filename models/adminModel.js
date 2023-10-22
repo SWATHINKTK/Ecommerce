@@ -107,13 +107,32 @@ const productData = mongoose.Schema({
     }
 });
 
+const brandData = mongoose.Schema({
+    brand_name:{
+        type : String,
+        require : true
+    },
+    brand_logo:{
+        type : String,
+        require : true
+    },
+    brand_addDate:{
+        type : Date,
+        require : true
+    },
+    brand_unlistDate:{
+        type : Date,
+    }
+})
 
 const loginData = mongoose.model('adminlogin',adminLogin);
 const category = mongoose.model('categorys',addCategory);
 const productInfo = mongoose.model('products',productData);
+const brandInfo = mongoose.model('brands',brandData)
 
 module.exports = {
     loginData,
     category,
-    productInfo
+    productInfo,
+    brandInfo
 };
