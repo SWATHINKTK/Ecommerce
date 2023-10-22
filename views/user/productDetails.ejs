@@ -51,13 +51,13 @@
                         <div class="col-lg-4 col-md-9">
                             <div class="tab-content">
                                 <div class="tab-pane active" id="tabs-1" role="tabpanel">
-                                    <div class="product__details__pic__item">
+                                    <div class="product__details__pic__item" id="zoomImage1">
                                         <img src="/public/admin/assets/productImages/<%= product.productImages[0] %>"
-                                            alt="">
+                                            alt="" >
                                     </div>
                                 </div>
                                 <div class="tab-pane" id="tabs-2" role="tabpanel">
-                                    <div class="product__details__pic__item">
+                                    <div class="product__details__pic__item" id="zoomImage2">
                                         <img src="/public/admin/assets/productImages/<%= product.productImages[1] %>"
                                             alt="">
                                     </div>
@@ -404,5 +404,24 @@
                 </div>
             </div>
         </section>
+        <script src="https://unpkg.com/js-image-zoom@0.7.0/js-image-zoom.js" type="application/javascript"></script>
+        <script>
+            document.getElementById('zoomImage1').addEventListener('mouseover',()=>{
+                console.log('hello');
+                let options = {
+                    zoomwidth:500,
+                    zoomPosition: 'original',
+                }
+                new ImageZoom(document.getElementById("zoomImage1"), options);
+            })
+            document.getElementById('zoomImage2').addEventListener('mouseover',()=>{
+                console.log('hello');
+                let options = {
+                    zoomwidth:500,
+                    zoomPosition: 'original',
+                }
+                new ImageZoom(document.getElementById("zoomImage2"), options);
+            })
+        </script>
         <!-- Related Section End -->
 <%- include('../partials/footer.ejs') %>

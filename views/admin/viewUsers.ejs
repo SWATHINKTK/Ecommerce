@@ -1,11 +1,11 @@
 <%- include('../partials/header.ejs') %>
+<h1 class="card-title text-center text-dark">User Details</h1>
     <div class="col-12 grid-margin stretch-card" id="userview">
-    <div class="card">
+    <div class="card card-div">
       <div class="card-body  mt-5">
-        <h4 class="card-title text-center">View Users&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
-        <div class="d-grid gap-4 d-md-flex justify-content-md-end mb-2">
-          <input type="text" class="form-control col-3 mr-2" id="categorySearch" placeholder="Category Search" name="categorySearch">
-          <button type="button" class="btn btn-outline-primary" onclick="searchUser()"><i class="bi bi-search"></i></button>
+        <div class="d-grid gap-4 d-md-flex justify-content-md-end mb-2 search">
+          <input type="text" class="form-control col-3 mr-2 " id="categorySearch" placeholder="User Search" name="categorySearch">
+          <button type="button" class="btn btn-search" onclick="searchUser()"><i class="bi bi-search"></i></button>
         </div>
         <div class="table-responsive">
           <table class="table table-hover">
@@ -29,15 +29,19 @@
                 <td><%= data[i].email %></td>
                 <td><%= data[i].phonenumber %></td>
                 <!-- <td><%= data[i].joined_date %></td> -->
-                <td><%= data[i]._isVerified ? 'Verfied' : 'NotVerified'%></td>
+                <!-- <td><%= data[i]._isVerified ? 'Verfied' : 'NotVerified'%></td> -->
+                
                 <% if(data[i].block) {%>
-                  <td id="<%= data[i]._id %>"><button class="btn  btn-outline-danger pl-4 pr-4" id="<%= data[i]._id %>" onclick="userList(this)">Block</button></td>
-                <% } else { %>
+                  <td name="<%= data[i]._id %>"><span class="text-danger font-weight-bold">&#128683; Blocked</span></td>
                   <td id="<%= data[i]._id %>"><button class="btn btn-outline-success pl-3 pr-3" id="<%= data[i]._id %>" onclick="userList(this)">Unblock</button></td>
+                <% } else { %>
+                  <td name="<%= data[i]._id %>"><span class="text-success font-weight-bold">&#9989; Verified</span></td>
+                  <td id="<%= data[i]._id %>"><button class="btn  btn-outline-danger pl-4 pr-4" id="<%= data[i]._id %>" onclick="userList(this)">Block</button></td>
+                  
                 <% } %>
               </tr>
               <% } }else {%>
-                <tr class="bg-danger">
+                <tr class="bg-danger text-center">
                   <th class="text-dark" colspan="7">USER IS NOT FOUND</th>
                 </tr> 
               <% } %>
@@ -51,7 +55,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="staticBackdropLabel">User Block/Unblock</h5>
-        <button class="btn btn-transparent" onclick="back()"><i class="bi bi-x"></i></button>
+        <button class="btn btn-transparent" onclick="back()"><i class="bi bi-x cancel"></i></button>
       </div>
       <div class="modal-body">
         Are you sure?

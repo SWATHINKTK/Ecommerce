@@ -3,8 +3,8 @@
     <div class="otp-div">
         <form method="POST" id="verificationOTP">
             <div class="pt-3 pb-3 ">
-                <h1>Verify Your Account</h1>
-                <p>To continue, complete this verification step. We've sent an OTP to the email <span class="text-primary"><%= locals.data.email ? data.email : '' %></span>. Please enter it below to complete verification.</p>
+                <h1 data-timer="<%= locals.timer ? timer : '' %>" id="verify-heading">Verify Your Account</h1>
+                <p>To continue, complete this verification step. We've sent an OTP to the email <span class="text-primary"><%= locals.email ? email : '' %></span>. Please enter it below to complete verification.</p>
             </div>
             <p id="result" class="text-danger"></p>
             <div class="input-group ">
@@ -19,6 +19,7 @@
     </div>
 </div>
 <script>
+    
     document.getElementById('verificationOTP').addEventListener('submit',(event)=>{
         event.preventDefault();
         const otp ={
@@ -53,9 +54,13 @@
     })
 
 
+    const data = document.getElementById('verify-heading')
+    const time = data.getAttribute('data-timer');
 
     // timer loading 
-    let second = 120;
+    let second = 0;
+    let intial_time = time / 1000;
+    let max_time = (time/1000) + 120;
     function timer(){
         second--;
         document.getElementById('timer').innerText = second;

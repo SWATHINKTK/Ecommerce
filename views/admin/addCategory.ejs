@@ -1,24 +1,29 @@
-    <div class="col-12 grid-margin stretch-card">
+<h1 class="card-title text-center text-dark">Add Category Data</h1>
+   <div class="col-12 grid-margin stretch-card">
       <div class="card">
-        <div class="card-body">
-          <h4 class="card-title mb-4">Add Category</h4>
-          <p class="card-description" id="categorysuccess"></p>
-          <form class="forms-sample" id="addCategoryForm" method="POST">
-            <p id="response"></p>
+        <div class="card-body form-style">
+          <!-- <p class="card-description" id="categorysuccess"></p> -->
+          <form class="forms-sample mb-3" id="addCategoryForm" method="POST">
             <div class="form-group">
               <label for="exampleInputName1">Category Name</label>
               <input type="text" class="form-control" id="categoryname" placeholder="Category Name" name="categoryname">
             </div>
+            <!-- <div class="form-group ">
+              <label class="col-sm-3 col-form-label">Image</label>
+              <input type="file" class="form-control" id="categoryImage" name="categoryImage" accept="image/*">
+              <div  class="ml-3 category-image-div" >
+                <img class="category-image" id="categoryImage-view" src="" alt="Category Image File">
+              </div>
+            </div> -->
             <div class="form-group">
               <label for="exampleTextarea1">Description</label>
-              <textarea class="form-control" id="description" rows="4" name="description" ></textarea>
+              <textarea class="form-control" id="description" rows="4" name="description" placeholder="Category Description"></textarea>
             </div>
             <button type="submit" class="btn btn-primary mr-2" id="categorysubmit">Submit</button>
-            <button class="btn btn-dark" >Cancel</button>
-            
-            <!-- <input type="button" value="submit" id="swathin"> -->
-
+            <button class="btn btn-dark" onclick="formReset()">Cancel</button> 
           </form>
+          <div class="" role="alert" id="category-submit-result">
+          </div>
         </div>
       </div>
     </div>                                                                                                                                                                                                   

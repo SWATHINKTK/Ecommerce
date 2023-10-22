@@ -8,6 +8,8 @@ async function viewMore(value){
         console.log(target.id)
         const id = target.getAttribute('data-viewmore-id');
         console.log(id)
+
+
         const url = `/admin/productmoredata${id}`;
 
         const response = await fetch(url);
@@ -64,6 +66,7 @@ async function productStatusSucess(){
         if(!response.ok){
 
             window.location.href = '/admin/error500';
+            return;
         }
 
         const data = await response.json();

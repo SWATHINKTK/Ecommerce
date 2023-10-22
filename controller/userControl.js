@@ -76,48 +76,62 @@ const loadUserLogin = (req,res) => {
 }
 
 // Storing User Register Data to Session 
-const storeSignupData = async(req,res) => {
+const storeSignupData = async (req, res) => {
 
-    try{
+    try {
         const password = req.body.password;
+        const email = req.body.email
 
-        // Checking Register All field Data Present
-        if(Object.keys(req.body).length == 5){
+        const data = req.body;
 
-            // Check Two Password Column Data Same
-            if(req.body.password === req.body.confirmPassword){
+        const emailExist = await userData.findOne({ email: email });
+        console.log(emailExist)
 
-                const strongPassword = await securePassword(password);
-                const user = {
-                    username: req.body.username,
-                    email: req.body.email,
-                    phonenumber: req.body.phonenumber,
-                    password: strongPassword
+        if (emailExist) {
+            res.render('user/userAuthentication', { admin: false, data: 'User email is already exist' });
+
+        } else {
+
+            // Checking Register All field Data Present
+            if (data.username != '' && data.email != '' && data.phonenumber != '' && data.password != '') {
+
+                // Check Two Password Column Data Same
+                if (req.body.password === req.body.confirmPassword) {
+
+                    const strongPassword = await securePassword(password);
+                    const user = {
+                        username: req.body.username,
+                        email: req.body.email,
+                        phonenumber: req.body.phonenumber,
+                        password: strongPassword
+                    }
+
+                    // user data added to session 
+                    req.session.userData = user;
+
+                    //Check the Session And generate OTP
+                    if (req.session.userData) {
+
+                        //generate otp and send mail
+                        const otp = await generateRandomOtp(6);
+                        req.session.otp = otp;
+                        const html = `<div style="width: 100%;background: #F5FEFD;text-align:center"><h2>${user.username} Welcome Our Shopping Website</h2><h6>Verification OTP</h6><h3 style="color: red;">${otp}</h3><h2>Thank You For Joining...</h2></div>`
+                        await sendEmail(user.username, user.email, otp, html);
+                        req.session.startTime = Date.now();
+                        res.redirect('/otpVerification');
+
+                    } else {
+                        res.render('partials/error-500');
+                    }
+
+                } else {
+                    res.render('user/userAuthentication', { admin: false, data: 'Must Enter Two Password Same' })
                 }
-
-                // user data added to session 
-                req.session.userData = user;
-
-                //Check the Session And generate OTP
-                if(req.session.userData){
-
-                    //generate otp and send mail
-                    const otp = await generateRandomOtp(6);
-                    req.session.otp = otp;
-                    const html = `<div style="width: 100%;background: #F5FEFD;text-align:center"><h2>${user.username} Welcome Our Shopping Website</h2><h6>Verification OTP</h6><h3 style="color: red;">${otp}</h3><h2>Thank You For Joining...</h2></div>`
-                    await sendEmail(user.username,user.email,otp,html);
-                    req.session.startTime = Date.now();
-                    res.redirect('/otpVerification');
-
-                }else{
-                    res.status(500).render('partials/error-500');
-                }
-                
-            }else{
-                res.status(400);
+            } else {
+                res.render('user/userAuthentication', { admin: false, data: 'Enter All Fields and Again You can register' })
             }
         }
-    }catch(error){
+    } catch (error) {
         console.log(error.message);
     }
 }
@@ -126,7 +140,8 @@ const storeSignupData = async(req,res) => {
 // View OTP Verification Page 
 const loadOTPVerification = (req,res) =>{
     const userdata = req.session.userData;
-    res.render('user/otpVerification',{admin:false,title:'User OTP',data:userdata});
+    const time = req.session.startTime
+    res.render('user/otpVerification',{admin:false,title:'User OTP',email:userdata.email,timer:time});
 }
 
 // Resend OTP In Verification Page
@@ -147,7 +162,7 @@ const OTPCheck = async(req,res) => {
     const startTime = req.session.startTime;
     const sessionOTP = req.session.otp;
     const data = req.session.userData;
-    console.log(data,sessionOTP)
+    // console.log(data,sessionOTP)
     const user = userData({
         username: data.username,
         email: data.email,
@@ -168,6 +183,7 @@ const OTPCheck = async(req,res) => {
             const sendData = await user.save();
             // Sucess Result
             if(sendData){
+                req.session._id = user._id;
                 res.redirect('/home');
             }else{
                 res.status(500).redirect('/error500');
@@ -208,7 +224,7 @@ const guestPage = async(req,res) => {
     try{
         const productData = await productInfo.find({});
         // console.log(productData)
-        res.render('user/index',{user:true,data:productData})
+        res.render('user/index',{user:true,title:'Brand Unlimited',data:productData})
     }catch(error){
         console.log(error.message)
     }
@@ -219,7 +235,7 @@ const loadProductDetailPage = async(req,res) => {
         const id = req.query.id;
         const data = await productInfo.findOne({_id:id});
         const productData = await productInfo.find({});
-        res.render('user/productDetails',{user:true,data:productData,product:data})
+        res.render('user/productDetails',{user:true,title:'Products',data:productData,product:data})
 
     }catch(error){
         res.status(500).redirect('/error500')

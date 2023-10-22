@@ -35,6 +35,8 @@ document.getElementById('sidebar').addEventListener('click', async function(even
 
             }
 
+        /*---------------------------------------View More Data End------------------------------------------------*/
+
 
 
         })
@@ -66,7 +68,21 @@ document.getElementById('sidebar').addEventListener('click', async function(even
         })
 
 
-       
+        document.getElementById('productSearchBtn').addEventListener('click',async function(){
+            const searchData = document.getElementById('productSearch').value;
+
+            const url = `/admin/searchproduct${searchData}`;
+            
+            const response = await fetch(url);
+
+            if(!response.ok){
+                window.location.href = '/admin/error500';
+            }
+
+            const data = await response.text();
+            contentPlaceholder.innerHTML = data;
+
+        })       
 
 
     }else if(id == 'add-product'){

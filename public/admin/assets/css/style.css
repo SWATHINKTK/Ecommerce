@@ -7495,7 +7495,7 @@ body {
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;
-  color: #ffffff;
+  color: #010101;
   text-align: left;
   background-color: #fff; }
 
@@ -8565,16 +8565,18 @@ pre {
   .offset-xl-11 {
     margin-left: 91.66667%; } }
 
+
 .table, .jsgrid .jsgrid-table {
   width: 100%;
   margin-bottom: 1rem;
-  color: #ffffff; }
+  color: #000000;
+ }
   .table th, .jsgrid .jsgrid-table th,
   .table td,
   .jsgrid .jsgrid-table td {
     padding: 0.9375rem;
     vertical-align: top;
-    border-top: 1px solid #2c2e33; }
+     }
   .table thead th, .jsgrid .jsgrid-table thead th {
     vertical-align: bottom;
     border-bottom: 2px solid #2c2e33; }
@@ -8604,8 +8606,8 @@ pre {
   background-color: #000000; }
 
 .table-hover tbody tr:hover {
-  color: #212529;
-  background-color: #000000; }
+  color: #000000;
+  background-color: #959595d6; }
 
 .table-primary,
 .table-primary > th,
@@ -8755,7 +8757,7 @@ pre {
     background-color: rgba(0, 0, 0, 0.075); }
 
 .table .thead-dark th, .jsgrid .jsgrid-table .thead-dark th {
-  color: #fff;
+  color: #000000;
   background-color: #212529;
   border-color: #454d55; }
 
@@ -8765,7 +8767,7 @@ pre {
   border-color: #2c2e33; }
 
 .table-dark {
-  color: #fff;
+  color: #050505;
   background-color: #212529; }
   .table-dark th,
   .table-dark td,
@@ -8831,11 +8833,11 @@ pre {
   width: 100%;
   height: 2.875rem;
   padding: 0.56rem 0.75rem;
-  font-size: 0.875rem;
+  font-size: 0.87rem;
   font-weight: 400;
   line-height: 1;
-  color: #495057;
-  background-color: #2A3038;
+  color: #111213;
+  background-color: #ffffff;
   background-clip: padding-box;
   border: 1px solid #2c2e33;
   border-radius: 2px;
@@ -8919,8 +8921,8 @@ select.form-control:focus::-ms-value, select.asColorPicker-input:focus::-ms-valu
 .jsgrid .jsgrid-table .jsgrid-filter-row select:focus::-ms-value, .select2-container--default select.select2-selection--single:focus::-ms-value, .select2-container--default .select2-selection--single select.select2-search__field:focus::-ms-value, select.typeahead:focus::-ms-value,
 select.tt-query:focus::-ms-value,
 select.tt-hint:focus::-ms-value {
-  color: #495057;
-  background-color: #2A3038; }
+  color: #111213;
+  background-color: #d9d9d9; }
 
 .form-control-file,
 .form-control-range {
@@ -8953,7 +8955,7 @@ select.tt-hint:focus::-ms-value {
   margin-bottom: 0;
   font-size: 0.875rem;
   line-height: 1;
-  color: #212529;
+  color: #0f0f10;
   background-color: transparent;
   border: solid transparent;
   border-width: 1px 0; }
@@ -9962,12 +9964,12 @@ input[type="button"].btn-block {
   padding: 0.5rem 0;
   margin: 0.125rem 0 0;
   font-size: 1rem;
-  color: #ffffff;
+  color: #000000;
   text-align: left;
   list-style: none;
-  background-color: #191c24;
+  background-color: #c5c6ca;
   background-clip: padding-box;
-  border: 1px solid #2c2e33;
+  /* border: 1px solid #2c2e33; */
   border-radius: 0.25rem; }
 
 .dropdown-menu-left {
@@ -10091,7 +10093,8 @@ input[type="button"].btn-block {
   height: 0;
   margin: 0.5rem 0;
   overflow: hidden;
-  border-top: 1px solid #2c2e33; }
+  /* border-top: 1px solid #2c2e33; */
+ }
 
 .dropdown-item {
   display: block;
@@ -10105,9 +10108,9 @@ input[type="button"].btn-block {
   background-color: transparent;
   border: 0; }
   .dropdown-item:hover, .dropdown-item:focus {
-    color: #16181b;
+    color: #121010;
     text-decoration: none;
-    background-color: #13151b; }
+    background-color: #c4c6cb; }
   .dropdown-item.active, .dropdown-item:active {
     color: #fff;
     text-decoration: none;
@@ -11571,15 +11574,108 @@ input[type="button"].btn-block {
     .navbar-dark .navbar-text a:hover, .navbar-dark .navbar-text a:focus {
       color: #fff; }
 
+
+.card-div{
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+.search input{
+  width: 100%; 
+  padding: 10px;
+  border: none; 
+  border-radius: 5px;
+  font-size: 16px;
+  margin-right: 10px; 
+}
+
+.form-style textarea{
+  width: 100%; 
+  padding: 10px;
+  border: none; 
+  border-radius: 5px;
+  font-size: 16px;
+  margin-right: 10px; 
+}
+
+.form-style input{
+  width: 100%; 
+  padding: 10px;
+  border: none; 
+  border-radius: 5px;
+  font-size: 16px;
+  margin-right: 10px; 
+}
+#category-submit-result{
+  display: none;
+}
+
+
+
+.modal-header,.modal-body,.modal-footer{
+  background-color:	#f9f9f9;
+  border: none;
+}
+
+.edit-btn{
+  color: #0050e3;
+}
+.edit-btn:hover{
+  color: #006d2f;
+}
+
+.category-image-div{
+  width: 20rem;
+  height: 20rem;
+  background-color: #000;
+}
+
+/* Style the search button */
+button.btn-search {
+  background-color: #6C757D; 
+  color: #fff;
+  /* border: 1px solid #007bff; */
+  border-radius: 5px;
+}
+
+button.btn-search:hover {
+  background-color: #000; 
+}
+
+/* Style for the edit button */
+.product-edit-button {
+  background-color: #007BFF; /* Background color when not hovered */
+  color: #fff; /* Text color when not hovered */
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s; /* Transition effect on hover */
+}
+
+/* Hover effect for the edit button */
+.product-edit-button:hover {
+  background-color: #0056b3; /* Background color on hover */
+}
+
+/* Optional: Add more styling to the button if needed */
+.product-edit-button i {
+  margin-right: 5px;
+}
+
+
+
 .card {
   position: relative;
+  /* padding: 3rem; */
   display: flex;
   flex-direction: column;
   min-width: 0;
   word-wrap: break-word;
-  background-color: #191c24;
+  /* background-color: #F3F2EE; */
+  background-color: #dadbdc;
   background-clip: border-box;
-  border: 1px solid rgba(0, 0, 0, 0.125);
+  /* border: 1px solid rgba(0, 0, 0, 0.125); */
   border-radius: 0.25rem; }
   .card > hr {
     margin-right: 0;
@@ -15334,7 +15430,7 @@ button.bg-dark:focus {
   font-style: italic !important; }
 
 .text-white {
-  color: #ffffff !important; }
+  color: #000 !important; }
 
 .text-primary, .list-wrapper .completed .remove {
   color: #0090e7 !important; }
@@ -15597,6 +15693,7 @@ input[type=submit]::-moz-focus-inner,
 input[type=file] > input[type=button]::-moz-focus-inner,
 select::-moz-focus-inner {
   outline: 0; }
+  
 
 input, .form-control:focus, .asColorPicker-input:focus, .dataTables_wrapper select:focus, .jsgrid .jsgrid-table .jsgrid-filter-row input:focus[type=text],
 .jsgrid .jsgrid-table .jsgrid-filter-row select:focus, .jsgrid .jsgrid-table .jsgrid-filter-row input:focus[type=number], .select2-container--default .select2-selection--single:focus, .select2-container--default .select2-selection--single .select2-search__field:focus, .typeahead:focus,
@@ -16051,7 +16148,7 @@ code {
   font-weight: normal; }
 
 .bg-gray-dark {
-  background: #12151e; }
+  background: #F3F2EE; }
 
 .text-twitter {
   color: #2caae1; }
@@ -16755,7 +16852,7 @@ code {
     .card .card-body + .card-body {
       padding-top: 1rem; }
   .card .card-title {
-    color: #ffffff;
+    color: #000;
     margin-bottom: 1.125rem;
     text-transform: capitalize; }
   .card .card-subtitle {
@@ -17106,15 +17203,15 @@ code {
   font-weight: normal;
   font-size: 0.875rem;
   padding: 0.625rem 0.6875rem;
-  background-color: #2A3038;
+  background-color: #ffffff;
   border-radius: 2px;
-  color: #ffffff; }
+  color: #000000; }
   .form-control:focus, .asColorPicker-input:focus, .dataTables_wrapper select:focus, .jsgrid .jsgrid-table .jsgrid-filter-row input:focus[type=text],
   .jsgrid .jsgrid-table .jsgrid-filter-row select:focus, .jsgrid .jsgrid-table .jsgrid-filter-row input:focus[type=number], .select2-container--default .select2-selection--single:focus, .select2-container--default .select2-selection--single .select2-search__field:focus, .typeahead:focus,
   .tt-query:focus,
   .tt-hint:focus {
     border: 1px solid rgba(71, 164, 71, 0.5);
-    background-color: #2A3038; }
+    background-color: #fff; }
   .form-control.form-control-lg, .form-control-lg.asColorPicker-input, .dataTables_wrapper select.form-control-lg, .jsgrid .jsgrid-table .jsgrid-filter-row input.form-control-lg[type=text],
   .jsgrid .jsgrid-table .jsgrid-filter-row select.form-control-lg, .jsgrid .jsgrid-table .jsgrid-filter-row input.form-control-lg[type=number], .select2-container--default .form-control-lg.select2-selection--single, .select2-container--default .select2-selection--single .form-control-lg.select2-search__field, .form-control-lg.typeahead,
   .form-control-lg.tt-query,
@@ -18074,7 +18171,8 @@ div.tagsinput {
     vertical-align: middle;
     font-size: 0.875rem;
     line-height: 1;
-    white-space: nowrap; }
+    white-space: nowrap; 
+}
     .table th img, .jsgrid .jsgrid-table th img,
     .table td img,
     .jsgrid .jsgrid-table td img {
@@ -19174,16 +19272,18 @@ body.avgrund-active {
   .fc .fc-widget-header table tr th {
     border-width: 0 0 1px 0;
     text-align: right;
-    padding: 1rem; }
+    padding:1rem; 
+}
     .fc .fc-widget-header table tr th span {
-      font-size: 10px;
+      font-size: 15px;
       text-transform: uppercase;
       color: #a8b2b9;
       letter-spacing: 1px; }
 
 .fc .fc-content-skeleton table tr td {
   padding: .5rem;
-  font-size: .875rem; }
+  font-size: .875rem; 
+}
 
 .fc .fc-event {
   border: 0;
@@ -20803,7 +20903,7 @@ div.tagsinput {
 .sidebar {
   min-height: calc(100vh - 70px);
   background: #ffffff;
-  font-weight: normal;
+  font-weight: 600;
   padding: 0;
   width: 244px;
   z-index: 11;

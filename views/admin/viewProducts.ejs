@@ -1,9 +1,11 @@
+<h1 class="card-title text-center text-dark">Product Details</h1>
 <div class="col-12 grid-margin stretch-card">
-    <div class="card">
+    <div class="card card-div">
       <div class="card-body  mt-5">
-        <h4 class="card-title text-center">Product View&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
-        <!-- <p class="card-description"> Add class <code>.table-hover</code> -->
-        </p>
+        <div class="d-grid gap-4 d-md-flex justify-content-md-end mb-2 search">
+          <input type="text" class="form-control col-3 mr-2" id="productSearch" placeholder="Category Search" name="categorySearch">
+          <button type="button" class="btn btn-search" id="productSearchBtn"><i class="bi bi-search"></i></button>
+        </div>
         <div class="table-responsive" id="table-product">
           <table class="table table-hover">
             <thead>
@@ -19,7 +21,7 @@
                 <th>Edit</th>
               </tr>
             </thead>
-            <tbody class="text-white">
+            <tbody class="text-white table-style">
               <% if(data.length) { %>
                 <% for(let i = 0; i < data.length ; i++) { %>
               <tr>
@@ -27,7 +29,7 @@
                 <td id="productTable-productname"><%= data[i].productName %></td>
                 <td >
                     <% for(let j = 0; j < data[i].categorys.length ; j++) { %>
-                    <%= data[i].categorys[j] %><br>
+                      <i class="bi bi-caret-right-fill"></i><%= data[i].categorys[j] %><br>
                     <% } %>
                 </td>
                 <td><%= data[i].brandname %></td>
@@ -44,7 +46,7 @@
               </tr>
               <% } } else { %>
                 <tr class="bg-danger">
-                  <th class="text-dark text-center" colspan="7">PRODUCT IS NOT FOUND</th>
+                  <th class="text-dark text-center" colspan="9">PRODUCT IS NOT FOUND</th>
                 </tr>
               <% } %>
             </tbody>
@@ -72,7 +74,7 @@
 </div>
 
 <div class="modal confirmation-modal" id="product-confirmation-modal" style="display: none; width: 23rem;margin-right: 50%;margin-left: 40%; margin-top:3rem;">
-  <div class="modal-content">
+  <div class="modal-content modal-style">
     <div class="modal-header">
       <h5 class="modal-title" id="staticBackdropLabel">User Block/Unblock</h5>
       <button class="btn btn-transparent" id="list-confirmation-cancel1"><i class="bi bi-x cancel"></i></button>
