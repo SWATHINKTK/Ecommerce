@@ -11628,13 +11628,14 @@ input[type="button"].btn-block {
   color: #006d2f;
 }
 
-#brand-img-view{
+#brand-img-view,#category-img-view{
   object-fit: contain;
   width: 20rem;
   height: 20rem;
   background-color: #000;
   display: none;
 }
+
 
 #edit-brand-img-view{
   object-fit: contain;

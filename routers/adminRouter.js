@@ -44,9 +44,20 @@ const uploadBrandImg = multer.diskStorage({
     }
 });
 
+const uploadCategoryImg = multer.diskStorage({
+    destination:(req,file,cb) => {
+        cb(null,path.join(__dirname,'../public/admin/assets/categoryImages'));
+    },
+    filename:(req,file,cb) => {
+        const name = Date.now()+'-'+file.originalname;
+        cb(null,name)
+    }
+});
 
 const uploadProductImage = multer({storage:uploadProductImg});
-const uploadBrandImage = multer({storage:uploadBrandImg})
+const uploadBrandImage = multer({storage:uploadBrandImg});
+const uploadCategoryImage = multer({storage:uploadCategoryImg});
+
 
 
 /* =========================================================== All Routing  Request in Admin Panel Order GET > POST > PATCH==================================================== */
@@ -81,7 +92,7 @@ adminRouter.post('/editproduct',uploadProductImage.array('productimages',4),admi
 adminRouter.get('/categorylist',adminController.loadCategoryList);
 adminRouter.get('/addcategory',adminController.loadAddCategoryPage);
 adminRouter.get('/editcategory:id',adminController.loadEditCategoryPage);
-adminRouter.post('/addcategory',adminController.addCategory);
+adminRouter.post('/addcategory',uploadCategoryImage.single('categoryImage'),adminController.addCategory);
 adminRouter.post('/editcategory',adminController.editCategory);
 adminRouter.post('/searchcategory',adminController.searchCategory);
 adminRouter.patch('/categorystatusupdate',adminController.categorySatusUpdate);

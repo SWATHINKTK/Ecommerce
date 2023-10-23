@@ -12,6 +12,7 @@
             <tr>
               <th>#</th>
               <th>Category Name</th>
+              <th>image</th>
               <th>Edit</th>
               <th>Status</th>
               <th>List/Unlist</th>
@@ -26,6 +27,11 @@
               <tr>
                 <td><%= i+1 %></td>
                 <td><%= data[i].categoryname %></td>
+                <td>
+                  <div style="width: 5rem; height: 5rem; object-fit: contain;">
+                      <img src="/public/admin/assets/categoryImages/<%= data[i]." alt="" srcset="">
+                  </div>
+                </td>
                 <td><button class="btn btn-transparent edit-btn" onclick="editCategory(this)"><i class="bi bi-pencil-square"></i>Edit</button></td>
                 <% if(data[i].list) {%>
                   <td name="<%= data[i]._id %>"><span class="text-success font-weight-bold">&#9989; Listed</span></td>

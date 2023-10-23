@@ -25,6 +25,10 @@ const addCategory = mongoose.Schema({
         type : String,
         require : true
     },
+    category_image : {
+        type : String,
+        require : true
+    },
     list : {
         type : Boolean,
         default : true

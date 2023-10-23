@@ -470,9 +470,10 @@ const addCategory = async (req, res) => {
     try {
         const name = req.body.categoryname;
         const description = req.body.description;
+        const image = req.file.filename;
 
         // Checking name & description is present
-        if (name && description) {
+        if (name && description && image) {
 
             const checkData = await category.findOne({ categoryname: { $regex: new RegExp(`^${name}`, 'i') } });
 
@@ -481,7 +482,8 @@ const addCategory = async (req, res) => {
 
                 const categoryData = category({
                     categoryname: name,
-                    description: description
+                    description: description,
+                    category_image: image
                 });
 
                 const dataSend = await categoryData.save();
