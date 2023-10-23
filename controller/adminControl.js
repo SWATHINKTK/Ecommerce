@@ -473,7 +473,7 @@ const addCategory = async (req, res) => {
         const image = req.file.filename;
 
         // Checking name & description is present
-        if (name && description && image) {
+        if (name !='' && description != '' && image) {
 
             const checkData = await category.findOne({ categoryname: { $regex: new RegExp(`^${name}`, 'i') } });
 
@@ -537,11 +537,21 @@ const editCategory = async (req, res) => {
 
     try {
 
+        console.log(req.body,req.file)
         // *** Retrieve Data Form the Body
         const name = req.body.categoryname;
         const oldName = req.body.oldCategoryName;
-        const description = req.body.description;
-        const id = req.body.categoryId;
+        const description = req.body.categoryDescription;
+        const id = req.body.categoryid;
+        const file = req.file;
+
+        let image;
+        if(file){
+            image = req.file.filename;
+        }else{
+            image = req.body.oldImage;
+        }
+        
 
         //*** Check All Fields Are Exist ***
         if (name && description) {
@@ -556,7 +566,7 @@ const editCategory = async (req, res) => {
             } else {
 
                 //*** Update Category Data ***
-                const dataSend = await category.updateOne({ _id: id }, { $set: { categoryname: name, description: description } });
+                const dataSend = await category.updateOne({ _id: id }, { $set: { categoryname: name, category_image: image, description: description } },{upsert:true});
 
                 //*** Check Sucess Or Not ***
                 if (dataSend) {
@@ -608,6 +618,7 @@ const loadBrandAddPage = async (req, res) => {
 //******* Add Brand Data Into DataBase ******
 const addBrandDetails = async(req,res) => {
 
+    console.log('sucess')
     try{
         const name = req.body.brandName;
         const img = req.file.filename;

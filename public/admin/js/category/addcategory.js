@@ -1,37 +1,67 @@
 document.getElementById("addCategoryForm").addEventListener("submit", function (event) {
         event.preventDefault(); // Prevent the default form submission
 
-        const result = document.getElementById('category-submit-result');
-        console.log(result)
-        
-        const form = document.getElementById('addCategoryForm');
-        const formData = new FormData(form);
+        console.log('helo')
+        const categoryname = document.getElementById('categoryname').value;
+        const image = document.getElementById('categoryImage');
+        const categoryDescription = document.getElementById('category-description').value;
 
-        fetch("/admin/addcategory", {
-            method: "POST",
-            body: formData,
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                
-                if (data.status) {
-                    result.setAttribute('class','alert alert-success');
-                    result.innerHTML = data.message;
-                    document.getElementById("addCategoryForm").reset();
-                }else{
-                    result.setAttribute('class','alert alert-danger');
-                    result.innerHTML = data.message;
-                }
+
+        let validate = document.querySelectorAll('p[name="validate-category"]');
+
+        if(categoryname.trim() === ''){
+
+            validate[0].innerHTML = '* enter Brand name';
+            validate[1].innerHTML = '';
+            validate[2].innerHTML = '';
+
+        }else if(image.files.length == 0){
+
+            validate[0].innerHTML = '';
+            validate[1].innerHTML = '* upload image';
+            validate[2].innerHTML = '';
+
+        }else if(categoryDescription.trim() === ''){
+
+            validate[0].innerHTML = '';
+            validate[1].innerHTML = '';
+            validate[2].innerHTML = '* enter description';
+
+        }
+        else{
+
+            const result = document.getElementById('category-submit-result');
+            result.style.display = 'block';
+            
+            const form = document.getElementById('addCategoryForm');
+            const formData = new FormData(form);
+
+            fetch("/admin/addcategory", {
+                method: "POST",
+                body: formData,
             })
-            .catch((error) => {
-                console.log();
-                "Error:", error.message;
-            });
+                .then((response) => response.json())
+                .then((data) => {
+                    
+                    if (data.status) {
+                        result.setAttribute('class','alert alert-success');
+                        result.innerHTML = data.message;
+                        document.getElementById("addCategoryForm").reset();
+                    }else{
+                        result.setAttribute('class','alert alert-danger');
+                        result.innerHTML = data.message;
+                    }
+                })
+                .catch((error) => {
+                    console.log();
+                    "Error:", error.message;
+                });
 
-            setTimeout(()=>{
-                result.style.display = 'none';
-            },2000)
-    });
+                setTimeout(()=>{
+                    result.style.display = 'none';
+                },2000);
+        }
+});
 
 
 function formReset(){

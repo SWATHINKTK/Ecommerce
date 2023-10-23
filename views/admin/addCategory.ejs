@@ -7,17 +7,20 @@
             <div class="form-group">
               <label for="exampleInputName1">Category Name</label>
               <input type="text" class="form-control" id="categoryname" placeholder="Category Name" name="categoryname">
+              <p class="text-danger ml-2" name="validate-category"></p>
             </div>
             <div class="form-group ">
               <label class="col-sm-3 col-form-label">Image</label>
               <input type="file" class="form-control" id="categoryImage" name="categoryImage" accept="image/*" onchange="imageView(this)">
+              <p class="text-danger ml-2" name="validate-category"></p>
               <div  class="ml-3">
                 <img class="category-image" id="category-img-view" src="" alt="Category Image File">
               </div>
             </div>
             <div class="form-group">
               <label for="exampleTextarea1">Description</label>
-              <textarea class="form-control" id="description" rows="4" name="description" placeholder="Category Description"></textarea>
+              <textarea class="form-control" id="category-description" rows="4" name="description" placeholder="Category Description"></textarea>
+              <p class="text-danger ml-2" name="validate-category"></p>
             </div>
             <button type="submit" class="btn btn-primary mr-2" id="categorysubmit">Submit</button>
             <button class="btn btn-dark" onclick="formReset()">Cancel</button> 

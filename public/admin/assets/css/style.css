@@ -11637,12 +11637,12 @@ input[type="button"].btn-block {
 }
 
 
-#edit-brand-img-view{
+#edit-brand-img-view,#edit-category-img-view{
   object-fit: contain;
   width: 20rem;
   height: 20rem;
   background-color: #000;
-  display: none;
+  /* display: none; */
 }
 
 

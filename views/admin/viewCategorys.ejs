@@ -28,8 +28,8 @@
                 <td><%= i+1 %></td>
                 <td><%= data[i].categoryname %></td>
                 <td>
-                  <div style="width: 5rem; height: 5rem; object-fit: contain;">
-                      <img src="/public/admin/assets/categoryImages/<%= data[i]." alt="" srcset="">
+                  <div style="width: 5rem; height: 5rem;">
+                      <img src="/public/admin/assets/categoryImages/<%= data[i].category_image %>" alt="Category Image" style="object-fit: contain; width: 100%; height: 100%;">
                   </div>
                 </td>
                 <td><button class="btn btn-transparent edit-btn" onclick="editCategory(this)"><i class="bi bi-pencil-square"></i>Edit</button></td>
@@ -50,7 +50,7 @@
               </tr>
               <% } } else{ %>
                 <tr class="bg-danger">
-                  <th class="text-dark" colspan="5">CATEGORY IS NOT FOUND</th>
+                  <th class="text-dark" colspan="7">CATEGORY IS NOT FOUND</th>
                 </tr> 
               <% } %>
           </tbody>

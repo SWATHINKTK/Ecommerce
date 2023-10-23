@@ -93,7 +93,7 @@ adminRouter.get('/categorylist',adminController.loadCategoryList);
 adminRouter.get('/addcategory',adminController.loadAddCategoryPage);
 adminRouter.get('/editcategory:id',adminController.loadEditCategoryPage);
 adminRouter.post('/addcategory',uploadCategoryImage.single('categoryImage'),adminController.addCategory);
-adminRouter.post('/editcategory',adminController.editCategory);
+adminRouter.post('/editcategory',uploadCategoryImage.single('categoryImage'),adminController.editCategory);
 adminRouter.post('/searchcategory',adminController.searchCategory);
 adminRouter.patch('/categorystatusupdate',adminController.categorySatusUpdate);
 

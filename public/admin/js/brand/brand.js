@@ -142,39 +142,63 @@ document.getElementById('addBrandForm').addEventListener('submit',async(event)=>
 
     try{
 
-        //*** Creating a FormData Object ***
-        const form = document.getElementById('addBrandForm');
-        const formData = new FormData(form);
+        const brandName = document.getElementById('brandname').value;
+        const image = document.getElementById('brandImage');
+        let validate = document.querySelectorAll('p[name="validate-brand"]');
 
-        //*** Result Printing in the request
-        const result = document.getElementById("brand-submit-result");
-        result.style.display = 'block';
+        if(brandName.trim() === ''){
 
-        const url = '/admin/addbrand';
-        const config = {
-            method: 'POST',
-            body: formData
-        }
-        const response = await fetch(url,config);
+            validate[0].innerHTML = '* enter Brand name';
 
-        if(!response.ok){
+        }else if(image.files.length == 0){
 
-            window.location.href = '/admin/error500'
+            validate[0].innerHTML = '';
+            validate[1].innerHTML = '* upload image';
             
-        }
-
-        const data = await response.json();
-
-        if (data.status) {
-
-            result.setAttribute('class','alert alert-success');
-            result.innerHTML = data.message;
-            document.getElementById("addBrandForm").reset();
-
         }else{
-            
-            result.setAttribute('class','alert alert-danger');
-            result.innerHTML = data.message;
+
+        
+
+            //*** Creating a FormData Object ***
+            const form = document.getElementById('addBrandForm');
+            const formData = new FormData(form);
+
+            //*** Result Printing in the request
+            const result = document.getElementById("brand-submit-result");
+            result.style.display = 'block';
+
+            const url = '/admin/addbrand';
+            const config = {
+                method: 'POST',
+                body: formData
+            }
+            const response = await fetch(url,config);
+
+            if(!response.ok){
+
+                window.location.href = '/admin/error500'
+                
+            }
+
+            const data = await response.json();
+
+            if (data.status) {
+
+                result.setAttribute('class','alert alert-success');
+                result.innerHTML = data.message;
+                document.getElementById("addBrandForm").reset();
+
+            }else{
+                
+                result.setAttribute('class','alert alert-danger');
+                result.innerHTML = data.message;
+            }
+
+            setTimeout(()=>{
+
+                result.style.display = 'none';
+
+            },2000)
         }
 
     }catch(error){
@@ -249,6 +273,7 @@ async function brandUnlist(button){
         status.innerHTML = '<span class="text-danger font-weight-bold">&#128683; Unlisted</span>';
         btn.innerHTML = `<button class="btn btn-primary pl-4 pr-4" id="${id}" onclick="brandStatusUpdate(this)"><i class="bi bi-check2-circle"> </i>list</button>`;
     }
+    
 }
 
 

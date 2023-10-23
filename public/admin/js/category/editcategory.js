@@ -1,73 +1,109 @@
 //*** Edit Category Name and Desciption***
-document.getElementById('editCategoryForm').addEventListener('submit',function (event) {
+document.getElementById('editCategoryForm').addEventListener('submit', function(event) {
+    event.preventDefault(); 
 
-    event.preventDefault(); // Prevent the default form submission
+    const errorMessage = document.querySelectorAll('p[name="validate-category"]');
+    // console.log(errorMessage)
 
     //*** Form id is used to taken the values of The Input Field ***
-    const categoryname = document.getElementById('editCategoryForm').categoryname.value;
-    const oldCategoryName = document.getElementById('editCategoryForm').oldCategoryName.value;
-    const description = document.getElementById('editCategoryForm').description.value;
-    const categoryId = document.getElementById('categoryid').value;
+    const categoryname = document.getElementById('categoryname').value;
+    const description = document.getElementById('category-description').value;
+    const image = document.getElementById('edit-categoryImage');
+    // console.log(categoryname,description,image)
+
+    if(categoryname.trim() === ''){
+
+        errorMessage[0].innerHTML = '* enter the categoryname';
+
+    }else if(description.trim() == ''){
+
+        errorMessage[2].innerHTML = '*enter the description'
+
+    }else{ 
+
+            const result = document.getElementById('category-submit-result');
+            result.style.display = 'block';
+
+            const form = document.getElementById('editCategoryForm');
+            const formData = new FormData(form);
 
 
-    //*** Select The Result Printing Option
-    const result = document.getElementById("category-submit-result");
-    result.style.display = 'block';
-    
+            // *** Fetch API is Used To Send Data And Update ***
+            fetch('/admin/editcategory', {
+                method: 'POST',
+                body: formData
+            }) 
 
-    //*** Input Field Taken Value Store Object & Convert To JSON ***
-    const formData = {
-        categoryname,
-        description,
-        categoryId,
-        oldCategoryName
-    };
-    const jsonData = JSON.stringify(formData);
+            .then(response => response.json())
 
+            .then(data => {
+               
+                //*** Status of the Edit Result Print on Web And reset the form After Sucess ***
+                if(data.status){
 
-    // *** Fetch API is Used To Send Data And Update ***
-    fetch('/admin/editcategory', {
-        method: 'POST',
-        body: jsonData,
-        headers :{'Content-Type':'application/json'}
-    }) 
+                    //*** Adding Updated Data To The Field
+                    document.getElementById('categoryname').setAttribute('value',`${categoryname}`);
+                    document.getElementById('category-description').innerHTML = description;
 
-    .then(response => response.json())
+                    result.innerHTML = data.message;
+                    result.setAttribute('class','alert alert-success');
+                    document.getElementById('editCategoryForm').reset();
 
-    .then(data => {
+                }else{
 
-        //*** Status of the Edit Result Print on Web And reset the form After Sucess ***
-        if(data.status){
+                    result.innerHTML = data.message;
+                    result.setAttribute('class','alert alert-danger');
 
-            //*** Adding Updated Data To The Field
-            document.getElementById('categoryname').setAttribute('value',`${categoryname}`);
-            document.getElementById('category-description').innerHTML = description;
-
-            result.innerHTML = data.message;
-            result.setAttribute('class','alert alert-success');
-            document.getElementById('editCategoryForm').reset();
-
-        }else{
-
-            result.innerHTML = data.message;
-            result.setAttribute('class','alert alert-danger');
-
-        }
+                }
 
 
-        // ***Result Data Div Hide
-       setTimeout(() => {
-        result.style.display = 'none';
-       },2000)
-        
+                // ***Result Data Div Hide
+                setTimeout(() => {
+                    result.style.display = 'none';
+                },2000);
+            
 
-    })
-    .catch((error) => {
-        console.log();('Error:', error.message);
-    });
+            })
+            .catch((error) => {
+                console.log();('Error:', error.message);
+            });
+    }
 
     
 });
 
 
+// ***** Clear The Error Messages ***
+function clearErrorMessages(){
+    const errorMessage = document.querySelectorAll('p[id="validate-category"]');
 
+    errorMessage.forEach((element) => {
+        element.innerHTML = '';
+    })
+}
+
+
+
+
+function imageView(event){
+    const image = event;
+    const imgTag = document.getElementById('edit-category-img-view');
+    const file = image.files[0];
+
+
+    if(file){
+
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            imgTag.src = e.target.result;
+        }
+
+        reader.readAsDataURL(file);
+        imgTag.style.display = 'block';
+
+    }else{
+        imgTag.style.display = 'none';
+        imgTag.src = '';
+    }
+}

@@ -7,7 +7,7 @@ function categoryList(value) {
 
     //*** Button to Retrieve Details of the Category***
     const row = value.parentElement.parentElement;
-    const id = row.cells[4];
+    const id = row.cells[5];
     const categoryName = row.cells[1].textContent;
 
     //**** Above Retrive data Add to Modal Ok Button***
@@ -35,10 +35,14 @@ function sucess() {
     const categoryId = document.getElementById("sucess").getAttribute("data-category-id");
     const categoryName = document.getElementById("sucess").getAttribute("data-category-name");
 
+    console.log(categoryId,categoryName)
+
     
     //*** Modal Sucess to Update Data Retrieve ***
     const button = document.querySelector(`td[id="${categoryId}"]`);
     const status = document.querySelector(`td[name="${categoryId}"]`);
+
+    console.log(button,status)
 
 
     //*** Fetch API Used to Update Data ***
@@ -79,7 +83,7 @@ async function editCategory(value) {
 
     //*** Take the Category id from that button Present Row ***
     const row = value.parentElement.parentElement;
-    const column = row.cells[4];
+    const column = row.cells[5];
     const id =column.getAttribute("id");
    
 

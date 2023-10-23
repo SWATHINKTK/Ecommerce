@@ -8,10 +8,12 @@
             <div class="form-group">
               <label for="exampleInputName1">Brand Name</label>
               <input type="text" class="form-control" id="brandname" placeholder="Brand Name" name="brandName">
+              <p class="text-danger ml-2" name="validate-brand"></p>
             </div>
             <div class="form-group ">
               <label class="col-sm-3 col-form-label">Image</label>
               <input type="file" class="form-control" id="brandImage" name="brandImage" accept="image/*" onchange="imageView(this)">
+              <p class="text-danger ml-2" name="validate-brand"></p>
               <div  class="ml-3">
                 <img class="image-section brand-image" id="brand-img-view" src="" alt="brand Image File">
               </div>
