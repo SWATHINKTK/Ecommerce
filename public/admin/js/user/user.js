@@ -26,9 +26,7 @@ function userBlock() {
     document.getElementById("modal").style.display = "none";
 
     //*** Retrieve the Data From OK Button ***
-    const buttonId = document
-        .getElementById("user-sucess")
-        .getAttribute("data-category-id");
+    const buttonId = document.getElementById("user-sucess").getAttribute("data-category-id");
 
 
     const button = document.querySelector(`td[id="${buttonId}"]`);

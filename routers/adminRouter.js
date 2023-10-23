@@ -92,8 +92,10 @@ adminRouter.patch('/categorystatusupdate',adminController.categorySatusUpdate);
 adminRouter.get('/viewbrand',adminController.loadBrandViewPage);
 adminRouter.get('/addbrand',adminController.loadBrandAddPage);
 adminRouter.get('/editbrand:id',adminController.loadEditBrandPage);
+adminRouter.get('/searchbrand',adminController.searchBrandData);
 adminRouter.post('/addbrand',uploadBrandImage.single('brandImage'),adminController.addBrandDetails);
 adminRouter.post('/editbrand',uploadBrandImage.single('brandImage'),adminController.editBrandDetails);
+adminRouter.get('/brandstatusupdate:id',adminController.brandStatusUpdate);
 
 
 

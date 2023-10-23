@@ -6,8 +6,8 @@
         <div class="d-flex justify-content-between align-items-center mb-2 search">
           <a href="/admin/addbrand" target="_self" rel="noopener noreferrer" class="btn btn-primary"><span>Add Brand</span></a>
           <div class="d-flex">
-            <input type="text" class="form-control col-10" id="categorySearch" placeholder="User Search" name="categorySearch">
-            <button type="button" class="btn btn-search p-2" onclick="searchUser()"><i class="bi bi-search"></i></button>
+            <input type="text" class="form-control col-10" id="brandSearch" placeholder="Brand Search" name="categorySearch">
+            <button type="button" class="btn btn-search p-2" onclick="searchBrands()"><i class="bi bi-search"></i></button>
           </div>
         </div>
         <div class="table-responsive">
@@ -39,13 +39,13 @@
                   <td id="<%= data[i]._id %>"><button class="btn btn-warning pl-3 pr-3" id="<%= data[i]._id %>" onclick="brandStatusUpdate(this)"><i class="bi bi-x-circle"></i>Unlist</button></td>
                 <% } else { %>
                   <td name="<%= data[i]._id %>"><span class="text-danger font-weight-bold">&#128683; Unlisted</span></td>
-                  <td><button class="btn btn-primary pl-4 pr-4" id="<%= data[i]._id %>" onclick="brandStatusUpdate(this)"><i class="bi bi-check2-circle"> </i>list</button></td>
+                  <td id="<%= data[i]._id %>"><button class="btn btn-primary pl-4 pr-4" id="<%= data[i]._id %>" onclick="brandStatusUpdate(this)"><i class="bi bi-check2-circle"> </i>list</button></td>
                 <% } %>
 
               </tr>
               <% } } else { %>
                 <tr class="bg-danger">
-                  <th class="text-dark text-center" colspan="9">PRODUCT IS NOT FOUND</th>
+                  <th class="text-dark text-center" colspan="9">BRAND IS NOT FOUND</th>
                 </tr>
               <% } %>
             </tbody>
@@ -54,10 +54,10 @@
       </div>
     </div>
   </div>
-  <div class="modal" id="modal" style="display: none; width: 23rem;margin-right: 50%;margin-left: 40%; margin-top:3rem;">
+  <div class="modal" id="brand-modal" style="display: none; width: 23rem;margin-right: 50%;margin-left: 40%; margin-top:3rem;">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">User Block/Unblock</h5>
+        <h5 class="modal-title" id="staticBackdropLabel">List/Unlist</h5>
         <button class="btn btn-transparent" onclick="back()"><i class="bi bi-x"></i></button>
       </div>
       <div class="modal-body">
@@ -65,7 +65,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" id="cancel" onclick="back()">Cancel</button>
-        <button type="button" class="btn btn-primary" id="user-sucess" data-category-id="" onclick="userBlock()">OK</button>
+        <button type="button" class="btn btn-primary" id="brand-unlist-sucess" data-category-id="" onclick="brandUnlist(this)">OK</button>
       </div>
     </div>
   </div>

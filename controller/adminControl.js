@@ -374,7 +374,7 @@ const editProduct = async (req, res) => {
 
 
 
-/*================================================ CATEGORY SECTION ROUTER FUNCTIONA==================================================*/
+/*####################################################### CATEGORY SECTION ROUTER FUNCTIONS ################################################*/
 
 //***** View Categorys ***** 
 const loadCategoryList = async (req, res) => {
@@ -527,8 +527,6 @@ const loadEditCategoryPage = async (req, res) => {
 
     }
 
-    
-
 }
 
 
@@ -583,9 +581,12 @@ const editCategory = async (req, res) => {
     }
 }
 
+/*================================================== END OF THE CATEGORY SECTION ROUTING FUNCTIONS ===========================================*/
 
 
-/*=============================================== View New Brand & Functionality Working Routes =========================================== */
+
+
+/*#################################################### View New Brand & Functionality Working Routes ######################################## */
 
 //***** View Brand Data Into a Table *****
 const loadBrandViewPage = async (req, res) => {
@@ -596,13 +597,13 @@ const loadBrandViewPage = async (req, res) => {
 }
 
 
-//*** View New Brand Add Page ***
+//****** View New Brand Add Page *****
 const loadBrandAddPage = async (req, res) => {
     res.render('admin/addBrand', { admin: true,title:'Add Brand'});
 }
 
 
-//*** Add Brand Data Into DataBase ***
+//******* Add Brand Data Into DataBase ******
 const addBrandDetails = async(req,res) => {
 
     try{
@@ -652,6 +653,23 @@ const addBrandDetails = async(req,res) => {
 
 };
 
+
+//***** Load Edit Brand Page ******
+const loadEditBrandPage = async(req,res) =>{
+    try{
+        const id = req.params.id;
+       
+        const brandData = await brandInfo.findOne({_id:id});
+
+        res.render('admin/editBrand',{data:brandData})
+    }catch(error){
+
+    }
+}
+
+
+
+//****** Edit Brand Details *******
 const editBrandDetails = async(req,res) => {
     
     try{
@@ -695,30 +713,75 @@ const editBrandDetails = async(req,res) => {
         }
 
     }catch(error){
-        console.log(error.message)
+        console.log(error.message);
+        res.redirect('/admin/error500')
     }
 }
 
 
 
-const loadEditBrandPage = async(req,res) =>{
+//****** Brand Status Update ******
+const brandStatusUpdate = async(req,res) =>{
     try{
         const id = req.params.id;
-       
+
+        console.log(id)
+        
         const brandData = await brandInfo.findOne({_id:id});
+        
+        if(brandData.status){
 
-        res.render('admin/editBrand',{data:brandData})
+            const update = await brandInfo.updateOne({_id:id},{$set:{status:false,brand_unlistDate:new Date()}},{upsert:true});
+            
+            if(update.acknowledged){
+                res.json({'status':false});
+            }else{
+                res.redirect('/admin/error500');
+            }
+
+        }else{
+
+            const update = await brandInfo.updateOne({_id:id},{$set:{status:true,brand_unlistDate:new Date()}},{upsert:true});
+            
+            console.log(update)
+            if(update.acknowledged){
+                res.json({'status':true});
+            }else{
+                res.redirect('/admin/error500');
+            }
+
+        }
+
     }catch(error){
-
+        console.log(error.message);
     }
 }
 
 
+
+//***** Brand Search Data ****
+const searchBrandData = async(req,res) =>{
+
+    const search = req.query.search;
+    const regex = new RegExp(`^${search}.*`, 'i');
+
+    const searchData = await brandInfo.find({ brand_name: { $regex: regex } });
+
+    res.render('admin/viewBrand', { admin: true, title: 'Brand Data', data:searchData});
+}
+
+/*========================================================= End Of The Brand Routing ================================================= */
+
+
+
+/*################################################### Banner Routing Functions ####################################################### */
 
 // Load Add Banner page 
 const loadAddBannerPage = (req, res) => {
     res.render('admin/addBanner', { admin: true });
 }
+
+/*========================================================= End Of The Banner Routing ================================================= */
 
 // Load  Coupon List Window
 const loadCouponList = (req, res) => {
@@ -789,6 +852,8 @@ module.exports = {
     addBrandDetails,
     editBrandDetails,
     loadEditBrandPage,
+    brandStatusUpdate,
+    searchBrandData,
     loadAddBannerPage,
     loadCouponList,
     loadAddCouponPage,
