@@ -18,11 +18,36 @@
                 <th>Brand Name</th>
                 <th>Logo</th>
                 <th>Edit</th>
-      
+                <th>Status</th>
+                <th>List/Unlist</th>
               </tr>
             </thead>
             <tbody class="text-white">
-              
+              <% if(data.length) { %>
+                <% for(let i = 0; i < data.length ; i++) { %>
+              <tr>
+                <td><%= i+1 %></td>
+                <td><%= data[i].brand_name %></td>
+                <td>
+                  <!-- <div class="brand-image-table"> -->
+                    <img src="/public/admin/assets/brandImages/<%= data[i].brand_logo %>" alt="Brand Logo">
+                  <!-- </div> -->
+                </td>
+                <td><button class="btn btn-transparent edit-btn" onclick="editBrandData(this)" name="<%= data[i]._id %>"><i class="bi bi-pencil-square"></i>Edit</button></td>
+                <% if(data[i].status) {%>
+                  <td name="<%= data[i]._id %>"><span class="text-success font-weight-bold">&#9989; Listed</span></td>
+                  <td id="<%= data[i]._id %>"><button class="btn btn-warning pl-3 pr-3" id="<%= data[i]._id %>" onclick="brandStatusUpdate(this)"><i class="bi bi-x-circle"></i>Unlist</button></td>
+                <% } else { %>
+                  <td name="<%= data[i]._id %>"><span class="text-danger font-weight-bold">&#128683; Unlisted</span></td>
+                  <td><button class="btn btn-primary pl-4 pr-4" id="<%= data[i]._id %>" onclick="brandStatusUpdate(this)"><i class="bi bi-check2-circle"> </i>list</button></td>
+                <% } %>
+
+              </tr>
+              <% } } else { %>
+                <tr class="bg-danger">
+                  <th class="text-dark text-center" colspan="9">PRODUCT IS NOT FOUND</th>
+                </tr>
+              <% } %>
             </tbody>
           </table>
         </div>

@@ -116,6 +116,13 @@ const brandData = mongoose.Schema({
         type : String,
         require : true
     },
+    status:{
+        type:Boolean,
+        default:true
+    },
+    brandDataUpdate_Date:{
+        type : Date,
+    },
     brand_addDate:{
         type : Date,
         require : true

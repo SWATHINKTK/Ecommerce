@@ -585,24 +585,29 @@ const editCategory = async (req, res) => {
 
 
 
-/*===============================================View New Brand & Functionality Working Routes=========================================== */
+/*=============================================== View New Brand & Functionality Working Routes =========================================== */
+
+//***** View Brand Data Into a Table *****
 const loadBrandViewPage = async (req, res) => {
-    res.render('admin/viewBrand', { admin: true, title: 'Brand Data' });
+
+    const brandData = await brandInfo.find({}).sort({_id:-1});
+    res.render('admin/viewBrand', { admin: true, title: 'Brand Data', data:brandData});
+
 }
 
+
+//*** View New Brand Add Page ***
 const loadBrandAddPage = async (req, res) => {
     res.render('admin/addBrand', { admin: true,title:'Add Brand'});
 }
 
-const addBrand = async(req,res) => {
-    try{
 
-        // console.log(req.body,req.file)
+//*** Add Brand Data Into DataBase ***
+const addBrandDetails = async(req,res) => {
+
+    try{
         const name = req.body.brandName;
         const img = req.file.filename;
-        console.log(name,img)
-
-        
 
         if(name && img){
 
@@ -621,30 +626,24 @@ const addBrand = async(req,res) => {
                 const sendData = await brandData.save();
                 
                 if(sendData){
-
                     res.json({'status':true,'message': '&#9989; Brand Sucessfullly Added'});
 
                 }else{
-
                     res.json({'status':false,'message': '&#10071; Brand Added Failed, Try Again'});
 
                 }
 
             }else{
-         
                 res.json({'status':false,'message': '&#10071; Brand is Already Exist' });
 
             }
 
         }else{
-
             res.json({'status':false,'message': '&#10071; Enter All Fields Then Submit' });
 
-        }
-        
+        }   
 
     }catch(error){
-
         console.log(error.message);
         res.redirect('adimin/error500')
 
@@ -653,8 +652,66 @@ const addBrand = async(req,res) => {
 
 };
 
+const editBrandDetails = async(req,res) => {
+    
+    try{
+        const data = req.body;
+        const file = req.file;
+        // console.log(data,file);
+
+        let logoImg;
+        if(file){
+            logoImg = file.filename;
+        }else{
+            logoImg =data.brandImage;
+        }
+
+        if(file && data.brandName){
+
+            const oldData = await brandInfo.findOne({_id:data.brandId});
+            
+            if(oldData && data.oldBrandName != data.brandName){
+                res.json({'status':false,'message': '&#10071; Brand is Already Exist' });
+
+            }else{
+                const brandData = brandInfo({
+                    brand_name: data.brandName,
+                    brand_logo: file.filename,
+                    brandDataUpdate_Date: new Date()
+                })
+
+                const sendData = await brandData.save();
+
+                if(sendData){
+                    res.json({'status':true,'message': '&#9989; Brand Sucessfullly Added'});
+                    
+                }else{
+                    res.json({'status':false,'message': '&#10071; Brand Added Failed, Try Again'});
+                }
+            }
+
+        }else{
+            res.json({'status':false,'message': '&#10071; Enter All Fields Then Submit' });
+        }
+
+    }catch(error){
+        console.log(error.message)
+    }
+}
 
 
+
+const loadEditBrandPage = async(req,res) =>{
+    try{
+        const id = req.params.id;
+       
+        const brandData = await brandInfo.findOne({_id:id});
+
+        res.render('admin/editBrand',{data:brandData})
+    }catch(error){
+
+    }
+}
 
 
 
@@ -729,7 +786,9 @@ module.exports = {
     editCategory,
     loadBrandViewPage,
     loadBrandAddPage,
-    addBrand,
+    addBrandDetails,
+    editBrandDetails,
+    loadEditBrandPage,
     loadAddBannerPage,
     loadCouponList,
     loadAddCouponPage,

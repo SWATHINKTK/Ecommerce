@@ -1,0 +1,30 @@
+
+<h1 class="card-title text-center text-dark">Edit Brand Data</h1>
+   <div class="col-12 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body form-style">
+          <!-- <p class="card-description" id="categorysuccess"></p> -->
+          <form class="forms-sample mb-3" id="editBrandForm" method="POST">
+            <div class="form-group">
+              <label for="exampleInputName1">Brand Name</label>
+              <input type="text" class="form-control" id="brandname" placeholder="Brand Name" name="brandName" value="<%= data.brand_name %>">
+              <input type="hidden" name="brandId" value="<%= data._id %>">
+              <input type="hidden" name="oldBrandName" value="<%= data.brand_name %>">
+              <input type="hidden" name="brandImage" value="<%= data.brand_logo %>">
+            </div> 
+            <div class="form-group ">
+              <label class="col-sm-3 col-form-label">Image</label>
+              <input type="file" class="form-control" id="editBrandImage" name="brandImage" accept="image/*">
+              <div  class="ml-3">
+                <img style="display: block;" id="edit-brand-img-view" src="/public/admin/assets/brandImages/<%= data.brand_logo %>" alt="brand Image File">
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary mr-2" id="brandsubmit">Submit</button>
+            <a class="btn btn-dark" href="/admin/viewbrand">Cancel</a> 
+          </form>
+          <div class="" role="alert" id="edit-brand-submit-result">
+          </div>
+        </div>
+      </div>
+    </div>                                                                                                                                                                                                   
+

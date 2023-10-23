@@ -11636,6 +11636,20 @@ input[type="button"].btn-block {
   display: none;
 }
 
+#edit-brand-img-view{
+  object-fit: contain;
+  width: 20rem;
+  height: 20rem;
+  background-color: #000;
+  display: none;
+}
+
+
+.brand-image-table{
+  width:9rem;
+  height: 9rem;
+}
+
 .category-image-div, .brand-image-div{
   width: 20rem;
   height: 20rem;
