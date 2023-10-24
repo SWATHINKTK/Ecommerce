@@ -144,60 +144,84 @@ document.getElementById('sidebar').addEventListener('click', async function(even
         /*------------------------------End of view Category------------------------------------------ */
 
 
+        // #################################### Image View Input Field Triggering ############################################
+        const imageFile = []
+        document.getElementById('productImage').addEventListener('change',(event)=>{
+            const fileInput = event.target;
+            
+            //*** Passing The Event Of the Input Field and The Array we Created For Storing Image Files Function Triggering to Coming Image Fields
+            productImagePreview(fileInput,imageFile)
+              
+        });
+
+
+        // ################################ Image Remove From The View Of the Images #########################################
+        document.getElementById('image-preview-main-div').addEventListener('click',(event) =>{
+            event.preventDefault()
+            
+            // Product Added Image Remove
+            if(event.target.classList.contains("remove")){
+
+                // Call The Fuction And Remove Images From Div. Function Present On the viewProduct.js
+                removePreviewImage(event.target,imageFile);
+            }
+        })
+
+        
         
         
         /*-------------------------- Event Deligation for view images --------------------------------*/
 
         // this event deligation for selcting image and  view that image imediatly
-        document.getElementById('image-product-data').addEventListener('change',(event)=>{
-            const image = event.target;
+        // document.getElementById('image-product-data').addEventListener('change',(event)=>{
+        //     const image = event.target;
 
             // this funcation view the images
-            function imageView(imageProduct,imageTag){
+        //     function imageView(imageProduct,imageTag){
 
-                const imagePreview = document.getElementById(`${imageProduct}`);
-                const file = image.files[0];
+        //         const imagePreview = document.getElementById(`${imageProduct}`);
+        //         const file = image.files[0];
     
-                    if(file){
+        //             if(file){
     
-                        const reader = new FileReader();
+        //                 const reader = new FileReader();
     
-                        reader.onload = function(e) {
-                            imageTag.src = e.target.result;
-                        }
+        //                 reader.onload = function(e) {
+        //                     imageTag.src = e.target.result;
+        //                 }
     
-                        reader.readAsDataURL(file);
-                        imageTag.style.display = 'block';
+        //                 reader.readAsDataURL(file);
+        //                 imageTag.style.display = 'block';
     
-                    }else{
-                        imageTag.style.display = 'none';
-                        imageTag.src = '';
-                    }
+        //             }else{
+        //                 imageTag.style.display = 'none';
+        //                 imageTag.src = '';
+        //             }
     
-            }
+        //     }
 
-            if(image.id == 'productImage_1'){
+        //     if(image.id == 'productImage_1'){
 
-                const image1 = document.getElementById('imageProduct-1');
-                imageView('imageProduct-1',image1);
+        //         const image1 = document.getElementById('imageProduct-1');
+        //         imageView('imageProduct-1',image1);
             
-            }else if(image.id == 'productImage_2'){
+        //     }else if(image.id == 'productImage_2'){
 
-                const image2 = document.getElementById('imageProduct-2');
-                imageView('imageProduct-2',image2);
+        //         const image2 = document.getElementById('imageProduct-2');
+        //         imageView('imageProduct-2',image2);
 
-            }else if(image.id == 'productImage_3'){
+        //     }else if(image.id == 'productImage_3'){
 
-                const image3 = document.getElementById('imageProduct-3');
-                imageView('imageProduct-3',image3);
+        //         const image3 = document.getElementById('imageProduct-3');
+        //         imageView('imageProduct-3',image3);
 
-            }else if(image.id == 'productImage_4'){
+        //     }else if(image.id == 'productImage_4'){
 
-                const image4 = document.getElementById('imageProduct-4');
-                imageView('imageProduct-4',image4);
+        //         const image4 = document.getElementById('imageProduct-4');
+        //         imageView('imageProduct-4',image4);
 
-            }
-        });
+        //     }
+        // });
 
         /*------------------ End Of The Event Deligation for view images-----------------------*/
 
@@ -205,133 +229,139 @@ document.getElementById('sidebar').addEventListener('click', async function(even
 
         /*==============================Form Data to send to the Server============================*/
         // Image Value Taken and Store to an Array
-        const images = new Array(4);
-        document.getElementById("productImage_1").addEventListener("change", function () {
-            const imagePreview = document.getElementById("productImage_1");
-            const input = this;
+        // const images = new Array(4);
+        // document.getElementById("productImage_1").addEventListener("change", function () {
+        //     const imagePreview = document.getElementById("productImage_1");
+        //     const input = this;
             
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.readAsDataURL(input.files[0]);
-                images[0] = input.files[0]
-            }
-        });
+        //     if (input.files && input.files[0]) {
+        //         const reader = new FileReader();
+        //         reader.readAsDataURL(input.files[0]);
+        //         images[0] = input.files[0]
+        //     }
+        // });
 
-        document.getElementById("productImage_2").addEventListener("change", function () {
-            const imagePreview = document.getElementById("productImage_2");
-            const input = this;
+        // document.getElementById("productImage_2").addEventListener("change", function () {
+        //     const imagePreview = document.getElementById("productImage_2");
+        //     const input = this;
             
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.readAsDataURL(input.files[0]);
-                images[1] = input.files[0]
-            }
-        });
+        //     if (input.files && input.files[0]) {
+        //         const reader = new FileReader();
+        //         reader.readAsDataURL(input.files[0]);
+        //         images[1] = input.files[0]
+        //     }
+        // });
 
-        document.getElementById("productImage_3").addEventListener("change", function () {
-            const imagePreview = document.getElementById("productImage_3");
-            const input = this;
+        // document.getElementById("productImage_3").addEventListener("change", function () {
+        //     const imagePreview = document.getElementById("productImage_3");
+        //     const input = this;
             
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.readAsDataURL(input.files[0]);
-                images[2] = input.files[0]
-            }
-        });
+        //     if (input.files && input.files[0]) {
+        //         const reader = new FileReader();
+        //         reader.readAsDataURL(input.files[0]);
+        //         images[2] = input.files[0]
+        //     }
+        // });
 
-        document.getElementById("productImage_4").addEventListener("change", function () {
-            const imagePreview = document.getElementById("productImage_4");
-            const input = this;
+        // document.getElementById("productImage_4").addEventListener("change", function () {
+        //     const imagePreview = document.getElementById("productImage_4");
+        //     const input = this;
             
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.readAsDataURL(input.files[0]);
-                images[3] = input.files[0]
-            }
-        });
+        //     if (input.files && input.files[0]) {
+        //         const reader = new FileReader();
+        //         reader.readAsDataURL(input.files[0]);
+        //         images[3] = input.files[0]
+        //     }
+        // });
 
 
         /*--------------------------Submit The Data ------------------------------------------ */
 
-        document.getElementById('product-submit').addEventListener('click',async(event) => {
+        document.getElementById('addProduct-form').addEventListener('submit',async(event) => {
             event.preventDefault();
 
+            const validate = validateProductData(imageFile);
+            if(validate)
+                submitNewProductData(imageFile);
+            // const form = document.getElementById('addProduct-form');
+            // const swathi = new FormData(form);
+            // console.log(...swathi)
             // Form Data Object Creation 
-            const formData = new FormData();
+            // const formData = new FormData();
 
             // Retrieve the Values From form 
-            const productname = document.getElementById('productname').value;
-            const category = document.getElementById('productcategory').innerHTML;
-            const description = document.getElementById('productdescription').value;
-            const brandname = document.getElementById('productbrandname').value;
-            const stock = document.getElementById('productstock').value;
-            const price = document.getElementById('productprice').value;
-            const size = document.getElementById('productsize').value;
-            const material = document.getElementById('productmaterial').value;
-            const color = document.getElementById('productcolor').value;
-            const specification = document.getElementById('productspecification').value ;
+            // const productname = document.getElementById('productname').value;
+            // const category = document.getElementById('productcategory').innerHTML;
+            // const description = document.getElementById('productdescription').value;
+            // const brandname = document.getElementById('productbrandname').value;
+            // const stock = document.getElementById('productstock').value;
+            // const price = document.getElementById('productprice').value;
+            // const size = document.getElementById('productsize').value;
+            // const material = document.getElementById('productmaterial').value;
+            // const color = document.getElementById('productcolor').value;
+            // const specification = document.getElementById('productspecification').value ;
          
             // images are append into the formData using a array
-            images.forEach((val,i)=>{
-                formData.append('productimages',images[i]);
-            })
+            // images.forEach((val,i)=>{
+            //     formData.append('productimages',images[i]);
+            // })
 
             // Appending the category into array 
-            const productCategorys = category.split(',');
-            console.log(productCategorys)
-            productCategorys.forEach((val,i)=>{
-                formData.append('categorys',productCategorys[i]);
-            })
+            // const productCategorys = category.split(',');
+            // console.log(productCategorys)
+            // productCategorys.forEach((val,i)=>{
+            //     formData.append('categorys',productCategorys[i]);
+            // })
 
-            //Speicification Sett to array
-            const specificationData = specification.split(',');
-            specificationData.forEach((val,i) => {
-                formData.append('specification',specificationData[i]);
-            })
+            // //Speicification Sett to array
+            // const specificationData = specification.split(',');
+            // specificationData.forEach((val,i) => {
+            //     formData.append('specification',specificationData[i]);
+            // })
 
             // Form Data to append the all form Datas 
-            formData.append('productname',productname);
-            formData.append('description',description);
-            formData.append('brandname',brandname);
-            formData.append('stock',stock);
-            formData.append('price',price);
-            formData.append('size',size);
-            formData.append('material',material);
-            formData.append('color',color);
+            // formData.append('productname',productname);
+            // formData.append('description',description);
+            // formData.append('brandname',brandname);
+            // formData.append('stock',stock);
+            // formData.append('price',price);
+            // formData.append('size',size);
+            // formData.append('material',material);
+            // formData.append('color',color);
 
 
             // Sending the Data to Sever using fetch 
-            try{
-                const SendData = await fetch('/admin/productadd',{
-                    method:'POST',
-                    body:formData
-                })
+            // try{
+            //     const SendData = await fetch('/admin/productadd',{
+            //         method:'POST',
+            //         body:formData
+            //     })
 
-                if(!SendData.ok){
-                    window.location.href = '/admin/error500'
-                }
+            //     if(!SendData.ok){
+            //         window.location.href = '/admin/error500'
+            //     }
 
-                const data = await SendData.json();
+            //     const data = await SendData.json();
 
-                const result = document.getElementById('product-sucess')
+            //     const result = document.getElementById('product-sucess')
 
-                if(data.status){
-                    result.innerHTML = data.message + " &#9989";
-                    result.style.color = "green";
+            //     if(data.status){
+            //         result.innerHTML = data.message + " &#9989";
+            //         result.style.color = "green";
 
-                }else{
-                    result.innerHTML = data.message + " &#10071;";
-                    result.style.color = "red"
+            //     }else{
+            //         result.innerHTML = data.message + " &#10071;";
+            //         result.style.color = "red"
 
-                }
+            //     }
 
-                setTimeout(()=>{
-                    result.innerHTML = '';
-                },2000)
+            //     setTimeout(()=>{
+            //         result.innerHTML = '';
+            //     },2000)
 
-            }catch(error){
-                console.log(error.message)
-            }
+            // }catch(error){
+            //     console.log(error.message)
+            // }
             /*-----------------------------------------Submit data complete------------------------------------------ */
 
           

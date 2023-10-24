@@ -368,3 +368,262 @@ async function loadEditProductPage(target){
 
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// *********************************************** ADD PRODUCT DATA SECTION **********************************************************************
+
+// Function Calling From Fetch.js For Product View On input Change
+function productImagePreview(fileInput,imageFile){
+
+    //*** Div For the Image View ***
+    const imagePreview = document.getElementById('product-image-preview');
+
+    //*** Checking The Image Limit ***
+    if(imageFile.length < 5 && fileInput.files.length <= 4){
+
+        //*** Storing Images In the Passing Array and Create Image Tag ***
+        for(let i = 0; i < fileInput.files.length;i++){
+
+            //*** Image File Push To Array ***
+            imageFile.push(fileInput.files[i]);
+
+            //*** Image View To Create Image Tag Dynamically ***
+            const img = document.createElement('img');
+            img.src = URL.createObjectURL(fileInput.files[i]); 
+            img.name = i
+            img.width = 100;
+
+            //*** Image Remove To Create Button Dynamically ***
+            const btn = document.createElement('button');
+            btn.id = i;
+            btn.classList.add("remove");
+            btn.innerHTML = `<i class="bi bi-x remove" id='${i}'></i>`;
+
+            //*** Apppend That Button And Image To Preview View Div
+            imagePreview.appendChild(img);
+            imagePreview.appendChild(btn);
+        }
+    }else{
+
+        document.getElementById('validate-product').innerHTML = 'Image Upload Limit Exceeded ! Only Upload 4 Images . You Can Removed Then Add.'
+
+    }
+}
+
+
+
+
+// *** Remove File View In The Image Preview And Remove From That Array *** 
+function removePreviewImage(button,imageFile){
+
+    // *** Index Value Stored as a id in Button Retrieve Id ***
+    const id = button.getAttribute('id');
+
+    //*** Image and Button id Taken For Removing ***
+    const imagePreview = document.getElementById('product-image-preview');
+    const imageRemove = document.querySelector(`img[name="${id}"]`);
+    const buttonRemove = document.querySelector(`button[id="${id}"]`);
+   
+    //*** Image Remove From The Array ***
+    imageFile.splice(id,1);
+
+    //*** Image Remove From That Div and Remove Button ***
+    imagePreview.removeChild(imageRemove);
+    imagePreview.removeChild(buttonRemove);
+
+}
+
+
+
+
+//********* Submit The New Product Data **********
+async function submitNewProductData(imageFile){
+  
+    //*** Retrieve The Form And Creating Form Data ***
+    const form = document.getElementById('addProduct-form');
+    const formData = new FormData(form);
+
+
+    //*** Retrieve The Brand Data ***
+    const brandName = document.getElementById('productbrandname');
+    formData.append('productBrandName',brandName);
+
+
+    //*** Retrieve the CategoryData View in Div . Then Appending the Category Array Into Form Data ***
+    const category = document.getElementById('productcategory').innerHTML;
+    const productCategorys = category.split(',');
+    productCategorys.forEach((val,i)=>{
+        formData.append('productCategory',productCategorys[i]);
+    })
+
+
+
+    //*** ImageFile Passing Through The Fuction This Value Added To The Form Data ***
+    imageFile.forEach((val,i) => {
+        formData.append('productImage',imageFile[i]);
+    })
+    
+    
+
+    //========================= SUBMIT DATA TO FETCH ==============================
+
+    try{
+
+        const result = document.getElementById("add-product-submit-result");
+        result.style.display = 'block';
+
+        const response = await fetch('/admin/productadd',{
+            method:'POST',
+            body:formData
+        })
+
+        if(!response.ok){
+            window.location.href = '/admin/error500'
+        }
+
+        const data = await response.json();
+
+
+        if (data.status) {
+
+            result.setAttribute('class','alert alert-success');
+            result.innerHTML = data.message;
+            document.getElementById("editBrandForm").reset();
+
+        }else{
+            
+            result.setAttribute('class','alert alert-danger');
+            result.innerHTML = data.message;
+        }
+
+        setTimeout(()=>{
+            result.style.display = 'none';
+        },2000);
+
+    }catch(error){
+
+        console.log(error.message);
+
+    }
+}
+
+
+
+// ****** Product Validate Data ********
+function validateProductData(imageFile){
+
+    alert(imageFile.length)
+    // Selecting The Error Message Printing P tag
+    const errorElements = document.querySelectorAll('p[name="validate-addProduct"]');
+
+
+    // *** Show error Message hiding ***
+    errorElementReset();
+
+
+    // Retrieve the Values From form 
+    const productname = document.getElementById('productname').value;
+    const category = document.getElementById('productcategory').innerHTML;
+    const description = document.getElementById('productdescription').value;
+    const brandName = document.getElementById('productbrandname').value;
+    const stock = document.getElementById('productstock').value;
+    const price = document.getElementById('productprice').value;
+    const size = document.getElementById('productsize').value;
+    const material = document.getElementById('productmaterial').value;
+    const color = document.getElementById('productcolor').value;
+    const specification = document.getElementById('productspecification').value ;
+    const imgLength = imageFile.length;
+
+
+    // Validation Checking
+    if(productname.trim() == ''){
+
+        errorElements[0].innerHTML = "* enter productname";
+        return false;
+
+    }else if(category == 'Select Category'){
+
+        errorElements[1].innerHTML = "* select category";
+        return false;
+
+    }else if(description.trim() == ''){
+
+        errorElements[2].innerHTML = "* enter description";
+        return false;
+
+    }else if(brandName.trim() == ''){
+
+        errorElements[3].innerHTML = "* select brand";
+        return false;
+
+    }else if(stock.trim() == ''){
+
+        errorElements[4].innerHTML = "* enter the stock";
+        return false;
+
+    }else if(stock < 0){
+
+        errorElements[4].innerHTML = "* stock can not be negative";
+        return false;
+
+    }else if(price <= 0){
+
+        errorElements[5].innerHTML = "* price can not be negative / zero";
+        return false;
+
+    }else if(size.trim() == ''){
+
+        errorElements[6].innerHTML = "* enter size";
+        return false;
+
+    }else if(size < 0){
+
+        errorElements[6].innerHTML = "* size can not be negative ";
+        return false;
+
+    }else if(material.trim() == ''){
+
+        errorElements[7].innerHTML = "* enter material";
+        return false;
+
+    }else if(imageFile.length < 2){
+        alert(imageFile.length)
+
+        errorElements[8].innerHTML = "* upload atleast two images";
+        return false;
+
+    }else if(specification.trim() == ''){
+
+        errorElements[9].innerHTML = "* enter specification";
+        return false;
+
+    }else{
+        return true;
+    }
+
+
+
+}
+
+
+
+//**** Error Element Hiding ******
+function errorElementReset(){
+    const errorElements = document.querySelectorAll('p[name="validate-addProduct"]');
+    
+    errorElements.forEach((val,i) => {
+        val.innerHTML = '';
+    })
+}

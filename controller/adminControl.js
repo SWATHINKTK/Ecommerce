@@ -4,6 +4,7 @@ const { loginData, category, productInfo,brandInfo } = require('../models/adminM
 const { userData } = require('../models/userModal');
 const { query } = require('express');
 const { connected } = require('process');
+const { error } = require('console');
 
 
 /*---------------------------------------ADMIN ROUTER ACCESSING FUNCTIONS----------------------------------------------------------*/
@@ -196,7 +197,11 @@ const productStatusUpdate = async (req, res) => {
 const loadAddProductPage = async (req, res) => {
 
     const categoryData = await category.find({ list: true }, { categoryname: 1 });
-    res.render('admin/addProduct', { admin: true, data: categoryData });
+    // console.log(categoryData)
+    const brandData = await brandInfo.find({},{brand_name:1});
+    // console.log(brandData)
+
+    res.render('admin/addProduct', { admin: true, categorydata: categoryData ,branddata:brandData});
 }
 
 
@@ -215,11 +220,9 @@ const productAdd = async (req, res) => {
         });
 
 
-        const length = Object.keys(data).length;
-
-        let condition = (data.productname !== '' && data.categorys !== '' && data.description !== '' && data.brandname !== '' && data.stock !== '' && data.price !== '' && data.size !== '' && data.material !== '' && data.color !== '' && data.specification !== '');
+        let condition = (data.productName !== '' && data.productCategory !== '' && data.productDescription !== '' && data.productBrandName !== '' && data.productStock !== '' && data.productPrice !== '' && data.productSize !== '' && data.productMaterial !== '' && data.productColor !== '' && data.productSpecification !== '');
         // checking All Field entered or not 
-        if (condition && images.length == 4) {
+        if (condition && images.length > 1 ) {
 
             const productData = productInfo({
                 productName: data.productname,
@@ -236,24 +239,29 @@ const productAdd = async (req, res) => {
                 addDate: new Date(),
             })
 
-            console.log(productData)
             const product = await productData.save();
 
             // Sucess result Checking
             if (product) {
-                res.status(200).json({ status: true, message: 'Succesfully Added Product' });
+                res.status(200).json({ status: true, message: '&#9989; Succesfully Added Product' });
             } else {
                 res.status(500).render('/admin/error500');
             }
 
         } else {
-            // Error message and Eror staus code
-            if (!condition) {
-                res.json({ status: false, message: 'Enter All Field' });
 
-            } else {
-                res.json({ status: false, message: 'Upload All Images' });
-            }
+            const filePath = '../public/admin/assets/productImages';
+            fs.unlink(filePath, (error) =>{
+
+                if(error){
+                    console.log(`Error deleting the file: ${error.message}`)
+                }else{
+                    console.log(`File ${filePath} has been deleted.`);
+                }
+
+            })
+
+            res.json({ status: false, message: '&#10071; Enter All Field' });
         }
 
     } catch (error) {

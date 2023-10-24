@@ -83,8 +83,8 @@ adminRouter.get('/productstausupdate:id',adminController.productStatusUpdate);
 adminRouter.get('/searchproduct:data',adminController.searchProduct);
 adminRouter.get('/addproduct',adminController.loadAddProductPage);
 adminRouter.get('/editproduct:id',adminController.loadEditProductPage);
-adminRouter.post('/productadd',uploadProductImage.array('productimages',4),adminController.productAdd);
-adminRouter.post('/editproduct',uploadProductImage.array('productimages',4),adminController.editProduct);
+adminRouter.post('/productadd',uploadProductImage.array('productImage',4),adminController.productAdd);
+adminRouter.post('/editproduct',uploadProductImage.array('productImage',4),adminController.editProduct);
 
 
 

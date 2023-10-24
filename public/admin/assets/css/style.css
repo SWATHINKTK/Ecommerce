@@ -11598,6 +11598,19 @@ input[type="button"].btn-block {
   margin-right: 10px; 
 }
 
+#dropdown{
+  max-height: 100px;
+}
+
+.form-style select{
+  width: 100%; 
+  padding: 10px;
+  border: none; 
+  border-radius: 5px;
+  font-size: 16px;
+  margin-right: 10px; 
+}
+
 .form-style input{
   width: 100%; 
   padding: 10px;
@@ -11606,9 +11619,51 @@ input[type="button"].btn-block {
   font-size: 16px;
   margin-right: 10px; 
 }
+#select-box-brand,#select-box{
+  width: 100%; 
+  padding: 10px;
+  border: none; 
+  border-radius: 5px;
+  font-size: 16px;
+  margin-right: 10px; 
+}
+
 #category-submit-result{
   display: none;
 }
+
+.product-image-preview {
+  display: flex;    
+
+}
+
+.product-image-preview img {
+  flex: 1; 
+  padding: 10px;
+  max-height: 14rem;
+  max-width: 12rem;
+}
+
+.product-image-preview button{
+  max-height: 1.5rem;
+  max-width: 1.5rem;
+  margin-top: 10px;
+  margin-right: 10px;
+  border: none;
+}
+
+
+
+/* .image-preview-main-div{
+  display: flex; 
+  flex-direction: row; 
+}
+.image-preview-main-div button{
+  flex: 1; 
+  margin: 10px;
+  max-width: 11rem;
+  border: none;
+} */
 
 
 .modal-content .modal-header,
@@ -11645,7 +11700,11 @@ input[type="button"].btn-block {
   /* display: none; */
 }
 
-
+#options-container{
+  background-color: #fff;
+  max-height: 180px; 
+  overflow-y: auto;
+}
 .brand-image-table{
   width:9rem;
   height: 9rem;

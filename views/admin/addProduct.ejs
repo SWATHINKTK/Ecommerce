@@ -10,23 +10,25 @@
               <div class="form-group">
                 <label class="col-sm-3 col-form-label">Product Name</label>
                 <div class="col-sm-12 form-style">
-                  <input type="text" class="form-control" name="productname" id="productname" >
+                  <input type="text" class="form-control" name="productName" id="productname" >
+                  <p class="text-danger ml-2" name="validate-addProduct"></p>
                 </div>
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label class="col-sm-3 col-form-label" onclick="hello()">Category</label>
+                <label class="col-sm-3 col-form-label">Category</label>
                 <div class="col-sm-12">
                   <div class="multiselect">
                     <div class="select-box form-control" id="select-box">
-                        <div class="selected-options" id="productcategory">Select options</div>
+                        <div class="selected-options" id="productcategory">Select Category</div>
                         <div class="arrow">&#9660;</div>
                     </div>
+                    <p class="text-danger ml-2" name="validate-addProduct"></p>
                     <div class="options-container" id="options-container">
-                        <% for(let i=0;i<data.length;i++){ %>
+                        <% for(let i=0;i<categorydata.length;i++){ %>
                         <div class="option">
-                            <label><input type="checkbox" class="option-input" value="<%= data[i].categoryname %>"><%= data[i].categoryname %></label>
+                            <label><input type="checkbox" class="option-input" data-category-id="<%= categorydata[i]._id %>" value="<%= categorydata[i].categoryname %>"><%= categorydata[i].categoryname %></label>
                         </div>
                         <% } %>
                     </div>
@@ -41,18 +43,25 @@
               <div class="form-group">
                 <label class="col-sm-12 col-form-label">Description</label>
                 <div class="col-sm-12">
-                  <textarea class="form-control" id="productdescription" rows="4" name="description"></textarea>
+                  <textarea class="form-control" id="productdescription" rows="4" name="productDescription"></textarea>
+                  <p class="text-danger ml-2" name="validate-addProduct"></p>
                 </div>
               </div>
             </div>
           </div>
            
-          <div class="row form-style">
-            <div class="col-md-6">
-              <div class="form-group ">
+          <div class="row">
+            <div class="col-md-6 form-style">
+              <div class="form-group">
                 <label class="col-sm-3 col-form-label">Brand Name</label>
                 <div class="col-sm-12">
-                  <input type="text" class="form-control" name="brandname" id="productbrandname">
+                  <select id="productbrandname" class="brand-dropdown" name="productBrandName">
+                    <option value="">Select Brand</option>
+                    <% for(let i=0;i<branddata.length;i++){ %>
+                      <option value="<%= branddata[i].brand_name %>" name="productBrandName"><%= branddata[i].brand_name %></option>
+                    <% } %>
+                  </select>
+                  <p class="text-danger ml-2" name="validate-addProduct"></p>
                 </div>
               </div>
             </div>
@@ -60,7 +69,8 @@
               <div class="form-group ">
                 <label class="col-sm-3 col-form-label">Stock</label>
                 <div class="col-sm-12">
-                  <input type="text" class="form-control" name="stock" id="productstock">
+                  <input type="number" class="form-control" name="productStock" id="productstock">
+                  <p class="text-danger ml-2" name="validate-addProduct"></p>
                 </div>
               </div>
             </div>
@@ -70,7 +80,8 @@
               <div class="form-group ">
                 <label class="col-sm-3 col-form-label">Price</label>
                 <div class="col-sm-12">
-                  <input type="number" class="form-control" name="price" id="productprice">
+                  <input type="number" class="form-control" name="productPrice" id="productprice">
+                  <p class="text-danger ml-2" name="validate-addProduct"></p>
                 </div>
               </div>
             </div>
@@ -78,7 +89,8 @@
               <div class="form-group ">
                 <label class="col-sm-3 col-form-label">Size</label>
                 <div class="col-sm-12">
-                  <input type="text" class="form-control" name="size" id="productsize">
+                  <input type="text" class="form-control" name="productSize" id="productsize">
+                  <p class="text-danger ml-2" name="validate-addProduct"></p>
                 </div>
               </div>
             </div>
@@ -88,7 +100,8 @@
               <div class="form-group ">
                 <label class="col-sm-3 col-form-label">Material</label>
                 <div class="col-sm-12">
-                  <input type="text" class="form-control" name="material" id="productmaterial">
+                  <input type="text" class="form-control" name="productMaterial" id="productmaterial">
+                  <p class="text-danger ml-2" name="validate-addProduct"></p>
                 </div>
               </div>
             </div>
@@ -96,84 +109,45 @@
               <div class="form-group ">
                 <label class="col-sm-3 col-form-label">Color</label>
                 <div class="col-sm-2 rounded-3">
-                  <input type="color" class="form-control pt-2 pb-2 color-addproduct" id="productcolor" value="#00ff37" title="Choose product color" name="color">
+                  <input type="color" class="form-control pt-2 pb-2 color-addproduct" id="productcolor" value="#00ff37" title="Choose product color" name="productColor">
                 </div>
-              </div>
-            </div>
-          </div>
-          <div id="image-product-data">
-          <div class="row form-style">
-            <div class="col-md-6">
-              <div class="form-group ">
-                <label class="col-sm-3 col-form-label">Image</label>
-                <div class="col-sm-12">
-                  <input type="file" class="form-control" id="productImage_1" name="productImage" accept="image/*">
-                </div>
-                <div  class="ml-3 image-addproduct-div" >
-                  <img class="image-addproduct" id="imageProduct-1" src="" alt="Upload the file">
-                </div>
-                
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group ">
-                <label class="col-sm-3 col-form-label">*</label>
-
-                <div class="col-sm-12">
-                  <input type="file" class="form-control" id="productImage_2" name="productImage" accept="image/*">
-                </div>
-                <div class="ml-3 image-addproduct-div" >
-                  <img class="image-addproduct" id="imageProduct-2" src="" alt="Upload the file">
-                </div>
-
               </div>
             </div>
           </div>
           <div class="row form-style">
-            <div class="col-md-6 form">
-              <div class="form-group ">
-                <label class="col-sm-3 col-form-label">Image</label>
-
+            <div class="col-md-12">
+              <div class="form-group">
+                <label class="col-sm-12 col-form-label">Image</label>
                 <div class="col-sm-12">
-                  <input type="file" class="form-control" id="productImage_3" name="productImage" accept="image/*">
+                  <input type="file" class="form-control" id="productImage" accept="image/*" multiple>
+                  <p class="text-danger ml-2" name="validate-addProduct"></p>
+                  <div id="image-preview-main-div" class="form-style bg-white image-preview-main-div">
+                    <div id="product-image-preview" class="form-style bg-white product-image-preview">
+                    
+                      
+                    </div>
+                  </div>
                 </div>
-
-                <div class="ml-3 image-addproduct-div">
-                  <img class="image-addproduct"id="imageProduct-3" src="" alt="Upload the file">
-                </div>
-                
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group ">
-                <label class="col-sm-3 col-form-label">*</label>
-
-                <div class="col-sm-12">
-                  <input type="file" class="form-control" id="productImage_4" name="productImage" accept="image/*">
-                </div>
-
-                <div class="ml-3 image-addproduct-div">
-                  <img class="image-addproduct" id="imageProduct-4" src="" alt="Upload the file">
-                </div>
-
               </div>
             </div>
           </div>
-          </div>
+
           <div class="row form-style">
             <div class="col-md-12">
               <div class="form-group">
                 <label class="col-sm-12 col-form-label">Specifications</label>
                 <div class="col-sm-12">
-                  <textarea class="form-control" id="productspecification" rows="4" name="specifications" placeholder="*specifications seprated using commas"></textarea>
+                  <textarea class="form-control" rows="4" id="productspecification" name="productSpecification" placeholder="*specifications seprated using commas"></textarea>
+                  <p class="text-danger ml-2" name="validate-addProduct"></p>
                 </div>
               </div>
             </div>
           </div>
-          <button type="button" class="btn btn-primary mr-3 ml-3" id="product-submit">Submit</button>
+          <button type="submit" class="btn btn-primary mr-3 ml-3" id="product-submit">Submit</button>
           <button class="btn btn-dark">Cancel</button>
         </form>
-        <p id="product-sucess" class="mt-4 ml-3"></p>
+        <div class="" role="alert" id="add-product-submit-result">
+        </div>
       </div>
     </div>
     </div>
