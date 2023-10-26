@@ -137,58 +137,7 @@
         
     </section>
     <!-- Product Section End -->
-    
-    <section class="product spad mt-5">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <ul class="filter__controls">
-                        <li class="active" data-filter="*">T Shirts</li>
-                        <!-- <li data-filter=".new-arrivals">New Arrivals</li>
-                        <li data-filter=".hot-sales">Hot Sales</li> -->
-                    </ul>
-                </div>
-            </div>
 
-            <div class="row product__filter">
-                <% for(let i = 0,j=0; i < dataProduct.length ; i++) {  %>
-                    <% if(dataProduct[i].categoryData.some(item => item.categoryname === 'T-Shirts' ) && j < 4) { j++%>  
-                        <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix hot-sales">
-                            <div class="product__item">
-                                <div class="product__item__pic set-bg" data-setbg="/public/admin/assets/productImages/<%= dataProduct[i].productImages[0] %>">
-                                    <ul class="product__hover">
-                                        <li><a href="#"><img src="/public/user/img/icon/heart.png" alt=""></a></li>
-                                        <li><a href="#"><img src="/public/user/img/icon/compare.png" alt=""> <span>Compare</span></a></li>
-                                        <li><a href="#"><img src="/public/user/img/icon/search.png" alt=""></a></li>
-                                    </ul>
-                                </div>
-                                <div class="product__item__text">
-                                    <h6><%= dataProduct[i].productName %></h6>
-                                    <a href="/productdetails?id=<%= dataProduct[i]._id %>" class="add-cart">+ View More</a>
-                                    <div class="rating">
-                                        <i class="fa fa-star-o"></i>
-                                        <i class="fa fa-star-o"></i>
-                                        <i class="fa fa-star-o"></i>
-                                        <i class="fa fa-star-o"></i>
-                                        <i class="fa fa-star-o"></i>
-                                    </div>
-                                    <h5>&#8377; <%= dataProduct[i].price %></h5>
-                                    <div class="product__color__select">
-                                        <label for="pc-4">
-                                            <input type="radio" id="pc-4">
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    <% } %>
-                <% } %>
-            </div>
-        </div>
-
-
-        
-    </section>
 
 
     <section class="product spad mt-5">

@@ -323,10 +323,14 @@ const guestPage = async (req, res) => {
 const loadProductDetailPage = async (req, res) => {
     try {
         const id = req.query.id;
-        console.log()
-        const data = await productInfo.findOne({ _id: id });
-        const productData = await productInfo.find({});
-        res.render('user/productDetails', { user: true, title: 'Products', })
+        console.log(id)
+        const productData = await productInfo.findOne({ _id: id });
+        const categoryData = await category.find({})
+        // console.log(productData)
+        console.log(productData.categoryIds);
+       
+        res.render('user/productDetails', { user: true, title: 'Products', product:productData ,category:categoryData})
+
 
     } catch (error) {
         res.status(500).redirect('/error500')
