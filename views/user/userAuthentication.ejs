@@ -6,34 +6,34 @@
     <div class="col align-items-center flex-col sign-up main-signup">
       <div class="form-wrapper align-items-center">
         <div class="form sign-up" id="hello">
-          <form id="signupForm" method="POST" action="/signup" >
+          <form id="signupForm" method="POST" action="/signup" novalidate>
             <div class="pt-2 pb-2">
               <h2>Sign up</h2>
             </div>
             <div class="input-group">
               <span class="text-muted hint">Username</span>
-              <input type="text" placeholder="Username" class="rounded-4" name="username" id="Username" onblur="return validateRegister()"/>
-              <span class="ml-4 text-danger" id="username-hint"></span>
+              <input type="text" placeholder="Username" class="rounded-4" name="username" id="Username" >
+              <span class="text-danger" style="margin-left: 1rem;" name="validate-signup"></span>
             </div>
             <div class="input-group">
               <span class="text-muted hint">Email</span>
-              <input type="email" placeholder="Email" class="rounded-4" name="email" id="email" onblur="return validateRegister()"/>
-              <span class="ml-4 text-danger" id="email-hint"></span>
+              <input type="email" placeholder="Email" class="rounded-4" name="email" id="email">
+              <span class="text-danger" style="margin-left: 1rem;" name="validate-signup"></span>
             </div>
             <div class="input-group">
               <span class="text-muted hint">Phone Number</span>
-              <input type="text" placeholder="Phone number" class="rounded-4" name="phonenumber" id="phonenumber" onblur="return validateRegister()"/>
-              <span class="ml-4 text-danger" id="phone-hint"></span>
+              <input type="text" placeholder="Phone number" class="rounded-4" name="phonenumber" id="phonenumber">
+              <span class="text-danger" style="margin-left: 1rem;" name="validate-signup"></span>
             </div>
             <div class="input-group">
               <span class="text-muted hint">Password</span>
-              <input type="password" placeholder="Password" class="rounded-4" name="password" id="password" onblur="return validateRegister()"/>
-              <span class="ml-4 text-danger" id="password-hint"></span>
+              <input type="password" placeholder="Password" class="rounded-4" name="password" id="password">
+              <span class="text-danger" style="margin-left: 1rem;" name="validate-signup"></span>
             </div>
             <div class="input-group">
               <span class="text-muted hint">Confirm Password</span>
-              <input type="password" placeholder="Confirm password" class="rounded-4" name="confirmPassword" id="confirmPassword" onblur="return validateRegister()"/>
-              <span class="ml-4 text-danger" id=confirmPassword-hint"></span>
+              <input type="password" placeholder="Confirm password" class="rounded-4" name="confirmPassword" id="confirmPassword">
+              <span class="text-danger" style="margin-left: 1rem;" name="validate-signup"></span>
             </div>
             <button type="submit" id="signupBtn">Request OTP</button>
           </form>
@@ -47,21 +47,28 @@
     <!-- END SIGN UP -->
     <!-- SIGN IN -->
     <div class="col align-items-center flex-col sign-in">
-      <h6 class="text-danger"><%= locals.data ? data : '' %></h6>
+      <h6 class="text-danger" id="verification-Result"><%= locals.data ? data : '' %></h6>
       <div class="form-wrapper align-items-center">
         <div class="form sign-in">
-          <div class="pt-3 pb-3">
-            <h2>Sign in</h2>
-          </div>
-          <div class="input-group">
-            <span class="text-muted hint">Username</span>
-            <input type="text" placeholder="Username" class="rounded-4"name="username" />
-          </div>
-          <div class="input-group">
-            <span class="text-muted hint">Password</span>
-            <input type="password" placeholder="Password" class="rounded-4" />
-          </div>
-          <button>Sign In</button>
+          <form id="signinForm" method="POST" novalidate>
+              <div class="pt-3 pb-3">
+                <h2>Sign in</h2>
+              </div>
+              <div class="alert alert-danger" role="alert" id="signin-alert">
+           
+              </div>
+              <div class="input-group">
+                <span class="text-muted hint">Username</span>
+                <input type="text" placeholder="Username" class="rounded-4" name="username" id="sign-in-username">
+                <span class="text-danger" style="margin-left: 1rem;" name="validate-signin"></span>
+              </div>
+              <div class="input-group">
+                <span class="text-muted hint">Password</span>
+                <input type="password" placeholder="Password" class="rounded-4" name="password" id="sign-in-password">
+                <span class="text-danger" style="margin-left: 1rem;" name="validate-signin"></span>
+              </div>
+              <button type="submit" id="signin-btn">Sign In</button>
+          </form>
           <p>
             <b>
               <!-- Forgot password? -->
@@ -103,6 +110,11 @@
   </div>
   <!-- END CONTENT SECTION -->
 </div>
+<style>
+  #signin-btn:active {
+    background-color: rgba(10, 10, 10, 0.819);
+  }
+</style>
 <script>
   let container = document.getElementById("container");
 
@@ -114,6 +126,10 @@
   setTimeout(() => {
     container.classList.add("sign-in");
   }, 200);
+
+  setTimeout(()=>{
+    document.getElementById('verification-Result').innerHTML = '';
+  },3000)
 
   // document.getElementById('signupForm').addEventListener('submit',async function(event){
   //     event.preventDefault();

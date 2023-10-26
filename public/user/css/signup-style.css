@@ -139,6 +139,12 @@ body {
 .input-group input:focus {
     border: 0.5rem solid var(--primary-color);
 }
+#signin-alert{
+    padding: 0;
+    margin-left: 2rem;
+    margin-right: 2rem;
+    display: none;
+}
 
 .form button {
     cursor: pointer;
@@ -352,7 +358,6 @@ body {
     .container.sign-up .col.sign-up {
         transform: translateY(0);
     }
-
     .content-row {
         align-items: flex-start !important;
     }

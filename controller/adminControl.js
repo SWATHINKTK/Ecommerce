@@ -120,14 +120,14 @@ const searchUser = async (req, res) => {
 
 
 
-/*----------------------------------------- PRODUCT SECTION-----------------------------------------------------------*/
+/*################################################################ PRODUCT SECTION #####################################################################*/
 
 
 // Load Product List Window
 const loadProductList = async (req, res) => {
 
     const product = await productInfo.find({});
-    res.render('admin/viewProducts', { admin: true, data: product });
+    res.render('admin/viewProducts', { admin: true, productData: product });
 
 }
 
@@ -137,7 +137,6 @@ const loadProductMoreData = async (req, res) => {
     const id = req.params.id
     console.log(id)
     const data = await productInfo.findOne({ _id: id });
-
     if (data) {
         res.status(200).render('admin/productDetailModal', { modaldata: data });
 
@@ -213,7 +212,7 @@ const productAdd = async (req, res) => {
 
         // Taken Data Come Form Clent 
         const data = req.body;
-
+        console.log(data);
         const images = [];
         req.files.forEach((file) => {
             images.push(file.filename)
@@ -225,27 +224,27 @@ const productAdd = async (req, res) => {
         if (condition && images.length > 1 ) {
 
             const productData = productInfo({
-                productName: data.productname,
-                categorys: data.categorys,
-                description: data.description,
-                brandname: data.brandname,
-                stock: data.stock,
-                price: data.price,
-                size: data.size,
-                material: data.material,
-                color: data.color,
+                productName: data.productName,
+                categoryIds: data.productCategory,
+                description: data.productDescription,
+                brandname: data.productBrandName,
+                stock: data.productStock,
+                price: data.productPrice,
+                size: data.productSize,
+                material: data.productMaterial,
+                color: data.productColor,
                 productImages: images,
-                specifications: data.specification,
+                specifications: data.productSpecification,
                 addDate: new Date(),
             })
-
+            console.log(productData)
             const product = await productData.save();
 
             // Sucess result Checking
             if (product) {
-                res.status(200).json({ status: true, message: '&#9989; Succesfully Added Product' });
+                res.json({ status: true, message: '&#9989; Succesfully Added Product' });
             } else {
-                res.status(500).render('/admin/error500');
+                res.render('/admin/error500');
             }
 
         } else {
@@ -282,7 +281,7 @@ const loadEditProductPage = async (req, res) => {
         const productData = await productInfo.findOne({ _id: id });
 
         const Data = await category.find({}, { categoryname: 1 });
-        res.render('admin/editProduct', { admin: true, dataCategory: Data, data: productData });
+        res.render('admin/editProduct', { admin: true, dataCategory: Data, dataProduct: productData });
 
     } catch (error) {
         console.log(error.message)
@@ -299,7 +298,7 @@ const editProduct = async (req, res) => {
         const data = req.body;
         const file = req.files;
 
-        console.log(data)
+        console.log(data,file)
 
         // Updating the Images and Deleting the old images
         let image = [];
@@ -308,7 +307,7 @@ const editProduct = async (req, res) => {
         // Admin Update the image it will be working other wise else to store the old image values.
         if (data.imageUpdatePosition) {
 
-            data.imageOld.forEach((val, i) => {
+            data.oldImages.forEach((val, i) => {
                 if (data.imageUpdatePosition.includes(i)) {
 
                     // Deleting the old images from my file.
@@ -332,43 +331,45 @@ const editProduct = async (req, res) => {
             image = [...(data.imageOld)]
         }
 
-        // Checking Length of the body data
-        // const length =  Object.keys(data).length;
-        // console.log(length);
+        
 
-        let condition = (data.productname !== '' && data.categorys !== '' && data.description !== '' && data.brandname !== '' && data.stock !== '' && data.price !== '' && data.size !== '' && data.material !== '' && data.color !== '' && data.specification !== '');
+        // // Checking Length of the body data
+        // // const length =  Object.keys(data).length;
+        // // console.log(length);
+
+        // let condition = (data.productname !== '' && data.categorys !== '' && data.description !== '' && data.brandname !== '' && data.stock !== '' && data.price !== '' && data.size !== '' && data.material !== '' && data.color !== '' && data.specification !== '');
 
 
-        // checking All Field entered or not 
-        if (condition && image.length == 4) {
+        // // checking All Field entered or not 
+        // if (condition && image.length == 4) {
 
-            const updateProduct = await productInfo.updateOne({ _id: data.id }, {
-                productName: data.productname,
-                categorys: data.categorys,
-                description: data.description,
-                brandname: data.brandname,
-                stock: data.stock,
-                price: data.price,
-                size: data.size,
-                material: data.material,
-                color: data.color,
-                productImages: image,
-                specifications: data.specification,
-                updateDate: new Date()
+        //     const updateProduct = await productInfo.updateOne({ _id: data.id }, {
+        //         productName: data.productname,
+        //         categorys: data.categorys,
+        //         description: data.description,
+        //         brandname: data.brandname,
+        //         stock: data.stock,
+        //         price: data.price,
+        //         size: data.size,
+        //         material: data.material,
+        //         color: data.color,
+        //         productImages: image,
+        //         specifications: data.specification,
+        //         updateDate: new Date()
 
-            })
-            if (updateProduct.acknowledged) {
-                res.status(200).json({ 'status': true });
+        //     })
+        //     if (updateProduct.acknowledged) {
+        //         res.status(200).json({ 'status': true });
 
-            } else {
-                res.status(500).redirect('/admin/error500');
-            }
+        //     } else {
+        //         res.status(500).redirect('/admin/error500');
+        //     }
 
-        } else {
-            // Error message and Eror staus code
-            res.json({ status: false });
+        // } else {
+        //     // Error message and Eror staus code
+        //     res.json({ status: false });
 
-        }
+        // }
 
     } catch (error) {
         console.log(error.message)

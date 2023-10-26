@@ -1,95 +1,200 @@
+document.addEventListener("DOMContentLoaded", function () {
+      const signupForm = document.getElementById("signupForm");
+  
+      signupForm.addEventListener("submit", function (event) {
+          event.preventDefault(); 
+  
+          if (validateRegister()) {
+              signupForm.submit();
+          }
+      });
+
+      const signinForm = document.getElementById('signinForm');
+      
+      signinForm.addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            if(validateSignin()){
+
+                  // signinForm.submit();
+                  try {
+                        const alert = document.getElementById('signin-alert');
+                        
+
+                        const username = document.getElementById('sign-in-username').value;
+                        const password = document.getElementById('sign-in-password').value;
+
+                        const url = '/signin';
+      
+                        const config = {
+                              method: 'POST',
+                              body:JSON.stringify({
+                                    'username':`${username}`,
+                                    'password':`${password}`
+                              }),
+                              headers: {'Content-Type': 'application/json',}
+                        }
+      
+                        const response = await fetch(url,config);
+
+                        if(!response.ok){
+                              window.location.href = '/error500';
+                        }
+                        
+                        const data = await response.json();
+                        console.log(data)
+
+                        if(data.status){
+
+                              window.location.href = '/home';
+                             
+                        }else{
+
+                              alert.style.display = 'block';
+                              alert.innerHTML = data.message;
+                             
+                        }
+
+                        setTimeout(()=>{
+                              alert.style.display = 'none';
+                        },2000)
+
+                  } catch (error) {
+      
+                        console.log(error.message);    
+                  }
+            }
+      })
+      
+
+});
+
+
+
+
 function validateRegister(){
+
+      const errorElements = document.querySelectorAll('span[name="validate-signup"]');
+
+      userErrorElementReset('validate-signup');
+
       let username = document.getElementById('Username').value;
       let email = document.getElementById('email').value;
       let phone = document.getElementById('phonenumber').value;
       let password = document.getElementById('password').value;
       let confirmpassword = document.getElementById('confirmPassword').value;
 
-      let username_hint = document.getElementById('username-hint');
-      let email_hint = document.getElementById('email-hint');
-      let phone_hint = document.getElementById('phone-hint');
-      let password_hint = document.getElementById('password-hint');
-      let confirmPassword_hint = document.getElementById('confirmPassword-hint');
+      
+      let emailRegex= /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
 
-      let emailRegex= /^[a-zA-Z0-9._-]+@[a-zA-Z]+\.[a-zA-Z]{2,4}$/;
-      let phoneRegex=/^[0-9]{10}$/;
+      let phoneRegex=/^\d{10}$/;
 
-      let is_valid = true;
+      
 
             
 
       if(username.trim() == ''){
-            username_hint.innerHTML = '*Enter this field';
-            email_hint.innerHTML = '';
-            phone_hint.innerHTML = '';
-            password_hint.innerHTML = '';
-            confirmPassword_hint.innerHTML = "";
-            return false;
-      }
-      if(phone.trim() == ''){
-            phone_hint.innerHTML = '*Enter this field';
-            username_hint.innerHTML = '';
-            email_hint.innerHTML = '';
-            password_hint.innerHTML = '';
-            confirmPassword_hint.innerHTML = "";
-            return false;
-      }
-      if(email.trim() == ''){
             
-            username_hint.innerHTML = '';
-            phone_hint.innerHTML = '';
-            password_hint.innerHTML = '';
-            confirmPassword_hint.innerHTML = "";
-            email_hint.innerHTML = '*Enter this field';
+            errorElements[0].innerHTML = '* enter the username'
+            return false;
+      }else if(email.trim() == ''){
+
+            errorElements[1].innerHTML = '* enter the email'
+            return false;
+      }else if(!emailRegex.test(email)){
+               
+            errorElements[1].innerHTML = '*Enter proper format';
             return false;
 
-      }
-      if(emailRegex.test(email)){
+      }else if(phone.trim() == ''){
+
+            errorElements[2].innerHTML = '* enter the phonenumber';
+            return false;
+
+      }else if(!phoneRegex.test(phone)){
             
-            username_hint.innerHTML = '';
-            phone_hint.innerHTML = '';
-            password_hint.innerHTML = '';
-            confirmPassword_hint.innerHTML = "";
-            email_hint.innerHTML = '*Enter proper format';
+            errorElements[2].innerHTML= '*Enter proper format';
             return false;
 
-      }
-      if(phoneRegex.test(phone)){
+      }else if(password.trim() == ''){
             
-            username_hint.innerHTML = '';
-            email_hint.innerHTML = '';
-            password_hint.innerHTML = '';
-            confirmPassword_hint.innerHTML = "";
-            phone_hint.innerHTML = '*Enter proper format';
+            errorElements[3].innerHTML = '* enter the password'
             return false;
 
-      }
-      if(password.trim() == ''){
-            password_hint.innerHTML = '*Enter this field';       
-            username_hint.innerHTML = '';
-            email_hint.innerHTML = '';
-            password_hint.innerHTML = '';
-            confirmPassword_hint.innerHTML = "";
+      }else if(password.length < 4){
+           
+            errorElements[3].innerHTML = '* password must be 4 digit'
             return false;
 
-      }
-      if(password.length < 4){
-            password_hint.innerHTML = '*musthave 5 digits';    
-            username_hint.innerHTML = '';
-            email_hint.innerHTML = '';
-            phone_hint.innerHTML = '';
-            confirmPassword_hint.innerHTML = "";
+      }else if(confirmpassword.trim() == ''){
+            
+            errorElements[4].innerHTML = '* enter the confirm password'
             return false;
 
-      }
-      if(confirmpassword == password){
-            confirmPassword_hint.innerHTML = "*Password Must have same";           
-            username_hint.innerHTML = '';
-            email_hint.innerHTML = '';
-            phone_hint.innerHTML = '';
-            password_hint.innerHTML = '';
+      }else if(password != confirmpassword){
 
+            errorElements[4].innerHTML = '* password & confirm password must be same'
             return false;
+      }else {
+
+            return true;
       }
-      return true;
+    
 }
+
+
+
+
+
+
+function validateSignin(){
+
+      const errorElements = document.querySelectorAll('span[name="validate-signin"]');
+
+      const username = document.getElementById('sign-in-username').value;
+      const password = document.getElementById('sign-in-password').value;
+
+      let emailRegex= /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+      userErrorElementReset('validate-signin');
+
+      if(username.trim() == ''){
+
+            errorElements[0].innerHTML = '* enter the username ';
+            return false;
+
+      }else if(!emailRegex.test(username)){
+
+            errorElements[0].innerHTML = '* enter proper email';
+            return false;
+
+      }else if(password.trim() == ''){
+
+            errorElements[1].innerHTML = '* enter the password';
+            return false;
+
+      }else if(password.length < 4){
+
+            errorElements[1].innerHTML = '* password must be for digit';
+            return false;
+
+      }else {
+            
+            return true;
+      }
+
+}
+
+
+
+
+//**** Error Element Hiding ******
+function userErrorElementReset(name){
+      const errorElements = document.querySelectorAll(`span[name="${name}"]`);
+      
+      errorElements.forEach((val,i) => {
+          val.innerHTML = '';
+      })
+}
+
+

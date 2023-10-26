@@ -47,8 +47,8 @@ const productData = mongoose.Schema({
         type : String,
         require : true
     },
-    categorys : {
-        type : [String],
+    categoryIds : {
+        type : [mongoose.Schema.Types.ObjectId],
         require : true
     },
     description : {

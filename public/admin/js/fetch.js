@@ -20,6 +20,7 @@ document.getElementById('sidebar').addEventListener('click', async function(even
 
       
         /*--------------------------------------------View More Data--------------------------------------------- */
+        const imageFile = []
         document.getElementById('table-product').addEventListener('click',function(event) {
             const target = event.target;
             
@@ -30,8 +31,8 @@ document.getElementById('sidebar').addEventListener('click', async function(even
                 productStatus(target);
 
             }else if(target.tagName == 'BUTTON' && target.classList.contains('product-edit-button')){
-                loadEditProductPage(target);
-                // console.log(target)
+                loadEditProductPage(target,imageFile);
+                
 
             }
 
@@ -130,17 +131,28 @@ document.getElementById('sidebar').addEventListener('click', async function(even
         // Selecting the Each input field
         const optionInputs = document.querySelectorAll('.option-input');
         const selectedOptions = document.querySelector('.selected-options');
+        const categoryHidden = document.getElementById('categoryHidden');
 
         // view the Selecting input Field
         optionInputs.forEach((input) => {
             input.addEventListener('change', function () {
                 const selected = Array.from(optionInputs)
                     .filter((input) => input.checked)
-                    .map((input) => input.value);
+                    .map((input) => {
+                        return input.value
+                    });
                 selectedOptions.textContent = selected.length > 0 ? selected.join(', ') : 'Select options';
+
+                const selectedId = Array.from(optionInputs)
+                .filter((input) => input.checked)
+                .map((input) => {
+                    return input.getAttribute('data-category-id')
+                });
+                categoryHidden.value = selectedId;
             });
         });
 
+      
         /*------------------------------End of view Category------------------------------------------ */
 
 
@@ -169,111 +181,6 @@ document.getElementById('sidebar').addEventListener('click', async function(even
 
         
         
-        
-        /*-------------------------- Event Deligation for view images --------------------------------*/
-
-        // this event deligation for selcting image and  view that image imediatly
-        // document.getElementById('image-product-data').addEventListener('change',(event)=>{
-        //     const image = event.target;
-
-            // this funcation view the images
-        //     function imageView(imageProduct,imageTag){
-
-        //         const imagePreview = document.getElementById(`${imageProduct}`);
-        //         const file = image.files[0];
-    
-        //             if(file){
-    
-        //                 const reader = new FileReader();
-    
-        //                 reader.onload = function(e) {
-        //                     imageTag.src = e.target.result;
-        //                 }
-    
-        //                 reader.readAsDataURL(file);
-        //                 imageTag.style.display = 'block';
-    
-        //             }else{
-        //                 imageTag.style.display = 'none';
-        //                 imageTag.src = '';
-        //             }
-    
-        //     }
-
-        //     if(image.id == 'productImage_1'){
-
-        //         const image1 = document.getElementById('imageProduct-1');
-        //         imageView('imageProduct-1',image1);
-            
-        //     }else if(image.id == 'productImage_2'){
-
-        //         const image2 = document.getElementById('imageProduct-2');
-        //         imageView('imageProduct-2',image2);
-
-        //     }else if(image.id == 'productImage_3'){
-
-        //         const image3 = document.getElementById('imageProduct-3');
-        //         imageView('imageProduct-3',image3);
-
-        //     }else if(image.id == 'productImage_4'){
-
-        //         const image4 = document.getElementById('imageProduct-4');
-        //         imageView('imageProduct-4',image4);
-
-        //     }
-        // });
-
-        /*------------------ End Of The Event Deligation for view images-----------------------*/
-
-
-
-        /*==============================Form Data to send to the Server============================*/
-        // Image Value Taken and Store to an Array
-        // const images = new Array(4);
-        // document.getElementById("productImage_1").addEventListener("change", function () {
-        //     const imagePreview = document.getElementById("productImage_1");
-        //     const input = this;
-            
-        //     if (input.files && input.files[0]) {
-        //         const reader = new FileReader();
-        //         reader.readAsDataURL(input.files[0]);
-        //         images[0] = input.files[0]
-        //     }
-        // });
-
-        // document.getElementById("productImage_2").addEventListener("change", function () {
-        //     const imagePreview = document.getElementById("productImage_2");
-        //     const input = this;
-            
-        //     if (input.files && input.files[0]) {
-        //         const reader = new FileReader();
-        //         reader.readAsDataURL(input.files[0]);
-        //         images[1] = input.files[0]
-        //     }
-        // });
-
-        // document.getElementById("productImage_3").addEventListener("change", function () {
-        //     const imagePreview = document.getElementById("productImage_3");
-        //     const input = this;
-            
-        //     if (input.files && input.files[0]) {
-        //         const reader = new FileReader();
-        //         reader.readAsDataURL(input.files[0]);
-        //         images[2] = input.files[0]
-        //     }
-        // });
-
-        // document.getElementById("productImage_4").addEventListener("change", function () {
-        //     const imagePreview = document.getElementById("productImage_4");
-        //     const input = this;
-            
-        //     if (input.files && input.files[0]) {
-        //         const reader = new FileReader();
-        //         reader.readAsDataURL(input.files[0]);
-        //         images[3] = input.files[0]
-        //     }
-        // });
-
 
         /*--------------------------Submit The Data ------------------------------------------ */
 
@@ -283,86 +190,8 @@ document.getElementById('sidebar').addEventListener('click', async function(even
             const validate = validateProductData(imageFile);
             if(validate)
                 submitNewProductData(imageFile);
-            // const form = document.getElementById('addProduct-form');
-            // const swathi = new FormData(form);
-            // console.log(...swathi)
-            // Form Data Object Creation 
-            // const formData = new FormData();
-
-            // Retrieve the Values From form 
-            // const productname = document.getElementById('productname').value;
-            // const category = document.getElementById('productcategory').innerHTML;
-            // const description = document.getElementById('productdescription').value;
-            // const brandname = document.getElementById('productbrandname').value;
-            // const stock = document.getElementById('productstock').value;
-            // const price = document.getElementById('productprice').value;
-            // const size = document.getElementById('productsize').value;
-            // const material = document.getElementById('productmaterial').value;
-            // const color = document.getElementById('productcolor').value;
-            // const specification = document.getElementById('productspecification').value ;
-         
-            // images are append into the formData using a array
-            // images.forEach((val,i)=>{
-            //     formData.append('productimages',images[i]);
-            // })
-
-            // Appending the category into array 
-            // const productCategorys = category.split(',');
-            // console.log(productCategorys)
-            // productCategorys.forEach((val,i)=>{
-            //     formData.append('categorys',productCategorys[i]);
-            // })
-
-            // //Speicification Sett to array
-            // const specificationData = specification.split(',');
-            // specificationData.forEach((val,i) => {
-            //     formData.append('specification',specificationData[i]);
-            // })
-
-            // Form Data to append the all form Datas 
-            // formData.append('productname',productname);
-            // formData.append('description',description);
-            // formData.append('brandname',brandname);
-            // formData.append('stock',stock);
-            // formData.append('price',price);
-            // formData.append('size',size);
-            // formData.append('material',material);
-            // formData.append('color',color);
-
-
-            // Sending the Data to Sever using fetch 
-            // try{
-            //     const SendData = await fetch('/admin/productadd',{
-            //         method:'POST',
-            //         body:formData
-            //     })
-
-            //     if(!SendData.ok){
-            //         window.location.href = '/admin/error500'
-            //     }
-
-            //     const data = await SendData.json();
-
-            //     const result = document.getElementById('product-sucess')
-
-            //     if(data.status){
-            //         result.innerHTML = data.message + " &#9989";
-            //         result.style.color = "green";
-
-            //     }else{
-            //         result.innerHTML = data.message + " &#10071;";
-            //         result.style.color = "red"
-
-            //     }
-
-            //     setTimeout(()=>{
-            //         result.innerHTML = '';
-            //     },2000)
-
-            // }catch(error){
-            //     console.log(error.message)
-            // }
-            /*-----------------------------------------Submit data complete------------------------------------------ */
+            
+        /*-----------------------------------------Submit data complete------------------------------------------ */
 
           
  

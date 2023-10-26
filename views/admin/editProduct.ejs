@@ -1,189 +1,170 @@
+<h1 class="card-title text-center text-dark">Edit Product Data</h1>
 <div class="col-12 grid-margin mt-5 addproductpage">
-  <div class="card">
-    <div class="card-body">
-      <h4 class="card-title">Edit Product</h4>
-   
-    <div class="">
-      <form id="editProduct-form">
-        <p class="card-description">  </p>
-        <div class="row">
-          <div class="col-md-6">
-            <div class="form-group">
-              <label class="col-sm-3 col-form-label">Product Name</label>
-              <div class="col-sm-12">
-                <input type="text" class="form-control" name="editproductname" id="editProductName" value="<%= data.productName %>">
+    <div class="card">
+      <div class="card-body">
+      <div class="">
+        <form id="editProduct-form">
+          <input type="hidden" value="<%= dataProduct._id %>" name="productId">
+          <p class="card-description">  </p>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="col-sm-3 col-form-label">Product Name</label>
+                <div class="col-sm-12 form-style">
+                  <input type="text" class="form-control" name="editProductName" id="productname" value="<%= dataProduct.productName %>">
+                  <p class="text-danger ml-2" name="validate-addProduct"></p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="col-sm-3 col-form-label">Category</label>
+                <div class="col-sm-12">
+                  <div class="multiselect">
+                    <div class="select-box form-control" id="select-box">
+                        <div class="selected-options" id="productcategory">
+                          <% for(let i=0;i<dataCategory.length;i++){ %>
+                            <% if(dataProduct.categoryIds.includes(dataCategory[i]._id)) {%>
+                              <%= dataCategory[i].categoryname %>,
+                          <% } }%>
+                        </div>
+                        <div class="arrow">&#9660;</div>
+                    </div>
+                    <input type="hidden" value="<%= dataProduct.categoryIds %>" id="categoryHidden">
+                    <p class="text-danger ml-2" name="validate-addProduct"></p>
+                    <div class="options-container" id="options-container">
+                        <% for(let i=0;i<dataCategory.length;i++){ %>
+                        <div class="option">
+                            <label><input type="checkbox" class="option-input" data-category-id="<%= dataCategory[i]._id %>" value="<%= dataCategory[i].categoryname %>"
+                              <%= dataProduct.categoryIds.includes(dataCategory[i]._id) ? 'checked' : '' %>><%= dataCategory[i].categoryname %></label>
+                        </div>
+                        <% } %>
+                    </div>
+                </div>
+            
+                </div>
               </div>
             </div>
           </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label class="col-sm-3 col-form-label">Category</label>
-              <div class="col-sm-12">
-                
-                <div class="multiselect">
-                  <div class="select-box form-control" id="select-box">
-                      <div class="selected-options" id="editProductCategory"><%= data.categorys %></div>
-                      <div class="arrow">&#9660;</div>
+          <div class="row form-style">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label class="col-sm-12 col-form-label">Description</label>
+                <div class="col-sm-12">
+                  <textarea class="form-control" id="productdescription" rows="4" name="productDescription"><%= dataProduct.description %></textarea>
+                  <p class="text-danger ml-2" name="validate-addProduct"></p>
+                </div>
+              </div>
+            </div>
+          </div>
+           
+          <div class="row">
+            <div class="col-md-6 form-style">
+              <div class="form-group">
+                <label class="col-sm-3 col-form-label">Brand Name</label>
+                <div class="col-sm-12">
+                  <select id="productbrandname" class="brand-dropdown" name="productBrandName">
+                    <option value="<%= dataProduct.brandname %>"><%= dataProduct.brandname %></option>
+                  </select>
+                  <p class="text-danger ml-2" name="validate-addProduct"></p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 form-style">
+              <div class="form-group ">
+                <label class="col-sm-3 col-form-label">Stock</label>
+                <div class="col-sm-12">
+                  <input type="number" class="form-control" name="productStock" id="productstock" value="<%= dataProduct.stock %>" >
+                  <p class="text-danger ml-2" name="validate-addProduct"></p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row form-style">
+            <div class="col-md-6">
+              <div class="form-group ">
+                <label class="col-sm-3 col-form-label">Price</label>
+                <div class="col-sm-12">
+                  <input type="number" class="form-control" name="productPrice" id="productprice" value="<%= dataProduct.price %>">
+                  <p class="text-danger ml-2" name="validate-addProduct"></p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 form-style">
+              <div class="form-group ">
+                <label class="col-sm-3 col-form-label">Size</label>
+                <div class="col-sm-12">
+                  <input type="text" class="form-control" name="productSize" id="productsize" value="<%= dataProduct.size %>">
+                  <p class="text-danger ml-2" name="validate-addProduct"></p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row form-style">
+            <div class="col-md-6">
+              <div class="form-group ">
+                <label class="col-sm-3 col-form-label">Material</label>
+                <div class="col-sm-12">
+                  <input type="text" class="form-control" name="productMaterial" id="productmaterial" value="<%= dataProduct.material %>">
+                  <p class="text-danger ml-2" name="validate-addProduct"></p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 form-style">
+              <div class="form-group ">
+                <label class="col-sm-3 col-form-label">Color</label>
+                <div class="col-sm-2 rounded-3">
+                  <input type="color" class="form-control pt-2 pb-2 color-addproduct" id="productcolor" value="<%= dataProduct.color %>" title="Choose product color" name="productColor">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row form-style">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label class="col-sm-12 col-form-label">Image</label>
+                <div class="col-sm-12">
+                  <input type="file" class="form-control" id="productImage" accept="image/*" multiple>
+                  <p class="text-danger ml-2" name="validate-addProduct"></p>
+                  <div id="edit-image-preview-main-div" class="form-style bg-white image-preview-main-div">
+                    <div id="product-image-preview" class="form-style bg-white product-image-preview">
+                      <% for(let i=0;i<dataProduct.productImages.length;i++){ %>
+                        <img src="/public/admin/assets/productImages/<%= dataProduct.productImages[i] %>" name='<%= i %>'>
+                        <button class="remove" id='<%= i %>'><i class="bi bi-x remove" id='<%= i %>'></i></button>
+                      <% } %>
+                    </div>
+                    <input type="hidden" value="<%= dataProduct.productImages %>" id="oldImages" name="oldImages">
                   </div>
-                  <div class="options-container" id="options-container" >
-                    <% for(let j=0;j<dataCategory.length;j++){ %>
-                      <div class="option">                      
-                          <label><input type="checkbox" class="option-input" value="<%= dataCategory[j].categoryname %>" 
-                            <%= data.categorys.includes(dataCategory[j].categoryname) ? 'checked' : '' %> >
-                            <%= dataCategory[j].categoryname %>
-                          </label>
-                      </div>
-                    <% } %>
-                  </div>
-              </div>
-             
-          
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="col-md-12">
-            <div class="form-group">
-              <label class="col-sm-12 col-form-label">Description</label>
-              <div class="col-sm-12">
-                <textarea class="form-control" id="editProductDescription" rows="4" name="editdescription"><%= data.description %></textarea>
-              </div>
-            </div>
-          </div>
-        </div>
-         
-        <div class="row">
-          <div class="col-md-6">
-            <div class="form-group ">
-              <label class="col-sm-3 col-form-label">Brand Name</label>
-              <div class="col-sm-12">
-                <input type="text" class="form-control" name="editbrandname" id="editProductBrandname" value="<%= data.brandname %>">
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group ">
-              <label class="col-sm-3 col-form-label">Stock</label>
-              <div class="col-sm-12">
-                <input type="text" class="form-control" name="stock" id="editProductStock" value="<%= data.stock %>">
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6">
-            <div class="form-group ">
-              <label class="col-sm-3 col-form-label">Price</label>
-              <div class="col-sm-12">
-                <input type="number" class="form-control" name="editprice" id="editProductPrice" value="<%= data.price %>">
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group ">
-              <label class="col-sm-3 col-form-label">Size</label>
-              <div class="col-sm-12">
-                <input type="text" class="form-control" name="editsize" id="editProductSize" value="<%= data.size %>">
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6">
-            <div class="form-group ">
-              <label class="col-sm-3 col-form-label">Material</label>
-              <div class="col-sm-12">
-                <input type="text" class="form-control" name="editmaterial" id="editProductMaterial" value="<%= data.material %>">
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group ">
-              <label class="col-sm-3 col-form-label">Color</label>
-              <div class="col-sm-2 rounded-3">
-                <input type="color" class="form-control pt-2 pb-2 color-addproduct" id="editProductColor" value="<%= data.color %>" title="Choose product color" name="editcolor">
-              </div>
-            </div>
-          </div>
-        </div>
-        <div id="image-product-data">
-        <div class="row">
-          <div class="col-md-6">
-            <div class="form-group ">
-              <label class="col-sm-3 col-form-label">Image</label>
-              <div class="col-sm-12">
-                <input type="file" class="form-control" id="editProductImage_1" name="editproductImage" accept="image/*">
-              </div>
-              <div  class="ml-3 image-addproduct-div" >
-                <img class="image-addproduct" id="editImageProduct-1" src="/public/admin/assets/productImages/<%= data.productImages[0] %>" alt="Upload the file">
-              </div>
-              
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group ">
-              <label class="col-sm-3 col-form-label">*</label>
 
-              <div class="col-sm-12">
-                <input type="file" class="form-control" id="editProductImage_2" name="editproductImage" accept="image/*">
-              </div>
-              <div class="ml-3 image-addproduct-div" >
-                <img class="image-addproduct" id="editImageProduct-2" src="/public/admin/assets/productImages/<%= data.productImages[1] %>"" alt="Upload the file">
-              </div>
-
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6">
-            <div class="form-group ">
-              <label class="col-sm-3 col-form-label">Image</label>
-              <input type="hidden" id="oldImages" value="<%= data.productImages %>">
-
-              <div class="col-sm-12">
-                <input type="file" class="form-control" id="editProductImage_3" name="editproductImage" accept="image/*">
-              </div>
-
-              <div class="ml-3 image-addproduct-div">
-                <img class="image-addproduct"id="editImageProduct-3" src="/public/admin/assets/productImages/<%= data.productImages[2] %>"" alt="Upload the file">
-              </div>
-              
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group ">
-              <label class="col-sm-3 col-form-label">*</label>
-
-              <div class="col-sm-12">
-                <input type="file" class="form-control" id="editProductImage_4" name="editproductImage" accept="image/*">
-              </div>
-
-              <div class="ml-3 image-addproduct-div">
-                <img class="image-addproduct" id="editImageProduct-4" src="/public/admin/assets/productImages/<%= data.productImages[3] %>"" alt="Upload the file">
-              </div>
-
-            </div>
-          </div>
-        </div>
-        </div>
-        <div class="row">
-          <div class="col-md-12">
-            <div class="form-group">
-              <label class="col-sm-12 col-form-label">Specifications</label>
-              <div class="col-sm-12">
-                <textarea class="form-control" id="editProductSpecification" rows="4" name="specifications" placeholder="*specifications seprated using commas"><%= data.specifications %></textarea>
+          <div class="row form-style">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label class="col-sm-12 col-form-label">Specifications</label>
+                <div class="col-sm-12">
+                  <textarea class="form-control" rows="4" id="productspecification" name="productSpecification" placeholder="*specifications seprated using commas"><%= dataProduct.specifications %></textarea>
+                  <p class="text-danger ml-2" name="validate-addProduct"></p>
+                </div>
               </div>
             </div>
           </div>
+          <button type="submit" class="btn btn-primary mr-3 ml-3" id="product-submit">Submit</button>
+          <button class="btn btn-dark">Cancel</button>
+        </form>
+        <div class="" role="alert" id="edit-product-submit-result">
         </div>
-        <input type="hidden" id="productId" value="<%= data._id %>">
-        <button type="button" class="btn btn-primary mr-3 ml-3" id="edit-product-submit">Submit</button>
-        <button class="btn btn-dark">Cancel</button>
-      </form>
-      <p id="edit-product-sucess" class="mt-4 ml-3"></p>
+      </div>
+    </div>
     </div>
   </div>
-  </div>
-</div>
+
+
+
+
+
+
+
 

@@ -1,64 +1,65 @@
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
-const {userData} = require('../models/userModal');
-const {productInfo} = require('../models/adminModel')
+const { userData } = require('../models/userModal');
+const { productInfo, category } = require('../models/adminModel');
+const { chownSync } = require('fs');
 
 
 /*--------------------------Router Access Functions in User Side --------------------------------- */
 
 // Random Bytes for OTP Create Using Crypto Module 
-async function generateRandomOtp(length){
+async function generateRandomOtp(length) {
 
-    if(length % 2 != 0){
+    if (length % 2 != 0) {
         throw new Error('Length must be even For OTP Generation.');
     }
 
-    const randomBytes = crypto.randomBytes(length/2);
+    const randomBytes = crypto.randomBytes(length / 2);
     const otp = randomBytes.toString('hex')
     return otp;
 }
 
 
 // Email Sending Using NodeMailer 
-async function sendEmail(name,email,otp,html){
+async function sendEmail(name, email, otp, html) {
 
     const transporter = nodemailer.createTransport({
-        host : 'smtp.gmail.com',
-        port : 465,
-        secure : true,
-        requireTLS : true,
-        auth : {
-            user:'swathinktk10@gmail.com',
-            pass:'qkxm daqx mbkn czzx'
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true,
+        requireTLS: true,
+        auth: {
+            user: 'swathinktk10@gmail.com',
+            pass: 'qkxm daqx mbkn czzx'
         }
     });
 
     const mailOptions = {
-        from : 'swathinktk10@gmail.com',
-        to : email,
-        subject : 'For Verification OTP',
+        from: 'swathinktk10@gmail.com',
+        to: email,
+        subject: 'For Verification OTP',
         // html : '<h2> Welcome <span style="color:blue">'+name+'<span> .</h2>'+'<h4>Your OTP :<b>'+otp+'</b></h4>'+'<h3>Thank You For Joinig...</h3>'
-        html : html
+        html: html
     }
 
     transporter.sendMail(mailOptions, (error, info) => {
-        if(error){
+        if (error) {
             console.log(error.message);
-        }else{
-            console.log("Email is to be sented",info.response);
+        } else {
+            console.log("Email is to be sented", info.response);
         }
     })
 }
 
 
 // PassWord Secure Using bcrypt Module 
-async function securePassword(password){
+async function securePassword(password) {
 
-    try{
-        const secure = await bcrypt.hash(password,10);
+    try {
+        const secure = await bcrypt.hash(password, 10);
         return secure;
-    }catch(error){
+    } catch (error) {
         console.log(error.message)
     }
 }
@@ -71,8 +72,8 @@ async function securePassword(password){
 
 /*-------------------------------------- User Login & Register-------------------------------------------------- */
 // View User Login Page 
-const loadUserLogin = (req,res) => {
-    res.render('user/userAuthentication',{admin:false,title:'User'});
+const loadUserLogin = (req, res) => {
+    res.render('user/userAuthentication', { admin: false, title: 'User' });
 }
 
 // Storing User Register Data to Session 
@@ -88,7 +89,7 @@ const storeSignupData = async (req, res) => {
         console.log(emailExist)
 
         if (emailExist) {
-            res.render('user/userAuthentication', { admin: false, data: 'User email is already exist' });
+            res.render('user/userAuthentication', { admin: false,title:'Sign Up', data: ' &#10060; User email is already exist' });
 
         } else {
 
@@ -125,10 +126,12 @@ const storeSignupData = async (req, res) => {
                     }
 
                 } else {
-                    res.render('user/userAuthentication', { admin: false, data: 'Must Enter Two Password Same' })
+                    res.render('user/userAuthentication', { admin: false,title:'Sign Up', data: 'Must Enter Two Password Same' })
                 }
             } else {
-                res.render('user/userAuthentication', { admin: false, data: 'Enter All Fields and Again You can register' })
+
+                res.render('user/userAuthentication', { admin: false,title:'Sign Up', data: 'Enter All Fields and Again You can register' });
+
             }
         }
     } catch (error) {
@@ -138,109 +141,197 @@ const storeSignupData = async (req, res) => {
 
 
 // View OTP Verification Page 
-const loadOTPVerification = (req,res) =>{
+const loadOTPVerification = (req, res) => {
     const userdata = req.session.userData;
     const time = req.session.startTime
-    res.render('user/otpVerification',{admin:false,title:'User OTP',email:userdata.email,timer:time});
+    res.render('user/otpVerification', { admin: false, title: 'User OTP', email: userdata.email, timer: time });
 }
 
 // Resend OTP In Verification Page
-const resendOTP = async(req,res) => {
+const resendOTP = async (req, res) => {
     const user = req.session.userData;
     const otp = await generateRandomOtp(6);
     req.session.otp = otp;
-    await sendEmail(user.username,user.email,otp)
+    await sendEmail(user.username, user.email, otp)
     req.session.startTime = Date.now();
     res.redirect('/otpVerification');
 }
 
 
 // OTP Verificatied and Go For the Home Window 
-const OTPCheck = async(req,res) => {
+const OTPCheck = async (req, res) => {
 
     const endTime = Date.now();
     const startTime = req.session.startTime;
     const sessionOTP = req.session.otp;
     const data = req.session.userData;
-    // console.log(data,sessionOTP)
-    const user = userData({
-        username: data.username,
-        email: data.email,
-        phonenumber: data.phonenumber,
-        password: data.password,
-        _isVerified: true,
-        joined_date: new Date()
-    })
+    console.log(data,sessionOTP)
 
-    const takenTime = (endTime - startTime)/1000;
+    const emailExist = await userData.findOne({email:data.email});
+    console.log(data.email)
 
-    // Checking OTP Expired OR Not
-    if(takenTime < 120){
+    if(!emailExist)
+    {
 
-        // Checking OTP
-        if(sessionOTP == req.body.otp)
-        {
-            const sendData = await user.save();
-            // Sucess Result
-            if(sendData){
-                req.session._id = user._id;
-                res.redirect('/home');
-            }else{
-                res.status(500).redirect('/error500');
+        const user = userData({
+            username: data.username,
+            email: data.email,
+            phonenumber: data.phonenumber,
+            password: data.password,
+            _isVerified: true,
+            joined_date: new Date()
+        })
+
+        const takenTime = (endTime / 1000) - (startTime / 1000);
+
+        // Checking OTP Expired OR Not
+        if (takenTime < 120) {
+
+            // Checking OTP
+            if (sessionOTP == req.body.otp) {
+                const sendData = await user.save();
+                console.log('sss')
+                if(sendData){
+
+                    req.session.userId = userData._id;
+                    res.json({'status':true})
+                    console.log('sucess')
+                }
+
+                delete req.session.startTime;
+                delete req.session.otp;
+                delete req.session.userData;
+
+            } else {
+                res.status(400).json({'status':false, 'message': 'Invalid OTP &#10071' });
             }
 
-            delete req.session.startTime;
+        } else {
+
             delete req.session.otp;
-            delete req.session.userData;
-
-        }else{
-            res.status(400).json({message:'Invalid OTP &#10071'});
+            res.status(200).json({'status':false, 'message': 'OTP Expired &#10060' });
         }
-
     }else{
-
-        delete req.session.otp;
-        res.status(200).json({message:'OTP Expired &#10060'});
+        res.status(200).json({'status':false, 'message': 'OTP Verified.You can go Home to Login' });
     }
 }
 
 
 // Verify Login 
-const verifyUser = (req,res) => {
-    // console.log("working")
-    // res.status(200);
+const verifyUser = async(req, res) => {
+    console.log(req.body)
+
+    const username = req.body.username;
+    const password = req.body.password;
+    
+    const usernameExist = await userData.findOne({email:username});
+
+    if(!usernameExist){
+
+        res.json({status:false,message:'&#10060; check your email address' });
+
+    }else{
+
+        const check = await bcrypt.compare(password,usernameExist.password);
+
+        if(check){
+
+            res.redirect('/home');
+
+        }else{
+
+            res.json({status:false,message:' &#10060; user email & password was inccorect' })
+
+        }
+
+    }
+    
 }
 
 
 // View Home Page
-const loadHomePage = (req,res) => {
-    res.send("HOME");
+const loadHomePage = async (req, res) => {
+    console.log('home')
+
+    try {
+
+        const categoryData = await category.find({}).sort({ _id: -1 });
+
+        const productData = await productInfo.aggregate([
+            {
+                $unwind: "$categoryIds"
+            },
+            {
+                $lookup: {
+                    from: 'categorys',
+                    localField: 'categoryIds',
+                    foreignField: '_id',
+                    as: 'categoryData'
+                }
+            }]);
+
+
+        res.render('user/index', { user: true, login: true, title: 'Brand Unlimited', dataCategory: categoryData, dataProduct: productData });
+
+    } catch (error) {
+
+        console.log(error.message);
+
+    }
+
 }
 
 
 /*------------------------------------------------Product Details Handling ------------------------------------------------------*/
-const guestPage = async(req,res) => {
+const guestPage = async (req, res) => {
 
-    try{
-        const productData = await productInfo.find({});
+    try {
+
+        const categoryData = await category.find({}).sort({ _id: -1 });
+
+        const productData = await productInfo.aggregate([
+            {
+                $unwind: "$categoryIds" // Unwind the array to create a separate document for each category ID
+            },
+            {
+                $lookup: {
+                    from: 'categorys', // The name of the collection to join with
+                    localField: 'categoryIds', // The field from the input collection
+                    foreignField: '_id', // The field from the "from" collection
+                    as: 'categoryData'         // The alias for the new field
+                }
+            }]);
+
+        const productsWithCategory = productData.filter(product =>
+            product.categoryData.some(category => category.categoryname === 'T-Shirts')
+
+        );
+        console.log(productsWithCategory)
+
         // console.log(productData)
-        res.render('user/index',{user:true,title:'Brand Unlimited',data:productData})
-    }catch(error){
+        // const found = productData[1].categoryData.some(item =>{ 
+        //     console.log(item._id)
+        //     return item.categoryname === 'Shirts' });
+        // console.log(found)
+
+        res.render('user/index', { user: true, title: 'Brand Unlimited', dataCategory: categoryData, dataProduct: productData })
+    } catch (error) {
         console.log(error.message)
     }
 }
 
-const loadProductDetailPage = async(req,res) => {
-    try{
+const loadProductDetailPage = async (req, res) => {
+    try {
         const id = req.query.id;
-        const data = await productInfo.findOne({_id:id});
+        console.log()
+        const data = await productInfo.findOne({ _id: id });
         const productData = await productInfo.find({});
-        res.render('user/productDetails',{user:true,title:'Products',data:productData,product:data})
+        res.render('user/productDetails', { user: true, title: 'Products', })
 
-    }catch(error){
+    } catch (error) {
         res.status(500).redirect('/error500')
     }
-    
+
 }
 
 
@@ -249,15 +340,15 @@ const loadProductDetailPage = async(req,res) => {
 /*--------------------------------------------Error Handling Pages---------------------------------------------------------------- */
 
 // ERROR Page Loading 
-const load500ErrorPage = (req,res) =>{
-    res.render('partials/error-500',{admin:true})
+const load500ErrorPage = (req, res) => {
+    res.render('partials/error-500', { admin: true })
 }
 
-const load404ErrorPage = (req,res) =>{
+const load404ErrorPage = (req, res) => {
     res.render('partials/error-404')
 }
 
-/*--------------------------------------------Module Exports ----------------------------------------------------------------------*/ 
+/*--------------------------------------------Module Exports ----------------------------------------------------------------------*/
 module.exports = {
     guestPage,
     loadUserLogin,
