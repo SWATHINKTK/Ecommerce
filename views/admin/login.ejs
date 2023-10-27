@@ -6,7 +6,9 @@
             <div class="card col-lg-4 mx-auto">
               <div class="card-body px-5 py-5 form-style">
                 <h3 class="card-title text-left mb-3">Login</h3>
-                <form method="POST" action="/admin">
+                <div class="alert alert-danger p-0 text-center" role="alert" id="signin-alert">
+                </div>
+                <form method="POST" action="/admin" id="admin-login-form">
                   <div class="form-group">
                     <label>Username or email *</label>
                     <input type="text" class="form-control p_input" name="username" value="">

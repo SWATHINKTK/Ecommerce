@@ -9,7 +9,8 @@ document.getElementById('editCategoryForm').addEventListener('submit', function(
     const categoryname = document.getElementById('categoryname').value;
     const description = document.getElementById('category-description').value;
     const image = document.getElementById('edit-categoryImage');
-    // console.log(categoryname,description,image)
+
+    
 
     if(categoryname.trim() === ''){
 
@@ -21,8 +22,9 @@ document.getElementById('editCategoryForm').addEventListener('submit', function(
 
     }else{ 
 
-            const result = document.getElementById('category-submit-result');
+            const result = document.getElementById('edit-category-submit-result');
             result.style.display = 'block';
+            console.log(result)
 
             const form = document.getElementById('editCategoryForm');
             const formData = new FormData(form);
@@ -58,9 +60,9 @@ document.getElementById('editCategoryForm').addEventListener('submit', function(
 
 
                 // ***Result Data Div Hide
-                setTimeout(() => {
+                setTimeout(()=>{
                     result.style.display = 'none';
-                },2000);
+                },2000)
             
 
             })

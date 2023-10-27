@@ -47,6 +47,7 @@ document.getElementById("addCategoryForm").addEventListener("submit", function (
                         result.setAttribute('class','alert alert-success');
                         result.innerHTML = data.message;
                         document.getElementById("addCategoryForm").reset();
+                        document.getElementById('category-img-view').style.display = 'none';
                     }else{
                         result.setAttribute('class','alert alert-danger');
                         result.innerHTML = data.message;

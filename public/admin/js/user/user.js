@@ -13,7 +13,8 @@ function userList(value) {
 }
 
 // Modal Back Button Functionality Working Method
-function back() {
+function modalBack() {
+    console.log('hello')
     document.getElementById("modal").style.display = "none";
 }
 

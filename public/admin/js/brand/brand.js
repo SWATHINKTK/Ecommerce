@@ -187,6 +187,7 @@ document.getElementById('addBrandForm').addEventListener('submit',async(event)=>
                 result.setAttribute('class','alert alert-success');
                 result.innerHTML = data.message;
                 document.getElementById("addBrandForm").reset();
+                document.getElementById('brand-img-view').style.display = 'none';
 
             }else{
                 

@@ -23,7 +23,10 @@
                   <div class="multiselect">
                     <div class="select-box form-control" id="select-box">
                         <div class="selected-options" id="productcategory">
-                          
+                          <% for(let i=0;i<dataCategory.length;i++){ %>
+                            <%if( dataProduct.categoryIds.includes(dataCategory[i]._id)){ %>
+                              <%= dataCategory[i].categoryname %>,
+                          <% } }%>   
                         </div>
                         <div class="arrow">&#9660;</div>
                     </div>
@@ -130,7 +133,7 @@
                         <button class="remove" id='<%= i %>'><i class="bi bi-x remove" id='<%= i %>'></i></button>
                       <% } %>
                     </div>
-                    <input type="hidden" value="<%= dataProduct.productImages %>" id="oldImages" name="oldImages">
+                    <input type="hidden" value="<%= dataProduct.productImages %>" id="oldImages" >
                   </div>
                 </div>
               </div>
@@ -149,7 +152,7 @@
             </div>
           </div>
           <button type="submit" class="btn btn-primary mr-3 ml-3" id="product-submit">Submit</button>
-          <button class="btn btn-dark">Cancel</button>
+          <a href="/admin/home" class="btn btn-dark">Cancel</a>
         </form>
         <div class="" role="alert" id="edit-product-submit-result">
         </div>

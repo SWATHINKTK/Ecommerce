@@ -93,6 +93,11 @@ async function productStatusSucess(){
 
 }
 
+// ** List Unlist Modal display None 
+function listModalDisplayHidden(){
+    const modal = document.getElementById('product-confirmation-modal');
+    modal.style.display = 'none';
+}
 
 
 
@@ -102,7 +107,9 @@ async function productStatusSucess(){
 async function loadEditProductPage(target,imageFile){
 
     // UpdateImage Position Checking 
-    const tempImge = [...imageFile];
+    let tempImage = [];
+    let removeImage = [];
+    let k = 0;
     try{
 
         const button = target;
@@ -124,7 +131,7 @@ async function loadEditProductPage(target,imageFile){
         const image = document.getElementById('oldImages').value;
         const imageArray = image.split(',')
         imageFile = [...imageArray];
-        
+        tempImage = [...imageArray];
         
 
         }catch(error){
@@ -194,19 +201,29 @@ async function loadEditProductPage(target,imageFile){
                 console.log(imageFile)
             }
         })
-        function editRemovePreviewImage(button,imageFile){
+        function editRemovePreviewImage(button){
 
             // *** Index Value Stored as a id in Button Retrieve Id ***
             const id = button.getAttribute('id');
         
+
             //*** Image and Button id Taken For Removing ***
             const imagePreview = document.getElementById('product-image-preview');
             const imageRemove = document.querySelector(`img[name="${id}"]`);
             const buttonRemove = document.querySelector(`button[id="${id}"]`);
-            console.log(imageFile)
+        
+
             //*** Image Remove From The Array ***
-            imageFile.splice(id,1);
-            console.log(imageFile,imagePreview,imageRemove,buttonRemove)
+            imageFile.splice(0,imageFile.length);
+            
+            removeImage[k++] = tempImage [id];
+            tempImage[id] = false;
+            
+            imageFile = tempImage.filter(val => val!=false);
+            // console.log(imageFile)
+
+
+
         
             //*** Image Remove From That Div and Remove Button ***
             imagePreview.removeChild(imageRemove);
@@ -226,7 +243,7 @@ async function loadEditProductPage(target,imageFile){
 
         //*** Edit Product Data Sumbit ***
         async function submitEditData(imageData){
-            alert('submit');
+            
             //*** Retrieve The Form And Creating Form Data ***
             const form = document.getElementById('editProduct-form');
             const formData = new FormData(form);
@@ -238,14 +255,24 @@ async function loadEditProductPage(target,imageFile){
                 formData.append('productCategory',productCategorys[i]);
             })
 
+
+            
+            removeImage.forEach((val,i) => {
+                formData.append('removeImage',removeImage[i]);
+            })
+
+
              //*** ImageFile Passing Through The Fuction This Value Added To The Form Data ***
             imageFile.forEach((val,i) => {
                 formData.append('productImage',imageFile[i]);
             })
 
-            imageFile.splice(0,imageFile.length)
+            imageFile.splice(0,imageFile.length);
+            tempImage.splice(0,tempImage.length);
 
-            console.log(...formData)
+         
+
+            
 
             try{
 
@@ -268,7 +295,7 @@ async function loadEditProductPage(target,imageFile){
 
                     result.setAttribute('class','alert alert-success');
                     result.innerHTML = data.message;
-                    document.getElementById("addProduct-form").reset();
+                    document.getElementById("editProduct-form").reset();
 
                 }else{
                     
@@ -423,6 +450,7 @@ async function submitNewProductData(imageFile){
             result.setAttribute('class','alert alert-success');
             result.innerHTML = data.message;
             document.getElementById("addProduct-form").reset();
+            document.getElementById('product-image-preview').style.display = 'none';
 
         }else{
             
@@ -547,4 +575,64 @@ function errorElementReset(){
     errorElements.forEach((val,i) => {
         val.innerHTML = '';
     })
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+function buttonWorkSearch(){
+    const imageFile = [];
+        document.getElementById('table-product').addEventListener('click',function(event) {
+            const target = event.target;
+            
+            if(target.tagName == 'A' && target.classList.contains('product-viewmore')){
+                viewMore(target)
+
+            }else if(target.tagName == 'BUTTON' && target.classList.contains('l-u-button')){
+                productStatus(target);
+
+            }else if(target.tagName == 'BUTTON' && target.classList.contains('product-edit-button')){
+                loadEditProductPage(target,imageFile);
+                
+
+            }
+
+        /*---------------------------------------View More Data End------------------------------------------------*/
+
+
+
+        })
+
+
+        /* --------------------------------------------Back Button for View More Data------------------------------------------------- */
+        document.getElementById('product-cancel').addEventListener('click',()=>{
+            const modal_div = document.getElementById('modal-total-div');
+            modal_div.style.display = "none";
+        })
+
+
+
+        /*------------------------------------------Sucess Button for list unllist Product------------------------------------------- */
+        document.getElementById('list-confirmation-sucess').addEventListener('click',()=>{
+            productStatusSucess();
+        })
+
+
+
+        /*------------------------------------------ 2 Back Button for confiramation modal-------------------------------------------- */
+        document.getElementById('list-confirmation-cancel1').addEventListener('click',()=>{
+            listModalDisplayHidden()
+        })
+        document.getElementById('list-confirmation-cancel2').addEventListener('click',()=>{
+            listModalDisplayHidden()
+        })
 }

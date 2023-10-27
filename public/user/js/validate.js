@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                         if(data.status){
 
-                              window.location.href = '/home';
+                              window.location.href = `/home?login=true`;
                              
                         }else{
 

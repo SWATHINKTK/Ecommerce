@@ -40,7 +40,7 @@ const verifyLogin = async (req, res) => {
                 req.session.admin_id = adminData._id;
                 res.redirect('admin/home');
             } else {
-                res.send("Invalid Data");
+                res.render('admin/login', { admin: false, style: true, title: 'Admin Login' });
             }
         }
     } catch (error) {
@@ -61,7 +61,7 @@ const loadAdminHomepage = (req, res) => {
 
 // ***VIEW User List Window***
 const loadUserList = async (req, res) => {
-    const user = await userData.find({}).sort({ block: 1 });
+    const user = await userData.find({}).sort({ block: 1,_id:-1 });
     res.render('admin/viewUsers', { admin: true, title: 'User Data', data: user });
 }
 
@@ -126,7 +126,7 @@ const searchUser = async (req, res) => {
 // Load Product List Window
 const loadProductList = async (req, res) => {
 
-    const product = await productInfo.find({});
+    const product = await productInfo.find({}).sort({_id:-1});
     res.render('admin/viewProducts', { admin: true, productData: product });
 
 }
@@ -151,7 +151,7 @@ const searchProduct = async (req, res) => {
         const Regex = new RegExp(`^${search}.*`, 'i');
         const productData = await productInfo.find({ productName: { $regex: Regex } });
         console.log(search, productData);
-        res.render('admin/viewProducts', { admin: true, data: productData });
+        res.render('admin/viewProducts', { admin: true, productData: productData });
     } catch (error) {
         console.log(error.meassge);
         res.redirect('/admin/error500', { admin: '/admin' });
@@ -298,78 +298,97 @@ const editProduct = async (req, res) => {
         const data = req.body;
         const file = req.files;
 
-        console.log(data,file)
+        console.log(data);
 
-        // Updating the Images and Deleting the old images
-        let image = [];
-        let j = 0;
 
-        // Admin Update the image it will be working other wise else to store the old image values.
-        if (data.imageUpdatePosition) {
-
-            data.oldImages.forEach((val, i) => {
-                if (data.imageUpdatePosition.includes(i)) {
-
-                    // Deleting the old images from my file.
-                    let filePath = `../public/admin/assets/productImages/${image[i]}`;
-                    fs.unlink(filePath, (error) => {
-                        if (error) {
-                            console.log(error.message);
-                        } else {
-                            console.log('sucess')
-                        }
-                    })
-
-                    image[i] = file[j].filename
-                    j++;
-
-                } else {
-                    image[i] = data.imageOld[i]
-                }
-            })
-        } else {
-            image = [...(data.imageOld)]
+        // *** Finding The Length Of The ProductImage ***
+        let incomeProductImageLength;
+        if(data.productImage){
+            incomeProductImageLength = typeof data.productImage == 'string' ? 1 : data.productImage.length ;
+        }else{
+            incomeProductImageLength = 0;
         }
-
         
 
-        // // Checking Length of the body data
-        // // const length =  Object.keys(data).length;
-        // // console.log(length);
+        //*** Updating the Images Length Setting ***
+        let productImages = [];
+        if(incomeProductImageLength == 1){
 
-        // let condition = (data.productname !== '' && data.categorys !== '' && data.description !== '' && data.brandname !== '' && data.stock !== '' && data.price !== '' && data.size !== '' && data.material !== '' && data.color !== '' && data.specification !== '');
+            productImages[0] = data.productImage;
+
+        }else if(incomeProductImageLength > 1){
+
+            productImages = [...data.productImage];
+
+        }
+       
+        
+        //*** Updating the Images  ***
+        let length = incomeProductImageLength;
+        if(file.length > 0){
+            file.forEach(val => productImages[length++] =  val.filename);
+        }
+
+     
+       
+
+        //*** Deleting the old images ***
+        let removeImages = [];
+        let removeImagesLength ;
+        if(data.removeImage){
+
+            removeImagesLength = typeof data.removeImage == 'string' ? 1 : data.removeImage.length ;
+
+        }else{
+
+            removeImagesLength = 0;
+
+        }
+
+        if(removeImagesLength == 1){
+
+            removeImages[0] = data.removeImage;
+
+        }else if(removeImagesLength > 1){
+
+            removeImages = [...data.removeImage];
+
+        }
+
+        for(let i = 0; i < removeImagesLength ;i++){
+            let filePath = `../public/admin/assets/productImages/${removeImages[i]}`;
+            console.log(filePath)  
+        }
+       
+        
 
 
-        // // checking All Field entered or not 
-        // if (condition && image.length == 4) {
+        const updateProduct = await productInfo.updateOne({ _id: data.productId }, {
+            productName: data.editProductName,
+            categoryIds: data.productCategory,
+            description: data.productDescription,
+            brandname: data.productBrandName,
+            stock: data.productStock,
+            price: data.productPrice,
+            size: data.productSize,
+            material: data.productMaterial,
+            color: data.productColor,
+            productImages: productImages,
+            specifications: data.productSpecification,
+            updateDate: new Date()
 
-        //     const updateProduct = await productInfo.updateOne({ _id: data.id }, {
-        //         productName: data.productname,
-        //         categorys: data.categorys,
-        //         description: data.description,
-        //         brandname: data.brandname,
-        //         stock: data.stock,
-        //         price: data.price,
-        //         size: data.size,
-        //         material: data.material,
-        //         color: data.color,
-        //         productImages: image,
-        //         specifications: data.specification,
-        //         updateDate: new Date()
+        })
+        console.log(updateProduct)
+        if (updateProduct.acknowledged) {
 
-        //     })
-        //     if (updateProduct.acknowledged) {
-        //         res.status(200).json({ 'status': true });
+            res.json({ status: true, message: '&#9989; Succesfully edit Product' });
 
-        //     } else {
-        //         res.status(500).redirect('/admin/error500');
-        //     }
+        } else {
 
-        // } else {
-        //     // Error message and Eror staus code
-        //     res.json({ status: false });
+            res.status(500).redirect('/admin/error500');
 
-        // }
+        }
+
 
     } catch (error) {
         console.log(error.message)
@@ -389,7 +408,7 @@ const editProduct = async (req, res) => {
 const loadCategoryList = async (req, res) => {
     try {
 
-        const categoryData = await category.find({}).sort({ list: -1 });
+        const categoryData = await category.find({}).sort({ list: -1,_id:-1 });
         res.render('admin/viewCategorys', { admin: true, data: categoryData, title: 'Categorylist' });
 
     } catch (error) {
@@ -622,6 +641,7 @@ const loadBrandViewPage = async (req, res) => {
 const loadBrandAddPage = async (req, res) => {
     res.render('admin/addBrand', { admin: true,title:'Add Brand'});
 }
+
 
 
 //******* Add Brand Data Into DataBase ******

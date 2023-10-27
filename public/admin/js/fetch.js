@@ -20,7 +20,7 @@ document.getElementById('sidebar').addEventListener('click', async function(even
 
       
         /*--------------------------------------------View More Data--------------------------------------------- */
-        const imageFile = []
+        const imageFile = [];
         document.getElementById('table-product').addEventListener('click',function(event) {
             const target = event.target;
             
@@ -60,12 +60,10 @@ document.getElementById('sidebar').addEventListener('click', async function(even
 
         /*------------------------------------------ 2 Back Button for confiramation modal-------------------------------------------- */
         document.getElementById('list-confirmation-cancel1').addEventListener('click',()=>{
-            const modal = document.getElementById('product-confirmation-modal');
-            modal.style.display = 'none';
+            listModalDisplayHidden()
         })
         document.getElementById('list-confirmation-cancel2').addEventListener('click',()=>{
-            const modal = document.getElementById('product-confirmation-modal');
-            modal.style.display = 'none';
+            listModalDisplayHidden()
         })
 
 
@@ -82,6 +80,7 @@ document.getElementById('sidebar').addEventListener('click', async function(even
 
             const data = await response.text();
             contentPlaceholder.innerHTML = data;
+            buttonWorkSearch();
 
         })       
 

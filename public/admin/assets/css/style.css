@@ -9003,7 +9003,6 @@ textarea.tt-hint {
 
 
 
-
   /* Style the options container
   .options-container {
     display: none;
@@ -9091,7 +9090,7 @@ textarea.tt-hint {
 
 /* Hover effect for options */
 .option:hover {
-  background-color: #1e1e1ed0;
+  background-color: #c5c5c5;
 }
 
 /* product side */
@@ -11692,7 +11691,7 @@ input[type="button"].btn-block {
   object-fit: contain;
   width: 20rem;
   height: 20rem;
-  background-color: #000;
+  /* background-color: #000; */
   display: none;
 }
 
@@ -11701,7 +11700,7 @@ input[type="button"].btn-block {
   object-fit: contain;
   width: 20rem;
   height: 20rem;
-  background-color: #000;
+  /* background-color: #000; */
   /* display: none; */
 }
 

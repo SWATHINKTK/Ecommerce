@@ -4,6 +4,7 @@ const nodemailer = require('nodemailer');
 const { userData } = require('../models/userModal');
 const { productInfo, category } = require('../models/adminModel');
 const { chownSync } = require('fs');
+const { error } = require('console');
 
 
 /*--------------------------Router Access Functions in User Side --------------------------------- */
@@ -75,6 +76,19 @@ async function securePassword(password) {
 const loadUserLogin = (req, res) => {
     res.render('user/userAuthentication', { admin: false, title: 'User' });
 }
+
+// User Logged 
+const userLogout = (req,res) => {
+    req.session.destroy((error)=>{
+        if(error){
+            console.log(error.message);
+        }else{
+            res.redirect('/login?login=false');
+        }
+    })
+}
+
+
 
 // Storing User Register Data to Session 
 const storeSignupData = async (req, res) => {
@@ -219,31 +233,36 @@ const OTPCheck = async (req, res) => {
 
 // Verify Login 
 const verifyUser = async(req, res) => {
-    console.log(req.body)
+    try{
 
-    const username = req.body.username;
-    const password = req.body.password;
-    
-    const usernameExist = await userData.findOne({email:username});
+        const username = req.body.username;
+        const password = req.body.password;
+        
+        const usernameExist = await userData.findOne({email:username});
 
-    if(!usernameExist){
+        if(!usernameExist){
 
-        res.json({status:false,message:'&#10060; check your email address' });
-
-    }else{
-
-        const check = await bcrypt.compare(password,usernameExist.password);
-
-        if(check){
-
-            res.redirect('/home');
+            res.json({'status':false,'message':'&#10060; check your email address' });
 
         }else{
 
-            res.json({status:false,message:' &#10060; user email & password was inccorect' })
+            const check = await bcrypt.compare(password,usernameExist.password);
+
+            if(check){
+
+                req.session.userId = usernameExist._id;
+                res.json({'status':true});
+
+            }else{
+
+                res.json({'status':false,'message':' &#10060; user email & password was inccorect' })
+
+            }
 
         }
-
+    }catch(error){
+        console.log(error.message);
+        res.redirect('/error500');
     }
     
 }
@@ -251,9 +270,12 @@ const verifyUser = async(req, res) => {
 
 // View Home Page
 const loadHomePage = async (req, res) => {
-    console.log('home')
 
     try {
+
+        const checkLogin = req.session.userId ? true : false;
+       
+        // console.log(req.session.userId);
 
         const categoryData = await category.find({}).sort({ _id: -1 });
 
@@ -271,7 +293,7 @@ const loadHomePage = async (req, res) => {
             }]);
 
 
-        res.render('user/index', { user: true, login: true, title: 'Brand Unlimited', dataCategory: categoryData, dataProduct: productData });
+        res.render('user/index', { user: true,login:checkLogin,  title: 'Brand Unlimited', dataCategory: categoryData, dataProduct: productData });
 
     } catch (error) {
 
@@ -300,21 +322,18 @@ const guestPage = async (req, res) => {
                     foreignField: '_id', // The field from the "from" collection
                     as: 'categoryData'         // The alias for the new field
                 }
-            }]);
+            },
+            {$sort:{_id:-1}}
+        ]);
 
-        const productsWithCategory = productData.filter(product =>
-            product.categoryData.some(category => category.categoryname === 'T-Shirts')
+        // const productsWithCategory = productData.filter(product =>
+        //     product.categoryData.some(category => category.categoryname === 'T-Shirts')
 
-        );
-        console.log(productsWithCategory)
-
+        // );
         // console.log(productData)
-        // const found = productData[1].categoryData.some(item =>{ 
-        //     console.log(item._id)
-        //     return item.categoryname === 'Shirts' });
-        // console.log(found)
 
-        res.render('user/index', { user: true, title: 'Brand Unlimited', dataCategory: categoryData, dataProduct: productData })
+
+        res.render('user/index', { user: true,login:false, title: 'Brand Unlimited', dataCategory: categoryData, dataProduct: productData })
     } catch (error) {
         console.log(error.message)
     }
@@ -322,14 +341,16 @@ const guestPage = async (req, res) => {
 
 const loadProductDetailPage = async (req, res) => {
     try {
+
+        const checkLogin = req.session.userId ? true : false;
         const id = req.query.id;
-        console.log(id)
+
         const productData = await productInfo.findOne({ _id: id });
         const categoryData = await category.find({})
         // console.log(productData)
         console.log(productData.categoryIds);
        
-        res.render('user/productDetails', { user: true, title: 'Products', product:productData ,category:categoryData})
+        res.render('user/productDetails', { user: true,login:checkLogin,title: 'Products', product:productData ,category:categoryData})
 
 
     } catch (error) {
@@ -339,7 +360,29 @@ const loadProductDetailPage = async (req, res) => {
 }
 
 
+const loadAllProductViewPage = async(req,res) =>{
+    
+    try {
 
+        const checkLogin = req.session.userId ? true : false;
+
+        const productData = await productInfo.find({}).sort({_id:-1});
+
+        res.render('user/allProductView',{ user: true,login:checkLogin, title: 'Products',product:productData});
+
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+
+const loadSpecificCategoryProducts = async(req,res) => {
+    const checkLogin = req.session.userId ? true : false;
+
+    const id = req.query.id;
+    const productData = await productInfo.find({ categoryIds:id }).sort({_id:-1});
+    console.log(productData)
+    res.render('user/allProductView',{ user: true,login:checkLogin, title: 'Products',product:productData});
+}
 
 /*--------------------------------------------Error Handling Pages---------------------------------------------------------------- */
 
@@ -355,6 +398,7 @@ const load404ErrorPage = (req, res) => {
 /*--------------------------------------------Module Exports ----------------------------------------------------------------------*/
 module.exports = {
     guestPage,
+    userLogout,
     loadUserLogin,
     storeSignupData,
     loadOTPVerification,
@@ -362,6 +406,8 @@ module.exports = {
     OTPCheck,
     verifyUser,
     loadHomePage,
+    loadAllProductViewPage,
+    loadSpecificCategoryProducts,
     loadProductDetailPage,
     load500ErrorPage,
     load404ErrorPage
