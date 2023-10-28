@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const fs = require('fs');
+const path = require('path')
 const { loginData, category, productInfo,brandInfo } = require('../models/adminModel');
 const { userData } = require('../models/userModal');
 const { query } = require('express');
@@ -18,6 +19,20 @@ async function strong(pass) {
 
 }
 
+// *** Deleting Files ***
+const publicFile = path.join(__dirname, '..', 'public', 'admin', 'assets');
+async function deleteFile(filePath){
+
+    fs.unlink(filePath,(error) => {
+
+        if(error){
+            console.log('Image not Deleted',error.message);
+        }else{
+            console.log('Previous Brand Image Delete Sucess');
+        }
+
+    })
+}
 
 /*---------------------------------------ADMIN LOGIN & HOME PAGE LOAD FUNTIONS---------------------------------------------------------*/
 
@@ -40,8 +55,10 @@ const verifyLogin = async (req, res) => {
                 req.session.admin_id = adminData._id;
                 res.redirect('admin/home');
             } else {
-                res.render('admin/login', { admin: false, style: true, title: 'Admin Login' });
+                res.render('admin/login', { admin: false, style: true, title: 'Admin Login',message:'Enter Proper Password' });
             }
+        }else{
+            res.render('admin/login', { admin: false, style: true, title: 'Admin Login',message:'Enter Valid Username & Password' });
         }
     } catch (error) {
         console.log(error.message);
@@ -237,29 +254,33 @@ const productAdd = async (req, res) => {
                 specifications: data.productSpecification,
                 addDate: new Date(),
             })
-            console.log(productData)
+            // console.log(productData)
             const product = await productData.save();
 
             // Sucess result Checking
             if (product) {
+
                 res.json({ status: true, message: '&#9989; Succesfully Added Product' });
+
             } else {
+
+                images.forEach((file)=>{
+                    let filename = file;
+                    let filePath = path.join(__dirname, '..', 'public', 'admin', 'assets', 'productImages', filename);
+                    deleteFile(filePath)
+                })
+
                 res.render('/admin/error500');
             }
 
         } else {
 
-            const filePath = '../public/admin/assets/productImages';
-            fs.unlink(filePath, (error) =>{
-
-                if(error){
-                    console.log(`Error deleting the file: ${error.message}`)
-                }else{
-                    console.log(`File ${filePath} has been deleted.`);
-                }
-
+            images.forEach((file)=>{
+                let filename = file;
+                let filePath = path.join(__dirname, '..', 'public', 'admin', 'assets', 'productImages', filename);
+                deleteFile(filePath)
             })
-
+            
             res.json({ status: false, message: '&#10071; Enter All Field' });
         }
 
@@ -335,6 +356,8 @@ const editProduct = async (req, res) => {
         //*** Deleting the old images ***
         let removeImages = [];
         let removeImagesLength ;
+
+        // LENGTH OF THE REMOVE IMAGE
         if(data.removeImage){
 
             removeImagesLength = typeof data.removeImage == 'string' ? 1 : data.removeImage.length ;
@@ -344,6 +367,7 @@ const editProduct = async (req, res) => {
             removeImagesLength = 0;
 
         }
+
 
         if(removeImagesLength == 1){
 
@@ -356,8 +380,10 @@ const editProduct = async (req, res) => {
         }
 
         for(let i = 0; i < removeImagesLength ;i++){
+
             let filePath = `../public/admin/assets/productImages/${removeImages[i]}`;
-            console.log(filePath)  
+            deleteFile(filePath);
+
         }
        
         
@@ -500,10 +526,13 @@ const addCategory = async (req, res) => {
         const description = req.body.description;
         const image = req.file.filename;
 
+        let update = true;
+
         // Checking name & description is present
         if (name !='' && description != '' && image) {
 
-            const checkData = await category.findOne({ categoryname: { $regex: new RegExp(`^${name}`, 'i') } });
+            const Regex = new RegExp(`^${name}$`, 'i') ;
+            const checkData = await category.findOne({ categoryname: { $regex: Regex } });
 
             // Checking edit Category name is present in the Category database
             if (!checkData) {
@@ -524,17 +553,32 @@ const addCategory = async (req, res) => {
 
                     res.json({'status':false,'message': '&#10071; Category is not added try again' });
 
+                    update = false;
+
                 }
 
             } else {
 
                 res.json({'status':false,'message': '&#10071; Category is Already Exist' });
+
+                update = false;
             }
         } else {
 
             res.json({'status':false,'message': '&#10071; Please Enter the Category and Description' });
 
+            update = false;
+
         }
+
+        // *** NOT UPDATED DELETE MULTER UPLOAD IMAGE ***
+        if(!update){
+
+            const filename = image;
+            const filePath = path.join(__dirname, '..', 'public', 'admin', 'assets', 'categoryImages', filename);
+            deleteFile(filePath);
+        }
+
     } catch (error) {
 
         console.log(error.message);
@@ -576,6 +620,11 @@ const editCategory = async (req, res) => {
         let image;
         if(file){
             image = req.file.filename;
+
+            const filename = req.body.oldImage;
+            const filePath = path.join(__dirname, '..', 'public', 'admin', 'assets', 'categoryImages', filename);
+            deleteFile(filePath);
+
         }else{
             image = req.body.oldImage;
         }
@@ -583,8 +632,9 @@ const editCategory = async (req, res) => {
 
         //*** Check All Fields Are Exist ***
         if (name && description) {
-
-            const dataCheck = await category.findOne({ categoryname: name });
+        
+            const Regex = new RegExp(`^${name}$`, 'i') ;
+            const dataCheck = await category.findOne({ categoryname: { $regex: Regex } });
 
             //*** Check The Category id Added New Name is Existing Or Not
             if (dataCheck && name != oldName) {
@@ -647,18 +697,18 @@ const loadBrandAddPage = async (req, res) => {
 //******* Add Brand Data Into DataBase ******
 const addBrandDetails = async(req,res) => {
 
-    console.log('sucess')
     try{
         const name = req.body.brandName;
         const img = req.file.filename;
 
+        let update = true;
+
         if(name && img){
 
-            const brands = await brandInfo.findOne({brand_name:name});
-            console.log(brands)
+            const brands = await brandInfo.findOne({brand_name:{ $regex: new RegExp(`^${name}$`, 'i') }});
 
             if(!brands){
-                console.log('hello')
+           
                 const brandData = brandInfo({
                     brand_name: name,
                     brand_logo: img,
@@ -677,14 +727,25 @@ const addBrandDetails = async(req,res) => {
                 }
 
             }else{
+
+                update = false
                 res.json({'status':false,'message': '&#10071; Brand is Already Exist' });
 
             }
 
         }else{
+
+            update = false;
             res.json({'status':false,'message': '&#10071; Enter All Fields Then Submit' });
 
         }   
+
+        if(!update){
+
+            const filename = img;       
+            const filePath = path.join(__dirname, '..', 'public', 'admin', 'assets', 'brandImages', filename); 
+            deleteFile(filePath);
+        }
 
     }catch(error){
         console.log(error.message);
@@ -719,30 +780,41 @@ const editBrandDetails = async(req,res) => {
         const file = req.file;
         // console.log(data,file);
 
+        console.log(data)
+
         let logoImg;
-        if(file){
+        if(typeof file == 'object'){
+
             logoImg = file.filename;
+
+            const filename = data.brandImage;
+            const filePath = path.join(__dirname, '..', 'public', 'admin', 'assets', 'brandImages', filename);
+            deleteFile(filePath);
+
         }else{
-            logoImg =data.brandImage;
+            logoImg = data.brandImage;
         }
 
-        if(file && data.brandName){
+  
+        if(logoImg && data.brandName){
 
-            const oldData = await brandInfo.findOne({_id:data.brandId});
+            const brands = await brandInfo.findOne({brand_name:{ $regex:new RegExp(`^${data.brandName}$`, "i") }});
             
-            if(oldData && data.oldBrandName != data.brandName){
+            if(brands && data.oldBrandName != data.brandName){
                 res.json({'status':false,'message': '&#10071; Brand is Already Exist' });
 
             }else{
-                const brandData = brandInfo({
-                    brand_name: data.brandName,
-                    brand_logo: file.filename,
-                    brandDataUpdate_Date: new Date()
-                })
 
-                const sendData = await brandData.save();
+                const brandData = await brandInfo.updateOne({_id:data.brandId},
+                    {$set:{
+                        brand_name: data.brandName,
+                        brand_logo: logoImg,
+                        brandDataUpdate_Date: new Date()
+                    }},{upsert:true})
+                    
+               
 
-                if(sendData){
+                if(brandData){
                     res.json({'status':true,'message': '&#9989; Brand Sucessfullly Added'});
                     
                 }else{

@@ -6,16 +6,21 @@
             <div class="card col-lg-4 mx-auto">
               <div class="card-body px-5 py-5 form-style">
                 <h3 class="card-title text-left mb-3">Login</h3>
+                <% if(locals.message ? true : false) { %>
                 <div class="alert alert-danger p-0 text-center" role="alert" id="signin-alert">
+                  <%= message %>
                 </div>
-                <form method="POST" action="/admin" id="admin-login-form">
+                <% } %>
+                <form method="POST" action="/admin" id="admin-login-form" onsubmit="return validateAdminLogin()" >
                   <div class="form-group">
                     <label>Username or email *</label>
-                    <input type="text" class="form-control p_input" name="username" value="">
+                    <input type="text" class="form-control p_input" name="username" value="" id="admin-username">
+                    <span class="text-danger ml-2" style="display: none;" name="validate-admin-alert"></span>
                   </div>
                   <div class="form-group">
                     <label>Password *</label>
-                    <input type="text" class="form-control p_input" name="password" value="">
+                    <input type="text" class="form-control p_input" name="password" value="" id="admin-password">
+                    <span class="text-danger ml-2" style="display: none;" name="validate-admin-alert"></span>
                   </div>
                   <div class="text-center">
                     <button type="submit" class="btn btn-primary btn-block enter-btn">Login</button>

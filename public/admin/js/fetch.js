@@ -18,6 +18,8 @@ document.getElementById('sidebar').addEventListener('click', async function(even
         const data = await response.text();
         contentPlaceholder.innerHTML = data;
 
+        document.querySelector('title').innerHTML = 'Products';
+
       
         /*--------------------------------------------View More Data--------------------------------------------- */
         const imageFile = [];
@@ -102,6 +104,8 @@ document.getElementById('sidebar').addEventListener('click', async function(even
             //Response Convert to text and view
             const html = await response.text();
             contentPlaceholder.innerHTML = html;
+
+            document.querySelector('title').innerHTML = 'Add Products'
 
         }catch(error){
             console.log(error.message)
@@ -223,6 +227,8 @@ document.getElementById('sidebar').addEventListener('click', async function(even
                 const script = document.createElement('script');
                 script.src = scriptSrc; 
                 document.body.appendChild(script);
+
+                document.querySelector('title').innerHTML = 'Categorys'
                 
             })
             .catch((error) => {
@@ -255,6 +261,8 @@ document.getElementById('sidebar').addEventListener('click', async function(even
                 const script = document.createElement('script');
                 script.src = scriptSrc; 
                 document.body.appendChild(script);
+
+                document.querySelector('title').innerHTML = 'Add Categorys';
             })
             .catch((error) => {
                 console.error("Fetch error:", error);
@@ -273,6 +281,8 @@ document.getElementById('sidebar').addEventListener('click', async function(even
             .then((html) => {
                 // Update the content of the placeholder with the fetched HTML
                 contentPlaceholder.innerHTML = html;
+
+                document.querySelector('title').innerHTML = 'Coupons';
             })
             .catch((error) => {
                 console.error("Fetch error:", error);
@@ -291,6 +301,8 @@ document.getElementById('sidebar').addEventListener('click', async function(even
             .then((html) => {
                 // Update the content of the placeholder with the fetched HTML
                 contentPlaceholder.innerHTML = html;
+
+                document.querySelector('title').innerHTML = 'Add Coupons';
             })
             .catch((error) => {
                 console.error("Fetch error:", error);

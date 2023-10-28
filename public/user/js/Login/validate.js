@@ -1,76 +1,5 @@
-document.addEventListener("DOMContentLoaded", function () {
-      const signupForm = document.getElementById("signupForm");
-  
-      signupForm.addEventListener("submit", function (event) {
-          event.preventDefault(); 
-  
-          if (validateRegister()) {
-              signupForm.submit();
-          }
-      });
 
-      const signinForm = document.getElementById('signinForm');
-      
-      signinForm.addEventListener('submit', async function(event) {
-            event.preventDefault();
-
-            if(validateSignin()){
-
-                  // signinForm.submit();
-                  try {
-                        const alert = document.getElementById('signin-alert');
-                        
-
-                        const username = document.getElementById('sign-in-username').value;
-                        const password = document.getElementById('sign-in-password').value;
-
-                        const url = '/signin';
-      
-                        const config = {
-                              method: 'POST',
-                              body:JSON.stringify({
-                                    'username':`${username}`,
-                                    'password':`${password}`
-                              }),
-                              headers: {'Content-Type': 'application/json',}
-                        }
-      
-                        const response = await fetch(url,config);
-
-                        if(!response.ok){
-                              window.location.href = '/error500';
-                        }
-                        
-                        const data = await response.json();
-                        console.log(data)
-
-                        if(data.status){
-
-                              window.location.href = `/home?login=true`;
-                             
-                        }else{
-
-                              alert.style.display = 'block';
-                              alert.innerHTML = data.message;
-                             
-                        }
-
-                        setTimeout(()=>{
-                              alert.style.display = 'none';
-                        },2000)
-
-                  } catch (error) {
-      
-                        console.log(error.message);    
-                  }
-            }
-      })
-      
-
-});
-
-
-
+// ************  SIGNUP PAGE VALIDATION - VALIDATION SUCESSFUL AFTER GO FOR OTP PAGE ****
 
 function validateRegister(){
 
@@ -147,6 +76,8 @@ function validateRegister(){
 
 
 
+// ******** lOGIN / SIGN IN PAGE VALIDATE. VALIDATE AFTER SUBMISSION WORK *****
+
 function validateSignin(){
 
       const errorElements = document.querySelectorAll('span[name="validate-signin"]');
@@ -188,8 +119,10 @@ function validateSignin(){
 
 
 
-//**** Error Element Hiding ******
+// **** EVERY CHECK ERROR VIEW ELEMENT WILL UPDATED TO BLANK ******
+
 function userErrorElementReset(name){
+
       const errorElements = document.querySelectorAll(`span[name="${name}"]`);
       
       errorElements.forEach((val,i) => {

@@ -18,6 +18,7 @@ async function editBrandData(value){
 
         contentPlaceholder.innerHTML = data;
 
+        
 
         //*** Title Name Setting ***
         const title = document.querySelector('title');
@@ -45,6 +46,7 @@ async function editBrandData(value){
 }
 
 
+
 //******** Function For Brand Edit.Brand Logo will View on a Div The Input Field Change Image Change *******
 function editImageViewInDiv(event){
     const image = event.target;
@@ -67,6 +69,7 @@ async function submitEditBrandData(){
     try{
         const form = document.getElementById('editBrandForm');
         const formData = new FormData(form);
+
 
         const result = document.getElementById("edit-brand-submit-result");
         result.style.display = 'block';

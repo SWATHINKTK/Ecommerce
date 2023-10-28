@@ -7,9 +7,12 @@ const { chownSync } = require('fs');
 const { error } = require('console');
 
 
-/*--------------------------Router Access Functions in User Side --------------------------------- */
 
-// Random Bytes for OTP Create Using Crypto Module 
+
+/* #####################################  ADMIN ACCESS ROUTER FUNCTIONS  ############################################# */
+
+
+// ***** OTP CREATE USING CRYPTO MODULE. IT CREATE RANDOM BYTES  *****
 async function generateRandomOtp(length) {
 
     if (length % 2 != 0) {
@@ -22,7 +25,8 @@ async function generateRandomOtp(length) {
 }
 
 
-// Email Sending Using NodeMailer 
+
+// ***** NODEMAILER TO SEND MAIL TO USERS *****
 async function sendEmail(name, email, otp, html) {
 
     const transporter = nodemailer.createTransport({
@@ -54,7 +58,8 @@ async function sendEmail(name, email, otp, html) {
 }
 
 
-// PassWord Secure Using bcrypt Module 
+
+// ****** BCRYPT MODULE IS USED TO ENCRYPT THE PASSWORD DATA ***** 
 async function securePassword(password) {
 
     try {
@@ -66,31 +71,41 @@ async function securePassword(password) {
 }
 
 
-/*------------------------------------------------------------Router Handling Functions -------------------------------------------*/
 
 
 
 
-/*-------------------------------------- User Login & Register-------------------------------------------------- */
-// View User Login Page 
+
+
+/* ################################################ ROUTER HANDLING FUNCTIONS ################################################# */
+
+
+
+
+/* ======================= USER LOGIN AND REGISTER ===================== */
+
+
+// ***** USER LOGIN PAGE VIEW *****
 const loadUserLogin = (req, res) => {
     res.render('user/userAuthentication', { admin: false, title: 'User' });
 }
 
-// User Logged 
+
+
+// ****** USER LOGOUT THEN GOTO GUSET PAGE
 const userLogout = (req,res) => {
     req.session.destroy((error)=>{
         if(error){
             console.log(error.message);
         }else{
-            res.redirect('/login?login=false');
+            res.redirect('/?login=false');
         }
     })
 }
 
 
 
-// Storing User Register Data to Session 
+//****** STORING USER REGISTER TIME DATA TO SESSION AND SEND A OTP MAIL ******
 const storeSignupData = async (req, res) => {
 
     try {
@@ -130,8 +145,11 @@ const storeSignupData = async (req, res) => {
                         //generate otp and send mail
                         const otp = await generateRandomOtp(6);
                         req.session.otp = otp;
+                        
+                        // Sending OTP to Thorough Email
                         const html = `<div style="width: 100%;background: #F5FEFD;text-align:center"><h2>${user.username} Welcome Our Shopping Website</h2><h6>Verification OTP</h6><h3 style="color: red;">${otp}</h3><h2>Thank You For Joining...</h2></div>`
                         await sendEmail(user.username, user.email, otp, html);
+
                         req.session.startTime = Date.now();
                         res.redirect('/otpVerification');
 
@@ -154,25 +172,34 @@ const storeSignupData = async (req, res) => {
 }
 
 
-// View OTP Verification Page 
+
+
+// ***** VIEW THE OTP VERIFICATION PAGE *****
 const loadOTPVerification = (req, res) => {
     const userdata = req.session.userData;
     const time = req.session.startTime
     res.render('user/otpVerification', { admin: false, title: 'User OTP', email: userdata.email, timer: time });
 }
 
-// Resend OTP In Verification Page
+
+
+
+
+// **** RESEND OTP WHEN OTP WAS EXPIRED ****
 const resendOTP = async (req, res) => {
     const user = req.session.userData;
     const otp = await generateRandomOtp(6);
     req.session.otp = otp;
-    await sendEmail(user.username, user.email, otp)
+    const html = `<div style="width: 100%;background: #F5FEFD;text-align:center"><h2>${user.username} Welcome Our Shopping Website</h2><h6>Verification OTP</h6><h3 style="color: red;">${otp}</h3><h2>Thank You For Joining...</h2></div>`;
+    await sendEmail(user.username, user.email, otp,html)
     req.session.startTime = Date.now();
     res.redirect('/otpVerification');
 }
 
 
-// OTP Verificatied and Go For the Home Window 
+
+
+// **** OTP VERIFICATON CHECKING FUNCTION AND THEN GO FOR USER HOME ****
 const OTPCheck = async (req, res) => {
 
     const endTime = Date.now();
@@ -204,11 +231,11 @@ const OTPCheck = async (req, res) => {
             // Checking OTP
             if (sessionOTP == req.body.otp) {
                 const sendData = await user.save();
-                console.log('sss')
+                
                 if(sendData){
 
                     req.session.userId = userData._id;
-                    res.json({'status':true})
+                    res.status(200).json({'status':true, 'message': 'Your Verification Sucessfull. &#9989;<br> Username & Password to login.' });
                     console.log('sucess')
                 }
 
@@ -231,7 +258,10 @@ const OTPCheck = async (req, res) => {
 }
 
 
-// Verify Login 
+
+
+
+// **** LOGIN USER DATA VERIFY AND PROVIDE THE HOME PAGE ****
 const verifyUser = async(req, res) => {
     try{
 
@@ -239,8 +269,13 @@ const verifyUser = async(req, res) => {
         const password = req.body.password;
         
         const usernameExist = await userData.findOne({email:username});
+        console.log(usernameExist.block)
 
-        if(!usernameExist){
+        if(usernameExist.block){
+
+            res.json({'status':false,'message':'&#10060; your account is blocked'});
+
+        }else if(!usernameExist){
 
             res.json({'status':false,'message':'&#10060; check your email address' });
 
@@ -268,16 +303,16 @@ const verifyUser = async(req, res) => {
 }
 
 
-// View Home Page
+
+// *** VIEW THE USER HOME PAGE *****
 const loadHomePage = async (req, res) => {
 
     try {
 
         const checkLogin = req.session.userId ? true : false;
        
-        // console.log(req.session.userId);
 
-        const categoryData = await category.find({}).sort({ _id: -1 });
+        const categoryData = await category.find({list:true}).sort({ _id: -1});
 
         const productData = await productInfo.aggregate([
             {
@@ -304,23 +339,34 @@ const loadHomePage = async (req, res) => {
 }
 
 
-/*------------------------------------------------Product Details Handling ------------------------------------------------------*/
+
+
+
+// =====================================   PRODUCT PAGES AND GUEST PAGE HANDLING   ==========================================
+
+
+// **** GUEST PAGE LOADING FOR EVERY USERS ****
 const guestPage = async (req, res) => {
 
     try {
 
-        const categoryData = await category.find({}).sort({ _id: -1 });
+        const categoryData = await category.find({list:true}).sort({ _id: -1 });
 
         const productData = await productInfo.aggregate([
             {
-                $unwind: "$categoryIds" // Unwind the array to create a separate document for each category ID
+                $match:{
+                    status:true
+                }
+            },
+            {
+                $unwind: "$categoryIds" 
             },
             {
                 $lookup: {
-                    from: 'categorys', // The name of the collection to join with
-                    localField: 'categoryIds', // The field from the input collection
-                    foreignField: '_id', // The field from the "from" collection
-                    as: 'categoryData'         // The alias for the new field
+                    from: 'categorys', 
+                    localField: 'categoryIds', 
+                    foreignField: '_id', 
+                    as: 'categoryData'      
                 }
             },
             {$sort:{_id:-1}}
@@ -339,6 +385,9 @@ const guestPage = async (req, res) => {
     }
 }
 
+
+
+// **** EACH PRODUT DETAIL VIEW DISPLAY PAGE LOADING *****
 const loadProductDetailPage = async (req, res) => {
     try {
 
@@ -360,6 +409,8 @@ const loadProductDetailPage = async (req, res) => {
 }
 
 
+
+// ***** LOAD ALL PRODUCT DATA VIEW PAGE ******
 const loadAllProductViewPage = async(req,res) =>{
     
     try {
@@ -375,27 +426,42 @@ const loadAllProductViewPage = async(req,res) =>{
     }
 }
 
+
+
+// ******* LOADING SPECIFIC CATEGORY PRODUCT DATA VIEW ******
 const loadSpecificCategoryProducts = async(req,res) => {
     const checkLogin = req.session.userId ? true : false;
 
     const id = req.query.id;
-    const productData = await productInfo.find({ categoryIds:id }).sort({_id:-1});
+    const productData = await productInfo.find({ categoryIds:id}).sort({_id:-1});
     console.log(productData)
     res.render('user/allProductView',{ user: true,login:checkLogin, title: 'Products',product:productData});
 }
 
-/*--------------------------------------------Error Handling Pages---------------------------------------------------------------- */
 
-// ERROR Page Loading 
+
+
+
+/* =============================================== ERROR HANDLING PAGES ==================================================== */
+
+
+// ***** 500 - ERROR PAGE LOADING *****
 const load500ErrorPage = (req, res) => {
     res.render('partials/error-500', { admin: true })
 }
 
+
+// ****  404 - ERROR PAGE LOADING  *****
 const load404ErrorPage = (req, res) => {
     res.render('partials/error-404')
 }
 
-/*--------------------------------------------Module Exports ----------------------------------------------------------------------*/
+
+
+
+
+/* ####################################### MODUE EXPORTS FOR THE ROUTER ############################################ */
+
 module.exports = {
     guestPage,
     userLogout,

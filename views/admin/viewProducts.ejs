@@ -31,9 +31,9 @@
                 <td>	&#8377; <%= productData[i].price %></td>
                 <div id="product-viewmore"><td><a href="#" class="product-viewmore" data-viewmore-id="<%= productData[i]._id %>">View More <i class="bi bi-chevron-double-right"></i></a></td></div>
                 <% if(productData[i].status) {%>
-                  <td id="<%= productData[i]._id %>"><button class="btn  btn-outline-danger pl-4 pr-4 l-u-button" name="l-u-button" data-button-id="<%= productData[i]._id %>">List</button></td>
+                  <td id="<%= productData[i]._id %>"><button class="btn  btn-danger pl-3 pr-3 l-u-button" name="l-u-button" data-button-id="<%= productData[i]._id %>">Unlist</button></td>
                 <% } else { %>
-                  <td id="<%= productData[i]._id %>"><button class="btn btn-outline-success pl-3 pr-3 l-u-button" name="l-u-button" data-button-id="<%= productData[i]._id %>">UnList</button></td>
+                  <td id="<%= productData[i]._id %>"><button class="btn btn-success pl-4 pr-4 l-u-button" name="l-u-button" data-button-id="<%= productData[i]._id %>">List</button></td>
                 <% } %>
                 <td ><button class="btn btn-transparent product-edit-button" data-edit-id="<%= productData[i]._id %>"><i class="bi bi-pencil-square"></i>Edit</button></td>
                

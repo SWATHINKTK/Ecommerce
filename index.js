@@ -33,6 +33,7 @@ app.use('/admin',adminRouter);
 const userRouter = require('./routers/userRouter');
 app.use('/',userRouter);
 
+
 app.listen(5000,()=>{
     console.log(`server is runnning @ http://${hostname}:${port}/`);
     console.log(`server is runnning @ http://${hostname}:${port}/admin`);

@@ -72,37 +72,10 @@
 
     
     
-        <script src="https://unpkg.com/js-image-zoom@0.7.0/js-image-zoom.js" type="application/javascript"></script>
+        
         <script>
 
-            document.getElementById('image-temp').addEventListener('mouseover',function(event){
-                if(event.target.id == "image-thumb"){
-                    const imageViewDiv = document.getElementById('divInsideImage');
-                    const imageSrc = event.target.src;
-                    imageViewDiv.src = imageSrc;
-                }
-                })
-
-            window.addEventListener('load', function() {
-                
-                const colorDiv = document.getElementById('productdetail-color-view');
-                const color = colorDiv.getAttribute('name');
-                colorDiv.style.backgroundColor = color;
-                
-
-            });
-
-
-            document.getElementById('imageView-Div').addEventListener('mouseover',()=>{
-                console.log('hello');
-                let options = {
-                    width:400,
-                    zoomwidth:100,
-                    scale:1,
-                    zoomPosition: 'original',
-                }
-                new ImageZoom(document.getElementById("imageView-Div"), options);
-            })
+            
         </script>
         <!-- Related Section End -->
 <%- include('../partials/footer.ejs') %>

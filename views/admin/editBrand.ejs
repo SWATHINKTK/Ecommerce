@@ -15,10 +15,10 @@
             </div> 
             <div class="form-group ">
               <label class="col-sm-3 col-form-label">Image</label>
-              <input type="file" class="form-control" id="editBrandImage" name="brandImage" accept="image/*">
+              <input type="file" class="form-control" id="editBrandImage" name="editBrandImage" accept="image/*">
               <p class="text-danger ml-2" name="validate-brand"></p>
               <div  class="ml-3">
-                <img  id="edit-brand-img-view" src="/public/admin/assets/brandImages/<%= data.brand_logo %>" alt="brand Image File">
+                <img  id="edit-brand-img-view" src="/public/admin/assets/brandImages/<%= data.brand_logo %>" data-edit-brand-image="<%= data.brand_logo %>" alt="brand Image File">
               </div>
             </div>
             <button type="submit" class="btn btn-primary mr-2" id="brandsubmit">Submit</button>

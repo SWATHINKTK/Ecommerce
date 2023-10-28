@@ -77,10 +77,10 @@ async function productStatusSucess(){
         const data = await response.json();
 
         if(data.message){
-            button.innerHTML = `<button class="btn  btn-outline-danger pl-4 pr-4 l-u-button" name="l-u-button" data-button-id="${data.id}">List</button>`;
+            button.innerHTML = `<button class="btn  btn-danger pl-3 pr-3 l-u-button" name="l-u-button" data-button-id="${data.id}">Unlist</button>`;
 
         }else{
-            button.innerHTML = `<button class="btn btn-outline-success pl-3 pr-3 l-u-button" name="l-u-button" data-button-id="${data.id}">UnList</button>`;
+            button.innerHTML = `<button class="btn btn-success pl-4 pr-4 l-u-button" name="l-u-button" data-button-id="${data.id}">List</button>`;
         }
 
         const modal = document.getElementById('product-confirmation-modal');

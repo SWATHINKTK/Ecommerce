@@ -6,7 +6,7 @@
     <div class="col align-items-center flex-col sign-up main-signup">
       <div class="form-wrapper align-items-center">
         <div class="form sign-up" id="hello">
-          <form id="signupForm" method="POST" action="/signup" novalidate>
+          <form id="signupForm" method="POST" action="/signup" onsubmit="return validateRegister()" novalidate>
             <div class="pt-2 pb-2">
               <h2>Sign up</h2>
             </div>
@@ -115,67 +115,4 @@
     background-color: rgba(10, 10, 10, 0.819);
   }
 </style>
-<script>
-  let container = document.getElementById("container");
-
-  toggle = () => {
-    container.classList.toggle("sign-in");
-    container.classList.toggle("sign-up");
-  };
-
-  setTimeout(() => {
-    container.classList.add("sign-in");
-  }, 200);
-
-  setTimeout(()=>{
-    document.getElementById('verification-Result').innerHTML = '';
-  },3000)
-
-  // document.getElementById('signupForm').addEventListener('submit',async function(event){
-  //     event.preventDefault();
-  //     const formData = new FormData(this);
-
-  //         // function formDataToUrlEncoded(formData)
-  //         // {
-  //         //     const urlEncodedPairs = [];
-
-  //         //     for (const [key, value] of formData) {
-  //         //         const encodedKey = encodeURIComponent(key);
-  //         //         const encodedValue = encodeURIComponent(value);
-  //         //         urlEncodedPairs.push(`${encodedKey}=${encodedValue}`);
-  //         //     }
-
-  //         //     return urlEncodedPairs.join('&');
-  //         // }
-
-  //         //     const formData = new FormData(this);
-  //         //     // formData.append('name', 'John Doe');
-  //         //     // formData.append('email', 'johndoe@example.com');
-
-  //         //     const urlEncodedData = formDataToUrlEncoded(formData);
-  //         //     console.log(urlEncodedData);
-
-  //     const form = {}
-  //     for (const [key, value] of formData.entries()) {
-  //         form[key] = value
-  //     }
-  //     console.log(form)
-  //     const json = JSON.stringify(form)
-  //     console.log(json)
-
-  //     const response = await fetch('/signup',{
-  //         method : 'POST',
-  //         body : json,
-  //         // headers : {'Content-Type':'application/json'}
-  //         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-  //     })
-  //     document.getElementById('signupForm').reset()
-  //     if(response.ok){
-  //         console.log(json)
-  //         console.log(response.text());
-  //         document.getElementById('hello').innerHTML = "hello"
-  //     }
-
-  // })
-</script>
 <%- include('../partials/footer.ejs') %>
