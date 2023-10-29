@@ -63,8 +63,12 @@
               <div class="form-group">
                 <label class="col-sm-3 col-form-label">Brand Name</label>
                 <div class="col-sm-12">
-                  <select id="productbrandname" class="brand-dropdown" name="productBrandName">
-                    <option value="<%= dataProduct.brandname %>"><%= dataProduct.brandname %></option>
+                  <select id="productbrandname" class="brand-dropdown" >
+                    <% for(let i=0;i<dataBrand.length;i++){ %>
+                      <% if(dataProduct.brandname.includes(dataBrand[i]._id) ){ %>
+                      <option value="<%= dataBrand[i]._id %>" id="productBrandId"><%= dataBrand[i].brand_name %></option>
+                      <% } %>
+                    <% } %>
                   </select>
                   <p class="text-danger ml-2" name="validate-addProduct"></p>
                 </div>

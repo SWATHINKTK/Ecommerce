@@ -128,6 +128,7 @@ async function loadEditProductPage(target,imageFile){
         
         contentPlaceholder.innerHTML = data;
 
+
         const image = document.getElementById('oldImages').value;
         const imageArray = image.split(',')
         imageFile = [...imageArray];
@@ -222,8 +223,6 @@ async function loadEditProductPage(target,imageFile){
             imageFile = tempImage.filter(val => val!=false);
             // console.log(imageFile)
 
-
-
         
             //*** Image Remove From That Div and Remove Button ***
             imagePreview.removeChild(imageRemove);
@@ -232,6 +231,7 @@ async function loadEditProductPage(target,imageFile){
         }
 
         
+
         document.getElementById('editProduct-form').addEventListener('submit',async(event) => {
             event.preventDefault();
 
@@ -247,6 +247,9 @@ async function loadEditProductPage(target,imageFile){
             //*** Retrieve The Form And Creating Form Data ***
             const form = document.getElementById('editProduct-form');
             const formData = new FormData(form);
+
+            const brandId = document.getElementById('productBrandId').value;
+            formData.append('productBrandName',brandId);
 
             // *** Append Category Data Into Form Data ***
             const category = document.getElementById('categoryHidden').value;
@@ -397,16 +400,15 @@ function removePreviewImage(button,imageFile){
 
 
 //********* Submit The New Product Data **********
-async function submitNewProductData(imageFile){
+async function submitNewProductData(imageFile,brandId){
   
     //*** Retrieve The Form And Creating Form Data ***
     const form = document.getElementById('addProduct-form');
     const formData = new FormData(form);
 
 
-    //*** Retrieve The Brand Data ***
-    // const brandName = document.getElementById('productbrandname').value;
-    // formData.append('productBrandName',brandName);
+    // *** RETRIEVE BRAND DATA ID AND ASSIGN TO FORM DATA ***
+    formData.append('productBrandName',brandId);
 
 
     //*** Retrieve the CategoryData View in Div . Then Appending the Category Array Into Form Data ***

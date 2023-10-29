@@ -144,7 +144,9 @@ const searchUser = async (req, res) => {
 const loadProductList = async (req, res) => {
 
     const product = await productInfo.find({}).sort({_id:-1});
-    res.render('admin/viewProducts', { admin: true, productData: product });
+    const brandData = await brandInfo.find({},{brand_name:1});
+    console.log(brandData)
+    res.render('admin/viewProducts', { admin: true, productData: product ,dataBrand:brandData});
 
 }
 
@@ -301,8 +303,10 @@ const loadEditProductPage = async (req, res) => {
         const id = req.params.id;
         const productData = await productInfo.findOne({ _id: id });
 
-        const Data = await category.find({}, { categoryname: 1 });
-        res.render('admin/editProduct', { admin: true, dataCategory: Data, dataProduct: productData });
+        const brandData = await brandInfo.find({},{brand_name:1})
+
+        const categoryData = await category.find({}, { categoryname: 1 });
+        res.render('admin/editProduct', { admin: true, dataCategory: categoryData, dataProduct: productData ,dataBrand:brandData });
 
     } catch (error) {
         console.log(error.message)

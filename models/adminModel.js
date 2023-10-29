@@ -56,7 +56,7 @@ const productData = mongoose.Schema({
         require : true
     },
     brandname : {
-        type : String,
+        type : mongoose.Schema.Types.ObjectId,
         require : true
     },
     stock : {

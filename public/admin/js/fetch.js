@@ -182,8 +182,14 @@ document.getElementById('sidebar').addEventListener('click', async function(even
             }
         })
 
-        
-        
+
+        // *********  SELECTING THE BRAND ID FROM THE BRANDED SELECT OPTION TAG  ***********
+        let brandId;
+        document.getElementById('productbrandname').addEventListener('change',()=>{
+            const selectedElement = productbrandname.options[productbrandname.selectedIndex]; 
+            brandId = selectedElement.getAttribute('data-brand-id');
+        })
+
 
         /*--------------------------Submit The Data ------------------------------------------ */
 
@@ -192,7 +198,7 @@ document.getElementById('sidebar').addEventListener('click', async function(even
 
             const validate = validateProductData(imageFile);
             if(validate)
-                submitNewProductData(imageFile);
+                submitNewProductData(imageFile,brandId);
             
         /*-----------------------------------------Submit data complete------------------------------------------ */
 
