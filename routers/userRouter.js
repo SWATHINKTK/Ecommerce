@@ -23,6 +23,8 @@ userRouter.get('/login',userController.loadUserLogin);
 userRouter.get('/logout',userController.userLogout);
 userRouter.get('/otpverification',userController.loadOTPVerification);
 userRouter.get('/home',userController.loadHomePage);
+userRouter.get('/userprofile',userController.loadUserProfile);
+
 userRouter.get('/allproductview',userController.loadAllProductViewPage);
 userRouter.get('/categoryproductview',userController.loadSpecificCategoryProducts);
 userRouter.get('/resendotp',userController.resendOTP);

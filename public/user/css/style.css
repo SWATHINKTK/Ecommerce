@@ -97,7 +97,7 @@ a:hover,
 a:focus {
 	text-decoration: none;
 	outline: none;
-	color: #ffffff;
+	color: #070707;
 }
 
 ul,
@@ -1691,6 +1691,131 @@ ol {
 	display: flex;
 	justify-content: center;
 }
+
+
+.user-profile{
+	padding: 3rem;
+	display: grid;
+	grid-template-columns: 1fr 4fr;
+	background-color: #F3F2ED;
+}
+
+.user-profile-sidebar{
+	background-color: #ffffff;
+	border-radius: 4px;
+}
+
+.user-profile-main-content{
+	background-color: #ffffff;
+	border-radius: 4px;
+	margin-left: 3rem;
+	padding: 3rem;
+}
+
+.user-profile-content{
+	display: flex;
+	flex-direction: column;
+	margin-left: 1.7rem;
+}
+
+.user-info{
+	display: flex;
+	margin-right: 1.7rem;
+	justify-content: center;
+	align-items: center;
+}
+
+.personl-information{
+	margin: 2rem;
+}
+
+.form-group {
+    display: block;
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 15px;
+    color: #333;
+    margin-bottom: 2px;
+    font-weight: 700;
+}
+
+.form-group input{
+    display: block;
+    width: 100%;
+    padding: 8px;
+    font-size: 16px;
+    border: none;
+	border-bottom: 1px solid #000;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.form-group button{
+	background-color: #007bff; 
+    color: #fff; 
+    border: none; 
+    padding: 4px 15px;
+	margin-left: 15px;
+    cursor: pointer; 
+    border-radius: 5px; 
+    font-weight: bold;
+	
+}
+/* Add a subtle box-shadow on focus for better interactivity */
+.form-group input:focus {
+	border-color: #191b1e;
+    box-shadow: 0 0 5px rgba(62, 62, 62, 0.5);
+}
+
+.form-group input:disabled {
+	background-color: #f0f0f0;
+}
+
+.user-address{
+	margin-top: 5rem;
+}
+
+.address-label{
+	display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.address-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.address-card {
+    width: calc(47% - 20px); /* 50% for a maximum of 2 cards in a row, subtract margin */
+    margin: 20px; /* Add margin for spacing between address cards */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    background-color: #f9f9f9;
+}
+
+.address-card .address-details p {
+    margin: 5px 0;
+}
+
+
+
+.address-card .address-actions button {
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
 
 
 .product__details__pic__item a {

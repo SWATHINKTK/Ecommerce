@@ -145,7 +145,7 @@ const loadProductList = async (req, res) => {
 
     const product = await productInfo.find({}).sort({_id:-1});
     const brandData = await brandInfo.find({},{brand_name:1});
-    console.log(brandData)
+  
     res.render('admin/viewProducts', { admin: true, productData: product ,dataBrand:brandData});
 
 }

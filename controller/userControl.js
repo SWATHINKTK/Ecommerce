@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const { userData } = require('../models/userModal');
-const { productInfo, category } = require('../models/adminModel');
+const { productInfo, category ,brandInfo} = require('../models/adminModel');
 const { chownSync } = require('fs');
 const { error } = require('console');
 
@@ -394,12 +394,14 @@ const loadProductDetailPage = async (req, res) => {
         const checkLogin = req.session.userId ? true : false;
         const id = req.query.id;
 
+        const brandData = await brandInfo.find({},{brand_name:1});
+
         const productData = await productInfo.findOne({ _id: id });
         const categoryData = await category.find({})
         // console.log(productData)
         console.log(productData.categoryIds);
        
-        res.render('user/productDetails', { user: true,login:checkLogin,title: 'Products', product:productData ,category:categoryData})
+        res.render('user/productDetails', { user: true,login:checkLogin,title: 'Products', product:productData ,category:categoryData, dataBrand:brandData})
 
 
     } catch (error) {
@@ -440,7 +442,9 @@ const loadSpecificCategoryProducts = async(req,res) => {
 
 
 
-
+const loadUserProfile = async(req,res)=>{
+    res.render('user/userProfile',{user: true});
+}
 
 /* =============================================== ERROR HANDLING PAGES ==================================================== */
 
@@ -472,6 +476,7 @@ module.exports = {
     OTPCheck,
     verifyUser,
     loadHomePage,
+    loadUserProfile,
     loadAllProductViewPage,
     loadSpecificCategoryProducts,
     loadProductDetailPage,
