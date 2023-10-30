@@ -1,18 +1,95 @@
+function editUserDetails(){
+    const username = document.getElementById('userprofile-username');
+    username.removeAttribute('disabled');
 
-function changeUsername(input,btn_save,btn_cancel){
+    const phonenumber = document.getElementById('userprofile-phonenumber');
+    phonenumber.removeAttribute('disabled');
 
-    const inputField = document.getElementById('username-input');
-    inputField.removeAttribute('disabled')
-    
-    const buttonSave = document.getElementById('update-username');
-    buttonSave.style.display = 'block';
+    const editinformation = document.getElementById('userprofile-edit');
+    editinformation.style.display = 'none';
 
-    const buttonCancel = document.getElementById('username-cancel');
-    buttonCancel.style.display = 'block';
+    const submit = document.getElementById('editinfomation-submit');
+    submit.style.display = 'block';
+
 }
 
-document.getElementById('update-username').addEventListener('click',()=>{
-    console.log('hello');
-    alert('hello')
-    window.location.href = '/'
+document.getElementById('editinfomation-submit').addEventListener('click',async function(event){
+    event.preventDefault();
+
+    const id = event.target.getAttribute('data-user-id');
+
+    const username = document.getElementById('userprofile-username').value;
+    const phonenumber = document.getElementById('userprofile-phonenumber').value;
+
+    const phonenumberRgex = /^[789]\d{9}$/;
+
+    const status = document.querySelectorAll("span[name='userinfo-hint']");
+    console.log(status)
+
+    status[1].innerHTML = '';
+    status[0].innerHTML = '';
+
+
+    if(username.trim() == ''){
+
+        status[0].innerHTML = ' * enter username';
+
+    }else if(!phonenumberRgex.test(phonenumber)){
+
+        status[1].innerHTML = ' * enter proper number'
+
+    }else{
+
+        const jsonData = JSON.stringify({
+            name:username,
+            number:phonenumber,
+            id:id
+        });
+        
+        const response = await fetch('/edituserinformation',{
+            method: 'POST',
+            body:jsonData,
+            headers:{'Content-Type':'application/json'}
+        });
+
+        if(!response.ok){
+            window.location.href = '/error500'
+        }
+
+        const data = await response.json();
+
+        
+
+        if(data.status){
+
+            const inputname = document.getElementById('userprofile-username');
+            const phonenumberField = document.getElementById('userprofile-phonenumber');
+
+            const result = document.getElementById('userupdate-result');
+            result.style.display = 'block';
+            result.innerHTML = "&#9989; Succesfully Updated";
+
+            inputname.value = data.updateData.username;
+            phonenumberField.value = data.updateData.phonenumber;
+
+            inputname.setAttribute('disabled','disabled');
+            phonenumberField.setAttribute('disabled','disabled');
+
+            const editinformation = document.getElementById('userprofile-edit');
+            editinformation.style.display = 'block';
+
+            const submit = document.getElementById('editinfomation-submit');
+            submit.style.display = 'none';
+
+           setTimeout(() => {
+            result.style.display = 'none';
+           }, 2000);
+        
+        }
+
+
+    }
+
+
+    
 })

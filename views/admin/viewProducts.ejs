@@ -27,11 +27,7 @@
                 <td><%= i+1 %></td>
                 <td id="productTable-productname"><%= productData[i].productName %></td>
                 <td>
-                  <% for(let k=0;k<dataBrand.length;k++){ %>
-                    <% if(productData[i].brandname.includes(dataBrand[k]._id) ){ %>
-                      <%= dataBrand[k].brand_name %>
-                    <% } %>
-                  <% } %>
+                 
                 </td>
                 <td><%= productData[i].stock %></td>
                 <td>	&#8377; <%= productData[i].price %></td>

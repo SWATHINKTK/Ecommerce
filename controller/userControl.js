@@ -3,7 +3,8 @@ const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const { userData } = require('../models/userModal');
 const { productInfo, category ,brandInfo} = require('../models/adminModel');
-const { connect } = require('http2');
+const { userInfo } = require('os');
+const { error } = require('console');
 
 
 
@@ -389,12 +390,15 @@ const loadProductDetailPage = async (req, res) => {
         const checkLogin = req.session.userId ? true : false;
         const id = req.query.id;
 
-        const brandData = await brandInfo.find({},{brand_name:1});
+        let brandData = await brandInfo.find({},{brand_name:1});
 
         const productData = await productInfo.findOne({ _id: id });
-        const categoryData = await category.find({})
-        // console.log(productData)
-        console.log(productData.categoryIds);
+        const categoryData = await category.find({});
+
+        for(let brand of brandData){
+            if(brand._id.equals(productData.brandname))
+                brandData = brand.brand_name
+        }
        
         res.render('user/productDetails', { user: true,login:checkLogin,title: 'Products', product:productData ,category:categoryData, dataBrand:brandData})
 
@@ -437,11 +441,36 @@ const loadSpecificCategoryProducts = async(req,res) => {
 
 
 
-const loadUserProfile = async(req,res)=>{
+const loadUserProfile = async function(req,res){
     const id = req.session.userId;
     const data = await userData.findOne({_id:id});
-    // console.log(data)
-    res.render('user/userProfile',{user:true, dataUser:data});
+    if(data){
+        res.render('user/userProfile',{user:true, userInfo:data, title:'User Profile'});
+    }else{
+        console.log('no data')
+    }
+    
+}
+
+const editUserInformations = async(req,res) => {
+    const data = req.body;
+    
+    const conditions = {_id:data.id};
+    const update = {$set:{username:data.name,phonenumber:data.number}};
+
+    const updateData = await userData.findOneAndUpdate(conditions,update,{ new: true });
+    if(updateData){
+        res.json({updateData:updateData,status:true})
+    }
+
+    
+}
+
+const loadAddressInformation = async(req,res)=>{
+
+    const checkLogin = req.session.userId ? true : false;
+    
+    res.render('user/addressInformation',{ user: true,login:checkLogin});
 }
 
 /* =============================================== ERROR HANDLING PAGES ==================================================== */
@@ -474,10 +503,14 @@ module.exports = {
     OTPCheck,
     verifyUser,
     loadHomePage,
+    loadAddressInformation,
     loadUserProfile,
     loadAllProductViewPage,
     loadSpecificCategoryProducts,
     loadProductDetailPage,
+    editUserInformations,
+    loadUserProfile,
+    // loadAddressForm,
     load500ErrorPage,
     load404ErrorPage
 }
