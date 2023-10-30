@@ -26,7 +26,7 @@ let container = document.getElementById("container");
 
 
 
-/* ******** SIGN IN FORM SUBMISSION ********* */
+/* ******** LOGIN (SIGN IN) FORM SUBMISSION ********* */
 
 document.addEventListener("DOMContentLoaded", function () {
     // **** FORM LOGIN VALIDATE & SUBMIT IN THIS LISTENER ****

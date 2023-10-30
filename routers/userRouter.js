@@ -4,7 +4,9 @@ const moongose = require('mongoose');
 const userRouter = express();
 
 // Local Module Import 
-const userController = require('../controller/userControl')
+const userController = require('../controller/userControl');
+const auth = require('../middleware/userAuth');
+const { compareSync } = require('bcrypt');
 
 
 // Application Middleware 

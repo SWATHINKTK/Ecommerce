@@ -11,6 +11,7 @@ const adminRouter = express();
 const adminController = require('../controller/adminControl');
 
 
+
 // Application Middlewares
 adminRouter.use(express.json());
 adminRouter.use(express.urlencoded({extended:true}))

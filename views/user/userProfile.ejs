@@ -1,10 +1,9 @@
 <%- include('../partials/header.ejs') %>
     <%- include('../partials/navbar.ejs') %>
 
-    <div class="product__details__breadcrumb ml-5 pt-4">
-        <a href="/home">Home</a>
-        <a href="/home">Shop</a>
-        <span>Product Details</span>
+    <div class="product__details__breadcrumb pt-4" style="background-color: #F3F2ED;">
+        <a href="/home" class="ml-5">Home</a>
+        <span>userprofile</span>
     </div>
 
     <div class="container-fluid user-profile">
@@ -12,14 +11,18 @@
             <div class="user-profile-content">
                 <h5 class="text-muted font-weight-bold mr-3 mb-3 mt-3 ml-0">My Profile</h5>
                 <div class="user-info">
-                    <div class="user-Img ml-2 mr-4">
+                    <div class="user-Img mr-2">
                         <i class="bi bi-person-circle fa-2x"></i>
                     </div>
-                    <div class="user-name-profile">
-                        <h3 class="text-uppercase">Swathin</h3>
+                    <div class="user-name-profile ">
+                        <% if (dataUser && dataUser.username) { %>
+                            <h5><%= dataUser.username %></h5>
+                        <% } else { %>
+                            <p>User data not available</p>
+                        <% } %>
                     </div>
                 </div>
-                <a href="">
+                <a href="#">
                     <div class="mt-4">
                         <i class="bi bi-person-fill fa-lg"></i> <span> Personl Information</span> 
                     </div>
@@ -36,28 +39,30 @@
             <h2 class="text-center">Personl Information</h2>
             <div class="personl-information">
                 <form>
-                    <div class="form-group">
+                    <div class="form-group user-details">
                         <div class="input-group">
                             <label>User Name</label> 
-                            <a href="" class="ml-2 fs-6">Edit</a>
+                            <a href="#" class="ml-3 fs-6" id="username-edit" onclick="changeUsername()">Edit</a>
+                            <a href="/userprofile" class="ml-3" id="username-cancel" style="display: none;">Cancel</a>
                         </div>
                         <div class="input-group">
-                            <input type="text" value="swathin" class="col-3">
-                            <button>Save</button>
+                            <input type="text" id="username-input" value="<%= dataUser.username %>" class="col-3"  disabled>
+                            <button id="update-username" data-user-id="<%= dataUser._id %>">Save</button>
                         </div>
                     </div>
                     <div class="form-group">
                         <label>Email</label>
-                        <input type="text" value="swathin@gmail.com" class="col-3" disabled>
+                        <input type="text" value="<%= dataUser.email %>" class="col-3" disabled>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group user-details">
                         <div class="input-group">
                             <label>Phone Number</label> 
-                            <a href="" class="ml-2 fs-6">Edit</a>
+                            <a href="#" class="ml-2 fs-6" id="phonenumber-edit" onclick="changeUsername('phonenumber-input','phonenumber-save','phonenumber-cancel')">Edit</a>
+                            <a href="/userprofile" class="ml-3" id="phonenumber-cancel" style="display: none;">Cancel</a>
                         </div>
                         <div class="input-group">
-                            <input type="text" value="swathin" class="col-3">
-                            <button>Save</button>
+                            <input type="text" class="col-3" id="phonenumber-input" value="<%= dataUser.phonenumber %>" disabled>
+                            <button id="phonenumber-save" data-user-id="<%= dataUser._id %>">Save</button>
                         </div>
                     </div>
 
@@ -114,7 +119,5 @@
         </div>
 
     </div>
-
-
 
 <%- include('../partials/footer.ejs') %>

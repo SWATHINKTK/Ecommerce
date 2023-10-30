@@ -3,8 +3,8 @@ const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const { userData } = require('../models/userModal');
 const { productInfo, category ,brandInfo} = require('../models/adminModel');
-const { chownSync } = require('fs');
-const { error } = require('console');
+const { connect } = require('http2');
+
 
 
 
@@ -115,7 +115,7 @@ const storeSignupData = async (req, res) => {
         const data = req.body;
 
         const emailExist = await userData.findOne({ email: email });
-        console.log(emailExist)
+       
 
         if (emailExist) {
             res.render('user/userAuthentication', { admin: false,title:'Sign Up', data: ' &#10060; User email is already exist' });
@@ -206,10 +206,10 @@ const OTPCheck = async (req, res) => {
     const startTime = req.session.startTime;
     const sessionOTP = req.session.otp;
     const data = req.session.userData;
-    console.log(data,sessionOTP)
+  
 
     const emailExist = await userData.findOne({email:data.email});
-    console.log(data.email)
+
 
     if(!emailExist)
     {
@@ -236,7 +236,7 @@ const OTPCheck = async (req, res) => {
 
                     req.session.userId = userData._id;
                     res.status(200).json({'status':true, 'message': 'Your Verification Sucessfull. &#9989;<br> Username & Password to login.' });
-                    console.log('sucess')
+    
                 }
 
                 delete req.session.startTime;
@@ -269,7 +269,6 @@ const verifyUser = async(req, res) => {
         const password = req.body.password;
         
         const usernameExist = await userData.findOne({email:username});
-        console.log(usernameExist.block)
 
         if(usernameExist.block){
 
@@ -347,9 +346,7 @@ const loadHomePage = async (req, res) => {
 
 // **** GUEST PAGE LOADING FOR EVERY USERS ****
 const guestPage = async (req, res) => {
-
     try {
-
         const categoryData = await category.find({list:true}).sort({ _id: -1 });
 
         const productData = await productInfo.aggregate([
@@ -377,8 +374,6 @@ const guestPage = async (req, res) => {
 
         // );
         // console.log(productData)
-
-
         res.render('user/index', { user: true,login:false, title: 'Brand Unlimited', dataCategory: categoryData, dataProduct: productData })
     } catch (error) {
         console.log(error.message)
@@ -436,14 +431,17 @@ const loadSpecificCategoryProducts = async(req,res) => {
 
     const id = req.query.id;
     const productData = await productInfo.find({ categoryIds:id}).sort({_id:-1});
-    console.log(productData)
+   
     res.render('user/allProductView',{ user: true,login:checkLogin, title: 'Products',product:productData});
 }
 
 
 
 const loadUserProfile = async(req,res)=>{
-    res.render('user/userProfile',{user: true});
+    const id = req.session.userId;
+    const data = await userData.findOne({_id:id});
+    // console.log(data)
+    res.render('user/userProfile',{user:true, dataUser:data});
 }
 
 /* =============================================== ERROR HANDLING PAGES ==================================================== */
