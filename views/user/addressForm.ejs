@@ -48,40 +48,48 @@
                 <div class="right-side p-5">
                     <h2 class="text-center font-weight-bold mb-4">Add New Address</h2>
                     
-                    <form>
+                    <form id="newAddressAdding">
+                        <div class="alert " role="alert" id="add-new-address-sucess">
+                            jj
+                        </div>
                         <div class="form-row">
                             <div class="col-md-6 mb-3">
                                 <label for="input1">Name</label>
-                                <input type="text" class="form-control" id="Name" placeholder="Name">
+                                <input type="text" class="form-control" id="Name" placeholder="Name" name="Name">
+                                <span class="text-danger ml-2" name="address-validate-message"></span>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="input2">Phone Number</label>
-                                <input type="text" class="form-control" id="PhnNumber" placeholder="10-digit MObile Number">
+                                <input type="text" class="form-control" id="PhnNumber" placeholder="10-digit Mobile Number" name="MobileNumber">
+                                <span class="text-danger ml-2" name="address-validate-message"></span>
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="col-md-6 mb-3">
                                 <label for="input1">Pincode</label>
-                                <input type="text" class="form-control" id="Pincode" placeholder="6 Digit Pincode">
+                                <input type="text" class="form-control" id="Pincode" placeholder="6 Digit Pincode" name="Pincode">
+                                <span class="text-danger ml-2" name="address-validate-message"></span>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="input2">Locality</label>
-                                <input type="text" class="form-control" id="Locality" placeholder="Locality">
+                                <input type="text" class="form-control" id="Locality" placeholder="Locality" name="Locality">
+                                <span class="text-danger ml-2" name="address-validate-message"></span>
                             </div>
                         </div>
-                
                         <div class="form-group">
                             <label for="textarea">Address</label>
                             <textarea class="form-control" id="textarea" rows="3" name="Address" id="Address" placeholder="Address (Area & Street)"></textarea>
+                            <span class="text-danger ml-2" name="address-validate-message"></span>
                         </div>
                         <div class="form-row">
                             <div class="col-md-6 mb-3">
                                 <label for="input1">City/Distict/Town</label>
-                                <input type="text" class="form-control" id="City" placeholder="City/Distict/Town" name="city">
+                                <input type="text" class="form-control" id="City" placeholder="City/Distict/Town" name="City">
+                                <span class="text-danger ml-2" name="address-validate-message"></span>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="districtSelect">Select a District:</label><br>
-                                <select id="districtSelect" name="district" class="district" >
+                                <select id="districtSelect" name="District" class="district" >
                                     <option value="" class="mt-2">Select District</option>
                                     <option value="Thiruvananthapuram">Thiruvananthapuram</option>
                                     <option value="Kollam">Kollam</option>
@@ -98,20 +106,23 @@
                                     <option value="Kannur">Kannur</option>
                                     <option value="Kasaragod">Kasaragod</option>
                                 </select>
+                                <span class="text-danger ml-2" name="address-validate-message"></span>
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="col-md-6 mb-3">
                                 <label for="input1">Landmark</label>
                                 <input type="text" class="form-control" id="Landmark" placeholder="Landmark" name="Landmark">
+                                <span class="text-danger ml-2" name="address-validate-message"></span>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="input2">Alternate Number</label>
                                 <input type="text" class="form-control" id="AlteranteNumber" name="AlteranteNumber" placeholder="Alternate Mobile Number">
+                                <span class="text-danger ml-2" name="address-validate-message"></span>
                             </div>
                         </div>
                 
-                        <button class="btn btn-primary pl-5 pr-5 font-weight-bold" type="submit">Save</button>
+                        <input class="btn btn-primary pl-4 pr-4" type="submit" value="Save">
                     </form>
                 
                     

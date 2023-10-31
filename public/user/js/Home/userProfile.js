@@ -87,9 +87,6 @@ document.getElementById('editinfomation-submit').addEventListener('click',async 
         
         }
 
-
     }
-
-
     
 })
