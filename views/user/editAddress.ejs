@@ -46,51 +46,52 @@
             <div class="col-md-9">
                 <!-- Right Side Div -->
                 <div class="right-side p-5">
-                    <h2 class="text-center font-weight-bold mb-4">Add New Address</h2>
+                    <h2 class="text-center font-weight-bold mb-4">Edit Address</h2>
                     
-                    <form id="newAddressAdding">
-                        <div class="alert " role="alert" id="add-new-address-sucess">
+                    <form id="editAddress">
+                        <div class="alert " role="alert" id="edit-new-address-sucess">
                         
                         </div>
                         <div class="form-row">
+                            <input type="hidden" class="form-control" value="<%= address._id %>" name="addressId">
                             <div class="col-md-6 mb-3">
                                 <label for="input1">Name</label>
-                                <input type="text" class="form-control" id="Name" placeholder="Name" name="Name">
+                                <input type="text" class="form-control" id="editName" value="<%= address.username %>" name="Name">
                                 <span class="text-danger ml-2" name="address-validate-message"></span>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="input2">Phone Number</label>
-                                <input type="text" class="form-control" id="PhnNumber" placeholder="10-digit Mobile Number" name="MobileNumber">
+                                <input type="text" class="form-control" id="editPhnNumber" value="<%= address.phoneNumber %>" name="MobileNumber">
                                 <span class="text-danger ml-2" name="address-validate-message"></span>
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="col-md-6 mb-3">
                                 <label for="input1">Pincode</label>
-                                <input type="text" class="form-control" id="Pincode" placeholder="6 Digit Pincode" name="Pincode">
+                                <input type="text" class="form-control" id="editPincode" value="<%= address.pincode %>" name="Pincode">
                                 <span class="text-danger ml-2" name="address-validate-message"></span>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="input2">Locality</label>
-                                <input type="text" class="form-control" id="Locality" placeholder="Locality" name="Locality">
+                                <input type="text" class="form-control" id="editLocality" value="<%= address.locality %>" name="Locality">
                                 <span class="text-danger ml-2" name="address-validate-message"></span>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="textarea">Address</label>
-                            <textarea class="form-control" id="textarea" rows="3" name="Address" id="Address" placeholder="Address (Area & Street)"></textarea>
+                            <textarea class="form-control" id="textarea" rows="3" name="Address" id="editAddress" ><%= address.address %></textarea>
                             <span class="text-danger ml-2" name="address-validate-message"></span>
                         </div>
                         <div class="form-row">
                             <div class="col-md-6 mb-3">
                                 <label for="input1">City/Distict/Town</label>
-                                <input type="text" class="form-control" id="City" placeholder="City/Distict/Town" name="City">
+                                <input type="text" class="form-control" id="editCity" value="<%= address.city %>" name="City">
                                 <span class="text-danger ml-2" name="address-validate-message"></span>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="districtSelect">Select a District:</label><br>
                                 <select id="districtSelect" name="District" class="district" >
-                                    <option value="" class="mt-2">Select District</option>
+                                    <option value="<%= address.district %>" class="mt-2"><%= address.district %></option>
                                     <option value="Thiruvananthapuram">Thiruvananthapuram</option>
                                     <option value="Kollam">Kollam</option>
                                     <option value="Pathanamthitta">Pathanamthitta</option>
@@ -112,12 +113,12 @@
                         <div class="form-row">
                             <div class="col-md-6 mb-3">
                                 <label for="input1">Landmark</label>
-                                <input type="text" class="form-control" id="Landmark" placeholder="Landmark" name="Landmark">
+                                <input type="text" class="form-control" id="editLandmark" value="<%= locals.address.landmark ? address.landmark : '' %>" name="Landmark">
                                 <span class="text-danger ml-2" name="address-validate-message"></span>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="input2">Alternate Number</label>
-                                <input type="text" class="form-control" id="AlteranteNumber" name="AlteranteNumber" placeholder="Alternate Mobile Number">
+                                <input type="text" class="form-control" id="editAlteranteNumber" name="AlteranteNumber" value="<%= locals.address.alternateNumber ? address.alternateNumber : '' %>">
                                 <span class="text-danger ml-2" name="address-validate-message"></span>
                             </div>
                         </div>

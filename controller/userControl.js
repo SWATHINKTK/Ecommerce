@@ -3,6 +3,7 @@ const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const { userData } = require('../models/userModal');
 const { productInfo, category ,brandInfo} = require('../models/adminModel');
+const addressInfo = require('../models/addressModel');
 const { userInfo } = require('os');
 const { error } = require('console');
 
@@ -441,6 +442,7 @@ const loadSpecificCategoryProducts = async(req,res) => {
 
 
 
+// ******** LOAD USER PROFILE PAGE *****
 const loadUserProfile = async function(req,res){
     const checkLogin = req.session.userId ? true : false;
 
@@ -454,6 +456,9 @@ const loadUserProfile = async function(req,res){
     
 }
 
+
+
+// ****** EDIT USER INFORMATIONS ******
 const editUserInformations = async(req,res) => {
     const checkLogin = req.session.userId ? true : false;
 
@@ -470,19 +475,132 @@ const editUserInformations = async(req,res) => {
     
 }
 
+
+
+// ****** LOAD ADDRESS INFORMATION AND VIEW ADDRESS IN THAT USER *****
 const loadAddressInformation = async(req,res)=>{
 
     const checkLogin = req.session.userId ? true : false;
+
+    const id = req.session.userId;
+
+    const addressData = await addressInfo.find({userId:id});
+    // console.log(addressData);
     
-    res.render('user/addressInformation',{title:'Address',login:checkLogin, user: true, login:checkLogin});
+    res.render('user/addressInformation',{title:'Address', login:checkLogin, user: true, login:checkLogin, address:addressData});
 }
 
+
+// ***** VIEW ADD ADDRESS FORM PAGE ******
 const loadAddressForm = async(req,res)=>{
 
     const checkLogin = req.session.userId ? true : false;
     
     res.render('user/addressForm',{ title:'Add New Address' ,login:checkLogin ,user: true,login:checkLogin});
 }
+
+
+// ***** ADDRESS FORM DATA STORE TO THE DATVBASE *****
+const storeAddressFormData = async(req,res) => {
+
+    const userId = req.session.userId;
+    const formData = req.body
+    // console.log(formData,userId)
+
+    const conditions = formData.Name != '' && formData.MobileNumber != '' && formData.Pincode != '' && formData.Locality != '' && formData.Address != '' && formData.City != '' && formData.District != '' ;
+
+    if(conditions){
+
+        const addressData = addressInfo({
+            userId:userId,
+            username:formData.Name,
+            phoneNumber:formData.MobileNumber,
+            pincode:formData.Pincode,
+            locality:formData.Locality,
+            address:formData.Address,
+            city:formData.City,
+            district:formData.District,
+            landmark:formData.Landmark,
+            alternateNumber:formData.AlteranteNumber,
+        })
+
+        // console.log(addressData)
+
+        
+        const store = await addressData.save();
+        if(store){
+
+            res.json({status:true, data:'Address Added Sucesfully'});
+
+        }else{
+
+            res.redirect('/error500');
+        }
+
+    }else{
+
+        res.json({status:false, data:'Address Adding is failed You can Enter All Field'});
+    }
+
+}
+
+
+
+
+// ***** VIEW EDIT ADDRESS FORM PAGE *****
+const loadEditAddressForm = async(req,res) =>  {
+
+    const checkLogin = req.session.userId ? true : false;
+
+    const addressId = req.params.id;
+
+    const addressData = await addressInfo.findOne({_id:addressId});
+
+    res.render('user/editAddress',{ title:'Update Address' ,login:checkLogin , user: true, login:checkLogin, address:addressData});
+
+}
+
+
+
+// **** UPDATE ADDRESS DATA ****
+const updateAddressData = async(req,res)=>{
+    const data = req.body;
+
+    if(data){
+
+        const update = await addressInfo.updateOne({_id:data.addressId},{$set:{
+            username:data.Name,
+            phoneNumber:data.MobileNumber,
+            pincode:data.Pincode,
+            locality:data.Locality,
+            address:data.Address,
+            city:data.City,
+            district:data.District,
+            landmark:data.Landmark,
+            alternateNumber:data.AlteranteNumber,
+        }});
+
+        if(update.acknowledged){
+            res.json({status:true, data:'Address Updated Sucesfully'});
+        }else{
+            res.json({status:false, data:'Update Address is failed You can Enter All Field'});
+        }
+
+    }else{
+
+        res.json({status:false, data:'Update Address is failed You can Enter All Field'});
+    }
+}
+
+
+
+
+// ***** DELETE ADDRESS *****
+const deleteAddress = async(req,res) =>{
+    console.log()
+}
+
+
 
 /* =============================================== ERROR HANDLING PAGES ==================================================== */
 
@@ -516,6 +634,10 @@ module.exports = {
     loadHomePage,
     loadAddressInformation,
     loadUserProfile,
+    storeAddressFormData,
+    updateAddressData,
+    deleteAddress,
+    loadEditAddressForm,
     loadAllProductViewPage,
     loadSpecificCategoryProducts,
     loadProductDetailPage,

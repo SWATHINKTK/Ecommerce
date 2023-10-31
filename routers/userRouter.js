@@ -36,13 +36,19 @@ userRouter.get('/productdetails',userController.loadProductDetailPage);
 userRouter.get('/userprofile',auth.isUserLogin,userController.loadUserProfile);
 userRouter.get('/addressinformation',auth.isUserLogin,userController.loadAddressInformation);
 userRouter.get('/addnewaddress',auth.isUserLogin,userController.loadAddressForm);
+userRouter.get('/editaddress:id',auth.isUserLogin,userController.loadEditAddressForm);
 userRouter.get('/*',userController.load500ErrorPage);
 
 // POST Request For User 
 userRouter.post('/signup',userController.storeSignupData);
 userRouter.post('/signin',userController.verifyUser);
 userRouter.post('/otpverification',userController.OTPCheck);
-userRouter.post('/edituserinformation',userController.editUserInformations)
+userRouter.post('/edituserinformation',userController.editUserInformations);
+userRouter.post('/addnewaddress',userController.storeAddressFormData);
+userRouter.post('/updateaddress',userController.updateAddressData);
+
+// DELETE REQUEST FOR USER
+userRouter.delete('/deleteaddress',userController.deleteAddress)
     
 
 

@@ -1,5 +1,7 @@
 
 // **** NEW ADDRESS ADDING FORM SUBMIT ****
+const add = document.getElementById('newAddressAdding') ? true : false;
+if(add){
 document.getElementById('newAddressAdding').addEventListener('submit',async(event)=>{
     event.preventDefault();
     
@@ -16,12 +18,85 @@ document.getElementById('newAddressAdding').addEventListener('submit',async(even
 
         const result = document.getElementById('add-new-address-sucess');
 
-        const url = `/addnewaddress/`;
+        const url = `/addnewaddress`;
+
+        const jsonData = JSON.stringify(data);
+       
 
         const config = {
-            method:'POST',
-            body:JSON.stringify(data),
-            Headers:{'Content-Type':'application/json'}
+            method: 'POST',
+            body:jsonData,
+            headers:{'Content-Type':'application/json'}
+        }
+        
+        const response = await fetch(url,config);
+
+        if(!response.ok){
+            Window.Location.href = '/error500'
+        }
+
+        const message = await response.json();
+
+        if(message.status){
+
+            window.scrollTo(0, 0);
+            result.style.display = 'block';
+            result.classList.add('alert-success');
+            
+            form.reset();
+            result.innerHTML = `&#9989; ${message.data}`;
+            
+
+        }else{
+
+            window.scrollTo(0, 0);
+            result.style.display = 'block';
+            result.classList.add('alert-danger');
+            
+            result.innerHTML = `&#10071; ${message.data}`;
+        }
+
+
+        setTimeout(() => {
+            result.style.display = 'none'; 
+        }, 2200);
+    }
+})
+
+}
+
+
+
+
+// ********* EDIT ADDRESS DATA AND SUBMIT ********
+const edit = document.getElementById('editAddress') ? true : false;
+if(edit){
+
+document.getElementById('editAddress').addEventListener('submit',async(event)=>{
+    event.preventDefault();
+    
+    const form = document.getElementById('editAddress');
+    const formData = new FormData(form);
+
+    // *** FormData Convert To Normal Object ***
+    const data = {};
+    for (const [key, value] of formData.entries()) {
+        data[key] = value;
+    }
+
+    if(validateAddress(data)){
+
+        const result = document.getElementById('edit-new-address-sucess');
+
+        const url = `/updateaddress`;
+
+        const jsonData = JSON.stringify(data);
+       
+
+        const config = {
+            method: 'POST',
+            body:jsonData,
+            headers:{'Content-Type':'application/json'}
         }
         
         const response = await fetch(url,config);
@@ -39,6 +114,7 @@ document.getElementById('newAddressAdding').addEventListener('submit',async(even
             result.classList.add('alert-success');
             
             result.innerHTML = `&#9989; ${message.data}`;
+            
 
         }else{
 
@@ -48,8 +124,20 @@ document.getElementById('newAddressAdding').addEventListener('submit',async(even
             
             result.innerHTML = `&#10071; ${message.data}`;
         }
+
+
+        setTimeout(() => {
+            result.style.display = 'none'; 
+            window.location.href = '/addressinformation';
+        }, 2200);
     }
 })
+
+
+}
+
+
+
 
 // *** ADDING NEW ADDRESS FORM VALIDATION ***
 function validateAddress(fromData){
@@ -142,12 +230,12 @@ function validateAddress(fromData){
 
             if(data.MobileNumber.length != 10){
     
-                errorElemetns[1].innerHTML = ' * number must be 10 digit. ';
+                errorElemetns[8].innerHTML = ' * number must be 10 digit. ';
                 is_valid = false;
     
             }else{
     
-                errorElemetns[1].innerHTML = ' * enter proper format.';
+                errorElemetns[8].innerHTML = ' * enter proper format.';
                 is_valid = false;
     
             }
