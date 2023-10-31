@@ -35,7 +35,7 @@ userRouter.get('/error404',userController.load404ErrorPage);
 userRouter.get('/productdetails',userController.loadProductDetailPage);
 userRouter.get('/userprofile',auth.isUserLogin,userController.loadUserProfile);
 userRouter.get('/addressinformation',auth.isUserLogin,userController.loadAddressInformation);
-// userRouter.get('/addaddress',auth.isUserLogin,userController.loadAddressForm);
+userRouter.get('/addnewaddress',auth.isUserLogin,userController.loadAddressForm);
 userRouter.get('/*',userController.load500ErrorPage);
 
 // POST Request For User 

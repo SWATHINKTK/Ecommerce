@@ -1705,6 +1705,51 @@ ol {
 .input-userprofile:active{
 	outline: none;
 }
+form .form-control:focus {
+	/* border: none; */
+	outline: none;
+	box-shadow: none;
+}
+
+/* .district{
+	min-height: 40px;
+} */
+
+.district{
+	height: 38px;
+	width: 100%;
+}
+
+	
+
+.nice-select.open .list {
+    opacity: 1;
+    pointer-events: auto;
+	background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 0 1px rgba(68, 68, 68, 0.11);
+    box-sizing: border-box;
+	max-width: 100%;
+    margin-top: 4px;
+    overflow: scroll;
+    max-height: 300px;
+    padding: 0;
+    position: absolute;
+	font-size: 22px;
+    top: 100%;
+    left: 0;
+	-webkit-transform: scale(1) translateY(0);
+    -ms-transform: scale(1) translateY(0);
+    -webkit-transform-origin: 50% 0;
+    -ms-transform-origin: 50% 0;
+    transform-origin: 50% 0;
+    -webkit-transform: scale(0.75) translateY(-21px);
+    -ms-transform: scale(0.75) translateY(-21px);
+    transform: scale(0.75) translateY(-21px);
+    -webkit-transition: all 0.0s cubic-bezier(0.5, 0, 0, 1.25), opacity 0.15s ease-out;
+    transition: all 0.0s cubic-bezier(0.5, 0, 0, 1.25), opacity 0.15s ease-out;
+    z-index: 9;
+}
 
 .product__details__pic__item a {
 	height: 56px;

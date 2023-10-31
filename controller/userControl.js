@@ -442,10 +442,12 @@ const loadSpecificCategoryProducts = async(req,res) => {
 
 
 const loadUserProfile = async function(req,res){
+    const checkLogin = req.session.userId ? true : false;
+
     const id = req.session.userId;
     const data = await userData.findOne({_id:id});
     if(data){
-        res.render('user/userProfile',{user:true, userInfo:data, title:'User Profile'});
+        res.render('user/userProfile',{user:true, login:checkLogin, userInfo:data, title:'User Profile'});
     }else{
         console.log('no data')
     }
@@ -453,6 +455,8 @@ const loadUserProfile = async function(req,res){
 }
 
 const editUserInformations = async(req,res) => {
+    const checkLogin = req.session.userId ? true : false;
+
     const data = req.body;
     
     const conditions = {_id:data.id};
@@ -470,7 +474,14 @@ const loadAddressInformation = async(req,res)=>{
 
     const checkLogin = req.session.userId ? true : false;
     
-    res.render('user/addressInformation',{ user: true,login:checkLogin});
+    res.render('user/addressInformation',{title:'Address',login:checkLogin, user: true, login:checkLogin});
+}
+
+const loadAddressForm = async(req,res)=>{
+
+    const checkLogin = req.session.userId ? true : false;
+    
+    res.render('user/addressForm',{ title:'Add New Address' ,login:checkLogin ,user: true,login:checkLogin});
 }
 
 /* =============================================== ERROR HANDLING PAGES ==================================================== */
@@ -510,7 +521,7 @@ module.exports = {
     loadProductDetailPage,
     editUserInformations,
     loadUserProfile,
-    // loadAddressForm,
+    loadAddressForm,
     load500ErrorPage,
     load404ErrorPage
 }
