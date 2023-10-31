@@ -30,14 +30,17 @@ userRouter.get('/home',userController.loadHomePage);
 userRouter.get('/allproductview',userController.loadAllProductViewPage);
 userRouter.get('/categoryproductview',userController.loadSpecificCategoryProducts);
 userRouter.get('/resendotp',userController.resendOTP);
-userRouter.get('/error500',userController.load500ErrorPage);
-userRouter.get('/error404',userController.load404ErrorPage);
 userRouter.get('/productdetails',userController.loadProductDetailPage);
 userRouter.get('/userprofile',auth.isUserLogin,userController.loadUserProfile);
 userRouter.get('/addressinformation',auth.isUserLogin,userController.loadAddressInformation);
 userRouter.get('/addnewaddress',auth.isUserLogin,userController.loadAddressForm);
 userRouter.get('/editaddress:id',auth.isUserLogin,userController.loadEditAddressForm);
-userRouter.get('/*',userController.load500ErrorPage);
+
+
+
+
+// DELETE REQUEST FOR USER
+userRouter.delete('/deleteaddress:id',auth.isUserLogin,userController.deleteAddress);
 
 // POST Request For User 
 userRouter.post('/signup',userController.storeSignupData);
@@ -47,9 +50,9 @@ userRouter.post('/edituserinformation',userController.editUserInformations);
 userRouter.post('/addnewaddress',userController.storeAddressFormData);
 userRouter.post('/updateaddress',userController.updateAddressData);
 
-// DELETE REQUEST FOR USER
-userRouter.delete('/deleteaddress',userController.deleteAddress)
-    
 
+userRouter.get('/error500',userController.load500ErrorPage);
+userRouter.get('/error404',userController.load404ErrorPage);  
+userRouter.get('/*',userController.load500ErrorPage);
 
 module.exports = userRouter;

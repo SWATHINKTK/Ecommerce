@@ -259,3 +259,54 @@ function removeErrorElements(){
         val.innerHTML = '';
     })
 }
+
+
+
+
+function removeModal(){
+    document.getElementById('modalDelete').style.display = 'none';
+}
+
+
+
+function deleteAddress(tag){
+
+    document.getElementById('modalDelete').style.display = 'block';
+    const id = tag.getAttribute('data-addressId');
+ 
+    const okButton = document.getElementById('deleteModalOk');
+    okButton.setAttribute('data-address-id',`${id}`);
+}
+
+
+
+async function deleteAddressSucess(tag){
+
+    const id = tag.getAttribute('data-address-id');
+    const address = document.getElementById(`${id}`);
+    
+    const url = `/deleteaddress${id}`
+
+    const requestOption = {
+        method:'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }
+
+    const response = await fetch(url,requestOption);
+
+    if(!response.ok){
+
+        window.location.href = '/error500'
+    }
+
+    const data = await response.json();
+
+    if(data.status){
+        
+        address.style.display = 'none';
+        document.getElementById('modalDelete').style.display = 'none';
+    }
+
+}

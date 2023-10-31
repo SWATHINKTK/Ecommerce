@@ -597,7 +597,15 @@ const updateAddressData = async(req,res)=>{
 
 // ***** DELETE ADDRESS *****
 const deleteAddress = async(req,res) =>{
-    console.log()
+    const id = req.params.id;
+
+    const deleteAddress = await addressInfo.deleteOne({_id:id});
+
+    if(deleteAddress){
+        res.json({status:true});
+    }else{
+        res.status(500);
+    }
 }
 
 
