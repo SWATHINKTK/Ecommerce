@@ -36,12 +36,12 @@
                             <div class="card col-sm-12 mt-2 address-card" >
                                 <div class="card-body p-3">
                                     <div class="row">
-                                        <input type="radio" class="address-selector"  name="Address"  data-addressId="<%= address[i]._id %>">
+                                        <input type="radio" class="address-selector"  name="Address"  data-addressId="<%= address[i]._id %>" <% if(i === 0) { %>checked<%} %>>
                                         <div class="col-sm-12 pl-4 pt-1">
                                             <div class="d-flex">
                                                 <p class="card-text font-weight-bold address-name"><%= address[i].username %><span class="ml-2"> <%= address[i].phoneNumber %> </span></p>
                                                 
-                                                <a href="#" id="editCheckoutAddress" class="text-primary ml-auto" data-addressId="<%= address[i]._id %>"><i class="bi bi-pencil-square"></i> Edit</a>
+                                                <a href="#" name="editCheckoutAddress" class="text-primary ml-auto" data-addressId="<%= address[i]._id %>"><i class="bi bi-pencil-square"></i> Edit</a>
                                             </div>
                                             <p class="card-text m-0"><%= address[i].address %></p>
                                             <p class="card-text m-0"><%= address[i].locality %> , <%= address[i].city %> , <%= address[i].district %></p>
@@ -160,17 +160,19 @@
                     </div>
                     <!--End  Delivery Address Section -->
 
-                    <div class="col-sm-12  p-3 border d-flex align-items-center mt-5 checkout-heading">
+                    <div class="col-sm-12  p-3 border d-flex align-items-center mt-5 checkout-heading ">
                         <h5 class="font-weight-bold">Product Details</h5>
                     </div>
                     <div class="p-3 cart-product-view d-flex mt-3 pb-5" id="">
-                        <div class="cart-productImage">
+                        <div class="cart-productImage checkout-productImg">
                             <img src="/public/admin/assets/productImages/<%= product.productImages[0] %>" alt="">
                             <div class="mt-2">
                                 <span class="font-weight-bold">Quanitity : </span>
-                                <input type="number" class="cart-quantity text-center font-weight-bold" name="quanitity" id="cart-product-quanitity" min="1" max="<%= product.stock %>" value="1" data-cart-product-id="" >
+                                <input type="number" class="cart-quantity text-center font-weight-bold" name="orderProducts" id="checkout-product-quanitity" min="1" max="10" value="1">
+                                <input type="hidden" name="<%= product.price %>" id="checkout-hidden-data" value="1">
                             </div>
                         </div>
+            
                         <div class="">
                             <h4 class="ml-4 mt-2 font-weight-bold mb-3"><%= product.productName %></h4>
                             <div class="d-flex align-items-center m-2">
@@ -231,6 +233,7 @@
                 </div>
 
 
+
                 <div class="col-lg-4 ">
                     <!-- <div class="cart__discount">
                         <h6>Discount codes</h6>
@@ -238,10 +241,11 @@
                     <div class="cart__total mt-3">
                         <h6 class="cart-total-head pb-3">Price Details</h6>
                         <ul>
-                            <li>Price ( 9 items) <span><i class="bi bi-currency-rupee"></i><span name="cart-price">0000</span></span></li>
+                            <li>Price <span><i class="bi bi-currency-rupee"></i><span name="checkout-price"><%= product.price %></span></span></li>
+                            <li>Quanitity <span name="checkout-price">1</span></li>
                             <li>Discount <span><i class="bi bi-currency-rupee"></i> 0</span></li>
                             <li>Delivery Charges <span>Free</span></li>
-                            <li class="mt-2 cart-total-amount">Total Amount <span><i class="bi bi-currency-rupee"></i> <span name="cart-price">000</span></span></li>
+                            <li class="mt-2 cart-total-amount">Total Amount <span><i class="bi bi-currency-rupee"></i> <span name="checkout-price"><%= product.price %></span></span></li>
                         </ul>
                         <!-- <a href="#" class="primary-btn">Proceed to checkout</a> -->
                     </div>

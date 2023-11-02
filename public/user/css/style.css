@@ -1765,7 +1765,15 @@ form .form-control:focus {
 	object-fit: contain;
 	/* max-width: 300px;
 	max-height: 100px; */
-	
+}
+
+/* .checkout-productImg{
+	max-width: 130px;
+	max-height: 40px;
+} */
+.checkout-productImg img{
+	object-fit: contain;
+	max-height: 150px;
 	
 }
 

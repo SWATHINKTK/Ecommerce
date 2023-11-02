@@ -559,6 +559,10 @@ const loadEditAddressForm = async(req,res) =>  {
     const addressId = req.params.id;
 
     const addressData = await addressInfo.findOne({_id:addressId});
+    if(req.query.url){
+        res.render('user/checkoutEditAddress',{ title:'Update Address' ,login:checkLogin , user: true, login:checkLogin, address:addressData});
+        return;
+    }
 
     res.render('user/editAddress',{ title:'Update Address' ,login:checkLogin , user: true, login:checkLogin, address:addressData});
 

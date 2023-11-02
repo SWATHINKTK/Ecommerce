@@ -6,7 +6,7 @@ const checkOutRouter = express();
 const checkOutController = require('../controller/checkoutControl');
 
 
-checkOutRouter.get('/checkout',checkOutController.LoadCheckoutPage)
+checkOutRouter.get('/checkout',auth.isUserLogin,checkOutController.LoadCheckoutPage)
 
 
 module.exports = checkOutRouter;

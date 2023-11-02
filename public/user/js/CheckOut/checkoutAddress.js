@@ -73,6 +73,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 
             setTimeout(() => {
                 result.style.display = 'none'; 
+                window.location.reload();
             }, 2200);
         }
     })
@@ -80,7 +81,79 @@ document.addEventListener('DOMContentLoaded',()=>{
 })
 
 
-// *** ADDING NEW ADDRESS FORM VALIDATION ***
+
+
+
+
+// ********* EDIT ADDRESS DATA AND SUBMIT ********
+const edit = document.getElementById('editAddress') ? true : false;
+if(edit){
+
+document.getElementById('editAddress').addEventListener('submit',async(event)=>{
+    event.preventDefault();
+    
+    const form = document.getElementById('editAddress');
+    const formData = new FormData(form);
+
+    // *** FormData Convert To Normal Object ***
+    const data = {};
+    for (const [key, value] of formData.entries()) {
+        data[key] = value;
+    }
+
+    if(validateAddress(data)){
+
+        const result = document.getElementById('edit-new-address-sucess');
+
+        const url = `/updateaddress`;
+
+        const jsonData = JSON.stringify(data);
+       
+
+        const config = {
+            method: 'POST',
+            body:jsonData,
+            headers:{'Content-Type':'application/json'}
+        }
+        
+        const response = await fetch(url,config);
+
+        if(!response.ok){
+            Window.Location.href = '/error500'
+        }
+
+        const message = await response.json();
+
+        if(message.status){
+
+            window.scrollTo(0, 0);
+            result.style.display = 'block';
+            result.classList.add('alert-success');
+            
+            result.innerHTML = `&#9989; ${message.data}`;
+            
+
+        }else{
+
+            window.scrollTo(0, 0);
+            result.style.display = 'block';
+            result.classList.add('alert-danger');
+            
+            result.innerHTML = `&#10071; ${message.data}`;
+        }
+
+
+        setTimeout(() => {
+            result.style.display = 'none'; 
+            window.location.href = '/addressinformation';
+        }, 2200);
+    }
+})
+
+
+}
+
+// *** ADDING NEW ADDRESS IN CHECKOUT PAGE FORM VALIDATION ***
 function validateCheckoutAddress(fromData){
 
     const data = fromData;
