@@ -39,6 +39,10 @@ const cartRouter = require('./routers/cartRouter');
 app.use('/api',cartRouter);
 
 
+// **** CHECKOUT ROUTER ****
+const checkOutRouter = require('./routers/checkoutRouter');
+app.use('/api',checkOutRouter);
+
 
 app.listen(5000,()=>{
     console.log(`server is runnning @ http://${hostname}:${port}/`);

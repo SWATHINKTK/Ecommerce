@@ -1827,6 +1827,27 @@ form .form-control:focus {
 	bottom: 20px; 
 }
 
+.checkout-heading{
+	box-shadow: 0 0 7px -2px #000000;
+	background-color:ghostwhite;
+}
+
+.checkout-heading h5{
+	font-size: 1.4rem;
+}
+
+.address-selector{
+	width: 20px;
+	height: 20px;
+}
+
+.placeorder{
+	box-shadow: 0 0 7px -2px #000000;
+}
+
+.placeorder button{
+	background-color: rgb(255, 139, 71);
+}
 
 .nice-select.open .list {
     opacity: 1;

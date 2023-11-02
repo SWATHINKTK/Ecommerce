@@ -7,6 +7,7 @@ document.getElementById('newAddressAdding').addEventListener('submit',async(even
     
     const form = document.getElementById('newAddressAdding');
     const formData = new FormData(form);
+    
 
     // *** FormData Convert To Normal Object ***
     const data = {};
@@ -37,9 +38,17 @@ document.getElementById('newAddressAdding').addEventListener('submit',async(even
 
         const message = await response.json();
 
+    
+        const middlePosition = Math.ceil(document.body.scrollHeight / 6);
+
+
         if(message.status){
 
-            window.scrollTo(0, 0);
+            window.scrollTo({
+                top: middlePosition,
+                behavior: 'smooth' // You can use 'auto' for instant scrolling
+              });
+
             result.style.display = 'block';
             result.classList.add('alert-success');
             
@@ -48,8 +57,12 @@ document.getElementById('newAddressAdding').addEventListener('submit',async(even
             
 
         }else{
+            
+            window.scrollTo({
+                top: middlePosition,
+                behavior: 'smooth' // You can use 'auto' for instant scrolling
+              });
 
-            window.scrollTo(0, 0);
             result.style.display = 'block';
             result.classList.add('alert-danger');
             
@@ -242,7 +255,11 @@ function validateAddress(fromData){
         }
     }
     if(!is_valid){
-        window.scrollTo(0, 0);
+        const middlePosition = Math.ceil(document.body.scrollHeight / 6);
+        window.scrollTo({
+            top: middlePosition,
+            behavior: 'smooth' // You can use 'auto' for instant scrolling
+          });
     }
     return is_valid;
 
