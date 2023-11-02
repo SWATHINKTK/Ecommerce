@@ -3,6 +3,7 @@ const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const { userData } = require('../models/userModal');
 const { productInfo, category ,brandInfo} = require('../models/adminModel');
+const cartData = require('../models/cartModel');
 const addressInfo = require('../models/addressModel');
 const { userInfo } = require('os');
 const { error } = require('console');
@@ -396,12 +397,15 @@ const loadProductDetailPage = async (req, res) => {
         const productData = await productInfo.findOne({ _id: id });
         const categoryData = await category.find({});
 
+        const cart = await cartData.findOne({cartProducts:{$elemMatch:{productId:id}}});
+        console.log(cart)
+
         for(let brand of brandData){
             if(brand._id.equals(productData.brandname))
                 brandData = brand.brand_name
         }
        
-        res.render('user/productDetails', { user: true,login:checkLogin,title: 'Products', product:productData ,category:categoryData, dataBrand:brandData})
+        res.render('user/productDetails', { user: true,login:checkLogin,title: 'Products', product:productData ,category:categoryData, dataBrand:brandData ,dataCart:cart})
 
 
     } catch (error) {

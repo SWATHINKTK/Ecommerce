@@ -34,6 +34,12 @@ const userRouter = require('./routers/userRouter');
 app.use('/',userRouter);
 
 
+// **** CART ROUTER ****
+const cartRouter = require('./routers/cartRouter');
+app.use('/api',cartRouter);
+
+
+
 app.listen(5000,()=>{
     console.log(`server is runnning @ http://${hostname}:${port}/`);
     console.log(`server is runnning @ http://${hostname}:${port}/admin`);

@@ -1,0 +1,16 @@
+const express = require('express');
+const auth = require('../middleware/userAuth')
+const cartRouter = express();
+
+
+const cartController = require('../controller/cartControl')
+
+
+cartRouter.get('/cart',auth.isUserLogin,cartController.loadCartPage);
+
+cartRouter.post('/addToCart',auth.isUserLogin,cartController.productAddToCart);
+
+cartRouter.patch('/cartQuantityUpdate',cartController.cartQuantityUpdate);
+
+cartRouter.delete('/deleteCartProduct:id', cartController.removeProductFromCart)
+module.exports = cartRouter;

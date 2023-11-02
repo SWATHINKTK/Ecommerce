@@ -1,0 +1,113 @@
+<%- include('../partials/header.ejs') %>
+<%- include('../partials/navbar.ejs') %>
+
+    <!-- Breadcrumb Section Begin -->
+    <section class="breadcrumb-option">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb__text">
+                        <h4>Shopping Cart</h4>
+                        <div class="breadcrumb__links">
+                            <a href="/">Home</a>
+                            <a href="/allproductview">Shop</a>
+                            <span>Shopping Cart</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumb Section End -->
+
+    <!-- Shopping Cart Section Begin -->
+    <section class="shopping-cart spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="shopping__cart__table">
+                        <% let sum = 0 %>
+                        <% for(let i = 0 ; i < cartData.length ; i++){ %>
+                            <% sum += cartData[i].quantity * cartData[i].productId.price %>
+                            <div class="p-3 cart-product-view d-flex mt-3" id="<%= cartData[i].productId._id %>">
+                                <div class="cart-productImage">
+                                    <img src="/public/admin/assets/productImages/<%= cartData[i].productId.productImages[0] %>" alt="">
+                                    <div class="mt-2">
+                                        <span class="font-weight-bold">Quanitity : </span><input type="number" class="cart-quantity text-center font-weight-bold" name="quanitity" id="cart-product-quanitity" min="1" max="10" value="<%= cartData[i].quantity %>" data-cart-product-id="<%= cartData[i].productId._id %>" >
+                                        <input type="hidden" id="oldData" value="<%= cartData[i].quantity %>" name="<%= cartData[i].productId.price %>">
+                                    </div>
+                                </div>
+                                <div class="">
+                                    <h4 class="ml-4 mt-2 font-weight-bold mb-3"><%= cartData[i].productId.productName %></h4>
+                                    <div class="d-flex align-items-center m-2">
+                                        <h6 class="ml-3 mr-2">Color : </h6><input type="color" value="<%= cartData[i].productId.color %>" class="cart-color">
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <h6 class="ml-4 mr-2">Size : </h6> <span><%= cartData[i].productId.size %></span>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <h4 class="ml-4 mr-2 mt-2"><i class="bi bi-currency-rupee"></i> <span class="font-weight-bold"><%= cartData[i].productId.price %></span></h4>
+                                    </div>
+                                    <div class="d-flex align-items-center mt-3">
+                                        <button class="ml-4 mr-2 text-danger mt-3 bg-transparent border-0" name="cart-product-delete" data-cart-product-id="<%= cartData[i].productId._id %>"><i class="fa-regular fa-trash-can" style="color: #e23232;"></i> Remove</button>
+                                    </div>    
+                                </div>    
+                            </div>
+                        <% } %>
+                    </div>
+                    <div class="row d-flex justify-content-end align-items-center sticky ">
+                        <div class="continue__btn  mr-3" >
+                            <button class="btn proceed-payment">Proceed To Payment</button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-lg-4 ">
+                    <!-- <div class="cart__discount">
+                        <h6>Discount codes</h6>
+                    </div> -->
+                    <div class="cart__total mt-3">
+                        <h6 class="cart-total-head pb-3">Cart total</h6>
+                        <ul>
+                            <li>Price ( <%= cartData.length %> items) <span><i class="bi bi-currency-rupee"></i><span name="cart-price"><%= sum %></span></span></li>
+                            <input type="hidden" id="oldPrice" value="<%= sum %>">
+                            <li>Discount <span><i class="bi bi-currency-rupee"></i> 0</span></li>
+                            <li>Delivery Charges <span>Free</span></li>
+                            <li class="mt-2 cart-total-amount">Total Amount <span><i class="bi bi-currency-rupee"></i> <span name="cart-price"><%= sum %></span></span></li>
+                        </ul>
+                        <!-- <a href="#" class="primary-btn">Proceed to checkout</a> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal top" id="modalremoveCart" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true" style="display: none;">
+            <div class="modal-dialog modal-frame modal-top modal-notify modal-success " role="document">
+              <!--Content-->
+              <div class="modal-content">
+                <!--Body-->
+                <div class="modal-body">
+                  <div class="row d-flex justify-content-center align-items-center">
+        
+                    <h2>
+                      <span class="badge">Delete Confirmation</span>
+                    </h2>
+                    <p class="pt-3 mx-4"><strong> Are you sure you want to delete this item?</strong> .</p>
+                    <div>
+      
+                    <button type="button" class="btn btn-danger ml-3" id="deleteCartModalOk" data-product-id="" onclick="successCartProduct(this)">
+                      <i class="bi bi-trash"></i> Delete
+                    </button>
+      
+                    <button type="button" class="btn btn-outline-danger waves-effect ml-4" onclick="removeModalCart()">Cancel</button>
+                  </div>
+                  </div>
+                </div>
+              </div>
+              <!--/.Content-->
+            </div>
+          </div>
+    </section>
+    <!-- Shopping Cart Section End -->
+<%- include('../partials/footer.ejs') %>

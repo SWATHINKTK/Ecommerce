@@ -35,6 +35,8 @@
 html,
 body {
 	height: 100%;
+	margin: 0;
+	padding: 0;
 	font-family: "Nunito Sans", sans-serif;
 	-webkit-font-smoothing: antialiased;
 }
@@ -316,9 +318,12 @@ ol {
 /*---------------------
   Header
 -----------------------*/
-
+.fluid-style{
+	padding-left: 4rem;
+	padding-right: 4rem;
+}
 .header {
-	background: #ffffff;
+	background: #bcbcbc;
 }
 
 .header__top {
@@ -337,7 +342,7 @@ ol {
 
 .header__top__links {
 	display: inline-block;
-	margin-right: 25px;
+	/* margin-right: 25px; */
 }
 
 .header__top__links a {
@@ -373,12 +378,12 @@ ol {
 	cursor: pointer;
 }
 
-.header__top__hover span i {
+/* .header__top__hover span i {
 	font-size: 20px;
 	position: relative;
 	top: 3px;
 	right: 2px;
-}
+} */
 
 .header__top__hover ul {
 	background: #ffffff;
@@ -528,7 +533,7 @@ ol {
 	margin-right: 0;
 }
 
-.header__nav__option .price {
+/* .header__nav__option .price {
 	font-size: 15px;
 	color: #111111;
 	font-weight: 700;
@@ -536,7 +541,7 @@ ol {
 	margin-left: -20px;
 	position: relative;
 	top: 3px;
-}
+} */
 
 .offcanvas-menu-wrapper {
 	display: none;
@@ -1051,6 +1056,11 @@ ol {
 	display: inline-block;
 }
 
+.product__item__pic .product__hover i{
+	background: #ffffff;
+	padding: 10px;
+	display: inline-block;
+}
 .product__item__text {
 	padding-top: 25px;
 	position: relative;
@@ -1626,33 +1636,26 @@ ol {
 	font-weight: 600;
 	font-size: 1.2rem;
 }
-.btn-addToCart,.btn-buyNow {
-	display: inline-block;
-	font-size: 22px;
-	font-weight: 700;
-	background-color: #FFC107;
-	color: #000000; 
-	border: none;
-	border-radius: 25px;
-	cursor: pointer;
-	transition: background-color 0.3s;
-	margin-top: 10px;
-}
+/*   */
 
 .btn-addToCart:hover {
 	
 }
 
-.btn-addToCart {
+.btn-addToCart{
 	/* margin-left: 10px; */
 	padding: 11px 33px;
-	background-color: #FFA000; /* Different background color for Add to Cart */
+	background-color: #FFA000; 
+	font-weight: 700;
+	font-size: 1.1rem;
 }
 
 .btn-buyNow {
 	padding: 11px 45px;
 	margin-left: 1.3rem;
-	background-color: #ff5e00; /* Different background color for Buy Now */
+	background-color: #ff5e00; 
+	font-weight: 700;
+	font-size: 1.1rem;
 }
 
 #productdetail-color-view{
@@ -1739,6 +1742,89 @@ form .form-control:focus {
 	/* font-family: 'Poppins', sans-serif; */
 	font-family: 'Sometype Mono', monospace;
 
+}
+.quantity{
+	width: auto; 
+	padding: 5px;
+	border: 2px solid #ccc;
+	text-align: center; 
+	border-radius: 5px; 
+	font-size: 16px;
+}
+  
+.quantity:focus {
+	border-color: #060a0f; 
+	outline: none; 
+}
+.cart-productImage{
+	max-width: 130px;
+	max-height: 50px;
+}
+
+.cart-productImage img{
+	object-fit: contain;
+	/* max-width: 300px;
+	max-height: 100px; */
+	
+	
+}
+
+.cart-product-view{
+	border: 1px solid #41414181;
+	border-radius: 3px;
+	box-shadow: 0 0 9px -2px #7f7f7f;
+}
+.cart-color{
+	border:none;
+	background-color: transparent;
+	max-width: 30px;
+}
+
+.cart-quantity{
+	width: 3rem;
+	border-radius: 4px;
+}
+
+
+
+.sticky {
+	position: -webkit-sticky;
+	position: sticky;
+	bottom:0;
+	margin-bottom: 50px;
+	height: 60px;
+	box-shadow: 0 0 9px -2px #918383;
+	background-color: #fff;
+  }
+
+.proceed-payment{
+	padding: 10px 20px;
+	background-color: #c5760e;
+	font-weight: 800;
+}
+
+.cart-total-head{
+	font-size: 20px;
+	font-weight: 700;
+	border-bottom: 2px dashed #cccccc;
+}
+
+.cart-total-amount{
+	font-size: 19px;
+	font-weight: 900;
+}
+
+.my-custom-icon-class{
+	font-size: 10px;
+}
+
+.modal-dialog{
+	box-shadow: 0 0 15px -2px #000000;
+}
+
+.swal2-popup {
+	position: fixed;
+	bottom: 20px; 
 }
 
 
@@ -2237,8 +2323,8 @@ form .form-control:focus {
 -----------------------*/
 
 .breadcrumb-option {
-	background: #f3f2ee;
-	padding: 40px 0;
+	background: #fff6f6;
+	padding: 10px 0;
 }
 
 .breadcrumb__text h4 {
@@ -2265,7 +2351,7 @@ form .form-control:focus {
 
 .breadcrumb__links span {
 	font-size: 15px;
-	color: #b7b7b7;
+	color: #4d20c7;
 	display: inline-block;
 }
 
@@ -2578,7 +2664,7 @@ form .form-control:focus {
 	text-align: center;
 }
 
-.continue__btn.update__btn {
+/* .continue__btn.update__btn {
 	text-align: right;
 }
 
@@ -2586,7 +2672,7 @@ form .form-control:focus {
 	color: #ffffff;
 	background: #111111;
 	border-color: #111111;
-}
+} */
 
 .continue__btn.update__btn a i {
 	margin-right: 5px;
@@ -2663,6 +2749,9 @@ form .form-control:focus {
 }
 
 .cart__total {
+	position: -webkit-sticky;
+	position: sticky;
+	top:0;
 	background: #f3f2ee;
 	padding: 35px 40px 40px;
 }

@@ -17,6 +17,9 @@ const userRegistration = moongose.Schema({
         type : String,
         require : true
     },
+    cartProducts : {
+        type : moongose.Schema.Types.ObjectId
+    },
     _isVerified : {
         type : Boolean,
         require : true

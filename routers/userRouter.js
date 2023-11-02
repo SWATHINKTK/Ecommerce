@@ -53,6 +53,6 @@ userRouter.post('/updateaddress',userController.updateAddressData);
 
 userRouter.get('/error500',userController.load500ErrorPage);
 userRouter.get('/error404',userController.load404ErrorPage);  
-userRouter.get('/*',userController.load500ErrorPage);
+// userRouter.get('/*',userController.load500ErrorPage);
 
 module.exports = userRouter;
