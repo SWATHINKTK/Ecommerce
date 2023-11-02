@@ -31,67 +31,58 @@
                         <h5 class="font-weight-bold">Delivery Address</h5>
                     </div>
                     
-                    <div class="card col-sm-12 mt-2 address-card" >
-                        <div class="card-body p-3">
-                            <div class="row">
-                                <input type="radio" class="address-selector"  name="1" id="">
-                                <div class="col-sm-12 pl-4 pt-1">
-                                    <div class="d-flex">
-                                        <p class="card-text font-weight-bold address-name">Swathin<span class="ml-2"> 898593845934 </span></p>
-                                        
-                                        <a href="/editaddress" class="text-primary ml-auto" ><i class="bi bi-pencil-square"></i> Edit</a>
+                    <% if(locals.address ? true : false){ %>
+                        <% for(let i=0; i < address.length ;i++){ %>
+                            <div class="card col-sm-12 mt-2 address-card" >
+                                <div class="card-body p-3">
+                                    <div class="row">
+                                        <input type="radio" class="address-selector"  name="Address"  data-addressId="<%= address[i]._id %>">
+                                        <div class="col-sm-12 pl-4 pt-1">
+                                            <div class="d-flex">
+                                                <p class="card-text font-weight-bold address-name"><%= address[i].username %><span class="ml-2"> <%= address[i].phoneNumber %> </span></p>
+                                                
+                                                <a href="#" id="editCheckoutAddress" class="text-primary ml-auto" data-addressId="<%= address[i]._id %>"><i class="bi bi-pencil-square"></i> Edit</a>
+                                            </div>
+                                            <p class="card-text m-0"><%= address[i].address %></p>
+                                            <p class="card-text m-0"><%= address[i].locality %> , <%= address[i].city %> , <%= address[i].district %></p>
+                                            <p class="card-text font-weight-bold"><%= address[i].pincode %></p>
+                                        </div>
                                     </div>
-                                    <p class="card-text m-0">KTK VILLA</p>
-                                    <p class="card-text m-0">kANNAMVELLY , PANOOR , KANNUR</p>
-                                    <p class="card-text font-weight-bold">770692</p>
                                 </div>
                             </div>
-                        </div>
-                    </div>
+                    <% } %>
+                    <% } else {%>
 
-                    <div class="card col-sm-12 mt-2 address-card" >
-                        <div class="card-body p-3">
-                            <div class="row">
-                                <input type="radio" class="address-selector"  name="1" id="">
-                                <div class="col-sm-12 pl-4">
-                                    <div class="d-flex">
-                                        <p class="card-text font-weight-bold address-name">Swathin<span class="ml-2"> 898593845934 </span></p>
-                                        
-                                        <a href="/editaddress" class="text-primary ml-auto" ><i class="bi bi-pencil-square"></i> Edit</a>
+                        <div class="card col-sm-12 mt-2 address-card">
+                            <div class="card-body p-3">
+                                <div class="row">
+                                    <div class="col-sm-12 text-center">
+                                        <h2 class="text-danger address-notfound">Address is Not Found Adding New Address</h2>
                                     </div>
-                                    <p class="card-text m-0">KTK VILLA</p>
-                                    <p class="card-text m-0">kANNAMVELLY , PANOOR , KANNUR</p>
-                                    <p class="card-text font-weight-bold">770692</p>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="card col-sm-12 mt-2 address-card" >
-                        <div class="card-body p-3">
-                            <div class="row">
-                                <input type="radio" class="address-selector"  name="1" id="">
-                                <div class="col-sm-12 pl-4">
-                                    <div class="d-flex">
-                                        <p class="card-text font-weight-bold address-name">Swathin<span class="ml-2"> 898593845934 </span></p>
-                                        
-                                        <a href="/editaddress" class="text-primary ml-auto" ><i class="bi bi-pencil-square"></i> Edit</a>
-                                    </div>
-                                    <p class="card-text m-0">KTK VILLA</p>
-                                    <p class="card-text m-0">kANNAMVELLY , PANOOR , KANNUR</p>
-                                    <p class="card-text font-weight-bold">770692</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
+                    <% } %>
+
+
+
+                    <!-- ADD NEW ADDRESS IN CHECKOUT  -->
                     <div class="col-sm-12  p-3 mb-5 mt-2 border d-flex align-items-center" id="checkout-AddNewAddress">
                         <i class="fa-solid fa-plus fa-lg mr-3" style="color: #000000;"></i> <h5 class="font-weight-bold">Add New Address</h5>
                     </div>
 
+
+                    <!--  EDIT EXISTING ADDRESS IN CHECKOUT -->
+                    <div id="checkout-editAddressForm" style="display: none;">
+                        
+                    </div>
+                    <!-- END EDIT EXISTING ADDRESS IN CHECKOUT -->
+                    
+
                     <div id="checkout-addAddressForm" style="display: none;">
                         <h2 class="text-center font-weight-bold mb-4">Add New Address</h2>
-                        <form id="newAddressAdding">
+                        <form id="newAddressAddingCheckout">
                             <div class="alert " role="alert" id="add-new-address-sucess">
                             
                             </div>
@@ -164,7 +155,6 @@
                                     <span class="text-danger ml-2" name="address-validate-message"></span>
                                 </div>
                             </div>
-                            <input type="hidden" id="checkWhichAddress" value="false">
                             <input class="btn btn-primary pl-4 pr-4" type="submit" value="Save">
                         </form>
                     </div>
@@ -175,22 +165,22 @@
                     </div>
                     <div class="p-3 cart-product-view d-flex mt-3 pb-5" id="">
                         <div class="cart-productImage">
-                            <img src="/public/admin/assets/productImages/1697554220865-img3.webp" alt="">
+                            <img src="/public/admin/assets/productImages/<%= product.productImages[0] %>" alt="">
                             <div class="mt-2">
                                 <span class="font-weight-bold">Quanitity : </span>
-                                <input type="number" class="cart-quantity text-center font-weight-bold" name="quanitity" id="cart-product-quanitity" min="1" max="10" value="" data-cart-product-id="" >
+                                <input type="number" class="cart-quantity text-center font-weight-bold" name="quanitity" id="cart-product-quanitity" min="1" max="<%= product.stock %>" value="1" data-cart-product-id="" >
                             </div>
                         </div>
                         <div class="">
-                            <h4 class="ml-4 mt-2 font-weight-bold mb-3">Trends Shirts</h4>
+                            <h4 class="ml-4 mt-2 font-weight-bold mb-3"><%= product.productName %></h4>
                             <div class="d-flex align-items-center m-2">
-                                <h6 class="ml-3 mr-2">Color : </h6><input type="color" value="#000" class="cart-color">
+                                <h6 class="ml-3 mr-2">Color : </h6><input type="color" value="<%= product.color %>" class="cart-color">
                             </div>
                             <div class="d-flex align-items-center">
-                                <h6 class="ml-4 mr-2">Size : </h6> <span>Medium</span>
+                                <h6 class="ml-4 mr-2">Size : </h6> <span><%= product.size %></span>
                             </div>
                             <div class="d-flex align-items-center">
-                                <h4 class="ml-4 mr-2 mt-2"><i class="bi bi-currency-rupee"></i> <span class="font-weight-bold">0000</span></h4>
+                                <h4 class="ml-4 mr-2 mt-2"><i class="bi bi-currency-rupee"></i> <span class="font-weight-bold"><%= product.price %></span></h4>
                             </div>    
                         </div>    
                     </div>

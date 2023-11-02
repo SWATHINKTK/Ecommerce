@@ -1,0 +1,79 @@
+<h2 class="text-center font-weight-bold mb-4">Edit Address</h2>
+                    
+<form id="editAddress">
+    <div class="alert " role="alert" id="edit-new-address-sucess">
+    
+    </div>
+    <div class="form-row">
+        <input type="hidden" class="form-control" value="<%= address._id %>" name="addressId">
+        <div class="col-md-6 mb-3">
+            <label for="input1">Name</label>
+            <input type="text" class="form-control" id="editName" value="<%= address.username %>" name="Name">
+            <span class="text-danger ml-2" name="address-validate-message"></span>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label for="input2">Phone Number</label>
+            <input type="text" class="form-control" id="editPhnNumber" value="<%= address.phoneNumber %>" name="MobileNumber">
+            <span class="text-danger ml-2" name="address-validate-message"></span>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col-md-6 mb-3">
+            <label for="input1">Pincode</label>
+            <input type="text" class="form-control" id="editPincode" value="<%= address.pincode %>" name="Pincode">
+            <span class="text-danger ml-2" name="address-validate-message"></span>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label for="input2">Locality</label>
+            <input type="text" class="form-control" id="editLocality" value="<%= address.locality %>" name="Locality">
+            <span class="text-danger ml-2" name="address-validate-message"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="textarea">Address</label>
+        <textarea class="form-control" id="textarea" rows="3" name="Address" id="editAddress" ><%= address.address %></textarea>
+        <span class="text-danger ml-2" name="address-validate-message"></span>
+    </div>
+    <div class="form-row">
+        <div class="col-md-6 mb-3">
+            <label for="input1">City/Distict/Town</label>
+            <input type="text" class="form-control" id="editCity" value="<%= address.city %>" name="City">
+            <span class="text-danger ml-2" name="address-validate-message"></span>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label for="districtSelect">Select a District:</label><br>
+            <select id="districtSelect" name="District" class="district" >
+                <option value="<%= address.district %>" class="mt-2"><%= address.district %></option>
+                <option value="Thiruvananthapuram">Thiruvananthapuram</option>
+                <option value="Kollam">Kollam</option>
+                <option value="Pathanamthitta">Pathanamthitta</option>
+                <option value="Alappuzha">Alappuzha</option>
+                <option value="Kottayam">Kottayam</option>
+                <option value="Idukki">Idukki</option>
+                <option value="Ernakulam">Ernakulam</option>
+                <option value="Thrissur">Thrissur</option>
+                <option value="Palakkad">Palakkad</option>
+                <option value="Malappuram">Malappuram</option>
+                <option value="Kozhikode">Kozhikode</option>
+                <option value="Wayanad">Wayanad</option>
+                <option value="Kannur">Kannur</option>
+                <option value="Kasaragod">Kasaragod</option>
+            </select>
+            <span class="text-danger ml-2" name="address-validate-message"></span>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col-md-6 mb-3">
+            <label for="input1">Landmark</label>
+            <input type="text" class="form-control" id="editLandmark" value="<%= locals.address.landmark ? address.landmark : '' %>" name="Landmark">
+            <span class="text-danger ml-2" name="address-validate-message"></span>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label for="input2">Alternate Number</label>
+            <input type="text" class="form-control" id="editAlteranteNumber" name="AlteranteNumber" value="<%= locals.address.alternateNumber ? address.alternateNumber : '' %>">
+            <span class="text-danger ml-2" name="address-validate-message"></span>
+        </div>
+    </div>
+
+    <input class="btn btn-primary pl-4 pr-4" type="submit" value="Save">
+</form>

@@ -1,3 +1,4 @@
+
 let address = true;
 document.addEventListener('DOMContentLoaded',()=>{
 
@@ -15,6 +16,26 @@ document.addEventListener('DOMContentLoaded',()=>{
             address = true;
         }
     });
+
+
+    // ***** EDIT THE EXISTNG ADDRESS IN CHECKOUT PAGE *****
+    const editCheckoutAddress = document.getElementById('editCheckoutAddress');
+    editCheckoutAddress.addEventListener('click',(event)=>{
+        event.preventDefault();
+
+        const addressDiv = document.getElementById('checkout-editAddressForm');
+        addressDiv.style.display = 'block';
+        addressDiv.innerHTML = "HELLO"
+
+        const middlePosition = Math.ceil(document.body.scrollHeight / 2.6);
+        window.scrollTo({
+            top: middlePosition,
+            behavior: 'smooth' // You can use 'auto' for instant scrolling
+          });
+    })
+
+
+
 
 
     // ****** PROCEED TO PAYMENT - PAYMENT OPTION DIV VIEW *****
