@@ -42,11 +42,22 @@
                                   <%= category[i].categoryname %>&nbsp;
                               <% } }%>
                     </li>
-                    <li class="mb-3"><span class="product-heading">in Stock : </span> <span class="text-danger"><%= product.stock %> left</span> </li>
+                    <li class="mb-3">
+                        <% if(product.stock > 0) {%>
+                            <span class="product-heading font-weight-bold text-success">in stock  </span>
+                        <% } %> 
+                        <span class="text-danger font-weight-bold">
+                            <% if(product.stock == 0) {%>
+                                Out Of Stock
+                            <% } else if(product.stock <= 10) {%>
+                                Stock : <%= product.stock %> left
+                            <% } %>
+                        </span> 
+                    </li>
                     <li class="d-flex mb-3"><span class="product-heading">Color : </span> <div id="productdetail-color-view" name="<%= product.color %>" ></div></li>
                     <li class="mb-3"><span class="product-heading">Size : </span> <span class="text-primary font-weight-bold"><%= product.size %> </span> </li>
                     <li class="mb-3"><span class="product-heading">Material : </span> <span class="text-primary font-weight-bold"><%= product.material %> </span> </li>
-                    <li class="mb-3"><span class="product-heading">Quanitity : </span><input type="number" class="quantity" name="quanitity" id="product-quanitity" min="1" max="<%= product.stock %>" value="1"></li>
+                    <!-- <li class="mb-3"><span class="product-heading">Quanitity : </span><input type="number" class="quantity" name="quanitity" id="product-quanitity" min="1" max="<%= product.stock %>" value="1"></li> -->
                     <div class="product__details__btns__option">
                         <a href="#"><i class="fa fa-heart"></i> add to wishlist</a>
                         <a href="#"><i class="fa fa-exchange"></i> Add To Compare</a>
@@ -62,8 +73,9 @@
                                 <% } %>
                             </div>
                         
-                            <!-- <button class="btn btn btn-warning rounded-pill btn-buyNow">Buy Now</button> -->
-                            <a href="/api/checkout?id=<%= product._id %>">Buy Now</a>
+                            <% if(product.stock != 0 ) {%>
+                                <button class="btn btn btn-warning rounded-pill btn-buyNow" id="buyNowBtn" data-url="/api/checkout?id=<%= product._id %>">Buy Now</button>
+                            <% } %>
                         </div>
                     </li>
                     

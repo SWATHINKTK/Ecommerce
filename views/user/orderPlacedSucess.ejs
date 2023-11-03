@@ -1,0 +1,56 @@
+<%- include('../partials/header.ejs') %>
+<%- include('../partials/navbar.ejs') %>
+<div class="success-animation mb-5">
+    <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" /><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" /></svg>
+    <div class="d-flex justify-content-center mt-4">
+        <h3>Order Placed Sucessfully !...</h3>
+    </div>
+</div>
+<section>
+    <div class="container w-50 mb-5 order-sucessfull-main-div W-50 p-4">
+        <div class="row">
+            <div class="col-md-6 border-right">
+                <!-- Left Side Div -->
+                <div class="left-side ordersuccess-left">
+                    <h5>PRODUCT INFORMATION</h5>
+                    <div class="mt-4 order-success-product-image">
+                        <img src="/public/admin/assets/productImages/1697554220865-img3.webp" alt="">
+                    </div>
+                    <ul type="none" class="mt-3">
+                        <li class="mt-1"><span class="pr-2 font-weight-bold">Product Name</span> : Trends</li>
+                        <li class="mt-1"><span class="pr-2 font-weight-bold">Size</span> : Trends</li>
+                        <li class="mt-1">
+                            <div class="d-flex align-items-center">
+                                <span class="pr-2 font-weight-bold">Color</span>: 
+                                <input type="color" value="#000" class="cart-color">
+                            </div>
+                        </li>
+                        <li class="mt-1"><span class="pr-2 font-weight-bold">Quanitity</span> : Trends</li>
+                        <li class="mt-1"><span class="pr-2 font-weight-bold">Price</span> : <i class="bi bi-currency-rupee"></i>  0000</li>
+                    </ul>
+                </div>
+                        
+            </div>
+            <div class="col-md-6">
+                <div class="right-side ordersuccess-right">
+                    <h5>ORDER DETAILS</h5>
+                    <ul type="none" class="mt-4">
+                        <li class="mt-1"><span class="pr-2 font-weight-bold">Order Id</span> : Trends</li>
+                        <li class="mt-1"><span class="pr-2 font-weight-bold">Order Date</span> : Trends</li>
+                        <li class="mt-1"><span class="pr-2 font-weight-bold">Delivery Date</span> : Trends</li>
+                        <li class="mt-4"><span class="pr-2 font-weight-bold">Swathin</span></li>
+                        <li class="mt-1"><span class="pr-2 font-weight-bold">Delivery Address</span> : </li>
+                        <li class="mt-3"><span class="pr-2 font-weight-bold">Payment Method</span> : </li>
+                        <li class="mt-1"><span class="pr-2 font-weight-bold">Total Price</span> : <i class="bi bi-currency-rupee"></i>  0000</li>
+                    </ul>
+                    <div class="d-flex justify-content-center mt-5">
+                        <a href="#" class="btn btn-dark rounded-pill px-3">Go  To Order</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<%- include('../partials/footer.ejs') %>

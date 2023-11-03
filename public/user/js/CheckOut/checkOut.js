@@ -77,19 +77,22 @@ priceUpdate.addEventListener('change',(event)=>{
 const placeOrder = document.getElementById('placeOrder');
 if(placeOrder){
 
-    placeOrder.addEventListener('click',(event)=>{
+    placeOrder.addEventListener('click', async(event)=>{
 
         const productId = event.target.getAttribute('data-product-id');
 
-        const productQuantity = document.getElementById('checkout-product-quanitity');
+        const productQuantity = document.getElementById('checkout-product-quanitity').value;
         
         const deliveryAddress = document.querySelectorAll('input[name="CheckedAddress"]');
+
+        const hiddenInput = document.getElementById('checkout-hidden-data');
+        const singlePrice = hiddenInput.getAttribute('name');
         
         let selectedAddress;
         deliveryAddress.forEach((address)=>{
             if(address.checked)
             {
-                selectedAddress = address;
+                selectedAddress = address.getAttribute('data-addressId');
             }
         });
 
@@ -98,10 +101,37 @@ if(placeOrder){
         let selectedPaymetOption;
         payment.forEach((paymentOption)=>{
             if(paymentOption.checked){
-                selectedPaymetOption = paymentOption;
+                selectedPaymetOption = paymentOption.value;
             }
         })
 
         console.log(productId,productQuantity,selectedAddress,selectedPaymetOption)
+
+        const jsonData = JSON.stringify({
+            ProductId:productId,
+            productQuantity:productQuantity,
+            ProductPrice:singlePrice,
+            Address:selectedAddress,
+            PaymentMethod:selectedPaymetOption,
+            SingleProduct:true
+        })
+
+        const url = '/api/placeOrder';
+
+        const requestOption = {
+            method:'POST',
+            body:jsonData,
+            headers:{'Content-Type':'application/json'}
+        }
+
+        const response = await fetch(url,requestOption) ;
+
+        const responseData = await response.json();
+
+        if(responseData.status){
+            window.location.href = '/api/orderSucesss';
+        }else{
+            window.location.href = '/api/ordersucess?status=false'
+        }
     })
 }

@@ -4,6 +4,8 @@ const addNewAddress = document.getElementById('checkout-AddNewAddress');
 addNewAddress.addEventListener('click',() => {
 
     const addressDiv = document.getElementById('checkout-addAddressForm');
+    const editAddressDiv = document.getElementById('checkout-editAddressForm');
+    editAddressDiv.style.display = 'none';
     if(address){
         addressDiv.style.display = 'block';
         address = false;
@@ -123,6 +125,12 @@ if(editCheckoutAddress){
 
             const addressDiv = document.getElementById('checkout-editAddressForm');
             addressDiv.style.display = 'block';
+
+            const middlePosition = Math.ceil(document.body.scrollHeight / 2.6);
+            window.scrollTo({
+                top: middlePosition,
+                behavior: 'smooth' // You can use 'auto' for instant scrolling
+            });
             
             addressDiv.innerHTML = responseData;
 
@@ -132,7 +140,7 @@ if(editCheckoutAddress){
                 submitCheckoutEditAddress();
             })
 
-            const middlePosition = Math.ceil(document.body.scrollHeight / 2.6);
+            // const middlePosition = Math.ceil(document.body.scrollHeight / 2.6);
             // window.scrollTo({
             //     top: middlePosition,
             //     behavior: 'smooth' // You can use 'auto' for instant scrolling
