@@ -163,29 +163,62 @@
                     <div class="col-sm-12  p-3 border d-flex align-items-center mt-5 checkout-heading ">
                         <h5 class="font-weight-bold">Product Details</h5>
                     </div>
-                    <div class="p-3 cart-product-view d-flex mt-3 pb-5" id="">
-                        <div class="cart-productImage checkout-productImg">
-                            <img src="/public/admin/assets/productImages/<%= product.productImages[0] %>" alt="">
-                            <div class="mt-2">
-                                <span class="font-weight-bold">Quanitity : </span>
-                                <input type="number" class="cart-quantity text-center font-weight-bold" name="orderProducts" id="checkout-product-quanitity" min="1" max="10" value="1">
-                                <input type="hidden" name="<%= product.price %>" id="checkout-hidden-data" value="1">
+                    <% 
+                        let quantity = 0;
+                        let sum = 0; 
+                    %>
+                    <% if(single){ %>
+                        <div class="p-3 cart-product-view d-flex mt-3 pb-5" id="">
+                            <div class="cart-productImage checkout-productImg">
+                                <img src="/public/admin/assets/productImages/<%= product.productImages[0] %>" alt="">
+                                <div class="mt-2">
+                                    <span class="font-weight-bold">Quanitity : </span>
+                                    <input type="number" class="cart-quantity text-center font-weight-bold" name="orderProducts" id="checkout-product-quanitity" min="1" max="10" value="1">
+                                    <input type="hidden" name="<%= product.price %>" id="checkout-hidden-data" value="1" data-product-stock="<%= product.stock %>">
+                                </div>
                             </div>
-                        </div>
-            
-                        <div class="">
-                            <h4 class="ml-4 mt-2 font-weight-bold mb-3"><%= product.productName %></h4>
-                            <div class="d-flex align-items-center m-2">
-                                <h6 class="ml-3 mr-2">Color : </h6><input type="color" value="<%= product.color %>" class="cart-color">
-                            </div>
-                            <div class="d-flex align-items-center">
-                                <h6 class="ml-4 mr-2">Size : </h6> <span><%= product.size %></span>
-                            </div>
-                            <div class="d-flex align-items-center">
-                                <h4 class="ml-4 mr-2 mt-2"><i class="bi bi-currency-rupee"></i> <span class="font-weight-bold"><%= product.price %></span></h4>
+                
+                            <div class="">
+                                <h4 class="ml-4 mt-2 font-weight-bold mb-3"><%= product.productName %></h4>
+                                <div class="d-flex align-items-center m-2">
+                                    <h6 class="ml-3 mr-2">Color : </h6><input type="color" value="<%= product.color %>" class="cart-color">
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <h6 class="ml-4 mr-2">Size : </h6> <span><%= product.size %></span>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <h4 class="ml-4 mr-2 mt-2"><i class="bi bi-currency-rupee"></i> <span class="font-weight-bold"><%= product.price %></span></h4>
+                                </div>    
                             </div>    
-                        </div>    
-                    </div>
+                        </div>
+                    <% } else {%>
+                        <% for(let i = 0 ; i < cartProduct.length ; i++){ %>
+                            <% quantity += cartProduct[i].quantity %>
+                            <% sum += cartProduct[i].quantity * cartProduct[i].productId.price %>
+                            <div class="p-3 cart-product-view d-flex mt-3 pb-5" id="">
+                                <div class="cart-productImage checkout-productImg">
+                                    <img src="/public/admin/assets/productImages/<%= cartProduct[i].productId.productImages[0] %>" alt="">
+                                    <div class="mt-2">
+                                        <span class="font-weight-bold">Quanitity : </span>
+                                        <input type="number" class="cart-quantity text-center font-weight-bold" name="orderProducts" id="checkout-product-quanitity" min="1" max="10" value="<%= cartProduct[i].quantity %>" readonly>
+                                        <input type="hidden" name="<%= cartProduct[i].productId.price %>" id="checkout-hidden-data" value="1">
+                                    </div>
+                                </div>
+                    
+                                <div class="">
+                                    <h4 class="ml-4 mt-2 font-weight-bold mb-3"><%= cartProduct[i].productId.productName %></h4>
+                                    <div class="d-flex align-items-center m-2">
+                                        <h6 class="ml-3 mr-2">Color : </h6><input type="color" value="<%= cartProduct[i].productId.color %>" class="cart-color">
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <h6 class="ml-4 mr-2">Size : </h6> <span><%= cartProduct[i].productId.size %></span>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <h4 class="ml-4 mr-2 mt-2"><i class="bi bi-currency-rupee"></i> <span class="font-weight-bold"><%= cartProduct[i].productId.price %></span></h4>
+                                    </div>    
+                                </div>    
+                            </div>
+                    <% }} %>
 
 
                     <div class="row d-flex justify-content-end align-items-center sticky mb-2 mt-2 ">
@@ -223,33 +256,60 @@
                                      Cash on Delivery</span>
                             </li>
                         </ul>
-                        <div class="row d-flex justify-content-end align-items-center mt-3 border p-2 placeorder">
-                            <div class="continue__btn  mr-3" >
-                                <button class="btn proceed-payment" id="placeOrder" data-product-id="<%= product._id %>">Place Order</button>
+
+                        <% if(single){ %>
+                            <div class="row d-flex justify-content-end align-items-center mt-3 border p-2 placeorder">
+                                <div class="continue__btn  mr-3" >
+                                    <button class="btn proceed-payment" id="placeOrder" data-product-id="<%= product._id %>">Place Order</button>
+                                </div>
                             </div>
-                        </div>
+                        <% } else { %>
+                            <div class="row d-flex justify-content-end align-items-center mt-3 border p-2 placeorder">
+                                <div class="continue__btn  mr-3" >
+                                    <button class="btn proceed-payment" id="cartPlaceOrder"  >Place Order</button>
+                                </div>
+                            </div>
+                        <% } %>
+
                     </div>
                     <!-- END PAYMENT OPTION -->
                 </div>
 
-
-
-                <div class="col-lg-4 ">
-                    <!-- <div class="cart__discount">
-                        <h6>Discount codes</h6>
-                    </div> -->
-                    <div class="cart__total mt-3">
-                        <h6 class="cart-total-head pb-3">Price Details</h6>
-                        <ul>
-                            <li>Price <span><i class="bi bi-currency-rupee"></i><span name="checkout-price"><%= product.price %></span></span></li>
-                            <li>Quanitity <span name="checkout-price">1</span></li>
-                            <li>Discount <span><i class="bi bi-currency-rupee"></i> 0</span></li>
-                            <li>Delivery Charges <span>Free</span></li>
-                            <li class="mt-2 cart-total-amount">Total Amount <span><i class="bi bi-currency-rupee"></i> <span name="checkout-price"><%= product.price %></span></span></li>
-                        </ul>
-                        <!-- <a href="#" class="primary-btn">Proceed to checkout</a> -->
+                <% if(single){ %>
+                    <div class="col-lg-4 ">
+                        <!-- <div class="cart__discount">
+                            <h6>Discount codes</h6>
+                        </div> -->
+                        <div class="cart__total mt-3">
+                            <h6 class="cart-total-head pb-3">Price Details</h6>
+                            <ul>
+                                <li>Price <span><i class="bi bi-currency-rupee"></i><span name="checkout-price"><%= product.price %></span></span></li>
+                                <li>Quanitity <span name="checkout-price">1</span></li>
+                                <li>Discount <span><i class="bi bi-currency-rupee"></i> 0</span></li>
+                                <li>Delivery Charges <span>Free</span></li>
+                                <li class="mt-2 cart-total-amount">Total Amount <span><i class="bi bi-currency-rupee"></i> <span name="checkout-price"><%= product.price %></span></span></li>
+                            </ul>
+                            <!-- <a href="#" class="primary-btn">Proceed to checkout</a> -->
+                        </div>
                     </div>
-                </div>
+                <% } else {%>
+                    <div class="col-lg-4 ">
+                        <!-- <div class="cart__discount">
+                            <h6>Discount codes</h6>
+                        </div> -->
+                        <div class="cart__total mt-3">
+                            <h6 class="cart-total-head pb-3">Price Details</h6>
+                            <ul>
+                                <li>Price <span><i class="bi bi-currency-rupee"></i><span name="checkout-price"><%= sum %></span></span></li>
+                                <li>Quanitity <span name="checkout-price"><%= quantity %></span></li>
+                                <li>Discount <span><i class="bi bi-currency-rupee"></i> 0</span></li>
+                                <li>Delivery Charges <span>Free</span></li>
+                                <li class="mt-2 cart-total-amount">Total Amount <span><i class="bi bi-currency-rupee"></i> <span name="checkout-price"><%= sum %></span></span></li>
+                            </ul>
+                            <!-- <a href="#" class="primary-btn">Proceed to checkout</a> -->
+                        </div>
+                    </div>
+                <% } %>
             </div>
         </div>
 

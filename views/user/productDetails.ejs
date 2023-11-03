@@ -47,7 +47,7 @@
                             <span class="product-heading font-weight-bold text-success">in stock  </span>
                         <% } %> 
                         <span class="text-danger font-weight-bold">
-                            <% if(product.stock == 0) {%>
+                            <% if(product.stock <= 0) {%>
                                 Out Of Stock
                             <% } else if(product.stock <= 10) {%>
                                 Stock : <%= product.stock %> left
@@ -64,17 +64,22 @@
                     </div>
                     <li>
                         <div class="d-flex">
-                            
+
+                            <% if(product.stock > 0 ) {%> 
                             <div id="addToCart">
                                 <% if(!dataCart){ %>
-                                    <button class="btn btn btn-warning rounded-pill btn-addToCart" data-product-id="<%= product._id %>" onclick="addToCart(this)">Add To Cart</button>
+                                    <button class="btn btn btn-warning rounded-pill btn-addToCart" data-product-id="<%= product._id %>" data-stock="<%= product.stock %>" onclick="addToCart(this)">Add To Cart</button>
                                 <% } else { %>
                                     <a href="/api/cart" class="btn btn btn-warning rounded-pill btn-addToCart"><i class="bi bi-cart3 fa-lg text-dark"></i> Go To Cart</a>
                                 <% } %>
                             </div>
                         
-                            <% if(product.stock != 0 ) {%>
-                                <button class="btn btn btn-warning rounded-pill btn-buyNow" id="buyNowBtn" data-url="/api/checkout?id=<%= product._id %>">Buy Now</button>
+                            
+                                <button class="btn btn btn-warning rounded-pill btn-buyNow" id="buyNowBtn" data-url="/api/checkout?id=<%= product._id %>&single=true">Buy Now</button>
+                            <% } else {%>
+                                <!-- <div class="text-center"> -->
+                                    <h5 class="text-danger font-weight-bold">Restocking soon....</h5>
+                                <!-- </div> -->
                             <% } %>
                         </div>
                     </li>

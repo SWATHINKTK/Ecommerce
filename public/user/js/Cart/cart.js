@@ -5,9 +5,15 @@ async function addToCart(eventTag){
 
         const productId = eventTag.getAttribute('data-product-id');
 
+        const stock = eventTag.getAttribute('data-stock');
+
         const productPrice = document.getElementById('product-price').innerHTML;
 
-        const productQuantity = document.getElementById('product-quanitity') ? document.getElementById('product-quanitity').value : 1;
+        let productQuantity = document.getElementById('product-quanitity') ? document.getElementById('product-quanitity').value : 1;
+
+        // if(stock <= 0){
+        //     productQuantity = 0;
+        // }
 
         const url = '/api/addToCart';
 
@@ -46,6 +52,43 @@ async function addToCart(eventTag){
 }
 
 
+
+const cartOrderPlace = document.getElementById('cartOrderPlace');
+if(cartOrderPlace){
+    cartOrderPlace.addEventListener('click',(event)=>{
+        event.preventDefault();
+
+        const stock = document.querySelectorAll('input[name="hidden-for-stock"]');
+
+        let value = true;
+        stock.forEach((stock)=>{
+            if(stock.value == 0){
+                value =false;
+                Swal.fire({
+                    text: `Some Out of Stock is Present in our Cart.You Check Our Cart`,
+                    icon: 'error',
+                    showConfirmButton: false, 
+                    timer: 2500,
+                    customClass: {
+                        icon: 'my-custom-icon-class', 
+                        content: 'my-custom-content-class', 
+                      }, 
+                  });
+                  return
+            }
+        })
+
+        if(value){
+            const url = event.target.getAttribute('data-url');
+            window.location.href = url;
+        }
+    })
+}
+
+
+
+
+
 document.addEventListener('DOMContentLoaded',()=>{
 
 
@@ -63,6 +106,23 @@ document.addEventListener('DOMContentLoaded',()=>{
             const parent = event.target.parentNode;
             const oldData = parent.querySelector('#oldData');
             const oldQuantity = oldData.value;
+
+            const stock = oldData.getAttribute('data-stock');
+
+            if(stock < productQuanitity ){
+                Swal.fire({
+                    text: `Only ${stock} products is left`,
+                    icon: 'warning',
+                    showConfirmButton: false, 
+                    timer: 2500,
+                    customClass: {
+                        icon: 'my-custom-icon-class', 
+                        content: 'my-custom-content-class', 
+                      }, 
+                  });
+                  event.target.value = stock;
+                  return;
+            }
 
             
             if(oldQuantity == 10 && productQuanitity == 10){
@@ -113,6 +173,24 @@ document.addEventListener('DOMContentLoaded',()=>{
                 const oldData = parent.querySelector('#oldData');
                 const oldQuantity = oldData.value;
                 const price = oldData.getAttribute('name');
+
+                const stock = oldData.getAttribute('data-stock');
+
+                if(stock < productQuanitity ){
+                    Swal.fire({
+                        text: `Only ${stock} products is left`,
+                        icon: 'warning',
+                        showConfirmButton: false, 
+                        timer: 2500,
+                        customClass: {
+                            icon: 'my-custom-icon-class', 
+                            content: 'my-custom-content-class', 
+                          }, 
+                      });
+                      event.target.value = stock;
+                      return;
+                }
+    
 
                 const priceUpdate = document.querySelectorAll('span[name="cart-price"]');
                 const totalAmount = parseFloat(priceUpdate[0].innerHTML);
@@ -177,7 +255,7 @@ document.addEventListener('DOMContentLoaded',()=>{
                         let newPrice;
                         if( productQuanitity > oldQuantity){
                             
-                            console.log(totalAmount,productQuanitity,oldQuantity,price)
+                            // console.log(totalAmount,productQuanitity,oldQuantity,price)
 
                             newPrice = totalAmount + parseInt(((productQuanitity - oldQuantity) * price));
 

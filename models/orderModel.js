@@ -40,6 +40,7 @@ const orderModel = moongose.Schema({
     productInforamtion : [{
         productId:{
             type:moongose.Schema.Types.ObjectId,
+            ref : 'products',
             require:true
         },
         productPrice:{
@@ -49,10 +50,16 @@ const orderModel = moongose.Schema({
         productquantity:{
             type:Number,
             require:true
-        }
+        },
+        orderStatus:{
+            type:String,
+            default:'Pending',
+            require:true
+        },
     }],
     userId:{
         type:moongose.Schema.Types.ObjectId,
+        ref : 'users',
         require:true
     },
     paymentMethod:{
@@ -63,12 +70,7 @@ const orderModel = moongose.Schema({
         type:String,
         require:true
     },
-    orderStatus:{
-        type:String,
-        default:'Pending',
-        require:true
-    },
-},{timestamp:true});
+},{timestamps: true});
 
 
 module.exports = moongose.model('orderData',orderModel);

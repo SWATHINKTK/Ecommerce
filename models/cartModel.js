@@ -8,7 +8,7 @@ const cartModel = moongose.Schema({
     cartProducts : [{
       quantity:{
         type : Number,
-        default : 1,
+        default : 0,
         require : true
       },
       price : {

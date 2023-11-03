@@ -1926,7 +1926,7 @@ form .form-control:focus {
 	
 	box-shadow: 0 0 9px -4px #000000;
 
-	max-width: 300px;
+	width: 60%;
 }
 .ordersuccess-left h5{
 	font-weight: 700;

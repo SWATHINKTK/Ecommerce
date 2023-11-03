@@ -33,8 +33,13 @@
                                 <div class="cart-productImage">
                                     <img src="/public/admin/assets/productImages/<%= cartData[i].productId.productImages[0] %>" alt="">
                                     <div class="mt-2">
-                                        <span class="font-weight-bold">Quanitity : </span><input type="number" class="cart-quantity text-center font-weight-bold" name="quanitity" id="cart-product-quanitity" min="1" max="10" value="<%= cartData[i].quantity %>" data-cart-product-id="<%= cartData[i].productId._id %>">
-                                        <input type="hidden" id="oldData" value="<%= cartData[i].quantity %>" name="<%= cartData[i].productId.price %>">
+                                        <% if(cartData[i].productId.stock > 0 ){ %>
+                                            <span class="font-weight-bold">Quanitity : </span><input type="number" class="cart-quantity text-center font-weight-bold" name="quanitity" id="cart-product-quanitity" min="1" max="10" value="<%= cartData[i].quantity %>" data-cart-product-id="<%= cartData[i].productId._id %>">
+                                            <input type="hidden" id="oldData" value="<%= cartData[i].quantity %>" name="<%= cartData[i].productId.price %>" data-stock="<%= cartData[i].productId.stock %>">
+                                        <% }else { %>
+                                            <span class="text-danger font-weight-bold pl-2" style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">OUT OF STOCK</span>
+                                            <input type="hidden" name="hidden-for-stock" value="0" id="">
+                                        <% } %>
                                     </div>
                                 </div>
                                 <div class="">
@@ -57,7 +62,7 @@
                     </div>
                     <div class="row d-flex justify-content-end align-items-center sticky ">
                         <div class="continue__btn  mr-3" >
-                            <button class="btn proceed-payment">Proceed To Payment</button>
+                            <button id="cartOrderPlace" data-url="/api/checkout" class="btn proceed-payment font-weight-bold">Place Order</button>
                         </div>
                     </div>
                 </div>

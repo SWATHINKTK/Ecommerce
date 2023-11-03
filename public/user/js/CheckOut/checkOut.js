@@ -21,9 +21,26 @@ priceUpdate.addEventListener('change',(event)=>{
 
     const newProductQuantity = event.target.value;
     const hiddenInput = document.getElementById('checkout-hidden-data');
-    console.log(hiddenInput)
+    // console.log(hiddenInput)
     const oldProductQuantity = hiddenInput.value;
     const singlePrice = hiddenInput.getAttribute('name');
+
+    const stock = hiddenInput.getAttribute('data-product-stock');
+
+    if(stock < newProductQuantity ){
+        Swal.fire({
+            text: `Only ${stock} products is left`,
+            icon: 'warning',
+            showConfirmButton: false, 
+            timer: 2500,
+            customClass: {
+                icon: 'my-custom-icon-class', 
+                content: 'my-custom-content-class', 
+              }, 
+          });
+          event.target.value = stock;
+          return;
+    }
 
     const checkoutPriceUpdate = document.querySelectorAll('span[name="checkout-price"]');
 
@@ -105,7 +122,7 @@ if(placeOrder){
             }
         })
 
-        console.log(productId,productQuantity,selectedAddress,selectedPaymetOption)
+        // console.log(productId,productQuantity,selectedAddress,selectedPaymetOption)
 
         const jsonData = JSON.stringify({
             ProductId:productId,
@@ -129,7 +146,62 @@ if(placeOrder){
         const responseData = await response.json();
 
         if(responseData.status){
-            window.location.href = '/api/orderSucesss';
+            window.location.href = `/api/orderSucesss?orderId=${responseData.orderId}`;
+        }else{
+            window.location.href = '/api/ordersucess?status=false'
+        }
+    })
+}
+
+
+
+// ***** CART DATA TO PLACE ORDER ******
+const cartPlaceOrder = document.getElementById('cartPlaceOrder');
+if(cartPlaceOrder){
+    cartPlaceOrder.addEventListener('click',async()=>{
+
+        const deliveryAddress = document.querySelectorAll('input[name="CheckedAddress"]');
+
+        let selectedAddress;
+        deliveryAddress.forEach((address)=>{
+            if(address.checked)
+            {
+                selectedAddress = address.getAttribute('data-addressId');
+            }
+        });
+
+        const payment = document.querySelectorAll('input[name="Payment"]');
+
+        let selectedPaymetOption;
+        payment.forEach((paymentOption)=>{
+            if(paymentOption.checked){
+                selectedPaymetOption = paymentOption.value;
+            }
+        })
+
+
+
+        const jsonData = JSON.stringify({
+            Address:selectedAddress,
+            PaymentMethod:selectedPaymetOption,
+            SingleProduct:false
+        })
+
+        const url = '/api/placeOrder';
+
+        const requestOption = {
+            method:'POST',
+            body:jsonData,
+            headers:{'Content-Type':'application/json'}
+        }
+
+        const response = await fetch(url,requestOption) ;
+
+        const responseData = await response.json();
+
+        if(responseData.status){
+            window.location.href = `/api/orderSucesss?orderId=${responseData.orderId}`;
+            // alert('sucess')
         }else{
             window.location.href = '/api/ordersucess?status=false'
         }
