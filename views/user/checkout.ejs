@@ -36,7 +36,7 @@
                             <div class="card col-sm-12 mt-2 address-card" >
                                 <div class="card-body p-3">
                                     <div class="row">
-                                        <input type="radio" class="address-selector"  name="Address"  data-addressId="<%= address[i]._id %>" <% if(i === 0) { %>checked<%} %>>
+                                        <input type="radio" class="address-selector"  name="CheckedAddress"  data-addressId="<%= address[i]._id %>" <% if(i === 0) { %>checked<%} %>>
                                         <div class="col-sm-12 pl-4 pt-1">
                                             <div class="d-flex">
                                                 <p class="card-text font-weight-bold address-name"><%= address[i].username %><span class="ml-2"> <%= address[i].phoneNumber %> </span></p>
@@ -198,26 +198,26 @@
                     <div id="payment-options" style="display: none;">
                         <ul class="border" type="none">
                             <li class="border p-3">
-                                <input type="radio" name="Payment">
+                                <input type="radio" name="Payment" checked value="UPI">
                                 <span class="payment-method-text pl-3"> 
                                     <i class="fa-brands fa-google-pay fa-2xl" style="color: #1964e6;"></i>
                                      UPI Payment</span
                             </li>
                             <li class="border p-3">
-                                <input type="radio" name="Payment">
+                                <input type="radio" name="Payment" value="CARD">
                                 <span class="payment-method-text pl-3">
                                     <i class="fa-solid fa-credit-card" style="color: #1f7bd1;"></i> 
                                     Credit / Debit / ATM Card
                                 </span
                             </li>
                             <li class="border p-3">
-                                <input type="radio" name="Payment">
+                                <input type="radio" name="Payment" value="NETBANKING">
                                 <span class="payment-method-text pl-3">
                                     <i class="fa-brands fa-paypal fa-lg" style="color: #091b3a;"></i>
                                     Net Banking</span>
                             </li>
                             <li class="border p-3">
-                                <input type="radio" name="Payment">
+                                <input type="radio" name="Payment" value="COD">
                                 <span class="payment-method-text pl-3"> 
                                     <i class="bi bi-cash-stack fa-lg"></i> 
                                      Cash on Delivery</span>
@@ -225,7 +225,7 @@
                         </ul>
                         <div class="row d-flex justify-content-end align-items-center mt-3 border p-2 placeorder">
                             <div class="continue__btn  mr-3" >
-                                <button class="btn proceed-payment">Place Order</button>
+                                <button class="btn proceed-payment" id="placeOrder" data-product-id="<%= product._id %>">Place Order</button>
                             </div>
                         </div>
                     </div>
