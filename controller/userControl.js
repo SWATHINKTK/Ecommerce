@@ -616,6 +616,39 @@ const deleteAddress = async(req,res) =>{
     }
 }
 
+// **** Edit Password 
+const editPassword = async(req,res)=>{
+    
+    try{
+
+        const userId = req.session.userId;
+        const data = req.body;
+
+        const user = await userData.findOne({_id:userId});
+
+        const check = await bcrypt.compare(data.currentPassword,user.password);
+        
+        if(!check){
+            res.json({status:false});
+        }else{
+            
+            const strongPassword = await securePassword(data.newPassword);
+
+            const updatePassword = await userData.updateOne({_id:userId},{$set:{password:strongPassword}});
+
+            if(updatePassword){
+                res.json({status:true})
+            }
+        }
+
+    }catch(error){
+        console.log(error.message);
+    }
+    
+
+}
+
+
 
 
 /* =============================================== ERROR HANDLING PAGES ==================================================== */
@@ -650,6 +683,7 @@ module.exports = {
     loadHomePage,
     loadAddressInformation,
     loadUserProfile,
+    editPassword,
     storeAddressFormData,
     updateAddressData,
     deleteAddress,

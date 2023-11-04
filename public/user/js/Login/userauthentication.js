@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", function () {
             // **** SIGIN FORM SUBMISSION START ***
             try {
                 const alert = document.getElementById("signin-alert");
-                alert.style.display = "block";
+                
 
                 const username = document.getElementById("sign-in-username").value;
                 const password = document.getElementById("sign-in-password").value;
@@ -69,6 +69,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (data.status) {
                     window.location.href = `/home`;
                 } else {
+                    alert.style.display = "block";
                     alert.innerHTML = data.message;
                 }
 

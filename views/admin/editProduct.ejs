@@ -65,6 +65,11 @@
                 <div class="col-sm-12">
                   <select id="productbrandname" class="brand-dropdown" >
                     
+                    <%for(let brand of dataBrand){
+                      if(dataProduct.brandname.equals(brand._id)){ %>
+                        <option value="<%= brand._id %>" id="productBrandId"><%= brand.brand_name %></option>
+                      <% } %> 
+                    <% } %>  
                   </select>
                   <p class="text-danger ml-2" name="validate-addProduct"></p>
                 </div>

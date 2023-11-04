@@ -6,6 +6,7 @@ const { userData } = require('../models/userModal');
 const { query } = require('express');
 const { connected } = require('process');
 const { error } = require('console');
+const session = require('express-session');
 
 
 /*---------------------------------------ADMIN ROUTER ACCESSING FUNCTIONS----------------------------------------------------------*/
@@ -101,6 +102,9 @@ const blockUser = async (req, res) => {
         // Store Data True Then send result Used is Blocked
         if (storeData) {
 
+            if(req.session.userId == id){
+                req.session.userId = null;
+            }
             res.json({ 'user': false });
 
         } else {
@@ -143,10 +147,25 @@ const searchUser = async (req, res) => {
 // Load Product List Window
 const loadProductList = async (req, res) => {
 
-    const product = await productInfo.find({}).sort({_id:-1});
+    const products = await productInfo.find({}).sort({_id:-1});
     const brandData = await brandInfo.find({},{brand_name:1});
+
+    // console.log(products,brandData)
+    // for(let brand of brandData){
+    //     // if(brand._id.equals(products.brandname))
+    //     //     brandData = brand.brand_name
+    //     // console.log(brand.brand_name)
+    // }
+    
+    //    for(let product of productData){
+    //         for(let brand of dataBrand){
+    //             if(product.brandname.equals(brand._id)){
+    //                 console.log(product.productName,brand.brand_name)
+    //             }
+    //         }
+    //     }
   
-    res.render('admin/viewProducts', { admin: true, productData: product ,dataBrand:brandData});
+    res.render('admin/viewProducts', { admin: true, productData: products ,dataBrand:brandData});
 
 }
 

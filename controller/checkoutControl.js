@@ -147,15 +147,26 @@ const loadOrderSucess = async(req,res)=>{
     const orderId = req.query.orderId;
     console.log(orderId)
     const orderDetails = await orderData.findOne({_id:orderId}).populate('productInforamtion.productId');
-    console.log(orderDetails)
-    console.log(orderDetails.productInforamtion)
-    console.log(orderId)
+    // console.log(orderDetails)
+    // console.log(orderDetails.productInforamtion)
+    // console.log(orderId)
    
     res.render('user/orderPlacedSucess',{user:true, title:'CheckOut', login:checkLogin, order:orderDetails});
+}
+
+
+
+const loadOrderList = async(req,res)=>{
+    
+    const checkLogin = req.session.userId ? true : false;
+
+    
+    res.render('user/orderDetails',{ title:'View Order' ,login:checkLogin ,user: true,login:checkLogin});
 }
 
 module.exports = {
     LoadCheckoutPage,
     PlaceOrder,
-    loadOrderSucess
+    loadOrderSucess,
+    loadOrderList
 }

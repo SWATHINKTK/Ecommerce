@@ -24,7 +24,7 @@ userRouter.get('/',userController.guestPage);
 userRouter.get('/login',userController.loadUserLogin);
 userRouter.get('/logout',userController.userLogout);
 userRouter.get('/otpverification',userController.loadOTPVerification);
-userRouter.get('/home',userController.loadHomePage);
+userRouter.get('/home',auth.isUserLogin,userController.loadHomePage);
 
 
 userRouter.get('/allproductview',userController.loadAllProductViewPage);
@@ -39,6 +39,7 @@ userRouter.get('/editaddress:id',auth.isUserLogin,userController.loadEditAddress
 
 
 
+
 // DELETE REQUEST FOR USER
 userRouter.delete('/deleteaddress:id',auth.isUserLogin,userController.deleteAddress);
 
@@ -46,9 +47,10 @@ userRouter.delete('/deleteaddress:id',auth.isUserLogin,userController.deleteAddr
 userRouter.post('/signup',userController.storeSignupData);
 userRouter.post('/signin',userController.verifyUser);
 userRouter.post('/otpverification',userController.OTPCheck);
-userRouter.post('/edituserinformation',userController.editUserInformations);
-userRouter.post('/addnewaddress',userController.storeAddressFormData);
-userRouter.post('/updateaddress',userController.updateAddressData);
+userRouter.post('/edituserinformation',auth.isUserLogin,userController.editUserInformations);
+userRouter.post('/addnewaddress',auth.isUserLogin,userController.storeAddressFormData);
+userRouter.post('/updateaddress',auth.isUserLogin,userController.updateAddressData);
+userRouter.post('/editPassword',auth.isUserLogin,userController.editPassword);
 
 
 userRouter.get('/error500',userController.load500ErrorPage);

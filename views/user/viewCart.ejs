@@ -60,11 +60,16 @@
                             </div>
                         <% } %>
                     </div>
+
+                    <% if(cartData.length != 0) { %>
                     <div class="row d-flex justify-content-end align-items-center sticky ">
                         <div class="continue__btn  mr-3" >
                             <button id="cartOrderPlace" data-url="/api/checkout" class="btn proceed-payment font-weight-bold">Place Order</button>
                         </div>
                     </div>
+                    <% } else { %>
+                            <img src="/public/user/img/empty-cart.bb5a8f2.png" alt="" style="object-fit: contain;">
+                    <% } %>
                 </div>
 
 
