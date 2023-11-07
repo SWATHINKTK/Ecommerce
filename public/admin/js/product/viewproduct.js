@@ -1,4 +1,72 @@
 
+// **** VIEW OF PRODUCT LIST (VIEW IN TABLE) *****
+async function productListView(){
+
+    const contentPlaceholder = document.getElementById("dynamic_page");
+
+    const response = await fetch("/admin/productlist");
+
+    if(!response.ok){
+        window.location.href = '/admin/error500';
+        return;
+    }
+
+    const data = await response.text();
+    contentPlaceholder.innerHTML = data;
+
+    document.querySelector('title').innerHTML = 'Products';
+    actionInViewProductTable();
+}
+
+
+
+
+// **** ACTION VIEW PRODUCT TABLE ****
+function actionInViewProductTable(){
+    
+    const imageFile = [];
+    document.getElementById('table-product').addEventListener('click',function(event) {
+        const target = event.target;
+        
+        if(target.tagName == 'A' && target.classList.contains('product-viewmore')){
+            viewMore(target)
+
+        }else if(target.tagName == 'BUTTON' && target.classList.contains('l-u-button')){
+            productStatus(target);
+
+        }else if(target.tagName == 'BUTTON' && target.classList.contains('product-edit-button')){
+            loadEditProductPage(target,imageFile);
+            
+
+        }
+
+    });
+
+
+    // ***** MODAL ACTION EVENTS *****
+    document.getElementById('product-cancel').addEventListener('click',()=>{
+        const modal_div = document.getElementById('modal-total-div');
+        modal_div.style.display = "none";
+    })
+
+
+
+    document.getElementById('list-confirmation-sucess').addEventListener('click',()=>{
+        productStatusSucess();
+    })
+
+
+    document.getElementById('list-confirmation-cancel1').addEventListener('click',()=>{
+        listModalDisplayHidden()
+    })
+    document.getElementById('list-confirmation-cancel2').addEventListener('click',()=>{
+        listModalDisplayHidden()
+    })
+}
+
+
+
+
 //******** Product More Details view in Modal *******
 async function viewMore(value){
 
@@ -308,6 +376,8 @@ async function loadEditProductPage(target,imageFile){
 
                 setTimeout(()=>{
                     result.style.display = 'none';
+                    productListView();
+                    window.scroll(0,0);
                 },2000);
 
             }catch(error){
@@ -337,7 +407,6 @@ async function loadEditProductPage(target,imageFile){
 
 // Function Calling From Fetch.js For Product View On input Change
 function productImagePreview(fileInput,imageFile){
-
     //*** Div For the Image View ***
     const imagePreview = document.getElementById('product-image-preview');
 
@@ -368,8 +437,11 @@ function productImagePreview(fileInput,imageFile){
         }
     }else{
 
-        document.getElementById('validate-product').innerHTML = 'Image Upload Limit Exceeded ! Only Upload 4 Images . You Can Removed Then Add.'
+        document.getElementById('validate-addProduct').innerHTML = 'Image Upload Limit Exceeded ! Only Upload 4 Images . You Can Removed Then Add.'
 
+        setTimeout(() => {
+            document.getElementById('validate-addProduct').innerHTML = '';
+        }, 2000);
     }
 }
 
@@ -451,6 +523,7 @@ async function submitNewProductData(imageFile,brandId){
 
             result.setAttribute('class','alert alert-success');
             result.innerHTML = data.message;
+            window.scroll(0,0);
             document.getElementById("addProduct-form").reset();
             document.getElementById('product-image-preview').style.display = 'none';
 

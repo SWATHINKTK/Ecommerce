@@ -62,6 +62,7 @@ document.getElementById('editCategoryForm').addEventListener('submit', function(
                 // ***Result Data Div Hide
                 setTimeout(()=>{
                     result.style.display = 'none';
+                    viewAllCategoryDetails();
                 },2000)
             
 

@@ -2,89 +2,31 @@
 document.getElementById('sidebar').addEventListener('click', async function(event){
     const contentPlaceholder = document.getElementById("dynamic_page");
     const id = event.target.id;
-    // console.log(id);
+
 
     /*========================================Product Page Loading Section ============================== */
     if(id == 'view-productlist'){
 
-        // ********* View the Product Into a table ************
-        const response = await fetch("/admin/productlist");
+        productListView();
 
-        if(!response.ok){
-            window.location.href = '/admin/error500';
-            return;
-        }
+    
 
-        const data = await response.text();
-        contentPlaceholder.innerHTML = data;
+        // document.getElementById('productSearchBtn').addEventListener('click',async function(){
+        //     const searchData = document.getElementById('productSearch').value;
 
-        document.querySelector('title').innerHTML = 'Products';
-
-      
-        /*--------------------------------------------View More Data--------------------------------------------- */
-        const imageFile = [];
-        document.getElementById('table-product').addEventListener('click',function(event) {
-            const target = event.target;
+        //     const url = `/admin/searchproduct${searchData}`;
             
-            if(target.tagName == 'A' && target.classList.contains('product-viewmore')){
-                viewMore(target)
+        //     const response = await fetch(url);
 
-            }else if(target.tagName == 'BUTTON' && target.classList.contains('l-u-button')){
-                productStatus(target);
+        //     if(!response.ok){
+        //         window.location.href = '/admin/error500';
+        //     }
 
-            }else if(target.tagName == 'BUTTON' && target.classList.contains('product-edit-button')){
-                loadEditProductPage(target,imageFile);
-                
+        //     const data = await response.text();
+        //     contentPlaceholder.innerHTML = data;
+        //     buttonWorkSearch();
 
-            }
-
-        /*---------------------------------------View More Data End------------------------------------------------*/
-
-
-
-        })
-
-
-        /* --------------------------------------------Back Button for View More Data------------------------------------------------- */
-        document.getElementById('product-cancel').addEventListener('click',()=>{
-            const modal_div = document.getElementById('modal-total-div');
-            modal_div.style.display = "none";
-        })
-
-
-
-        /*------------------------------------------Sucess Button for list unllist Product------------------------------------------- */
-        document.getElementById('list-confirmation-sucess').addEventListener('click',()=>{
-            productStatusSucess();
-        })
-
-
-
-        /*------------------------------------------ 2 Back Button for confiramation modal-------------------------------------------- */
-        document.getElementById('list-confirmation-cancel1').addEventListener('click',()=>{
-            listModalDisplayHidden()
-        })
-        document.getElementById('list-confirmation-cancel2').addEventListener('click',()=>{
-            listModalDisplayHidden()
-        })
-
-
-        document.getElementById('productSearchBtn').addEventListener('click',async function(){
-            const searchData = document.getElementById('productSearch').value;
-
-            const url = `/admin/searchproduct${searchData}`;
-            
-            const response = await fetch(url);
-
-            if(!response.ok){
-                window.location.href = '/admin/error500';
-            }
-
-            const data = await response.text();
-            contentPlaceholder.innerHTML = data;
-            buttonWorkSearch();
-
-        })       
+        // })       
 
 
     }else if(id == 'add-product'){
@@ -210,36 +152,7 @@ document.getElementById('sidebar').addEventListener('click', async function(even
 
     }else if(id == 'view-categorylist'){
 
-        // View Category List to a Table Form
-        fetch("/admin/categorylist")
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error("Network response was not ok");
-                }
-                return response.text();
-            })
-            .then((html) => {
-
-                // Update The Part Of The HTML & View Categorys
-                contentPlaceholder.innerHTML = html;
-
-                //View Category Page Inside js Functionality Working add Js File
-                const scriptSrc = '/public/admin/js/category/listCategory.js';
-                const scriptExist = document.querySelector(`script[src="${scriptSrc}"]`);
-
-                if(scriptExist){
-                    scriptExist.parentNode.removeChild(scriptExist);
-                }
-                const script = document.createElement('script');
-                script.src = scriptSrc; 
-                document.body.appendChild(script);
-
-                document.querySelector('title').innerHTML = 'Categorys'
-                
-            })
-            .catch((error) => {
-                console.error("Fetch error:", error);
-            });
+        viewAllCategoryDetails();
 
     }else if(id == 'add-category'){
 

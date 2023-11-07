@@ -131,7 +131,7 @@ document.getElementById('verificationOTP').addEventListener('submit',(event)=>{
 
             setTimeout(()=>{
 
-                window.location.href = '/';
+                window.location.href = '/login';
 
             },2500)
             

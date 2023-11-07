@@ -4,6 +4,8 @@
       <div class="card-body">
       <div class="">
         <form id="addProduct-form">
+          <div class="" role="alert" id="add-product-submit-result">
+          </div>
           <p class="card-description">  </p>
           <div class="row">
             <div class="col-md-6">
@@ -122,6 +124,7 @@
                 <div class="col-sm-12">
                   <input type="file" class="form-control" id="productImage" accept="image/*" multiple>
                   <p class="text-danger ml-2" name="validate-addProduct"></p>
+                  <p class="text-danger ml-2" id="validate-addProduct"></p>
                   <div id="image-preview-main-div" class="form-style bg-white image-preview-main-div">
                     <div id="product-image-preview" class="form-style bg-white product-image-preview">
                     
@@ -147,8 +150,7 @@
           <button type="submit" class="btn btn-primary mr-3 ml-3" id="product-submit">Submit</button>
           <a href="/admin/home" class="btn btn-dark">Cancel</a>
         </form>
-        <div class="" role="alert" id="add-product-submit-result">
-        </div>
+       
       </div>
     </div>
     </div>

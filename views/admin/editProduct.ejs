@@ -4,6 +4,8 @@
       <div class="card-body">
       <div class="">
         <form id="editProduct-form">
+          <div class="" role="alert" id="edit-product-submit-result">
+          </div>
           <input type="hidden" value="<%= dataProduct._id %>" name="productId">
           <p class="card-description">  </p>
           <div class="row">
@@ -159,8 +161,6 @@
           <button type="submit" class="btn btn-primary mr-3 ml-3" id="product-submit">Submit</button>
           <a href="/admin/home" class="btn btn-dark">Cancel</a>
         </form>
-        <div class="" role="alert" id="edit-product-submit-result">
-        </div>
       </div>
     </div>
     </div>

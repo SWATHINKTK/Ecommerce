@@ -11,12 +11,17 @@ const loadCartPage = async(req,res)=>{
 
         const id = req.session.userId;
 
-        if(id){
+        const cartProduct = await cartData.findOne({userId:id})
+
+        if(cartProduct){
 
             const cartProduct = await cartData.findOne({userId:id}).populate('cartProducts.productId')
             const data = cartProduct.cartProducts;
            
             res.render('user/viewCart',{user:true, title:'Cart', login:checkLogin, cartData : data });
+            
+        }else{
+
         }
 
 
