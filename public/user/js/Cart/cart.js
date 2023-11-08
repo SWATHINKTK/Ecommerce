@@ -108,6 +108,7 @@ document.addEventListener('DOMContentLoaded',()=>{
             const oldQuantity = oldData.value;
 
             const stock = oldData.getAttribute('data-stock');
+            // alert(stock)
 
             if(stock < productQuanitity ){
                 Swal.fire({
@@ -120,7 +121,7 @@ document.addEventListener('DOMContentLoaded',()=>{
                         content: 'my-custom-content-class', 
                       }, 
                   });
-                  event.target.value = stock;
+                  event.target.value = oldQuantity;
                   return;
             }
 
@@ -187,7 +188,9 @@ document.addEventListener('DOMContentLoaded',()=>{
                             content: 'my-custom-content-class', 
                           }, 
                       });
-                      event.target.value = stock;
+                      if(stock <= 10){
+                        event.target.value = stock;
+                      }
                       return;
                 }
     
@@ -351,6 +354,22 @@ async function successCartProduct(button){
                 const productDiv = document.getElementById(`${productId}`);
                 document.getElementById('modalremoveCart').style.display = 'none';
                 productDiv.remove();
+
+                const productRemove = document.querySelectorAll('button[name="cart-product-delete"]');
+
+                if(productRemove.length == 0){
+
+                    location.reload();
+
+                }else{
+
+                    Swal.fire({
+                        html: '<i class="fa-solid fa-circle-check" style="color: #2dd26c;"></i> Successfully Removed.',
+                        showConfirmButton: false, 
+                        timer: 1500,
+                    })
+                }
+                
             }
 
     }catch(error){

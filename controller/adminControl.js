@@ -931,10 +931,10 @@ const loadAddCouponPage = (req, res) => {
 }
 
 
-// Load  Order List Window
-const loadOrderList = (req, res) => {
-    res.render('admin/viewOrders', { admin: true })
-}
+// // Load  Order List Window
+// const loadOrderList = (req, res) => {
+//     res.render('admin/viewOrders', { admin: true })
+// }
 
 
 
@@ -994,7 +994,7 @@ module.exports = {
     loadAddBannerPage,
     loadCouponList,
     loadAddCouponPage,
-    loadOrderList,
+    // loadOrderList,
     logoutAdmin,
     addCategory,
     load500ErrorPage,

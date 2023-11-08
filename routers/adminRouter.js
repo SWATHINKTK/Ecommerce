@@ -123,8 +123,8 @@ adminRouter.get('/addcoupon',adminController.loadAddCouponPage);
 
 
 
-//*** Order Routing ***
-adminRouter.get('/orderlist',adminController.loadOrderList);
+// //*** Order Routing ***
+// adminRouter.get('/orderlist',adminController.loadOrderList);
 
 
 

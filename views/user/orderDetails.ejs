@@ -17,9 +17,9 @@
 </section>
 
 <section>
-    <div class="container mt-3">
+    <div class="container-fluid p-4">
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-2 p-4 pr-5 Profile-sidebar" >
                 <!-- Left Side Div -->
                 <div class="left-side">
                     <div>
@@ -43,46 +43,48 @@
                         </a>
                 </div>
             </div>
-            <div class="col-md-9">
+            <div class="col-md-8 ml-4">
                 <!-- Right Side Div -->
-                <div class="right-side p-5">
+                <div class="right-side p-4 order-right-side">
                     <h2 class="text-center font-weight-bold mb-4">Orders</h2>
 
-                    <div class="d-flex">
-                        <div class="col-md-7 border">
-                            <h5 class="font-weight-bold pt-2">PRODUCT INFORMATION</h5>
-                            <div class="mt-4 order-success-product-image mb-4 ">
-                                <img src="/public/admin/assets/productImages/1697554220865-img1.webp" alt="">
-                            </div>
-                            <ul type="none" class="mt-3 p-2">
-                                <li class="mt-1"><span class="pr-2 font-weight-bold">Product Name</span> : Trends</li>
-                                <li class="mt-1"><span class="pr-2 font-weight-bold">Size</span> : M</li>
-                                <li class="mt-1">
-                                    <div class="d-flex align-items-center">
-                                        <span class="pr-2 font-weight-bold">Color</span>: 
-                                        <input type="color" value="#000" class="cart-color">
+                    <!-- Order Detials view Div -->
+                    <% if(orderData.length > 0) { %>
+                        <% for(let i= 0 ; i < orderData.length ; i++) { %>
+                            <a href="/api/orderDetails?id=<%= orderData[i]._id %>&productId=<%= orderData[i].productData[0]._id %>">
+                                <div class="p-4 pl-5 order-view d-flex mt-3 pb-2" id="">
+                                    <div class="order-detail-image checkout-productImg">
+                                        <img src="/public/admin/assets/productImages/<%= orderData[i].productData[0].productImages[0] %>"  alt="">
+                                        <div class="m-3 d-flex justify-content-center order-qunatity">
+                                            Qty: <%= orderData[i].productInforamtion.productquantity %>
+                                        </div>
                                     </div>
-                                </li>
-                                <li class="mt-1"><span class="pr-2 font-weight-bold">Quanitity</span> : 22</li>
-                                <li class="mt-1"><span class="pr-2 font-weight-bold">Price</span> : <i class="bi bi-currency-rupee text-primary font-weight-bold"></i> <span class="text-primary font-weight-bold"> 33333 </span></li>
-                            </ul>
-                        </div>
-                        <div class="col-md-5 border">
-                            <h5 class="font-weight-bold pt-2 mt-2">ORDER DETAILS</h5>
-                    <ul type="none" class="mt-4 p-2">
-                        <li class="mt-1"><span class="pr-2 font-weight-bold">Order Id</span> :4444</li>
-                        <li class="mt-1"><span class="pr-2 font-weight-bold">Order Date</span> : 4</li>
-                        <li class="mt-1"><span class="pr-2 font-weight-bold">Delivery Date</span> : 03/11/2023</li>
-                        <li class="mt-4"><span class="pr-2 font-weight-bold">SSSSSSSSSSSS</span></li>
-                        <li class="mt-1">
-                       jjjjjjjjjjjjjj
-                        </li>
-                        <li class="mt-3"><span class="pr-2 font-weight-bold">Payment Method</span> : uuuu</li>
-                        <li class="mt-1"><span class="pr-2 font-weight-bold">Total Price</span> : <i class="bi bi-currency-rupee text-primary font-weight-bold"></i> <span class="font-weight-bold text-primary">nnnn</span></li>
-                    </ul>
-                        </div>
-                    </div>
-                    
+                        
+                                    <div class="ml-4">
+                                        <h4 class="ml-4 mt-1 font-weight-bold"><%= orderData[i].productData[0].productName %></h4>
+                                        <div class="d-flex align-items-center">
+                                            <h5 class="ml-4 mr-2 mt-1"><i class="bi bi-currency-rupee"></i> <span class="font-weight-bold">333</span></h5>
+                                        </div>   
+                                        <div class="d-flex align-items-center m-2 mt-3">
+                                            <h6 class="ml-3 mr-5">Color &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h6>&nbsp;&nbsp;&nbsp;&nbsp;:<input type="color" value="<%= orderData[i].productData[0].color %>" class="cart-color">
+                                        </div>
+                                        <div class="d-flex align-items-center">
+                                            <h6 class="ml-4 mr-5 ">Size  </h6> <span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <%= orderData[i].productData[0].size %></span>
+                                        </div>
+                                
+                                        <div class="d-flex align-items-center m-2 mt-3">
+                                            <h6 class="ml-3 mr-2">Ordered Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <%= orderData[i].createdAt.toLocaleDateString() %></h6>
+                                        </div>
+                                        <div class="d-flex align-items-center m-2 mt-3"> 
+                                            <h6 class="ml-3 mr-2">Delivery Expected &nbsp;: <span class="text-danger">3 to 4 Days to Delivery</span></h6>
+                                        </div>
+                                        
+                                        
+                                    </div>    
+                                </div>
+                            </a>
+                        <% } %>
+                    <% } %>
                 </div>
             </div>
         </div>

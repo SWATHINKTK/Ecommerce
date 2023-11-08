@@ -44,6 +44,11 @@ const checkOutRouter = require('./routers/checkoutRouter');
 app.use('/api',checkOutRouter);
 
 
+// **** ORDER ROUTER ****
+const orderRouter = require('./routers/orderRouter');
+app.use('/api',orderRouter);
+
+
 app.listen(5000,()=>{
     console.log(`server is runnning @ http://${hostname}:${port}/`);
     console.log(`server is runnning @ http://${hostname}:${port}/admin`);

@@ -1944,6 +1944,129 @@ form .form-control:focus {
 	max-height: 180px;
 }
 
+.Profile-sidebar{
+	background-color:#f9f9f9d5; 
+	box-shadow: 0 0 9px -4px #000000;
+	margin-left: 8rem;
+}
+
+.order-right-side{
+	box-shadow: 0 0 5px -2px rgba(0, 0, 0, 0.647);
+	border: 1px solid #41414181;
+
+}
+
+.order-view{
+	/* border: 1px solid #41414181; */
+	border-radius: 1px;
+	box-shadow: 0 0 9px -2px #7f7f7f;
+}
+
+
+.order-detail-image{
+	max-width: 190px;
+	max-height: 90px;
+}
+
+.order-qunatity{
+	background-color: #fff;
+	box-shadow: 0 0 7px -2px #171616;
+}
+
+
+/* Order Progress */
+.gradient-custom-2 {
+	/* fallback for old browsers */
+	background: #a1c4fd;
+	
+	/* Chrome 10-25, Safari 5.1-6 */
+	background: -webkit-linear-gradient(to right, rgba(161, 196, 253, 1), rgba(194, 233, 251, 1));
+	
+	/* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+	background: linear-gradient(to right, rgba(161, 196, 253, 1), rgba(194, 233, 251, 1))
+	}
+	
+	#progressbar-1 {
+	color: #455A64;
+	}
+	
+	#progressbar-1 li {
+	list-style-type: none;
+	font-size: 13px;
+	width: 33.33%;
+	float: left;
+	position: relative;
+	}
+	
+	#progressbar-1 #step1:before {
+	content: "1";
+	color: #fff;
+	width: 29px;
+	margin-left: 22px;
+	padding-left: 11px;
+	}
+	
+	#progressbar-1 #step2:before {
+	content: "2";
+	color: #fff;
+	width: 29px;
+	}
+	
+	#progressbar-1 #step3:before {
+	content: "3";
+	color: #fff;
+	width: 29px;
+	margin-right: 22px;
+	text-align: center;
+	}
+	
+	#progressbar-1 li:before {
+	line-height: 29px;
+	display: block;
+	font-size: 12px;
+	background: #455A64;
+	border-radius: 50%;
+	margin: auto;
+	}
+	
+	#progressbar-1 li:after {
+	content: '';
+	width: 121%;
+	height: 2px;
+	background: #455A64;
+	position: absolute;
+	left: 0%;
+	right: 0%;
+	top: 15px;
+	z-index: -1;
+	}
+	
+	#progressbar-1 li:nth-child(2):after {
+	left: 50%
+	}
+	
+	#progressbar-1 li:nth-child(1):after {
+	left: 25%;
+	width: 121%
+	}
+	
+	#progressbar-1 li:nth-child(3):after {
+	left: 25%;
+	width: 50%;
+	}
+	
+	#progressbar-1 li.active:before,
+	#progressbar-1 li.active:after {
+	background: #1266f1;
+	}
+	
+	.card-stepper {
+	z-index: 0
+	}
+
+
+
+
 .nice-select.open .list {
     opacity: 1;
     pointer-events: auto;

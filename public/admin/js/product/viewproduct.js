@@ -366,6 +366,7 @@ async function loadEditProductPage(target,imageFile){
 
                     result.setAttribute('class','alert alert-success');
                     result.innerHTML = data.message;
+                    window.scroll(0,0)
                     document.getElementById("editProduct-form").reset();
 
                 }else{
@@ -530,6 +531,7 @@ async function submitNewProductData(imageFile,brandId){
         }else{
             
             result.setAttribute('class','alert alert-danger');
+            window.scroll(0,0);
             result.innerHTML = data.message;
         }
 

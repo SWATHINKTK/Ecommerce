@@ -18,9 +18,11 @@ const loadCartPage = async(req,res)=>{
             const cartProduct = await cartData.findOne({userId:id}).populate('cartProducts.productId')
             const data = cartProduct.cartProducts;
            
-            res.render('user/viewCart',{user:true, title:'Cart', login:checkLogin, cartData : data });
+            res.render('user/viewCart',{user:true, title:'Cart', login:checkLogin, cartData : data ,cartExist:true});
             
         }else{
+
+            res.render('user/viewCart',{user:true, title:'Cart', login:checkLogin ,cartExist:false});
 
         }
 
@@ -43,6 +45,7 @@ const productAddToCart = async(req,res)=>{
         const productId = req.body.id;
         const productQuantity = req.body.quantity;
         const productPrice = req.body.price;
+        // console.log(req.body)
         
 
         const user = await userData.findOne({_id:userId});
@@ -70,13 +73,13 @@ const productAddToCart = async(req,res)=>{
 
         }else{
 
-            console.log('new data')
+            // console.log('new data')
             
             const cartInfo = cartData({
                 userId:userId,
                 cartProducts:cartProductData
             });
-
+            // console.log(cartInfo)
             const userUpdate = await userData.updateOne({_id:userId},{$set:{cartProducts:cartInfo._id}},{upsert:true});
             
             if(userUpdate){
@@ -133,12 +136,29 @@ const removeProductFromCart = async (req,res) => {
     const userId = req.session.userId
     const productId = req.params.id;
 
-    const deleteProduct = await cartData.updateOne({ userId: userId }, { $pull: { cartProducts: { productId: productId } } });
-    
-    if(deleteProduct.acknowledged){
-        res.json({status:true});
+    const cartInfo = await cartData.findOne({userId:userId});
+
+    if(cartInfo.cartProducts.length == 1){
+
+        const deleteCart = await cartData.deleteOne({userId:userId});
+        const userCartId = await userData.updateOne({_id:userId},{ $unset: { cartProducts: 1 } });
+        if(userCartId){
+            res.json({status:true});
+        }else{
+            res.json({status:false});
+        }
+
     }else{
-        res.json({status:false});
+
+        const deleteProduct = await cartData.updateOne({ userId: userId }, { $pull: { cartProducts: { productId: productId } } });
+
+        
+        if(deleteProduct.acknowledged){
+            res.json({status:true});
+        }else{
+            res.json({status:false});
+        }
+
     }
 }
 

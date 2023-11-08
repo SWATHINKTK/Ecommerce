@@ -63,6 +63,7 @@ document.getElementById('editCategoryForm').addEventListener('submit', function(
                 setTimeout(()=>{
                     result.style.display = 'none';
                     viewAllCategoryDetails();
+                    window.scroll(0,0)
                 },2000)
             
 

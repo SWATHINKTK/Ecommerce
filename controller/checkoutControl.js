@@ -3,6 +3,7 @@ const {productInfo} = require('../models/adminModel');
 const orderData = require('../models/orderModel');
 const cartData = require('../models/cartModel');
 
+
 const LoadCheckoutPage = async(req,res) => {
 
     try{
@@ -156,17 +157,8 @@ const loadOrderSucess = async(req,res)=>{
 
 
 
-const loadOrderList = async(req,res)=>{
-    
-    const checkLogin = req.session.userId ? true : false;
-
-    
-    res.render('user/orderDetails',{ title:'View Order' ,login:checkLogin ,user: true,login:checkLogin});
-}
-
 module.exports = {
     LoadCheckoutPage,
     PlaceOrder,
-    loadOrderSucess,
-    loadOrderList
+    loadOrderSucess
 }

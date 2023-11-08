@@ -21,9 +21,9 @@
     <!-- Breadcrumb Section End -->
 
     <!-- Shopping Cart Section Begin -->
-    <section class="shopping-cart spad">
+    <section class="shopping-cart py-4">
         <div class="container">
-            <% if(cart || cartData) %>
+            <% if(cartExist && cartData.length > 0) {%>
             <div class="row">
                 <div class="col-lg-8">
                     <div class="shopping__cart__table">
@@ -38,6 +38,7 @@
                                             <span class="font-weight-bold">Quanitity : </span><input type="number" class="cart-quantity text-center font-weight-bold" name="quanitity" id="cart-product-quanitity" min="1" max="10" value="<%= cartData[i].quantity %>" data-cart-product-id="<%= cartData[i].productId._id %>">
                                             <input type="hidden" id="oldData" value="<%= cartData[i].quantity %>" name="<%= cartData[i].productId.price %>" data-stock="<%= cartData[i].productId.stock %>">
                                         <% }else { %>
+                                            <% sum -= cartData[i].quantity * cartData[i].productId.price %>
                                             <span class="text-danger font-weight-bold pl-2" style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">OUT OF STOCK</span>
                                             <input type="hidden" name="hidden-for-stock" value="0" id="">
                                         <% } %>
@@ -45,6 +46,7 @@
                                 </div>
                                 <div class="">
                                     <h4 class="ml-4 mt-2 font-weight-bold mb-3"><%= cartData[i].productId.productName %></h4>
+                                    
                                     <div class="d-flex align-items-center m-2">
                                         <h6 class="ml-3 mr-2">Color : </h6><input type="color" value="<%= cartData[i].productId.color %>" class="cart-color">
                                     </div>
@@ -68,8 +70,6 @@
                             <button id="cartOrderPlace" data-url="/api/checkout" class="btn proceed-payment font-weight-bold">Place Order</button>
                         </div>
                     </div>
-                    <% } else { %>
-                            <img src="/public/user/img/empty-cart.bb5a8f2.png" alt="" style="object-fit: contain;">
                     <% } %>
                 </div>
 
@@ -91,6 +91,15 @@
                     </div>
                 </div>
             </div>
+            <% } else { %>
+                <div class="d-flex justify-content-center  m-0  p-0">
+                      <img src="/public/user/img/empty-cart.bb5a8f2.png" alt="" style="object-fit: contain;">
+                </div>
+                <div class="text-center font-weight-bold">
+                    <a href="/home" class="btn btn-primary rounded-pill">Go to Home</a>
+                </div>
+                
+            <% } %>
         </div>
 
         <div class="modal top" id="modalremoveCart" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true" style="display: none;">

@@ -9,48 +9,30 @@
             <thead>
               <tr>
                 <th>#</th>
-                <th>User</th>
-                <th>Product</th>
-                <th>Sale</th>
-                <th>Status</th>
+                <th>Order Id</th>
+                <th>Total</th>
+                <th>Places On</th>
+                <th>Updated On</th>
+                <th>Manage</th>
               </tr>
             </thead>
             <tbody class="text-white">
-              <tr>
-                <td>1</td>
-                <td>Jacob</td>
-                <td>Photoshop</td>
-                <td class="text-danger"> 28.76% <i class="mdi mdi-arrow-down"></i></td>
-                <td><label class="badge badge-danger">Pending</label></td>
-              </tr>
-              <tr>
-                <td>1</td>
-                <td>Messsy</td>
-                <td>Flash</td>
-                <td class="text-danger"> 21.06% <i class="mdi mdi-arrow-down"></i></td>
-                <td><label class="badge badge-warning">In progress</label></td>
-              </tr>
-              <tr>
-                <td>1</td>
-                <td>John</td>
-                <td>Premier</td>
-                <td class="text-danger"> 35.00% <i class="mdi mdi-arrow-down"></i></td>
-                <td><label class="badge badge-info">Fixed</label></td>
-              </tr>
-              <tr>
-                <td>1</td>
-                <td>Peter</td>
-                <td>After effects</td>
-                <td class="text-success"> 82.00% <i class="mdi mdi-arrow-up"></i></td>
-                <td><label class="badge badge-success">Completed</label></td>
-              </tr>
-              <tr>
-                <td>1</td>
-                <td>Dave</td>
-                <td>53275535</td>
-                <td class="text-success"> 98.05% <i class="mdi mdi-arrow-up"></i></td>
-                <td><label class="badge badge-warning">In progress</label></td>
-              </tr>
+              <% if(orderData.length > 0) { %>
+                <% for(let i= 0 ; i < orderData.length ; i++) { %>
+                  <tr>
+                    <td><%= i+1 %></td>
+                    <td><%= orderData[i]._id %></td>
+                    <td><%= orderData[i].productInforamtion.productPrice %></td>
+                    <td><%= orderData[i].createdAt.toLocaleDateString() %></td>
+                    <td><%= orderData[i].updatedAt.toLocaleDateString() %></td>
+                    <td><a href='/api/orderManage<%= orderData[i]._id %>' class="btn btn-warning">Manage</a></td>
+                  </tr>
+                <% } %>
+              <% } else {%> 
+                <tr class="bg-danger">
+                  <th class="text-dark text-center" colspan="6">ORDER NOT EXIST</th>
+                </tr>
+              <% } %>
             </tbody>
           </table>
         </div>

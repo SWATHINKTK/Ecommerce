@@ -66,9 +66,11 @@
                                 <input type="text" class="form-control col-sm-4 input-userprofile p-2" id="userprofile-phonenumber"" value="<%= userInfo.phonenumber %>" disabled>
                                 <span class="text-danger" name="userinfo-hint"></span>
                             </div>
-                            <a href="#" onclick="editUserDetails()" id="userprofile-edit">Edit Information</a> 
-                            <a href="#" id="reset-password-link" class="ml-3">Reset Password</a>
-                            <input type="button" class="btn btn-primary" value="Save" data-user-id="<%= userInfo._id %>" id="editinfomation-submit" style="display: none;">
+                            <div class="d-flex">
+                                <input type="button" class="btn btn-primary" value="Save" data-user-id="<%= userInfo._id %>" id="editinfomation-submit" style="display: none;">
+                                <a href="#" onclick="editUserDetails()" id="userprofile-edit">Edit Information</a> 
+                                <a href="#" id="reset-password-link" class="ml-3">Reset Password</a>
+                            </div>
                         </form>
 
                         <div id="reset-password-div" style="display: none;">
