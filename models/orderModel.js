@@ -47,6 +47,10 @@ const orderModel = moongose.Schema({
             type:Number,
             require:true
         },
+        productTotalAmount:{
+            type:Number,
+            require:true
+        },
         productquantity:{
             type:Number,
             require:true
@@ -60,6 +64,10 @@ const orderModel = moongose.Schema({
     userId:{
         type:moongose.Schema.Types.ObjectId,
         ref : 'users',
+        require:true
+    },
+    totalAmount:{
+        type:Number,
         require:true
     },
     paymentMethod:{

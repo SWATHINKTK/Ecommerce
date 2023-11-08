@@ -10,5 +10,6 @@ orderRouter.get('/orderDetails',auth.isUserLogin,orderController.loadOrderProgre
 //*** Order Routing Admin Side ***
 orderRouter.get('/orderlist',orderController.loadOrderListAdminSide);
 orderRouter.get('/orderManage:id',orderController.loadOrderManagePageAdminSide);
+orderRouter.patch('/updateStatus',orderController.updateOrderStatus);
 
 module.exports = orderRouter;

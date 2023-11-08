@@ -40,6 +40,7 @@ const LoadCheckoutPage = async(req,res) => {
 const PlaceOrder = async(req,res)=>{
 
     try {
+        console.log('checkout')
 
         const userId = req.session.userId;
         
@@ -73,23 +74,31 @@ const PlaceOrder = async(req,res)=>{
         }
         
         let products;
+        let totalPrice = 0;
         if(data.SingleProduct){
 
             products = {
                 productId:data.ProductId,
                 productPrice:data.ProductPrice,
+                productTotalAmount:(data.productQuantity * data.ProductPrice),
                 productquantity:data.productQuantity
             }
+            totalPrice = data.productQuantity * data.ProductPrice;
 
         }else{
 
             const cartInfo = await cartData.findOne({userId:userId},{cartProducts:1});
             products = cartInfo.cartProducts.map(item => ({
                 productId: item.productId,
-                productPrice: (item.price * item.quantity),
+                productPrice:item.price,
+                productTotalAmount: (item.price * item.quantity),
                 productquantity:item.quantity
             }));
-            console.log(products)
+            products.map((val) => {
+                totalPrice += val.productTotalAmount
+            })
+            console.log(products,totalPrice)
+           
         }
 
 
@@ -100,6 +109,7 @@ const PlaceOrder = async(req,res)=>{
             addressInformation:address,
             productInforamtion:products,
             userId:userId,
+            totalAmount:totalPrice,
             paymentMethod:data.PaymentMethod,
             paymentStatus:paymentStatus
         })

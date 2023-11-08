@@ -53,7 +53,7 @@
                         <!-- <section class="vh-100 gradient-custom-2"> -->
                         <div class="container">
                             <!-- <div class="container py-5 h-100"> -->
-                          <div class="row d-flex justify-content-center align-items-center h-100">
+                          <div class="row d-flex justify-content-center align-items-center h-100" data-order-status="<%= orderData[0].productInforamtion.orderStatus %>" id="order-Progress-ViewPage" data-order-Place="<%= orderData[0].createdAt %>">
                             <div class="col-md-12 col-lg-12 col-xl-12">
                               <div class="card card-stepper" style="border-radius: 16px;">
                                 <div class="card-header p-4">
@@ -86,15 +86,41 @@
                                         src="/public/admin/assets/productImages/<%= orderData[0].productData[0].productImages[0] %>" width="250">
                                     </div>
                                   </div>
-                                  <ul id="progressbar-1" class="mx-0 mt-0 mb-5 px-0 pt-0 pb-4">
+                                  <div class="col-md-11 d-flex">
+                                    <div class="col-md-6 d-flex align-items-center">
+                                      <span class="progress-number">1</span>
+                                      <div class="progress" role="progressbar" aria-label="Default striped example" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width: 95%;height: 4px;">
+                                        <div class="progress-bar progress-bar-striped bg-secondary" name="progress-order" style="width: 0%; transition: width 2s ease-in-out;"></div>
+                                      </div>
+                                    </div>
+                                    <div>
+                                      <span class="progress-number">2</span>
+                                    </div>
+                                    <div class="col-md-6 d-flex align-items-center">
+                                      <div class="progress" role="progressbar" aria-label="Success striped example" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="width: 95%;height: 4px;">
+                                        <div class="progress-bar progress-bar-striped bg-secondary" name="progress-order" style="width: 0%; transition: width 2s ease-in-out;"></div>
+                                      </div>
+                                      <span class="progress-number p-2">3</span>
+                                    </div>
+                                  </div>
+                                  <div class="col-md-12 d-flex justify-content-between">
+                                    <span class="text-progressbar ml-2">Placed</span>
+                                    
+                                    <span class="text-progressbar">Shipped</span>
+                                    
+                                    <span class="text-progressbar mr-4">Delivered</span>
+                                   
+                                  </div>
+                                  <!-- <ul id="progressbar-1" class="mx-0 mt-0 mb-5 px-0 pt-0 pb-4">
                                     <li class="step0 active" id="step1"><span
                                         style="margin-left: 22px; margin-top: 12px;">PLACED</span></li>
                                     <li class="step0 active text-center" id="step2"><span>SHIPPED</span></li>
                                     <li class="step0 text-muted text-end" id="step3"><span
                                         style="margin-right: 22px;">DELIVERED</span></li>
-                                  </ul>
+                                  </ul>     -->
                                 </div>
-                                <div class="card-footer p-4">
+                                
+                                <div class="card-footer p-4" id="cart-footer">
                                   <div class="d-flex justify-content-between">
                                     <h5 class="fw-normal mb-0"><a href="/cancelOrder?id=<%= orderData[0]._id %>&productId=<%= orderData[0].productData[0]._id %>">Cancel Order</a></h5>
                                     <!-- <div class="border-start h-100"></div>

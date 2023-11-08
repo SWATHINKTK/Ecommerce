@@ -1988,6 +1988,7 @@ form .form-control:focus {
 	
 	#progressbar-1 {
 	color: #455A64;
+	/* position: relative; */
 	}
 	
 	#progressbar-1 li {
@@ -2063,7 +2064,21 @@ form .form-control:focus {
 	.card-stepper {
 	z-index: 0
 	}
+.progressbar-order{
+	position: relative;
+}
 
+.progress-number{
+	width: 40px; /* Adjust the size as needed */
+    height: 40px; /* Adjust the size as needed */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #007bff; /* Background color for the circle */
+    color: #fff; /* Text color */
+    border-radius: 50%; /* Make it a circle */
+    font-weight: bold;
+}
 
 
 

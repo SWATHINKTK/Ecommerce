@@ -76,13 +76,13 @@ const loadOrderProgressInUserSide = async(req,res) => {
 
 
 
-// ORDER MANAGEMENT ADMIN SIDE
+// *** ORDER MANAGEMENT ADMIN SIDE ***
 const loadOrderListAdminSide = async(req, res) => {
 
     const order = await orderData.aggregate([
-        {
-            $unwind:"$productInforamtion"
-        },
+        // {
+        //     $unwind:"$productInforamtion"
+        // },
         {
             $lookup: {
                 from: 'products', 
@@ -93,11 +93,15 @@ const loadOrderListAdminSide = async(req, res) => {
 
         }
     ]);
+    // const order = await orderData.find({});
+    console.log(order)
 
     res.render('admin/viewOrders', { admin: true, title:'Order',  orderData:order})
 }
 
 
+
+// **** LOAD ORDER MANAGEMENT PAGE VIEW ADMIN SIDE *****
 const loadOrderManagePageAdminSide = async(req,res)=>{
 
     try {
@@ -123,17 +127,37 @@ const loadOrderManagePageAdminSide = async(req,res)=>{
             }
         ]);
 
-        res.render('admin/manageOrder', { admin: true, title:'Order'})
+        res.render('admin/manageOrder', { admin: true, title:'Order', orderData:order})
 
-        console.log(id,order);
+        // console.log(id,order);
     } catch (error) {
         console.log(error.message)
     }
 }
 
+
+
+// UPDATE STATUS OF THE ORDERED PRODUCT ******
+const updateOrderStatus = async(req,res) => {
+    try {
+
+        const data = req.body;
+
+        const updateData = await orderData.find({_id:data.orderId,productInforamtion:{$elemMatch:{productId:data.productId}}})
+        console.log(updateData,data)
+        
+    } catch (error) {
+
+        console.log(error.message);
+
+    }
+}
+
+
 module.exports = {
     loadOrderListViewUserSide,
     loadOrderProgressInUserSide,
     loadOrderListAdminSide,
-    loadOrderManagePageAdminSide
+    loadOrderManagePageAdminSide,
+    updateOrderStatus
 }

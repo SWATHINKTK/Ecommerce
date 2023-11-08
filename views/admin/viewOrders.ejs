@@ -1,9 +1,8 @@
 <%- include('../partials/header.ejs') %>
 <h1 class="card-title text-center text-dark">Order Details</h1>
-    <div class="col-12 grid-margin stretch-card">
+  <div class="col-12 grid-margin stretch-card">
     <div class="card card-div">
       <div class="card-body  mt-5">
-        </p>
         <div class="table-responsive">
           <table class="table table-hover">
             <thead>
@@ -16,16 +15,16 @@
                 <th>Manage</th>
               </tr>
             </thead>
-            <tbody class="text-white">
+            <tbody class="text-white" >
               <% if(orderData.length > 0) { %>
                 <% for(let i= 0 ; i < orderData.length ; i++) { %>
                   <tr>
                     <td><%= i+1 %></td>
                     <td><%= orderData[i]._id %></td>
-                    <td><%= orderData[i].productInforamtion.productPrice %></td>
+                    <td><%= orderData[i].totalAmount %></td>
                     <td><%= orderData[i].createdAt.toLocaleDateString() %></td>
                     <td><%= orderData[i].updatedAt.toLocaleDateString() %></td>
-                    <td><a href='/api/orderManage<%= orderData[i]._id %>' class="btn btn-warning">Manage</a></td>
+                    <td><a href='/api/orderManage<%= orderData[i]._id %>'  class="btn btn-warning">Manage</a></td>
                   </tr>
                 <% } %>
               <% } else {%> 
