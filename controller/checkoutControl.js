@@ -1,5 +1,6 @@
 const addressData = require('../models/addressModel');
 const {productInfo} = require('../models/adminModel');
+const {userData} = require('../models/userModal');
 const orderData = require('../models/orderModel');
 const cartData = require('../models/cartModel');
 
@@ -97,7 +98,7 @@ const PlaceOrder = async(req,res)=>{
             products.map((val) => {
                 totalPrice += val.productTotalAmount
             })
-            console.log(products,totalPrice)
+            // console.log(products,totalPrice)
            
         }
 
@@ -134,8 +135,11 @@ const PlaceOrder = async(req,res)=>{
 
                 stockUpdate = await productInfo.updateOne(filter,update);
             }
+
+            const deleteCart = await cartData.deleteOne({userId:userId});
+            const userCartId = await userData.updateOne({_id:userId},{ $unset: { cartProducts: 1 } });
             
-            if(stockUpdate){
+            if(stockUpdate && deleteCart && userCartId){
 
                 res.json({status:true,orderId:orderSucess._id});
             }else{

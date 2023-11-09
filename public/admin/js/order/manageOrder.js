@@ -49,16 +49,19 @@ updateOrderStatus.forEach((updateButton) => {
                 const response = await fetch(url,responseOptions) ;
 
                 headingStatusView.innerHTML = `( ${status.value} )`;
+
+                // Status Update Selction Box And Button
+                const updateStatusSection = document.querySelector(`div[name='${productId}']`);
                 
                 if(status.value == 'Canceled'){
 
-                    const updateStatusSection = document.querySelector(`div[name='${productId}']`);
                     updateStatusSection.style.display = 'none';
                     headingStatusView.setAttribute('class','ml-3 font-weight-bold text-danger');
                     
 
                 }else{
                     headingStatusView.setAttribute('class','ml-3 font-weight-bold text-success');
+                    status.value == 'Delivered' ?  updateStatusSection.style.display = 'none' : '';
                 }
 
                 Swal.fire("Saved!", "", "success");

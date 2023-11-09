@@ -38,8 +38,12 @@ async function addToCart(eventTag){
         const data = await response.json();
 
                 if(data.status){
-                    const addToCart = document.getElementById('addToCart');
 
+                    // NavBar Cart Count Update
+                    const cartCount = document.getElementById('Cart-Count');
+                    cartCount.innerHTML = parseInt(cartCount.innerHTML) + 1;
+
+                    const addToCart = document.getElementById('addToCart');
                     addToCart.innerHTML = '<a href="/api/cart" class="btn btn btn-warning rounded-pill btn-addToCart"><i class="bi bi-cart3 fa-lg text-dark"></i> Go To Cart</a>'
                 }
 
@@ -87,6 +91,10 @@ homePageAddToCart.forEach(eventTag => {
         const data = await response.json();
 
             if(data.status){
+
+                // NavBar Cart Count Update
+                const cartCount = document.getElementById('Cart-Count');
+                cartCount.innerHTML = parseInt(cartCount.innerHTML) + 1;
                 
                 const gotoCart = document.getElementById(`${productId}`);
                 gotoCart.innerHTML = '<a href="/api/cart"> <i class="bi bi-cart3 text-dark"></i><span>Go to Cart</span></a>';
@@ -398,6 +406,11 @@ async function successCartProduct(button){
         const responseData = await response.json();
 
             if(responseData.status){
+
+                // NavBar Cart Count Update
+                const cartCount = document.getElementById('Cart-Count');
+                cartCount.innerHTML = parseInt(cartCount.innerHTML) - 1;
+
                 const productDiv = document.getElementById(`${productId}`);
                 document.getElementById('modalremoveCart').style.display = 'none';
                 productDiv.remove();

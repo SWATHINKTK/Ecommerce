@@ -24,6 +24,9 @@ const loadOrderListViewUserSide = async(req,res)=>{
                 as: 'productData' 
             }
 
+        },
+        {
+            $sort:{_id:-1}
         }
     ]);
     
@@ -91,6 +94,9 @@ const loadOrderListAdminSide = async(req, res) => {
                 as: 'productData' 
             }
 
+        },
+        {
+            $sort:{_id:-1}
         }
     ]);
     // const order = await orderData.find({});

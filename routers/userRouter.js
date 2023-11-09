@@ -9,6 +9,7 @@ const auth = require('../middleware/userAuth');
 const { compareSync } = require('bcrypt');
 
 
+
 // Application Middleware 
 userRouter.use(express.urlencoded({extended:true}));
 userRouter.use(express.json())
@@ -17,6 +18,22 @@ userRouter.use(session({
     resave : false,
     saveUninitialized : true
  }));
+
+
+ 
+// *** CART COUNT CALCULATE USING MIDDLEWARE ****
+const cartData = require('../models/cartModel');
+userRouter.use(async(req,res,next) => {
+
+    if(req.session.userId){
+        const id = req.session.userId;
+        const cart = await cartData.findOne({userId:id});
+        res.locals.count =  cart ? cart.cartProducts.length : 0; 
+    }
+    next();
+    
+ })
+
 
 
 // GET Request For User 

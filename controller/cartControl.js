@@ -45,7 +45,7 @@ const productAddToCart = async(req,res)=>{
         const productId = req.body.id;
         const productQuantity = req.body.quantity;
         const productPrice = req.body.price;
-        // console.log(req.body)
+        console.log(req.body)
         
 
         const user = await userData.findOne({_id:userId});
@@ -57,7 +57,6 @@ const productAddToCart = async(req,res)=>{
         }
 
         if(user.cartProducts){
-            console.log('cart update')
             
             const addMoreProduct = await cartData.updateOne({userId:userId},{$push:{cartProducts:cartProductData}});
 

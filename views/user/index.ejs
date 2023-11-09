@@ -162,10 +162,14 @@
                                         <li><a href="#"><img src="/public/user/img/icon/heart.png" alt=""></a></li>
                                         <li id="<%= product._id %>">
                                             <% let InCart = locals.dataCart ? dataCart.cartProducts.some(item => item.productId.equals(product._id)) : false %>
-                                            <% if(!InCart){ %>
+                                            <% if(!InCart && product.stock > 0){ %>
                                                     <a href="#" name="homePageAddToCart"> <i class="bi bi-cart-plus-fill text-dark" data-product-id="<%= product._id %>" data-product-price="<%= product.price %>"></i><span>Add to Cart</span></a>
                                             <% } else {%>
-                                                <a href="/api/cart"> <i class="bi bi-cart3 text-dark"></i><span>Go to Cart</span></a>
+                                                <% if(product.stock > 0) { %>
+                                                    <a href="/api/cart"> <i class="bi bi-cart3 text-dark"></i><span>Go to Cart</span></a>
+                                                <% } else {%>
+                                                    <a href="/api/cart"> <i class="bi bi-cart3 text-dark"></i><span>Out Of Stock</span></a>
+                                                <% } %>
                                             <% } %>
                                                 
                                         </li>
