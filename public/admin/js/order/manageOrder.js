@@ -5,6 +5,21 @@ const updateOrderStatus = document.querySelectorAll('button[name="updateOrderSta
 
 updateOrderStatus.forEach((updateButton) => {
     updateButton.addEventListener('click', async(event)=>{
+
+        const orderId = event.target.getAttribute('data-order-id');
+        const productId = event.target.getAttribute('data-product-id');
+        const productQty = event.target.getAttribute('data-product-quantity');
+
+        const status = document.getElementById(`${productId}`);
+        
+        const headingStatusView = document.querySelector(`span[name='${productId}']`);
+
+
+        if(status.value == ''){
+            alert('Select the Status')
+            return;
+        }
+
         Swal.fire({
             title: "Do you want to Update the Status?",
             // showDenyButton: true,
@@ -14,9 +29,8 @@ updateOrderStatus.forEach((updateButton) => {
           }).then(async (result) => {
         
             if (result.isConfirmed) {
-                const orderId = event.target.getAttribute('data-order-id');
-                const productId = event.target.getAttribute('data-product-id');
-                const status = document.getElementById(`${productId}`);
+
+                
                 // console.log(status,status.value)
                 
                 const url = '/api/updateStatus';
@@ -26,12 +40,26 @@ updateOrderStatus.forEach((updateButton) => {
                     body:JSON.stringify({
                         orderId:orderId,
                         productId:productId,
-                        status:status.value
+                        productQty:productQty,
+                        orderStatus:status.value
                     }),
                     headers:{'Content-Type':'application/json'}
                 }
 
                 const response = await fetch(url,responseOptions) ;
+
+                headingStatusView.innerHTML = `( ${status.value} )`;
+                
+                if(status.value == 'Canceled'){
+
+                    const updateStatusSection = document.querySelector(`div[name='${productId}']`);
+                    updateStatusSection.style.display = 'none';
+                    headingStatusView.setAttribute('class','ml-3 font-weight-bold text-danger');
+                    
+
+                }else{
+                    headingStatusView.setAttribute('class','ml-3 font-weight-bold text-success');
+                }
 
                 Swal.fire("Saved!", "", "success");
             } 

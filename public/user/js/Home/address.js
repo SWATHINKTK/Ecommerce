@@ -252,6 +252,10 @@ function validateAddress(fromData){
                 is_valid = false;
     
             }
+        }else if(data.AlteranteNumber == data.MobileNumber){
+            
+            errorElemetns[8].innerHTML = ' *  alternate number not enter same as mobile number.';
+            is_valid = false;
         }
     }
     if(!is_valid){

@@ -7,6 +7,7 @@ const cartData = require('../models/cartModel');
 const addressInfo = require('../models/addressModel');
 const { userInfo } = require('os');
 const { error } = require('console');
+const { chownSync } = require('fs');
 
 
 
@@ -312,6 +313,9 @@ const loadHomePage = async (req, res) => {
     try {
 
         const checkLogin = req.session.userId ? true : false;
+
+        // UserId Taken From The Session
+        const id = req.session.userId;
        
 
         const categoryData = await category.find({list:true}).sort({ _id: -1});
@@ -329,8 +333,11 @@ const loadHomePage = async (req, res) => {
                 }
             }]);
 
+        const cart = await cartData.findOne({userId:id});
 
-        res.render('user/index', { user: true,login:checkLogin,  title: 'Brand Unlimited', dataCategory: categoryData, dataProduct: productData });
+    
+
+        res.render('user/index', { user: true,login:checkLogin,  title: 'Brand Unlimited', dataCategory: categoryData, dataProduct: productData ,dataCart:cart});
 
     } catch (error) {
 

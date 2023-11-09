@@ -53,6 +53,53 @@ async function addToCart(eventTag){
 
 
 
+
+// *** HOME PAGE PAGE ADD TO CART ****
+
+const homePageAddToCart = document.querySelectorAll('a[name="homePageAddToCart"]');
+
+homePageAddToCart.forEach(eventTag => {
+
+    eventTag.addEventListener('click',async(event)=>{
+        event.preventDefault();
+
+        const productId = event.target.getAttribute('data-product-id');
+        const productPrice = event.target.getAttribute('data-product-price');
+
+        const url = '/api/addToCart';
+
+        const requestOption = {
+            method:'POST',
+            body:JSON.stringify({
+                id:productId,
+                quantity:1,
+                price : productPrice
+            }),
+            headers:{'Content-Type':'application/json'}
+        }
+
+        const response = await fetch(url,requestOption);
+        
+            if(!response.ok){
+                window.location.href = '/error500';
+            }
+
+        const data = await response.json();
+
+            if(data.status){
+                
+                const gotoCart = document.getElementById(`${productId}`);
+                gotoCart.innerHTML = '<a href="/api/cart"> <i class="bi bi-cart3 text-dark"></i><span>Go to Cart</span></a>';
+            }
+
+        console.log(productPrice,productId)
+    })
+})
+
+
+
+
+// **** CART DATA IS USED TO PLACE AN ORDER *****
 const cartOrderPlace = document.getElementById('cartOrderPlace');
 if(cartOrderPlace){
     cartOrderPlace.addEventListener('click',(event)=>{

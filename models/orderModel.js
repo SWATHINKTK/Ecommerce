@@ -57,7 +57,7 @@ const orderModel = moongose.Schema({
         },
         orderStatus:{
             type:String,
-            default:'Pending',
+            default:'Placed',
             require:true
         },
     }],

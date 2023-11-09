@@ -94,7 +94,7 @@ const loadOrderListAdminSide = async(req, res) => {
         }
     ]);
     // const order = await orderData.find({});
-    console.log(order)
+    // console.log(order)
 
     res.render('admin/viewOrders', { admin: true, title:'Order',  orderData:order})
 }
@@ -142,9 +142,85 @@ const updateOrderStatus = async(req,res) => {
     try {
 
         const data = req.body;
+        // console.log(data)
 
-        const updateData = await orderData.find({_id:data.orderId,productInforamtion:{$elemMatch:{productId:data.productId}}})
-        console.log(updateData,data)
+        const order = await orderData.findById(data.orderId);
+
+        if(order){
+            const productToUpdate = order.productInforamtion.find(orderProduct => orderProduct.productId.equals(data.productId))
+            
+            // *** ORDER CANCELED STATUS CHANGE ***
+            if(data.orderStatus === 'Canceled'){
+
+                productToUpdate.orderStatus = data.orderStatus;
+                const updateStock = await productInfo.updateOne({_id:data.productId},{$inc:{stock:data.productQty}});
+                
+                if(updateStock){
+                    const updateStatus = await order.save();
+
+                    if(updateStatus){
+
+                        res.json({status:true});
+
+                    }else{
+                        res.json({status:false});
+                    }
+                }
+            }
+
+
+            // **** ORDER SHIPPED STATUS CHANGE ****
+            if(data.orderStatus === 'Shipped'){
+
+                productToUpdate.orderStatus = data.orderStatus;
+
+                const updateStatus = await order.save();
+
+                    if(updateStatus){
+
+                        res.json({status:true});
+
+                    }else{
+                        res.json({status:false});
+                    }
+            }
+
+
+            // **** ORDER DELIVERED STATUS CHANGE ****
+            if(data.orderStatus === 'Delivered'){
+
+                productToUpdate.orderStatus = data.orderStatus;
+
+                const updateStatus = await order.save();
+
+                    if(updateStatus){
+
+                        res.json({status:true});
+
+                    }else{
+                        res.json({status:false});
+                    }
+            }
+
+
+            // **** ORDER PLACED STATUS CHANGE ****
+            if(data.orderStatus === 'Placed'){
+
+                productToUpdate.orderStatus = data.orderStatus;
+
+                const updateStatus = await order.save();
+
+                    if(updateStatus){
+
+                        res.json({status:true});
+
+                    }else{
+                        res.json({status:false});
+                    }
+            }
+
+
+        }
         
     } catch (error) {
 
