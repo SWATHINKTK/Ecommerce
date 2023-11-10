@@ -91,6 +91,8 @@
                                             src="/public/admin/assets/productImages/<%= orderData[0].productData[0].productImages[0] %>" width="250">
                                         </div>
                                     </div>
+
+                                    <!-- **** LOAD TIME EVENT WORKING ON PROGRESS BAR  IN JS order>js*** -->
                                     <div id="progress-div">
                                         <div class="col-md-11 d-flex">
                                             <div class="col-md-6 d-flex align-items-center">
@@ -139,19 +141,15 @@
                                         </div>
                                     </div>
                                 </div>
-                                
-                                <div class="card-footer p-4" id="cart-footer">
-                                  <div class="d-flex justify-content-between">
-                                    <h5 class="fw-normal mb-0"><a href="/cancelOrder?id=<%= orderData[0]._id %>&productId=<%= orderData[0].productData[0]._id %>">Cancel Order</a></h5>
-                                    <!-- <div class="border-start h-100"></div>
-                                    <h5 class="fw-normal mb-0"><a href="#!">Cancel</a></h5>
-                                    <div class="border-start h-100"></div>
-                                    <h5 class="fw-normal mb-0"><a href="#!">Pre-pay</a></h5> -->
-                                    <!-- <div class="border-start h-100"></div>
-                                    <h5 class="fw-normal mb-0"><a href="#!" class="text-muted"><i class="fas fa-ellipsis-v"></i></a>
-                                    </h5>
-                                  </div> -->
-                                </div>
+                                 <!-- **** LOAD TIME EVENT WORKING ON PROGRESS BAR  IN JS order>js*** -->
+                                <% if(orderData[0].productInforamtion.orderStatus == "Canceled" || orderData[0].productInforamtion.orderStatus == 'Delivered'){ %>
+                                <% } else { %>
+                                  <div class="card-footer p-4" id="order-progress-footer">
+                                    <div class="d-flex justify-content-between">
+                                      <h5 class="fw-normal mb-0"><a href="#" id="orderCancel" data-product-qunatity="<%= orderData[0].productInforamtion.productquantity %>" data-order-id="<%= orderData[0]._id %>" data-product-id="<%= orderData[0].productData[0]._id %>">Cancel Order</a></h5>
+                                    </div>
+                                  </div>
+                                <% } %>
                               </div>
                             </div>
                           </div>

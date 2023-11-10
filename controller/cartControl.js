@@ -1,5 +1,6 @@
 const {userData} = require('../models/userModal');
 const cartData = require('../models/cartModel');
+const wishlistData = require('../models/wishlistModel')
 
 
 // **** VIEW PRODUCT INSIDE THE CART ******
@@ -15,10 +16,12 @@ const loadCartPage = async(req,res)=>{
 
         if(cartProduct){
 
-            const cartProduct = await cartData.findOne({userId:id}).populate('cartProducts.productId')
+            const cartProduct = await cartData.findOne({userId:id}).populate('cartProducts.productId');
             const data = cartProduct.cartProducts;
+
+            const wishlist = await wishlistData.findOne({userId:id});
            
-            res.render('user/viewCart',{user:true, title:'Cart', login:checkLogin, cartData : data ,cartExist:true});
+            res.render('user/viewCart',{user:true, title:'Cart', login:checkLogin, cartData : data ,wishlistData:wishlist ,cartExist:true,});
             
         }else{
 

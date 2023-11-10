@@ -19,15 +19,15 @@ proceedPaymentBtn.addEventListener('click',()=>{
 const priceUpdate = document.getElementById('checkout-product-quanitity');
 priceUpdate.addEventListener('change',(event)=>{
 
-    const newProductQuantity = event.target.value;
+    const newProductQuantity = parseInt(event.target.value);
     const hiddenInput = document.getElementById('checkout-hidden-data');
     // console.log(hiddenInput)
     const oldProductQuantity = hiddenInput.value;
     const singlePrice = hiddenInput.getAttribute('name');
 
-    const stock = hiddenInput.getAttribute('data-product-stock');
+    const stock = parseInt(hiddenInput.getAttribute('data-product-stock'));
 
-    if(stock < newProductQuantity ){
+    if(stock < newProductQuantity && newProductQuantity < 10){
         Swal.fire({
             text: `Only ${stock} products is left`,
             icon: 'warning',

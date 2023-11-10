@@ -212,6 +212,29 @@
                                     <div class="product__item">
                                         <div class="product__item__pic set-bg" data-setbg="/public/admin/assets/productImages/<%= product[i].productImages[0] %>">
                                             <ul class="product__hover">
+
+                                                <!-- Wishlist -->
+                                                <li>
+                                                    <% if( locals.wishlistData ? true : false ) {%>
+                                                        <a href="#"  name="addToWishlist">
+                                                            <% if(wishlistData.wishlistProducts.includes(product._id)) {%>
+                                                                <i class="fa-solid fa-heart fa-lg text-danger fa-lg  py-3 px-2" data-wishlist-productId="<%= product._id %>"></i> 
+                                                                <span class="mr-5">Item In You Wishlist</span> 
+                                                            <% } else { %>
+                                                                <i class="fa-regular text-dark fa-heart fa-lg fa-lg  py-3 px-2" data-wishlist-productId="<%= product._id %>"></i> 
+                                                                <span class="mr-5">Add to Wishlist</span> 
+                                                            <% } %>
+                                                        </a>
+                                                    <% } else { %>
+                                                        <a href="/login">
+                                                            <i class="fa-regular text-dark fa-heart fa-lg fa-lg  py-3 px-2" data-wishlist-productId="<%= product._id %>"></i> 
+                                                            <span class="mr-5">Add to Wishlist</span> 
+                                                        </a>
+                                                    <% } %>
+                                                </li>
+
+                                                
+
                                                 <!-- <li><a href="#"><img src="/public/user/img/icon/heart.png" alt=""></a></li>
                                                 <li><a href="#"><img src="/public/user/img/icon/compare.png" alt=""> <span>Compare</span></a></li>
                                                 <li><a href="#"><img src="/public/user/img/icon/search.png" alt=""></a></li> -->

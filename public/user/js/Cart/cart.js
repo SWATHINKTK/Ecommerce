@@ -415,7 +415,6 @@ async function successCartProduct(button){
             }
 
         const responseData = await response.json();
-        console.log('sss')
 
             if(responseData.status){
 

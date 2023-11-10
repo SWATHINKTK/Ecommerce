@@ -23,6 +23,17 @@ addToWishlist.forEach((addWishlistBtn)=>{
 
         if(responseData.status && responseData.removed){
 
+            if(anchorTag.getAttribute('data-cart')){
+                anchorTag.innerHTML = `<i class="fa-regular fa-heart fa-lg text-dark  py-3 px-2" data-wishlist-productId="${productId}"></i>`;
+                Swal.fire({
+                    position:'bottom',
+                    html: '<span class="font-weight-bold"><i class="fa-solid fa-circle-check" style="color: #2dd26c;"></i> Removed Successfully.</span>',
+                    showConfirmButton: false, 
+                    timer: 1800,
+                });                         
+                return;
+            }
+
             anchorTag.innerHTML = `<i class="fa-regular text-dark fa-heart fa-lg  py-3 px-2" data-wishlist-productId="${productId}"></i><span class="mr-5">Add to Wishlist</span>`
 
             // event.target.setAttribute('class','fa-regular fa-heart fa-lg text-dark py-3 px-2');
@@ -36,6 +47,17 @@ addToWishlist.forEach((addWishlistBtn)=>{
 
 
         }else if(responseData.status){
+
+            if(anchorTag.getAttribute('data-cart')){
+                anchorTag.innerHTML = `<i class="fa-solid fa-heart fa-lg text-danger  py-3 px-2" data-wishlist-productId="${productId}"></i>`;
+                Swal.fire({
+                    position:'bottom',
+                    html: '<span class="font-weight-bold"><i class="fa-solid fa-circle-check" style="color: #2dd26c;"></i> Added Successfully.<span>',
+                    showConfirmButton: false, 
+                    timer: 1999,
+                })
+                return;
+            }
 
             anchorTag.innerHTML = `<i class="fa-solid fa-heart fa-lg text-danger  py-3 px-2" data-wishlist-productId="${productId}"></i><span class="mr-5">Item In Your Wishlist</span>`
 
@@ -129,7 +151,12 @@ removeProductWishlist.forEach((proucts)=>{
                             timer: 1500,
                         })
                     }else{
-
+                        Swal.fire({
+                            position:'bottom',
+                            html: ' NetWork Please Try Again.',
+                            showConfirmButton: false, 
+                            timer: 1500,
+                        })
                     }
 
                 }

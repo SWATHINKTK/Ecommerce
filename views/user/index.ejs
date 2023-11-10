@@ -193,7 +193,7 @@
                                         
                                         <li>
                                             <% if(product.stock > 0) { %>
-                                                <a href="/api/checkout?id=<%= product._id %>"><i class="bi bi-bag-fill text-danger"></i> <span>Buy Now</span></a>
+                                                <a href="/api/checkout?id=<%= product._id %>&single=true"><i class="bi bi-bag-fill text-danger"></i> <span>Buy Now</span></a>
                                             <% } else { %>
                                                 <i class="bi bi-bag-fill text-danger"></i> <span>Out Of Stock</span>
                                             <% } %>

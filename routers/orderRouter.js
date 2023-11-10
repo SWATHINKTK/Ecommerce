@@ -5,6 +5,7 @@ const auth = require('../middleware/userAuth');
 
 orderRouter.get('/viewOrder',auth.isUserLogin,orderController.loadOrderListViewUserSide);
 orderRouter.get('/orderDetails',auth.isUserLogin,orderController.loadOrderProgressInUserSide);
+orderRouter.delete('/cancelOrder',auth.isUserLogin,orderController.cancelOrder)
 
 
 //*** Order Routing Admin Side ***

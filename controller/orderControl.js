@@ -3,6 +3,7 @@ const {productInfo} = require('../models/adminModel');
 
 const mongoose = require('mongoose');
 
+
 // ****** Load All Orders in View Order Page ******
 const loadOrderListViewUserSide = async(req,res)=>{
     
@@ -70,10 +71,46 @@ const loadOrderProgressInUserSide = async(req,res) => {
     ]);
 
     res.render('user/orderProgress',{ title:'View Order' ,login:checkLogin ,user: true, orderData:order});
+}
+
+
+
+// **** CANCEL ORDER IN ADMIN SIDE ****
+const cancelOrder = async(req,res) => {
     
-    // const order = await orderData.findOne({_id:orderId});
-    // const product = await productInfo.findOne({_id:productId});
-    console.log(order)
+    try {
+        const data = req.body;
+        console.log(data)
+
+        const order = await orderData.findById(data.orderId);
+        console.log(order)
+
+        if(order){
+            const productToUpdate = order.productInforamtion.find(orderProduct => orderProduct.productId.equals(data.productId));
+            console.log(productToUpdate)
+            
+            // *** ORDER CANCELED STATUS CHANGE ***
+
+            productToUpdate.orderStatus = 'Canceled';
+            const updateStock = await productInfo.updateOne({_id:data.productId},{$inc:{stock:data.qunatity}});
+            
+            if(updateStock){
+                const updateStatus = await order.save();
+
+                if(updateStatus){
+
+                    res.json({status:true});
+
+                }else{
+                    res.json({status:false});
+                }
+            }
+        }else{
+            res.status(500);
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
 }
 
 
@@ -99,11 +136,11 @@ const loadOrderListAdminSide = async(req, res) => {
             $sort:{_id:-1}
         }
     ]);
-    // const order = await orderData.find({});
-    // console.log(order)
 
     res.render('admin/viewOrders', { admin: true, title:'Order',  orderData:order})
+
 }
+
 
 
 
@@ -236,9 +273,13 @@ const updateOrderStatus = async(req,res) => {
 }
 
 
+
+
+
 module.exports = {
     loadOrderListViewUserSide,
     loadOrderProgressInUserSide,
+    cancelOrder,
     loadOrderListAdminSide,
     loadOrderManagePageAdminSide,
     updateOrderStatus

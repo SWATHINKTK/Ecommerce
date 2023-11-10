@@ -432,7 +432,19 @@ const loadAllProductViewPage = async(req,res) =>{
 
         const checkLogin = req.session.userId ? true : false;
 
+        const userId = req.session.useId
+
         const productData = await productInfo.find({}).sort({_id:-1});
+
+        if(userId){
+            const cart = await cartData.find({userId:userId});
+            const wishlist = await wishlistData.find({userId:userId});
+            consolelog(cart,productData)
+
+            res.render('user/allProductView',{ user: true,login:checkLogin, title: 'Products', product:productData, wishlistData:wishlist, dataCart:cart});
+            return;
+
+        }
 
         res.render('user/allProductView',{ user: true,login:checkLogin, title: 'Products',product:productData});
 
