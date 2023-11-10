@@ -4,6 +4,7 @@ const nodemailer = require('nodemailer');
 const { userData } = require('../models/userModal');
 const { productInfo, category ,brandInfo} = require('../models/adminModel');
 const cartData = require('../models/cartModel');
+const wishlistData = require('../models/wishlistModel');
 const addressInfo = require('../models/addressModel');
 const { userInfo } = require('os');
 const { error } = require('console');
@@ -335,9 +336,10 @@ const loadHomePage = async (req, res) => {
 
         const cart = await cartData.findOne({userId:id});
 
+        const wishlist = await wishlistData.findOne({userId:id});
     
 
-        res.render('user/index', { user: true,login:checkLogin,  title: 'Brand Unlimited', dataCategory: categoryData, dataProduct: productData ,dataCart:cart});
+        res.render('user/index', { user: true,login:checkLogin,  title: 'Brand Unlimited', dataCategory: categoryData, dataProduct: productData ,dataCart:cart, wishlistData:wishlist});
 
     } catch (error) {
 

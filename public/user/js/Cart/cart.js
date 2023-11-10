@@ -156,16 +156,17 @@ document.addEventListener('DOMContentLoaded',()=>{
 
         changeInputField.addEventListener('click' , (event)=>{
 
-            const productQuanitity = event.target.value;
+            const productQuanitity = parseInt(event.target.value);
 
             const parent = event.target.parentNode;
             const oldData = parent.querySelector('#oldData');
             const oldQuantity = oldData.value;
 
-            const stock = oldData.getAttribute('data-stock');
-            // alert(stock)
+            const stock = parseInt(oldData.getAttribute('data-stock'));
 
             if(stock < productQuanitity ){
+                alert(stock)
+                alert(productQuanitity)
                 Swal.fire({
                     text: `Only ${stock} products is left`,
                     icon: 'warning',
@@ -222,7 +223,8 @@ document.addEventListener('DOMContentLoaded',()=>{
             try{
 
                 const productId = event.target.getAttribute('data-cart-product-id');
-                const productQuanitity = event.target.value;
+
+                const productQuanitity = parseInt(event.target.value);
 
 
                 const parent = event.target.parentNode;
@@ -230,7 +232,7 @@ document.addEventListener('DOMContentLoaded',()=>{
                 const oldQuantity = oldData.value;
                 const price = oldData.getAttribute('name');
 
-                const stock = oldData.getAttribute('data-stock');
+                const stock = parseInt(oldData.getAttribute('data-stock'));
 
                 if(stock < productQuanitity ){
                     Swal.fire({

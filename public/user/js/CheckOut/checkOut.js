@@ -2,7 +2,7 @@
 // ****** PROCEED TO PAYMENT - PAYMENT OPTION DIV VIEW *****
 const proceedPaymentBtn = document.getElementById('proceed-payment-btn');
 proceedPaymentBtn.addEventListener('click',()=>{
-    alert('d')
+    // alert('d')
     const paymentOptionDiv = document.getElementById('payment-options');
     paymentOptionDiv.style.display = 'block';
 

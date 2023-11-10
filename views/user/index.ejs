@@ -95,7 +95,6 @@
     <!-- Banner Section End -->
 
     <!-- Product Section Begin -->
-    
     <section class="product spad mt-5">
         <div class="container">
             <div class="row">
@@ -151,7 +150,6 @@
                     </ul>
                 </div>
             </div>
-
             <div class="row product__filter">
                 <% const productsWithCategory = dataProduct.filter(product =>product.categoryData.some(category => category._id.equals("6538bdfeb9d241bcc58a8104"))); %>
                     <% if(productsWithCategory.length > 0){ productsWithCategory.forEach(product => {%>
@@ -159,7 +157,26 @@
                             <div class="product__item">
                                 <div class="product__item__pic set-bg" data-setbg="/public/admin/assets/productImages/<%= product.productImages[0] %>">
                                     <ul class="product__hover">
-                                        <li><a href="#"><img src="/public/user/img/icon/heart.png" alt=""></a></li>
+
+                                        <li>
+                                            <% if( locals.wishlistData ? true : false ) {%>
+                                                <a href="#"  name="addToWishlist">
+                                                    <% if(wishlistData.wishlistProducts.includes(product._id)) {%>
+                                                        <i class="fa-solid fa-heart fa-lg text-danger fa-lg  py-3 px-2" data-wishlist-productId="<%= product._id %>"></i> 
+                                                        <span class="mr-5">Item In You Wishlist</span> 
+                                                    <% } else { %>
+                                                        <i class="fa-regular text-dark fa-heart fa-lg fa-lg  py-3 px-2" data-wishlist-productId="<%= product._id %>"></i> 
+                                                        <span class="mr-5">Add to Wishlist</span> 
+                                                    <% } %>
+                                                </a>
+                                            <% } else { %>
+                                                <a href="/login">
+                                                    <i class="fa-regular text-dark fa-heart fa-lg fa-lg  py-3 px-2" data-wishlist-productId="<%= product._id %>"></i> 
+                                                    <span class="mr-5">Add to Wishlist</span> 
+                                                </a>
+                                            <% } %>
+                                        </li>
+                                        
                                         <li id="<%= product._id %>">
                                             <% let InCart = locals.dataCart ? dataCart.cartProducts.some(item => item.productId.equals(product._id)) : false %>
                                             <% if(!InCart && product.stock > 0){ %>
@@ -173,6 +190,7 @@
                                             <% } %>
                                                 
                                         </li>
+                                        
                                         <li>
                                             <% if(product.stock > 0) { %>
                                                 <a href="/api/checkout?id=<%= product._id %>"><i class="bi bi-bag-fill text-danger"></i> <span>Buy Now</span></a>

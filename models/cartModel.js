@@ -21,6 +21,6 @@ const cartModel = moongose.Schema({
         require : true
       }
     }]
-})
+},{timestamps: true})
 
 module.exports = moongose.model('carts',cartModel);
