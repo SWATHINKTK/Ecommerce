@@ -1832,8 +1832,8 @@ form .form-control:focus {
 }
 
 .swal2-popup {
-	position: fixed;
-	bottom: 20px; 
+	/* position: fixed; */
+	/* bottom: 20px;  */
 }
 
 .checkout-heading{

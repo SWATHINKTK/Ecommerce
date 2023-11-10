@@ -392,10 +392,13 @@ async function successCartProduct(button){
         const productId = button.getAttribute('data-product-id');
     
 
-        const url = `/api/deleteCartProduct${productId}`;
+        const url = '/api/deleteCartProduct';
 
         const requestOption = {
             method:'DELETE',
+            body:JSON.stringify({
+                productId:productId
+            }),
             headers:{'Content-Type': 'application/json'}
         }
 
@@ -405,7 +408,14 @@ async function successCartProduct(button){
                 window.location.href = '/error500';
             }
 
+            if(response.status == 404){
+
+                window.location.href = '/login';
+
+            }
+
         const responseData = await response.json();
+        console.log('sss')
 
             if(responseData.status){
 
@@ -426,6 +436,7 @@ async function successCartProduct(button){
                 }else{
 
                     Swal.fire({
+                        position:'bottom',
                         html: '<i class="fa-solid fa-circle-check" style="color: #2dd26c;"></i> Successfully Removed.',
                         showConfirmButton: false, 
                         timer: 1500,

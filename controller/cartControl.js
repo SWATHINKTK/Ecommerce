@@ -130,10 +130,12 @@ const cartQuantityUpdate = async (req,res) => {
 }
 
 
+
+// **** REMOVE CART ****
 const removeProductFromCart = async (req,res) => {
     
     const userId = req.session.userId
-    const productId = req.params.id;
+    const productId = req.body.productId;
 
     const cartInfo = await cartData.findOne({userId:userId});
 

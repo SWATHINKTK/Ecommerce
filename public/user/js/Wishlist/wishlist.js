@@ -60,3 +60,79 @@ addToWishlist.forEach((addWishlistBtn)=>{
 
     })
 })
+
+
+
+
+
+
+// ***** REMOVE PRODUCT FROM WISHLIST ****
+const removeProductWishlist = document.querySelectorAll('a[name="remove-wishlist"]');
+
+removeProductWishlist.forEach((proucts)=>{
+    proucts.addEventListener('click', async(event)=>{
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "It will permanently deleted !",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#808080',
+            confirmButtonText: '<i class="fa-regular fa-trash-can  fa-lg" style="color: #ffffff;"></i> Delete'
+          }).then(async (result) => {
+        
+                if (result.isConfirmed) {
+
+                    const wishlistProductId = event.target.getAttribute('data-wishlist-product');
+
+                    const noofProducts = document.querySelectorAll('a[name="remove-wishlist"]')
+
+                    const url = '/api/removeWishlistProduct';
+
+                    const requestOptions = {
+                        method:'DELETE',
+                        body:JSON.stringify({
+                            productId:wishlistProductId
+                        }),
+                        headers:{'Content-Type':'application/json'}
+                    }
+
+                    const response = await fetch(url,requestOptions);
+
+                    if(!response.ok){
+                        window.location.href = '/error500';
+                    }
+
+                    if(response.status == 404){
+
+                        window.location.href = '/login';
+
+                    }
+
+                    const responseData = await response.json();
+
+                    if(responseData.status){
+                        
+                        const divToRemove = document.getElementById(`${wishlistProductId}`);
+                        divToRemove.remove();
+
+                        console.log(noofProducts.length)
+                        if(noofProducts.length == 1){
+                            location.reload();
+                        }
+                        
+                        Swal.fire({
+                            position:'bottom',
+                            html: '<i class="fa-solid fa-circle-check" style="color: #2dd26c;"></i> Successfully Removed.',
+                            showConfirmButton: false, 
+                            timer: 1500,
+                        })
+                    }else{
+
+                    }
+
+                }
+            })
+    })
+})

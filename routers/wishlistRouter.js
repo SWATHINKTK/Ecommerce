@@ -7,6 +7,8 @@ const auth = require('../middleware/userAuth');
 wishlistRouter.use(express.urlencoded({extended:true}));
 wishlistRouter.use(express.json());
 
-wishlistRouter.get('/addWishlist:productId', auth.isUserLogin, wishlistController.addProductToWishlist)
+wishlistRouter.get('/addWishlist:productId', auth.isUserLogin, wishlistController.addProductToWishlist);
+wishlistRouter.get('/viewWishlist', auth.isUserLogin, wishlistController.viewWishlistProduct);
 
+wishlistRouter.delete('/removeWishlistProduct',auth.isUserLogin, wishlistController.removeWishlistProduct)
 module.exports = wishlistRouter;

@@ -12,5 +12,5 @@ cartRouter.post('/addToCart',auth.isUserLogin,cartController.productAddToCart);
 
 cartRouter.patch('/cartQuantityUpdate',cartController.cartQuantityUpdate);
 
-cartRouter.delete('/deleteCartProduct:id', cartController.removeProductFromCart)
+cartRouter.delete('/deleteCartProduct',auth.isUserLogin, cartController.removeProductFromCart)
 module.exports = cartRouter;
