@@ -16,16 +16,21 @@ updateOrderStatus.forEach((updateButton) => {
 
 
         if(status.value == ''){
-            alert('Select the Status')
+            swal.fire({
+                text:'Please Select The Status',
+            });
             return;
         }
 
         Swal.fire({
-            title: "Do you want to Update the Status?",
+            text: "Do you want to Update the Status?",
             // showDenyButton: true,
             showCancelButton: true,
             confirmButtonText: "Save",
             // denyButtonText: `Don't save`
+            customClass: {
+                content: 'custom-swal-text-color'
+            }
           }).then(async (result) => {
         
             if (result.isConfirmed) {

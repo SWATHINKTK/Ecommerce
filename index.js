@@ -25,10 +25,6 @@ mongoose.connect('mongodb://127.0.0.1:27017/ecommerce')
 
 
 
-// Admin Router 
-const adminRouter = require('./routers/adminRouter');
-app.use('/admin',adminRouter);
-
 // User Router 
 const userRouter = require('./routers/userRouter');
 app.use('/',userRouter);
@@ -52,6 +48,11 @@ app.use('/api',orderRouter);
 // ***** WISHLIST ROUTER *****
 const wishlistRouter = require('./routers/wishlistRouter');
 app.use('/api',wishlistRouter);
+
+
+// Admin Router 
+const adminRouter = require('./routers/adminRouter');
+app.use('/admin',adminRouter);
 
 
 app.listen(5000,()=>{

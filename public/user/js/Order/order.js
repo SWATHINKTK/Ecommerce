@@ -82,77 +82,93 @@ window.addEventListener('load',()=>{
 
 // **** CANCEL ORDER FOR USER SIDE ****
 const cancelOrder = document.getElementById('orderCancel');
-console.log(cancelOrder)
 
 cancelOrder.addEventListener('click',async(event) => {
     event.preventDefault();
 
-    const productQuantity = event.target.getAttribute('data-product-qunatity');
-    const productId = event.target.getAttribute('data-product-id');
-    const orderId = event.target.getAttribute('data-order-id');
-    console.log(productId,orderId,productQuantity);
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "Order Will Be Canceled !",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#808080',
+        confirmButtonText: '<i class="fa-regular fa-trash-can  fa-lg" style="color: #ffffff;"></i> Delete'
+      }).then(async (result) => {
+    
+            if (result.isConfirmed) {
+                const productQuantity = event.target.getAttribute('data-product-qunatity');
+                const productId = event.target.getAttribute('data-product-id');
+                const orderId = event.target.getAttribute('data-order-id');
+                console.log(productId,orderId,productQuantity);
 
-    const url = '/api/cancelOrder';
+                const url = '/api/cancelOrder';
 
-    const requestOptions = {
-        method:'DELETE',
-        body:JSON.stringify({
-            productId:productId,
-            orderId:orderId,
-            qunatity:productQuantity
-        }),
-        headers:{'Content-Type':'application/json'}
-    }
+                const requestOptions = {
+                    method:'DELETE',
+                    body:JSON.stringify({
+                        productId:productId,
+                        orderId:orderId,
+                        qunatity:productQuantity
+                    }),
+                    headers:{'Content-Type':'application/json'}
+                }
 
-    const response = await fetch(url,requestOptions);
+                const response = await fetch(url,requestOptions);
 
-        if(!response.ok){
-            window.location.href = '/error500';
-        }
+                    if(!response.ok){
+                        window.location.href = '/error500';
+                    }
 
-    const responseData = await response.json();
+                const responseData = await response.json();
 
-        if(responseData.status){
+                    if(responseData.status){
 
-            Swal.fire({
-                position:'bottom',
-                html: '<i class="fa-solid fa-circle-check" style="color: #2dd26c;"></i> Order Cancel Successfull.',
-                showConfirmButton: false, 
-                timer: 1500,
-            })
+                        Swal.fire({
+                            position:'bottom',
+                            html: '<i class="fa-solid fa-circle-check" style="color: #2dd26c;"></i> Order Cancel Successfull.',
+                            showConfirmButton: false, 
+                            timer: 1500,
+                        })
 
-            setTimeout(() => {
-                window.location.href = `/api/orderDetails?id=${orderId}&productId=${productId}`
-            }, 1600);
-
-
-            // document.getElementById('progress-div').remove();
-
-            // document.getElementById('order-progress-footer').remove();
-
-            // const progressCanceled = document.getElementById('progress-div-canceled');
-            // progressCanceled.style.display = 'block';
-
-            // setTimeout(() => {
-            //     progress[2].style.width = '100%';
-                
-            //     progressState[3].style.backgroundColor = 'green';
-            //     progressState[4].style.backgroundColor = '#f9f1f1';
-
-            //     progressState[3].innerHTML = '&#10004;';
-            //     progressState[4].innerHTML = '&#10060;';
-
-            //     progress[2].setAttribute('class','progress-bar progress-bar-striped bg-success')
-            // }, 1600);
+                        setTimeout(() => {
+                            window.location.href = `/api/orderDetails?id=${orderId}&productId=${productId}`
+                        }, 1600);
 
 
-            
-        }else{
-            Swal.fire({
-                position:'bottom',
-                html: 'NetWork Issue Try Again.',
-                showConfirmButton: false, 
-                timer: 1500,
-            })
-        }
+                        // document.getElementById('progress-div').remove();
+
+                        // document.getElementById('order-progress-footer').remove();
+
+                        // const progressCanceled = document.getElementById('progress-div-canceled');
+                        // progressCanceled.style.display = 'block';
+
+                        // setTimeout(() => {
+                        //     progress[2].style.width = '100%';
+                            
+                        //     progressState[3].style.backgroundColor = 'green';
+                        //     progressState[4].style.backgroundColor = '#f9f1f1';
+
+                        //     progressState[3].innerHTML = '&#10004;';
+                        //     progressState[4].innerHTML = '&#10060;';
+
+                        //     progress[2].setAttribute('class','progress-bar progress-bar-striped bg-success')
+                        // }, 1600);
+
+
+                        
+                    }else{
+                        Swal.fire({
+                            position:'bottom',
+                            html: 'NetWork Issue Try Again.',
+                            showConfirmButton: false, 
+                            timer: 1500,
+                        })
+                    }
+            }
+      })
+
+    
 })
+
+

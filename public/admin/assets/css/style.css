@@ -196,6 +196,9 @@
   .card-stepper {
   z-index: 0
   }
+
+
+
 /* === SCSS Compass Functions === */
 @-moz-keyframes flash {
   0% {
@@ -9550,7 +9553,8 @@ textarea.is-invalid.tt-hint {
     .form-inline .custom-control-label {
       margin-bottom: 0; } }
 
-.btn, .fc button, .ajax-upload-dragdrop .ajax-file-upload, .swal2-modal .swal2-buttonswrapper .swal2-styled, .swal2-modal .swal2-buttonswrapper .swal2-styled.swal2-confirm, .swal2-modal .swal2-buttonswrapper .swal2-styled.swal2-cancel, .wizard > .actions a {
+/* .btn, .fc button, .ajax-upload-dragdrop .ajax-file-upload, .swal2-modal .swal2-buttonswrapper .swal2-styled, .swal2-modal .swal2-buttonswrapper .swal2-styled.swal2-confirm, .swal2-modal .swal2-buttonswrapper .swal2-styled.swal2-cancel, .wizard > .actions a { */
+  .btn, .fc button, .ajax-upload-dragdrop .ajax-file-upload,  .wizard > .actions a {
   display: inline-block;
   font-weight: 400;
   color: #ffffff;

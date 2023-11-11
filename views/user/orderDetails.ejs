@@ -36,7 +36,7 @@
                                 <i class="fa-regular fa-address-card"></i>  <span> Address</span> 
                             </div>
                         </a>
-                        <a href="#"> <span><%=  %></span>
+                        <a href="/api/viewOrder"> <span><%=  %></span>
                             <div class="mt-2 options-userprofle">
                                 <i class="bi bi-box-seam-fill"></i> <span> Orders</span> 
                             </div>
@@ -48,6 +48,30 @@
                             </div>
                         </a>
                 </div>
+                <div class="d-flex flex-column align-items-start mt-5 justify-content-center">
+                    <h5 class="font-weight-bold mb-3">Order Filter</h5>
+
+                    <div class="input-group">
+                        <input type="radio" class="mb-1" name="orderFilter" id="" value="All"> <span class="ml-2 font-weight-bold text-secondary">All</span>
+                    </div>
+
+                    <div class="input-group">
+                        <input type="radio" class="mb-1" name="orderFilter" id="" value="Placed"> <span class="ml-2 font-weight-bold text-secondary">Placed</span>
+                    </div>
+
+                    <div class="input-group">
+                        <input type="radio" class="mb-1" name="orderFilter" id="" value="Shipped"> <span class="ml-2 font-weight-bold text-secondary">Shipped</span>
+                    </div>
+
+                    <div class="input-group">
+                        <input type="radio" class="mb-1" name="orderFilter" id="" value="Delivered"> <span class="ml-2 font-weight-bold text-secondary">Delivered</span>
+                    </div>
+
+                    <div class="input-group">
+                        <input type="radio" class="mb-1" name="orderFilter" id="" value="Canceled"> <span class="ml-2 font-weight-bold text-secondary">Canceled</span>
+                    </div>
+
+                </div>
             </div>
             <div class="col-md-8 ml-4">
                 <!-- Right Side Div -->
@@ -57,6 +81,7 @@
                     <!-- Order Detials view Div -->
                     <% if(orderData.length > 0) { %>
                         <% for(let i= 0 ; i < orderData.length ; i++) { %>
+                            <div name="orderDatas" value="<%= orderData[i].productInforamtion.orderStatus %>">
                             <a href="/api/orderDetails?id=<%= orderData[i]._id %>&productId=<%= orderData[i].productData[0]._id %>">
                                 <div class="p-4 pl-5 order-view d-flex mt-3 pb-2" id="">
                                     <div class="order-detail-image checkout-productImg">
@@ -88,7 +113,7 @@
                                             <% } else if (orderData[i].productInforamtion.orderStatus == 'Delivered') { %>
                                                 <i class="fa-solid fa-circle ml-3 text-success"></i><h5 class="ml-2 font-weight-bold text-success">Delivered on <%= orderData[i].updatedAt.toLocaleDateString() %></h5>
                                             <% } else { %>
-                                                <h6 class="ml-3 mr-2">Delivery Expected &nbsp;: <span class="text-danger">3 to 4 Days to Delivery</span></h6>
+                                                <h6 class="ml-3 mr-2">Delivery Expected &nbsp;: <span class="text-danger">3 to 4 Days to Delivery</span> <span class="font-weight-bold text-success"> (<%= orderData[i].productInforamtion.orderStatus %>)</span></h6>
                                             <% } %>
                                         </div>
                                         
@@ -96,6 +121,7 @@
                                     </div>    
                                 </div>
                             </a>
+                            </div>
                         <% } %>
                     <% } %>
                 </div>
