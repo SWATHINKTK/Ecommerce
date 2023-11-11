@@ -8,10 +8,20 @@ function editUserDetails(){
     const editinformation = document.getElementById('userprofile-edit');
     editinformation.style.display = 'none';
 
+    const resetPasswordLink = document.getElementById('reset-password-link');
+    resetPasswordLink.style.display = 'none';
+
+    const resetPasswodDiv = document.getElementById('reset-password-div');
+    resetPasswodDiv.style.display = 'none'
+
     const submit = document.getElementById('editinfomation-submit');
     submit.style.display = 'block';
 
+    const cancelButton = document.getElementById('editInformation-Cancel');
+    cancelButton.style.display = 'block';
+
 }
+
 const editinfomation = document.getElementById('editinfomation-submit');
 if(editinfomation){
 document.getElementById('editinfomation-submit').addEventListener('click',async function(event){
@@ -94,6 +104,11 @@ document.getElementById('editinfomation-submit').addEventListener('click',async 
 }
 
 
+function cancelEditOperation(button){
+    window.location.reload();
+}
+
+
 
 const resetPasswodDiv = document.getElementById('reset-password-link');
 if(resetPasswodDiv){
@@ -106,9 +121,12 @@ if(resetPasswodDiv){
 }
 
 function cancelResetOperation(){
+
+    window.location.reload();
+    window.scroll(0,0);
    
-    const resetDiv = document.getElementById('reset-password-div');
-    resetDiv.style.display = 'none';
+    // const resetDiv = document.getElementById('reset-password-div');
+    // resetDiv.style.display = 'none';
 }
 
 

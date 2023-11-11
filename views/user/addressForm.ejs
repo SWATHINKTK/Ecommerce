@@ -17,14 +17,14 @@
 </section>
 
 <section>
-    <div class="container mt-3">
+    <div class="container-fluid p-4">
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-2 p-4 pr-5 Profile-sidebar">
                 <!-- Left Side Div -->
                 <div class="left-side">
                     <div>
                         <i class="bi bi-person-circle fa-2x"></i><span class="ml-2 font-weight-bold text-muted">My Profile</span>
-                      
+                        <h3 class="mt-2 text-center font-weight-bold"><%= locals.username %></h3>
                     </div>
                         <a href="/userprofile">
                             <div class="mt-4 options-userprofle">
@@ -33,7 +33,7 @@
                         </a>
                         <a href="/addressinformation">
                             <div class="mt-2 options-userprofle">
-                                <i class="bi bi-box-seam-fill"></i> <span> Address</span> 
+                                <i class="fa-regular fa-address-card"></i> <span> Address</span> 
                             </div>
                         </a>
                         <a href="/api/viewOrder">
@@ -41,16 +41,17 @@
                                 <i class="bi bi-box-seam-fill"></i> <span> Orders</span> 
                             </div>
                         </a>
-                        <a href="/api/viewWishlist">
+                        <a href="/api/viewWishlist"> 
                             <div class="mt-2 options-userprofle">
-                                <i class="bi bi-box-seam-fill"></i> <span> Wishlist</span> 
+                                <i class="fa-regular fa-heart"></i> <span> Wishlist</span> 
+                                <span class="text-dark font-weight-bold"> ( <%= locals.wishlistCount %> )</span>
                             </div>
                         </a>
                 </div>
             </div>
-            <div class="col-md-9">
+            <div class="col-md-8 ml-4">
                 <!-- Right Side Div -->
-                <div class="right-side p-5">
+                <div class="right-side p-4 order-right-side">
                     <h2 class="text-center font-weight-bold mb-4">Add New Address</h2>
                     
                     <form id="newAddressAdding">

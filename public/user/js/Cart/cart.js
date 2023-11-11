@@ -120,6 +120,7 @@ if(cartOrderPlace){
             if(stock.value == 0){
                 value =false;
                 Swal.fire({
+                    position:'bottom',
                     text: `Some Out of Stock is Present in our Cart.You Check Our Cart`,
                     icon: 'error',
                     showConfirmButton: false, 
@@ -168,6 +169,7 @@ document.addEventListener('DOMContentLoaded',()=>{
                 alert(stock)
                 alert(productQuanitity)
                 Swal.fire({
+                    position:'bottom',
                     text: `Only ${stock} products is left`,
                     icon: 'warning',
                     showConfirmButton: false, 
@@ -185,6 +187,7 @@ document.addEventListener('DOMContentLoaded',()=>{
             if(oldQuantity == 10 && productQuanitity == 10){
 
                 Swal.fire({
+                    position:'bottom',
                     text: 'Sorry ! Only 10 unit(s) allowed in each order',
                     icon: 'warning',
                     showConfirmButton: false, 
@@ -200,6 +203,7 @@ document.addEventListener('DOMContentLoaded',()=>{
             }else if(oldQuantity == 1 && productQuanitity == 1){
 
                 Swal.fire({
+                    position:'bottom',
                     text: 'Sorry ! this is not allowed',
                     icon: 'warning',
                     showConfirmButton: false, 
@@ -236,6 +240,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 
                 if(stock < productQuanitity ){
                     Swal.fire({
+                        position:'bottom',
                         text: `Only ${stock} products is left`,
                         icon: 'warning',
                         showConfirmButton: false, 
@@ -258,6 +263,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 
                 if(productQuanitity > 10 ){
                     Swal.fire({
+                        position:'bottom',
                         text: 'Sorry ! Only 10 unit(s) allowed in each order',
                         icon: 'warning',
                         showConfirmButton: false, 
@@ -273,6 +279,7 @@ document.addEventListener('DOMContentLoaded',()=>{
                 }else if(productQuanitity < 1){
 
                     Swal.fire({
+                        position:'bottom',
                         text: 'Sorry ! this is not allowed',
                         icon: 'warning',
                         showConfirmButton: false, 
@@ -331,6 +338,7 @@ document.addEventListener('DOMContentLoaded',()=>{
                         priceUpdate[1].innerText = newPrice;
 
                         Swal.fire({
+                            position:'bottom',
                             text: 'Quantity Updated!',
                             icon: 'success',
                             showConfirmButton: false, 
@@ -345,6 +353,7 @@ document.addEventListener('DOMContentLoaded',()=>{
                     }else{
 
                         Swal.fire({
+                            position:'bottom',
                             text: 'Quantity Not Updated!',
                             icon: 'error',
                             showConfirmButton: false, 

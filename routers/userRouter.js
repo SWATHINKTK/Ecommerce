@@ -23,12 +23,20 @@ userRouter.use(session({
  
 // *** CART COUNT CALCULATE USING MIDDLEWARE ****
 const cartData = require('../models/cartModel');
+const {userData} = require('../models/userModal');
+const wishlistData = require('../models/wishlistModel')
 userRouter.use(async(req,res,next) => {
 
     if(req.session.userId){
         const id = req.session.userId;
         const cart = await cartData.findOne({userId:id});
-        res.locals.count =  cart ? cart.cartProducts.length : 0; 
+        const user = await userData.findOne({_id:id});
+        const wishlist = await wishlistData.findOne({userId:id});
+        
+
+        res.locals.username = user ? user.username : '';
+        res.locals.wishlistCount = wishlist ? wishlist.wishlistProducts.length : '';
+        res.locals.cartCount =  cart ? cart.cartProducts.length : 0; 
     }
     next();
     

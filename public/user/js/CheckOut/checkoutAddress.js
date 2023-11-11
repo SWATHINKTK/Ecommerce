@@ -253,7 +253,7 @@ if(editCheckoutAddress){
                         }
                     }else if(data.AlteranteNumber == data.MobileNumber){
             
-                        errorElemetns[8].innerHTML = ' *  alternate number not enter same as mobile number.';
+                        errorElemetns[8].innerHTML = ' *  enter the different number.';
                         is_valid = false;
                     }
                 }
@@ -446,7 +446,7 @@ function validateCheckoutAddress(fromData){
             }
         }else if(data.AlteranteNumber == data.MobileNumber){
             
-            errorElemetns[8].innerHTML = ' *  alternate number not enter same as mobile number.';
+            errorElemetns[8].innerHTML = ' * enter the different number.';
             is_valid = false;
         }
     }
