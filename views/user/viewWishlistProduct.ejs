@@ -60,12 +60,16 @@
                             <a href="#" >
                                 <div class="pt-3 pb-3 pl-4  order-view d-flex mt-3 " id="<%= wishlistData[i].productData[0]._id %>">
                                     <div class="order-detail-image checkout-productImg">
-                                        <img src="/public/admin/assets/productImages/<%= wishlistData[i].productData[0].productImages[0] %>"  alt="">
+                                        <a href="/productdetails?id=<%= wishlistData[i].productData[0]._id %>">
+                                            <img src="/public/admin/assets/productImages/<%= wishlistData[i].productData[0].productImages[0] %>"  alt="">
+                                        </a>
                                     </div>
             
                                     <div class="ml-4 w-100" >
                                         <div class="d-flex">
-                                            <h4 class="ml-4 mt-1 font-weight-bold"><%= wishlistData[i].productData[0].productName %></h4>
+                                            <a href="/productdetails?id=<%= wishlistData[i].productData[0]._id %>">
+                                                <h4 class="ml-4 mt-1 font-weight-bold"><%= wishlistData[i].productData[0].productName %></h4>
+                                            </a>
                                             <a href="#" name="remove-wishlist" class="ml-auto"><i class="fa-regular fa-trash-can  fa-lg mr-4 mt-3" style="color: #f70202;"  data-wishlist-product="<%= wishlistData[i].productData[0]._id %>"></i></a>
                                             
                                         </div>

@@ -217,23 +217,45 @@
                                                 <li>
                                                     <% if( locals.wishlistData ? true : false ) {%>
                                                         <a href="#"  name="addToWishlist">
-                                                            <% if(wishlistData.wishlistProducts.includes(product._id)) {%>
-                                                                <i class="fa-solid fa-heart fa-lg text-danger fa-lg  py-3 px-2" data-wishlist-productId="<%= product._id %>"></i> 
+                                                            <% if(wishlistData[0].wishlistProducts.includes(product[i]._id)) {%>
+                                                                <i class="fa-solid fa-heart fa-lg text-danger fa-lg  py-3 px-2" data-wishlist-productId="<%= product[i]._id %>"></i> 
                                                                 <span class="mr-5">Item In You Wishlist</span> 
                                                             <% } else { %>
-                                                                <i class="fa-regular text-dark fa-heart fa-lg fa-lg  py-3 px-2" data-wishlist-productId="<%= product._id %>"></i> 
+                                                                <i class="fa-regular text-dark fa-heart fa-lg fa-lg  py-3 px-2" data-wishlist-productId="<%= product[i]._id %>"></i> 
                                                                 <span class="mr-5">Add to Wishlist</span> 
                                                             <% } %>
                                                         </a>
                                                     <% } else { %>
                                                         <a href="/login">
-                                                            <i class="fa-regular text-dark fa-heart fa-lg fa-lg  py-3 px-2" data-wishlist-productId="<%= product._id %>"></i> 
+                                                            <i class="fa-regular text-dark fa-heart fa-lg fa-lg  py-3 px-2" data-wishlist-productId="<%= product[i]._id %>"></i> 
                                                             <span class="mr-5">Add to Wishlist</span> 
                                                         </a>
                                                     <% } %>
                                                 </li>
 
-                                                
+                                                <li id="<%= product[i]._id %>">
+                                                    <% let InCart = locals.dataCart ? dataCart[0].cartProducts.some(item => item.productId.equals(product[i]._id)) : false %>
+                                                    <% if(!InCart && product[i].stock > 0){ %>
+                                                            <a href="#" name="homePageAddToCart"> <i class="bi bi-cart-plus-fill text-dark" data-product-id="<%= product[i]._id %>" data-product-price="<%= product[i].price %>"></i><span>Add to Cart</span></a>
+                                                    <% } else {%>
+                                                        <% if(product[i].stock > 0) { %>
+                                                            <a href="/api/cart"> <i class="bi bi-cart3 text-dark"></i><span>Go to Cart</span></a>
+                                                        <% } else {%>
+                                                            <a href="/api/cart"> <i class="bi bi-cart3 text-dark"></i><span>Out Of Stock</span></a>
+                                                        <% } %>
+                                                    <% } %>
+                                                        
+                                                </li>
+
+                                                <li>
+                                                    <% if(product[i].stock > 0) { %>
+                                                        <a href="/api/checkout?id=<%= product[i]._id %>&single=true"><i class="bi bi-bag-fill text-danger"></i> <span>Buy Now</span></a>
+                                                    <% } else { %>
+                                                        <i class="bi bi-bag-fill text-danger"></i> <span>Out Of Stock</span>
+                                                    <% } %>
+                                                </li>
+
+
 
                                                 <!-- <li><a href="#"><img src="/public/user/img/icon/heart.png" alt=""></a></li>
                                                 <li><a href="#"><img src="/public/user/img/icon/compare.png" alt=""> <span>Compare</span></a></li>
@@ -241,8 +263,9 @@
                                             </ul>
                                         </div>
                                         <div class="product__item__text">
+
                                             <h6><%= product[i].productName %></h6>
-                                            <a href="/productdetails?id=<%= product[i]._id %>" class="add-cart" target="_blank">+ View More</a>
+                                            <a href="/productdetails?id=<%= product[i]._id %>" class="add-cart" >+ View More</a>
                                             <div class="rating">
                                                 <i class="fa fa-star-o"></i>
                                                 <i class="fa fa-star-o"></i>
@@ -262,6 +285,7 @@
                                 <% } %>
                     </div>
                 </div>
+                
                    
                         
                         <div class="col-lg-4 col-md-6 col-sm-6">

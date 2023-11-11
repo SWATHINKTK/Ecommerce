@@ -32,7 +32,9 @@
                             <% sum += cartData[i].quantity * cartData[i].productId.price %>
                             <div class="p-3 cart-product-view d-flex mt-3" id="<%= cartData[i].productId._id %>">
                                 <div class="cart-productImage">
-                                    <img src="/public/admin/assets/productImages/<%= cartData[i].productId.productImages[0] %>" alt="">
+                                    <a href="/productdetails?id=<%= cartData[i].productId._id %>">
+                                        <img src="/public/admin/assets/productImages/<%= cartData[i].productId.productImages[0] %>" alt="">
+                                    </a>
                                     <div class="mt-2">
                                         <% if(cartData[i].productId.stock > 0 ){ %>
                                             <span class="font-weight-bold">Quanitity : </span><input type="number" class="cart-quantity text-center font-weight-bold" name="quanitity" id="cart-product-quanitity" min="1" max="10" value="<%= cartData[i].quantity %>" data-cart-product-id="<%= cartData[i].productId._id %>">
@@ -46,7 +48,9 @@
                                 </div>
                                 <div class="w-100">
                                     <div class="w-100 d-flex">
-                                        <h4 class="ml-4 mt-2 font-weight-bold mb-3"><%= cartData[i].productId.productName %></h4>
+                                        <a href="/productdetails?id=<%= cartData[i].productId._id %>">
+                                            <h4 class="ml-4 mt-2 font-weight-bold mb-3"><%= cartData[i].productId.productName %></h4>
+                                        </a>
 
                                         <% if(wishlistData.wishlistProducts.includes(cartData[i].productId._id)) { %>
                                             <a href="#" name="addToWishlist" data-cart="true" class="ml-auto bg-white" style="height: 35px;border-radius: 50%;box-shadow: 0 0 15px -2px #6f6e6e;">

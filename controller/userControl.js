@@ -432,14 +432,16 @@ const loadAllProductViewPage = async(req,res) =>{
 
         const checkLogin = req.session.userId ? true : false;
 
-        const userId = req.session.useId
+        const userId = req.session.userId;
+
+        console.log(checkLogin,userId)
 
         const productData = await productInfo.find({}).sort({_id:-1});
 
-        if(userId){
+        if(checkLogin){
             const cart = await cartData.find({userId:userId});
             const wishlist = await wishlistData.find({userId:userId});
-            consolelog(cart,productData)
+            console.log(cart,productData,wishlist)
 
             res.render('user/allProductView',{ user: true,login:checkLogin, title: 'Products', product:productData, wishlistData:wishlist, dataCart:cart});
             return;
