@@ -337,17 +337,17 @@ document.addEventListener('DOMContentLoaded',()=>{
                         priceUpdate[0].innerText = newPrice;
                         priceUpdate[1].innerText = newPrice;
 
-                        Swal.fire({
-                            position:'bottom',
-                            text: 'Quantity Updated!',
-                            icon: 'success',
-                            showConfirmButton: false, 
-                            timer: 1000,
-                            customClass: {
-                                icon: 'my-custom-icon-class', 
-                                content: 'my-custom-content-class', 
-                              }, 
-                          });
+                        // Swal.fire({
+                        //     position:'bottom',
+                        //     text: 'Quantity Updated!',
+                        //     icon: 'success',
+                        //     showConfirmButton: false, 
+                        //     timer: 1000,
+                        //     customClass: {
+                        //         icon: 'my-custom-icon-class', 
+                        //         content: 'my-custom-content-class', 
+                        //       }, 
+                        //   });
 
 
                     }else{

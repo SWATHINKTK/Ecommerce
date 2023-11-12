@@ -10,7 +10,7 @@ cartRouter.get('/cart',auth.isUserLogin,cartController.loadCartPage);
 
 cartRouter.post('/addToCart',auth.isUserLogin,cartController.productAddToCart);
 
-cartRouter.patch('/cartQuantityUpdate',cartController.cartQuantityUpdate);
+cartRouter.patch('/cartQuantityUpdate',auth.isUserLogin,cartController.cartQuantityUpdate);
 
 cartRouter.delete('/deleteCartProduct',auth.isUserLogin, cartController.removeProductFromCart)
 module.exports = cartRouter;

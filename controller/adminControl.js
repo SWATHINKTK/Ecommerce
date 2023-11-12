@@ -1,10 +1,13 @@
 const bcrypt = require('bcrypt');
 const fs = require('fs');
 const path = require('path')
-const { loginData, category, productInfo,brandInfo } = require('../models/adminModel');
+const { loginData } = require('../models/adminModel');
+const { productInfo } = require('../models/productModel');
+const { brandInfo } = require('../models/brandModel');
+const { category } = require('../models/categoryModel');
 const { userData } = require('../models/userModal');
 const { query } = require('express');
-const { connected } = require('process');
+const { connected, nextTick } = require('process');
 const { error } = require('console');
 const session = require('express-session');
 
@@ -27,9 +30,9 @@ async function deleteFile(filePath){
     fs.unlink(filePath,(error) => {
 
         if(error){
-            console.log('Image not Deleted',error.message);
+            console.error(error.code);
         }else{
-            console.log('Previous Brand Image Delete Sucess');
+            console.log('Previous Image Delete Sucess');
         }
 
     })
@@ -38,13 +41,19 @@ async function deleteFile(filePath){
 /*---------------------------------------ADMIN LOGIN & HOME PAGE LOAD FUNTIONS---------------------------------------------------------*/
 
 // VIEW Admin Login Page 
-const loadAdminLogin = (req, res) => {
-    res.render('admin/login', { admin: false, style: true, title: 'Admin Login' });
+const loadAdminLogin = (req, res,next) => {
+
+    try {
+        res.render('admin/login', { admin: false, style: true, title: 'Admin Login' });    
+    } catch (error) {    
+        next(error);
+    }
 
 }
 
 // Verify the Admin Credential and Redirect Admin Homepage
-const verifyLogin = async (req, res) => {
+const verifyLogin = async (req, res,next) => {
+
     try {
         const username = req.body.username;
         const password = req.body.password;
@@ -53,7 +62,7 @@ const verifyLogin = async (req, res) => {
             const passwordMatch = await bcrypt.compare(password, adminData.password)
             if (passwordMatch) {
                 req.session.name = adminData.adminname;
-                req.session.admin_id = adminData._id;
+                req.session.adminId = adminData._id;
                 res.redirect('admin/home');
             } else {
                 res.render('admin/login', { admin: false, style: true, title: 'Admin Login',message:'Enter Proper Password' });
@@ -62,15 +71,21 @@ const verifyLogin = async (req, res) => {
             res.render('admin/login', { admin: false, style: true, title: 'Admin Login',message:'Enter Valid Username & Password' });
         }
     } catch (error) {
-        console.log(error.message);
+        
+        next(error);
     }
 
 }
 
 // VIEW Admin Home Window 
-const loadAdminHomepage = (req, res) => {
-    // const name = req.params.adminData.name;
-    res.render('admin/main', { admin: true, name: req.session.name, title: 'AdminHome' });
+const loadAdminHomepage = (req, res, next) => {
+
+   try {
+        res.render('admin/main', { admin: true, name: req.session.name, title: 'AdminHome' });  
+   } catch (error) {
+        next(error);
+   }
+    
 }
 
 
@@ -78,65 +93,88 @@ const loadAdminHomepage = (req, res) => {
 /*============================================ ADMIN USER MANAGE ROUTE FUNCTIONS =================================================*/
 
 // ***VIEW User List Window***
-const loadUserList = async (req, res) => {
-    const user = await userData.find({}).sort({ block: 1,_id:-1 });
-    res.render('admin/viewUsers', { admin: true, title: 'User Data', data: user });
+const loadUserList = async (req, res, next) => {
+
+    try {
+        const user = await userData.find({}).sort({ block: 1,_id:-1 });
+        res.render('admin/viewUsers', { admin: true, title: 'User Data', data: user });
+    } catch (error) {
+        next(error);
+    }
+
 }
 
 
 // ***USER BLOCK / UNBLOCK FEATURE***
-const blockUser = async (req, res) => {
+const blockUser = async (req, res, next) => {
 
-    const id = req.body.id;
-    const user = await userData.findOne({ _id: id });
+    try {
+        
+        const id = req.body.id;
+        const user = await userData.findOne({ _id: id });
 
 
-    // in this case checking the User is blocked or Unblocked
-    if (user.block) {
+        // in this case checking the User is blocked or Unblocked
+        if (user.block) {
 
-        const storeData = await userData.findOneAndUpdate(
-            { _id: id },
-            { $set: { block: false, block_date: new Date() } },
-            { new: true });
+            const storeData = await userData.findOneAndUpdate(
+                { _id: id },
+                { $set: { block: false, block_date: new Date() } },
+                { new: true });
 
-        // Store Data True Then send result Used is Blocked
-        if (storeData) {
+            // Store Data True Then send result Used is Blocked
+            if (storeData) {
 
-            if(req.session.userId == id){
-                req.session.userId = null;
+                if(req.session.userId == id){
+                    req.session.userId = null;
+                }
+                res.json({ 'user': false });
+
+            } else {
+                res.status(500).render('partials/error-500')
             }
-            res.json({ 'user': false });
 
         } else {
-            res.status(500).render('partials/error-500')
+
+            const storeData = await userData.findOneAndUpdate(
+                { _id: id },
+                { $set: { block: true, block_date: new Date() } },
+                { new: true });
+
+
+            // Store Data True Then send result Used is UnBlocked
+            if (storeData) {
+                
+                if(req.session.userId == id){
+                    req.session.userId = null;
+                }
+                res.json({ 'user': true });
+
+            } else {
+                throw new Error('Updation is Not Working');
+            }
         }
 
-    } else {
-
-        const storeData = await userData.findOneAndUpdate(
-            { _id: id },
-            { $set: { block: true, block_date: new Date() } },
-            { new: true });
-
-        // Store Data True Then send result Used is UnBlocked
-        if (storeData) {
-
-            res.json({ 'user': true });
-
-        } else {
-            res.status(500).render('partials/error-500')
-        }
+    } catch (error) {
+        next(error);        
     }
 }
 
 // User Search
-const searchUser = async (req, res) => {
-    const search = req.query.search;
-    const regex = new RegExp(`^${search}.*`, 'i');
+const searchUser = async (req, res, next) => {
 
-    const searchData = await userData.find({ username: { $regex: regex } });
+    try {
+        const search = req.query.search;
+        const regex = new RegExp(`^${search}.*`, 'i');
 
-    res.render('admin/viewUsers', { admin: true, data: searchData, title: 'Users' });
+        const searchData = await userData.find({ username: { $regex: regex } });
+
+        res.render('admin/viewUsers', { admin: true, data: searchData, title: 'Users' });
+        
+    } catch (error) {
+        next(error);
+    }
+
 }
 
 
@@ -145,85 +183,101 @@ const searchUser = async (req, res) => {
 
 
 // Load Product List Window
-const loadProductList = async (req, res) => {
+const loadProductList = async (req, res, next) => {
 
-    const products = await productInfo.find({}).sort({_id:-1});
-    const brandData = await brandInfo.find({},{brand_name:1});
+    try {
+        const products = await productInfo.find({}).sort({_id:-1});
+        const brandData = await brandInfo.find({},{brand_name:1});
 
-    // console.log(products,brandData)
-    // for(let brand of brandData){
-    //     // if(brand._id.equals(products.brandname))
-    //     //     brandData = brand.brand_name
-    //     // console.log(brand.brand_name)
-    // }
+        // console.log(products,brandData)
+        // for(let brand of brandData){
+        //     // if(brand._id.equals(products.brandname))
+        //     //     brandData = brand.brand_name
+        //     // console.log(brand.brand_name)
+        // }
+        
+        //    for(let product of productData){
+        //         for(let brand of dataBrand){
+        //             if(product.brandname.equals(brand._id)){
+        //                 console.log(product.productName,brand.brand_name)
+        //             }
+        //         }
+        //     }
     
-    //    for(let product of productData){
-    //         for(let brand of dataBrand){
-    //             if(product.brandname.equals(brand._id)){
-    //                 console.log(product.productName,brand.brand_name)
-    //             }
-    //         }
-    //     }
-  
-    res.render('admin/viewProducts', { admin: true, productData: products ,dataBrand:brandData});
-
+        res.render('admin/viewProducts', { admin: true, productData: products ,dataBrand:brandData});
+        
+    } catch (error) {
+        next();
+    }
 }
 
 
 // Load Product More Data and view in a modal
-const loadProductMoreData = async (req, res) => {
-    const id = req.params.id
-    console.log(id)
-    const data = await productInfo.findOne({ _id: id });
-    if (data) {
-        res.status(200).render('admin/productDetailModal', { modaldata: data });
+const loadProductMoreData = async (req, res, next) => {
 
-    } else {
-        res.status(500).redirect('/admin/error500');
+    try {
+        const id = req.params.id
+
+        const data = await productInfo.findOne({ _id: id });
+        if (data) {
+            res.status(200).render('admin/productDetailModal', { modaldata: data });
+
+        } else {
+            // res.status(500).redirect('/admin/error500');
+            throw new Error('Product Id Error')
+        }
+    } catch (error) {
+        next(error);
     }
+
+
 }
 
-const searchProduct = async (req, res) => {
+const searchProduct = async (req, res, next) => {
     try {
         const search = req.params.data;
         const Regex = new RegExp(`^${search}.*`, 'i');
         const productData = await productInfo.find({ productName: { $regex: Regex } });
-        console.log(search, productData);
+
         res.render('admin/viewProducts', { admin: true, productData: productData });
     } catch (error) {
-        console.log(error.meassge);
-        res.redirect('/admin/error500', { admin: '/admin' });
+        next(error);
     }
 
 }
 
 // Product Staus Update and show list and unlist button
-const productStatusUpdate = async (req, res) => {
+const productStatusUpdate = async (req, res, next) => {
 
-    const id = req.params.id;
-    const data = await productInfo.findOne({ _id: id });
+    try {
+        const id = req.params.id;
+        const data = await productInfo.findOne({ _id: id });
 
-    if (data.status) {
+        if (data.status) {
 
-        const update = await productInfo.updateOne({ _id: id }, { $set: { status: false } });
+            const update = await productInfo.updateOne({ _id: id }, { $set: { status: false } });
 
-        if (update.acknowledged) {
-            res.status(200).json({ message: false, id: data._id });
+            if (update.acknowledged) {
+                res.status(200).json({ message: false, id: data._id });
 
-        } else {
-            res.redirect('/admin/error404');
-        }
-
-    } else {
-
-        const update = await productInfo.updateOne({ _id: id }, { $set: { status: true, listDate: new Date() } }, { upsert: true });
-
-        if (update.acknowledged) {
-            res.status(200).json({ message: true, id: data._id });
+            } else {
+                res.redirect('/admin/error404');
+            }
 
         } else {
-            res.redirect('/admin/error404');
+
+            const update = await productInfo.updateOne({ _id: id }, { $set: { status: true, listDate: new Date() } }, { upsert: true });
+
+            if (update.acknowledged) {
+                res.status(200).json({ message: true, id: data._id });
+
+            } else {
+                // res.redirect('/admin/error404');
+                throw new Error('Data NOt Found')
+            }
         }
+    } catch (error) {
+        next(error);
     }
 }
 
@@ -231,20 +285,21 @@ const productStatusUpdate = async (req, res) => {
 
 
 // Load Add Product page 
-const loadAddProductPage = async (req, res) => {
+const loadAddProductPage = async (req, res, next) => {
+    try {
+        const categoryData = await category.find({ list: true }, { categoryname: 1 });
+        const brandData = await brandInfo.find({},{brand_name:1});
 
-    const categoryData = await category.find({ list: true }, { categoryname: 1 });
-    // console.log(categoryData)
-    const brandData = await brandInfo.find({},{brand_name:1});
-    // console.log(brandData)
-
-    res.render('admin/addProduct', { admin: true, categorydata: categoryData ,branddata:brandData});
+        res.render('admin/addProduct', { admin: true, categorydata: categoryData ,branddata:brandData});
+    } catch (error) {
+        next(error)
+    }
 }
 
 
 
 // Adding the Product Data into Database
-const productAdd = async (req, res) => {
+const productAdd = async (req, res, next) => {
 
     try {
 
@@ -291,7 +346,8 @@ const productAdd = async (req, res) => {
                     deleteFile(filePath)
                 })
 
-                res.render('/admin/error500');
+                // res.render('/admin/error500');
+                throw new Error('Server Error Data NOt Inserted')
             }
 
         } else {
@@ -306,7 +362,7 @@ const productAdd = async (req, res) => {
         }
 
     } catch (error) {
-        console.log(error.meassge);
+        next(error);
     }
 
 
@@ -316,7 +372,7 @@ const productAdd = async (req, res) => {
 
 
 // Load Edit Product page 
-const loadEditProductPage = async (req, res) => {
+const loadEditProductPage = async (req, res, next) => {
 
     try {
         const id = req.params.id;
@@ -328,7 +384,7 @@ const loadEditProductPage = async (req, res) => {
         res.render('admin/editProduct', { admin: true, dataCategory: categoryData, dataProduct: productData ,dataBrand:brandData });
 
     } catch (error) {
-        console.log(error.message)
+        next(error);
     }
 
 
@@ -336,13 +392,11 @@ const loadEditProductPage = async (req, res) => {
 
 
 
-const editProduct = async (req, res) => {
+const editProduct = async (req, res, next) => {
 
     try {
         const data = req.body;
         const file = req.files;
-
-        console.log(data);
 
 
         // *** Finding The Length Of The ProductImage ***
@@ -427,20 +481,21 @@ const editProduct = async (req, res) => {
             updateDate: new Date()
 
         })
-        console.log(updateProduct)
+        // console.log(updateProduct)
         if (updateProduct.acknowledged) {
 
             res.json({ status: true, message: '&#9989; Succesfully edit Product' });
 
         } else {
 
-            res.status(500).redirect('/admin/error500');
+            // res.status(500).redirect('/admin/error500');
+            throw new Error('Server Error');
 
         }
 
 
     } catch (error) {
-        console.log(error.message)
+        next(error);
     }
 
 
@@ -454,33 +509,38 @@ const editProduct = async (req, res) => {
 /*####################################################### CATEGORY SECTION ROUTER FUNCTIONS ################################################*/
 
 //***** View Categorys ***** 
-const loadCategoryList = async (req, res) => {
+const loadCategoryList = async (req, res, next) => {
     try {
 
         const categoryData = await category.find({}).sort({ list: -1,_id:-1 });
         res.render('admin/viewCategorys', { admin: true, data: categoryData, title: 'Categorylist' });
 
     } catch (error) {
-
-        console.log(error.message);
-
+            next(error)
     }
 }
 
 
 //***** Searching Category Using Category Name *****
-const searchCategory = async (req, res) => {
+const searchCategory = async (req, res, next) => {
 
-    const search = req.body.search;
-    const regex = new RegExp(`^${search}`, 'i');
-    const searchData = await category.find({ categoryname: { $regex: regex } });
-    res.render('admin/viewCategorys', { admin: true, data: searchData, title: 'Categorylist' });
+    try {
 
+        const search = req.body.search;
+        const regex = new RegExp(`^${search}`, 'i');
+        const searchData = await category.find({ categoryname: { $regex: regex } });
+        res.render('admin/viewCategorys', { admin: true, data: searchData, title: 'Categorylist' });
+   
+    } catch (error) {
+        next(error);
+    }
+
+    
 }
 
 
 //***** List/Unlist The Category Functionality and Change the CAtegoroy field "list" then Provide a message *****
-const categorySatusUpdate = async (req, res) => {
+const categorySatusUpdate = async (req, res, next) => {
 
     try {
 
@@ -529,20 +589,24 @@ const categorySatusUpdate = async (req, res) => {
         
     } catch (error) {
 
-        console.log(error.message);
+        next(error);
 
     }
 }
 
 
 //***** View the Add Category Page *****
-const loadAddCategoryPage = (req, res) => {
-    res.render('admin/addCategory', { admin: true, title: 'AddCategory' });
+const loadAddCategoryPage = (req, res, next) => {
+    try{
+        res.render('admin/addCategory', { admin: true, title: 'AddCategory' });
+    }catch(error){
+        next(error);
+    }
 }
 
 
 //***** Add Category Page to Retrive Data And Store to The Database and provide the message *****
-const addCategory = async (req, res) => {
+const addCategory = async (req, res, next) => {
 
     try {
         const name = req.body.categoryname;
@@ -603,13 +667,12 @@ const addCategory = async (req, res) => {
         }
 
     } catch (error) {
-
-        console.log(error.message);
+        next(error);
     }
 }
 
 //***** View the Edit Page and Load the Details *****
-const loadEditCategoryPage = async (req, res) => {
+const loadEditCategoryPage = async (req, res, next) => {
     
     try{
 
@@ -618,21 +681,17 @@ const loadEditCategoryPage = async (req, res) => {
         res.render('admin/editCategory', { admin: true, data: categoryData });
 
     }catch(error){
-
-        console.log(error.message);
-        res.redirect('admin/error500');
-
+        next(error);
     }
 
 }
 
 
 //***** Update Category Values *****
-const editCategory = async (req, res) => {
+const editCategory = async (req, res, next) => {
 
     try {
 
-        console.log(req.body,req.file)
         // *** Retrieve Data Form the Body
         const name = req.body.categoryname;
         const oldName = req.body.oldCategoryName;
@@ -688,9 +747,7 @@ const editCategory = async (req, res) => {
         }
 
     } catch (error) {
-
-        console.log(error.message);
-
+        next(error);
     }
 }
 
@@ -702,23 +759,30 @@ const editCategory = async (req, res) => {
 /*#################################################### View New Brand & Functionality Working Routes ######################################## */
 
 //***** View Brand Data Into a Table *****
-const loadBrandViewPage = async (req, res) => {
+const loadBrandViewPage = async (req, res, next) => {
+    try {
+        const brandData = await brandInfo.find({}).sort({_id:-1});
+        res.render('admin/viewBrand', { admin: true, title: 'Brand Data', data:brandData});
 
-    const brandData = await brandInfo.find({}).sort({_id:-1});
-    res.render('admin/viewBrand', { admin: true, title: 'Brand Data', data:brandData});
-
+    } catch (error) {
+        next(error);
+    }
 }
 
 
 //****** View New Brand Add Page *****
-const loadBrandAddPage = async (req, res) => {
-    res.render('admin/addBrand', { admin: true,title:'Add Brand'});
+const loadBrandAddPage = async (req, res, next) => {
+    try {
+        res.render('admin/addBrand', { admin: true,title:'Add Brand'});
+    } catch (error) {
+        next(error);
+    }
 }
 
 
 
 //******* Add Brand Data Into DataBase ******
-const addBrandDetails = async(req,res) => {
+const addBrandDetails = async(req, res, next) => {
 
     try{
         const name = req.body.brandName;
@@ -771,9 +835,7 @@ const addBrandDetails = async(req,res) => {
         }
 
     }catch(error){
-        console.log(error.message);
-        res.redirect('adimin/error500')
-
+        next(error);
     }
        
 
@@ -781,7 +843,7 @@ const addBrandDetails = async(req,res) => {
 
 
 //***** Load Edit Brand Page ******
-const loadEditBrandPage = async(req,res) =>{
+const loadEditBrandPage = async(req,res, next) =>{
     try{
         const id = req.params.id;
        
@@ -789,21 +851,19 @@ const loadEditBrandPage = async(req,res) =>{
 
         res.render('admin/editBrand',{data:brandData})
     }catch(error){
-
+        next(error);
     }
 }
 
 
 
 //****** Edit Brand Details *******
-const editBrandDetails = async(req,res) => {
+const editBrandDetails = async(req, res, next) => {
     
     try{
         const data = req.body;
         const file = req.file;
         // console.log(data,file);
-
-        console.log(data)
 
         let logoImg;
         if(typeof file == 'object'){
@@ -850,19 +910,16 @@ const editBrandDetails = async(req,res) => {
         }
 
     }catch(error){
-        console.log(error.message);
-        res.redirect('/admin/error500')
+        next(error);
     }
 }
 
 
 
 //****** Brand Status Update ******
-const brandStatusUpdate = async(req,res) =>{
+const brandStatusUpdate = async(req, res, next) =>{
     try{
         const id = req.params.id;
-
-        console.log(id)
         
         const brandData = await brandInfo.findOne({_id:id});
         
@@ -880,31 +937,34 @@ const brandStatusUpdate = async(req,res) =>{
 
             const update = await brandInfo.updateOne({_id:id},{$set:{status:true,brand_unlistDate:new Date()}},{upsert:true});
             
-            console.log(update)
             if(update.acknowledged){
                 res.json({'status':true});
             }else{
-                res.redirect('/admin/error500');
+                throw new Error('Server Error')
             }
 
         }
 
     }catch(error){
-        console.log(error.message);
+        next(error);
     }
 }
 
 
 
 //***** Brand Search Data ****
-const searchBrandData = async(req,res) =>{
+const searchBrandData = async(req, res, next) =>{
 
-    const search = req.query.search;
-    const regex = new RegExp(`^${search}.*`, 'i');
+    try {
+        const search = req.query.search;
+        const regex = new RegExp(`^${search}.*`, 'i');
 
-    const searchData = await brandInfo.find({ brand_name: { $regex: regex } });
+        const searchData = await brandInfo.find({ brand_name: { $regex: regex } });
 
-    res.render('admin/viewBrand', { admin: true, title: 'Brand Data', data:searchData});
+        res.render('admin/viewBrand', { admin: true, title: 'Brand Data', data:searchData});
+    } catch (error) {
+        next(error);
+    }
 }
 
 /*========================================================= End Of The Brand Routing ================================================= */
@@ -914,20 +974,32 @@ const searchBrandData = async(req,res) =>{
 /*################################################### Banner Routing Functions ####################################################### */
 
 // Load Add Banner page 
-const loadAddBannerPage = (req, res) => {
-    res.render('admin/addBanner', { admin: true });
+const loadAddBannerPage = (req, res, next) => {
+    try {
+        res.render('admin/addBanner', { admin: true });
+    } catch (error) {
+        next(error);
+    }
 }
 
 /*========================================================= End Of The Banner Routing ================================================= */
 
 // Load  Coupon List Window
-const loadCouponList = (req, res) => {
-    res.render('admin/viewCoupons', { admin: true });
+const loadCouponList = (req, res, next) => {
+    try {
+        res.render('admin/viewCoupons', { admin: true });
+    } catch (error) {
+        next(error);
+    }
 }
 
 // Load Add Coupon page 
-const loadAddCouponPage = (req, res) => {
-    res.render('admin/addCoupon', { admin: true });
+const loadAddCouponPage = (req, res, next) => {
+    try {
+        res.render('admin/addCoupon', { admin: true });   
+    } catch (error) {
+        next(error);
+    }
 }
 
 
@@ -938,7 +1010,7 @@ const loadAddCouponPage = (req, res) => {
 
 
 
-const logoutAdmin = (req, res) => {
+const logoutAdmin = (req, res, next) => {
     try {
         req.session.destroy((error) => {
             if (error) {
@@ -948,7 +1020,7 @@ const logoutAdmin = (req, res) => {
             }
         })
     } catch (error) {
-        console.error(error.message);
+        next(error);
     }
 
 }

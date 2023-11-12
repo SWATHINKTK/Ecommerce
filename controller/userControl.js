@@ -2,13 +2,16 @@ const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const { userData } = require('../models/userModal');
-const { productInfo, category ,brandInfo} = require('../models/adminModel');
+const { productInfo } = require('../models/productModel');
+const { brandInfo } = require('../models/brandModel');
+const { category } = require('../models/categoryModel');
 const cartData = require('../models/cartModel');
 const wishlistData = require('../models/wishlistModel');
 const addressInfo = require('../models/addressModel');
 const { userInfo } = require('os');
 const { error } = require('console');
 const { chownSync } = require('fs');
+const { threadId } = require('worker_threads');
 
 
 
@@ -71,7 +74,7 @@ async function securePassword(password) {
         const secure = await bcrypt.hash(password, 10);
         return secure;
     } catch (error) {
-        console.log(error.message)
+        console.log(error.message);
     }
 }
 
@@ -91,17 +94,21 @@ async function securePassword(password) {
 
 
 // ***** USER LOGIN PAGE VIEW *****
-const loadUserLogin = (req, res) => {
-    res.render('user/userAuthentication', { admin: false, title: 'User' });
+const loadUserLogin = (req, res, next) => {
+    try {
+        res.render('user/userAuthentication', { admin: false, title: 'User' }); 
+    } catch (error) {
+        next(error);
+    }
 }
 
 
 
 // ****** USER LOGOUT THEN GOTO GUSET PAGE
-const userLogout = (req,res) => {
+const userLogout = (req, res, next) => {
     req.session.destroy((error)=>{
         if(error){
-            console.log(error.message);
+            next(error);
         }else{
             res.redirect('/?login=false');
         }
@@ -111,7 +118,7 @@ const userLogout = (req,res) => {
 
 
 //****** STORING USER REGISTER TIME DATA TO SESSION AND SEND A OTP MAIL ******
-const storeSignupData = async (req, res) => {
+const storeSignupData = async (req, res, next) => {
 
     try {
         const password = req.body.password;
@@ -172,7 +179,7 @@ const storeSignupData = async (req, res) => {
             }
         }
     } catch (error) {
-        console.log(error.message);
+        next(error);
     }
 }
 
@@ -180,10 +187,15 @@ const storeSignupData = async (req, res) => {
 
 
 // ***** VIEW THE OTP VERIFICATION PAGE *****
-const loadOTPVerification = (req, res) => {
-    const userdata = req.session.userData;
-    const time = req.session.startTime
-    res.render('user/otpVerification', { admin: false, title: 'User OTP', email: userdata.email, timer: time });
+const loadOTPVerification = (req, res, next) => {
+    try {
+        const userdata = req.session.userData;
+        const time = req.session.startTime;
+        res.render('user/otpVerification', { admin: false, title: 'User OTP', email: userdata.email, timer: time });
+    } catch (error) {
+        next(error);
+    }
+    
 }
 
 
@@ -191,75 +203,85 @@ const loadOTPVerification = (req, res) => {
 
 
 // **** RESEND OTP WHEN OTP WAS EXPIRED ****
-const resendOTP = async (req, res) => {
-    const user = req.session.userData;
-    const otp = await generateRandomOtp(6);
-    req.session.otp = otp;
-    const html = `<div style="width: 100%;background: #F5FEFD;text-align:center"><h2>${user.username} Welcome Our Shopping Website</h2><h6>Verification OTP</h6><h3 style="color: red;">${otp}</h3><h2>Thank You For Joining...</h2></div>`;
-    await sendEmail(user.username, user.email, otp,html)
-    req.session.startTime = Date.now();
-    res.redirect('/otpVerification');
+const resendOTP = async (req, res, next) => {
+    try {
+        const user = req.session.userData;
+        const otp = await generateRandomOtp(6);
+        req.session.otp = otp;
+        const html = `<div style="width: 100%;background: #F5FEFD;text-align:center"><h2>${user.username} Welcome Our Shopping Website</h2><h6>Verification OTP</h6><h3 style="color: red;">${otp}</h3><h2>Thank You For Joining...</h2></div>`;
+        await sendEmail(user.username, user.email, otp,html)
+        req.session.startTime = Date.now();
+        res.redirect('/otpVerification');
+    } catch (error) {
+        next(error);
+    }
+   
 }
 
 
 
 
 // **** OTP VERIFICATON CHECKING FUNCTION AND THEN GO FOR USER HOME ****
-const OTPCheck = async (req, res) => {
+const OTPCheck = async (req, res, next) => {
 
-    const endTime = Date.now();
-    const startTime = req.session.startTime;
-    const sessionOTP = req.session.otp;
-    const data = req.session.userData;
-  
-
-    const emailExist = await userData.findOne({email:data.email});
-
-
-    if(!emailExist)
-    {
-
-        const user = userData({
-            username: data.username,
-            email: data.email,
-            phonenumber: data.phonenumber,
-            password: data.password,
-            _isVerified: true,
-            joined_date: new Date()
-        })
-
-        const takenTime = (endTime / 1000) - (startTime / 1000);
-
-        // Checking OTP Expired OR Not
-        if (takenTime < 120) {
-
-            // Checking OTP
-            if (sessionOTP == req.body.otp) {
-                const sendData = await user.save();
-                
-                if(sendData){
-
-                    req.session.userId = userData._id;
-                    res.status(200).json({'status':true, 'message': 'Your Verification Sucessfull. &#9989;<br> Username & Password to login.' });
+    try {
+        const endTime = Date.now();
+        const startTime = req.session.startTime;
+        const sessionOTP = req.session.otp;
+        const data = req.session.userData;
     
+
+        const emailExist = await userData.findOne({email:data.email});
+
+
+        if(!emailExist)
+        {
+
+            const user = userData({
+                username: data.username,
+                email: data.email,
+                phonenumber: data.phonenumber,
+                password: data.password,
+                _isVerified: true,
+                joined_date: new Date()
+            })
+
+            const takenTime = (endTime / 1000) - (startTime / 1000);
+
+            // Checking OTP Expired OR Not
+            if (takenTime < 120) {
+
+                // Checking OTP
+                if (sessionOTP == req.body.otp) {
+                    const sendData = await user.save();
+                    
+                    if(sendData){
+
+                        req.session.userId = userData._id;
+                        res.status(200).json({'status':true, 'message': 'Your Verification Sucessfull. &#9989;<br> Username & Password to login.' });
+        
+                    }
+
+                    delete req.session.startTime;
+                    delete req.session.otp;
+                    delete req.session.userData;
+
+                } else {
+                    res.status(400).json({'status':false, 'message': 'Invalid OTP &#10071' });
                 }
 
-                delete req.session.startTime;
-                delete req.session.otp;
-                delete req.session.userData;
-
             } else {
-                res.status(400).json({'status':false, 'message': 'Invalid OTP &#10071' });
+
+                delete req.session.otp;
+                res.status(200).json({'status':false, 'message': 'OTP Expired &#10060' });
             }
-
-        } else {
-
-            delete req.session.otp;
-            res.status(200).json({'status':false, 'message': 'OTP Expired &#10060' });
+        }else{
+            res.status(200).json({'status':false, 'message': 'OTP Verified.You can go Home to Login' });
         }
-    }else{
-        res.status(200).json({'status':false, 'message': 'OTP Verified.You can go Home to Login' });
+    } catch (error) {
+        next(error)
     }
+    
 }
 
 
@@ -267,7 +289,7 @@ const OTPCheck = async (req, res) => {
 
 
 // **** LOGIN USER DATA VERIFY AND PROVIDE THE HOME PAGE ****
-const verifyUser = async(req, res) => {
+const verifyUser = async(req, res, next) => {
     try{
 
         const username = req.body.username;
@@ -300,8 +322,7 @@ const verifyUser = async(req, res) => {
 
         }
     }catch(error){
-        console.log(error.message);
-        res.redirect('/error500');
+        next(error);
     }
     
 }
@@ -309,7 +330,7 @@ const verifyUser = async(req, res) => {
 
 
 // *** VIEW THE USER HOME PAGE *****
-const loadHomePage = async (req, res) => {
+const loadHomePage = async (req, res, next) => {
 
     try {
 
@@ -342,9 +363,7 @@ const loadHomePage = async (req, res) => {
         res.render('user/index', { user: true,login:checkLogin,  title: 'Brand Unlimited', dataCategory: categoryData, dataProduct: productData ,dataCart:cart, wishlistData:wishlist});
 
     } catch (error) {
-
-        console.log(error.message);
-
+        next(error);
     }
 
 }
@@ -357,7 +376,7 @@ const loadHomePage = async (req, res) => {
 
 
 // **** GUEST PAGE LOADING FOR EVERY USERS ****
-const guestPage = async (req, res) => {
+const guestPage = async (req, res, next) => {
     try {
         const categoryData = await category.find({list:true}).sort({ _id: -1 });
 
@@ -388,37 +407,45 @@ const guestPage = async (req, res) => {
         // console.log(productData)
         res.render('user/index', { user: true,login:false, title: 'Brand Unlimited', dataCategory: categoryData, dataProduct: productData })
     } catch (error) {
-        console.log(error.message)
+        next(error);
     }
 }
 
 
 
 // **** EACH PRODUT DETAIL VIEW DISPLAY PAGE LOADING *****
-const loadProductDetailPage = async (req, res) => {
+const loadProductDetailPage = async (req, res, next) => {
     try {
 
         const checkLogin = req.session.userId ? true : false;
         const id = req.query.id;
 
         let brandData = await brandInfo.find({},{brand_name:1});
+        console.log(id,brandData)
 
         const productData = await productInfo.findOne({ _id: id });
         const categoryData = await category.find({});
+        console.log('product',productData);
+        console.log('category',categoryData)
 
         const cart = await cartData.findOne({cartProducts:{$elemMatch:{productId:id}}});
-        console.log(cart)
+        console.log('cart',cart)
+
+        const wishlist = await wishlistData.findOne({userId:req.session.userId});
+        console.log('wishlist',wishlist);
+
+
 
         for(let brand of brandData){
             if(brand._id.equals(productData.brandname))
                 brandData = brand.brand_name
         }
        
-        res.render('user/productDetails', { user: true,login:checkLogin,title: 'Products', product:productData ,category:categoryData, dataBrand:brandData ,dataCart:cart})
+        res.render('user/productDetails', { user: true,login:checkLogin,title: 'Products', product:productData ,category:categoryData, dataBrand:brandData ,dataCart:cart, wishlistData:wishlist})
 
 
     } catch (error) {
-        res.status(500).redirect('/error500')
+        next(error);
     }
 
 }
@@ -426,7 +453,7 @@ const loadProductDetailPage = async (req, res) => {
 
 
 // ***** LOAD ALL PRODUCT DATA VIEW PAGE ******
-const loadAllProductViewPage = async(req,res) =>{
+const loadAllProductViewPage = async(req, res, next) =>{
     
     try {
 
@@ -434,213 +461,261 @@ const loadAllProductViewPage = async(req,res) =>{
 
         const userId = req.session.userId;
 
-        console.log(checkLogin,userId)
+        const categoryInfo = await category.find({},{categoryname:1});
+        console.log(userId,categoryInfo)
+
+        const brand = await brandInfo.find({},{brand_name:1});
+        // console.log('brand',brand)
 
         const productData = await productInfo.find({}).sort({_id:-1});
+        // console.log('product',productData)
 
         if(checkLogin){
+            console.log('hello')
             const cart = await cartData.find({userId:userId});
             const wishlist = await wishlistData.find({userId:userId});
-            console.log(cart,productData,wishlist)
+            console.log(cart,wishlist)
 
-            res.render('user/allProductView',{ user: true,login:checkLogin, title: 'Products', product:productData, wishlistData:wishlist, dataCart:cart});
+            res.render('user/allProductView',{ user: true,login:checkLogin, title: 'Products', product:productData, wishlistData:wishlist, dataCart:cart , categoryData:categoryInfo, brandData:brand});
             return;
 
         }
 
-        res.render('user/allProductView',{ user: true,login:checkLogin, title: 'Products',product:productData});
+        res.render('user/allProductView',{ user: true,login:checkLogin, title: 'Products',product:productData, categoryData:categoryInfo, brandData:brand});
 
     } catch (error) {
-        console.log(error.message)
+        next(error);
     }
 }
 
 
 
 // ******* LOADING SPECIFIC CATEGORY PRODUCT DATA VIEW ******
-const loadSpecificCategoryProducts = async(req,res) => {
-    const checkLogin = req.session.userId ? true : false;
+const loadSpecificCategoryProducts = async(req, res, next) => {
+    try {
+        const checkLogin = req.session.userId ? true : false;
 
-    const id = req.query.id;
-    const productData = await productInfo.find({ categoryIds:id}).sort({_id:-1});
-   
-    res.render('user/allProductView',{ user: true,login:checkLogin, title: 'Products',product:productData});
+        const id = req.query.id;
+        const productData = await productInfo.find({ categoryIds:id}).sort({_id:-1});
+    
+        res.render('user/allProductView',{ user: true,login:checkLogin, title: 'Products',product:productData});
+    } catch (error) {
+        next(error);
+    }
+
 }
 
 
 
 // ******** LOAD USER PROFILE PAGE *****
-const loadUserProfile = async function(req,res){
-    const checkLogin = req.session.userId ? true : false;
+const loadUserProfile = async function(req, res, next){
+    try {
+        const checkLogin = req.session.userId ? true : false;
 
-    const id = req.session.userId;
-    const data = await userData.findOne({_id:id});
-    if(data){
-        res.render('user/userProfile',{user:true, login:checkLogin, userInfo:data, title:'User Profile'});
-    }else{
-        console.log('no data')
+        const id = req.session.userId;
+        const data = await userData.findOne({_id:id});
+        if(data){
+            res.render('user/userProfile',{user:true, login:checkLogin, userInfo:data, title:'User Profile'});
+        }else{
+            throw new Error('Not Found error');
+        }
+    } catch (error) {
+        next(error);
     }
+        
     
 }
 
 
 
 // ****** EDIT USER INFORMATIONS ******
-const editUserInformations = async(req,res) => {
-    const checkLogin = req.session.userId ? true : false;
+const editUserInformations = async(req, res, next) => {
+    try {
+        const checkLogin = req.session.userId ? true : false;
 
-    const data = req.body;
-    
-    const conditions = {_id:data.id};
-    const update = {$set:{username:data.name,phonenumber:data.number}};
+        const data = req.body;
+        
+        const conditions = {_id:data.id};
+        const update = {$set:{username:data.name,phonenumber:data.number}};
 
-    const updateData = await userData.findOneAndUpdate(conditions,update,{ new: true });
-    if(updateData){
-        res.json({updateData:updateData,status:true})
+        const updateData = await userData.findOneAndUpdate(conditions,update,{ new: true });
+        if(updateData){
+            res.json({updateData:updateData,status:true})
+        }else{
+            throw new Error('Not Found error')
+        }
+
+    } catch (error) {
+        next(error)
     }
-
+        
     
 }
 
 
 
 // ****** LOAD ADDRESS INFORMATION AND VIEW ADDRESS IN THAT USER *****
-const loadAddressInformation = async(req,res)=>{
+const loadAddressInformation = async(req, res, next)=>{
+    try {
+        const checkLogin = req.session.userId ? true : false;
 
-    const checkLogin = req.session.userId ? true : false;
+        const id = req.session.userId;
 
-    const id = req.session.userId;
+        const addressData = await addressInfo.find({userId:id});
 
-    const addressData = await addressInfo.find({userId:id});
-    // console.log(addressData);
-    
-    res.render('user/addressInformation',{title:'Address', login:checkLogin, user: true, login:checkLogin, address:addressData});
+        if(addressData){
+            res.render('user/addressInformation',{title:'Address', login:checkLogin, user: true, login:checkLogin, address:addressData});
+        }else{
+            throw new Error('Not Found Error');
+        }      
+    } catch (error) {
+        next(error)
+    }
+
+
 }
 
 
 // ***** VIEW ADD ADDRESS FORM PAGE ******
-const loadAddressForm = async(req,res)=>{
+const loadAddressForm = async(req, res, next)=>{
+    try {  
 
-    const checkLogin = req.session.userId ? true : false;
-    
-    res.render('user/addressForm',{ title:'Add New Address' ,login:checkLogin ,user: true,login:checkLogin});
+        const checkLogin = req.session.userId ? true : false;
+        res.render('user/addressForm',{ title:'Add New Address' ,login:checkLogin ,user: true,login:checkLogin});
+        
+    } catch (error) {
+        next(error);
+    }
 }
 
 
 // ***** ADDRESS FORM DATA STORE TO THE DATVBASE *****
-const storeAddressFormData = async(req,res) => {
+const storeAddressFormData = async(req, res, next) => {
+    try {
+        const userId = req.session.userId;
+        const formData = req.body;
 
-    const userId = req.session.userId;
-    const formData = req.body
-    // console.log(formData,userId)
+        const conditions = formData.Name != '' && formData.MobileNumber != '' && formData.Pincode != '' && formData.Locality != '' && formData.Address != '' && formData.City != '' && formData.District != '' ;
 
-    const conditions = formData.Name != '' && formData.MobileNumber != '' && formData.Pincode != '' && formData.Locality != '' && formData.Address != '' && formData.City != '' && formData.District != '' ;
+        if(conditions){
 
-    if(conditions){
+            const addressData = addressInfo({
+                userId:userId,
+                username:formData.Name,
+                phoneNumber:formData.MobileNumber,
+                pincode:formData.Pincode,
+                locality:formData.Locality,
+                address:formData.Address,
+                city:formData.City,
+                district:formData.District,
+                landmark:formData.Landmark,
+                alternateNumber:formData.AlteranteNumber,
+            })
 
-        const addressData = addressInfo({
-            userId:userId,
-            username:formData.Name,
-            phoneNumber:formData.MobileNumber,
-            pincode:formData.Pincode,
-            locality:formData.Locality,
-            address:formData.Address,
-            city:formData.City,
-            district:formData.District,
-            landmark:formData.Landmark,
-            alternateNumber:formData.AlteranteNumber,
-        })
+            
+            const store = await addressData.save();
+            if(store){
 
-        // console.log(addressData)
+                res.json({status:true, data:'Address Added Sucesfully'});
 
-        
-        const store = await addressData.save();
-        if(store){
-
-            res.json({status:true, data:'Address Added Sucesfully'});
+            }else{
+                throw new Error('Failed to Add Data');
+            }
 
         }else{
-
-            res.redirect('/error500');
+            res.json({status:false, data:'Address Adding is failed You can Enter All Field'});
         }
 
-    }else{
-
-        res.json({status:false, data:'Address Adding is failed You can Enter All Field'});
+    } catch (error) {
+        next(error);
     }
-
 }
 
 
 
 
 // ***** VIEW EDIT ADDRESS FORM PAGE *****
-const loadEditAddressForm = async(req,res) =>  {
+const loadEditAddressForm = async(req, res, next) =>  {
+    try {
+        const checkLogin = req.session.userId ? true : false;
 
-    const checkLogin = req.session.userId ? true : false;
+        const addressId = req.params.id;
 
-    const addressId = req.params.id;
+        const addressData = await addressInfo.findOne({_id:addressId});
+        if(addressData){
 
-    const addressData = await addressInfo.findOne({_id:addressId});
-    if(req.query.url){
-        res.render('user/checkoutEditAddress',{ title:'Update Address' ,login:checkLogin , user: true, login:checkLogin, address:addressData});
-        return;
+            if(req.query.url){
+                res.render('user/checkoutEditAddress',{ title:'Update Address' ,login:checkLogin , user: true, login:checkLogin, address:addressData});
+                return;
+            }
+
+            res.render('user/editAddress',{ title:'Update Address' ,login:checkLogin , user: true, login:checkLogin, address:addressData});
+        }else{
+            throw new Error('Data Is Not Found')
+        }
+    } catch (error) {
+        next(error);
     }
-
-    res.render('user/editAddress',{ title:'Update Address' ,login:checkLogin , user: true, login:checkLogin, address:addressData});
-
 }
 
 
 
 // **** UPDATE ADDRESS DATA ****
-const updateAddressData = async(req,res)=>{
-    const data = req.body;
+const updateAddressData = async(req, res, next)=>{
+    try {
+        const data = req.body;
 
-    if(data){
+        if(data){
 
-        const update = await addressInfo.updateOne({_id:data.addressId},{$set:{
-            username:data.Name,
-            phoneNumber:data.MobileNumber,
-            pincode:data.Pincode,
-            locality:data.Locality,
-            address:data.Address,
-            city:data.City,
-            district:data.District,
-            landmark:data.Landmark,
-            alternateNumber:data.AlteranteNumber,
-        }});
+            const update = await addressInfo.updateOne({_id:data.addressId},{$set:{
+                username:data.Name,
+                phoneNumber:data.MobileNumber,
+                pincode:data.Pincode,
+                locality:data.Locality,
+                address:data.Address,
+                city:data.City,
+                district:data.District,
+                landmark:data.Landmark,
+                alternateNumber:data.AlteranteNumber,
+            }});
 
-        if(update.acknowledged){
-            res.json({status:true, data:'Address Updated Sucesfully'});
+            if(update.acknowledged){
+                res.json({status:true, data:'Address Updated Sucesfully'});
+            }else{
+                res.json({status:false, data:'Update Address is failed You can Enter All Field'});
+            }
+
         }else{
+
             res.json({status:false, data:'Update Address is failed You can Enter All Field'});
-        }
-
-    }else{
-
-        res.json({status:false, data:'Update Address is failed You can Enter All Field'});
-    }
+        } 
+    } catch (error) {
+        next(error);
+    }  
 }
 
 
 
 
 // ***** DELETE ADDRESS *****
-const deleteAddress = async(req,res) =>{
-    const id = req.params.id;
+const deleteAddress = async(req, res, next) =>{
+    try {
+        const id = req.params.id;
 
-    const deleteAddress = await addressInfo.deleteOne({_id:id});
+        const deleteAddress = await addressInfo.deleteOne({_id:id});
 
-    if(deleteAddress){
-        res.json({status:true});
-    }else{
-        res.status(500);
+        if(deleteAddress){
+            res.json({status:true});
+        }else{
+            throw new Error('Data Not Found');
+        }
+    } catch (error) {
+        next(error);
     }
 }
 
 // **** Edit Password 
-const editPassword = async(req,res)=>{
+const editPassword = async(req, res, next)=>{
     
     try{
 
@@ -661,11 +736,13 @@ const editPassword = async(req,res)=>{
 
             if(updatePassword){
                 res.json({status:true})
+            }else{
+                throw new Error('Data Not Found');
             }
         }
 
     }catch(error){
-        console.log(error.message);
+        next(error)
     }
     
 

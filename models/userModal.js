@@ -41,4 +41,4 @@ const userData = moongose.model('users',userRegistration);
 
 module.exports = {
     userData
-}
+};

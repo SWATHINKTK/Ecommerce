@@ -5,12 +5,6 @@ const isUserLogin = async(req,res,next) =>{
         if(!(req.session.userId)){
 
                 res.redirect('/login');
-
-            // if(req.method == 'GET')
-            //     res.redirect('/login');
-            // else
-            //     res.status(404)
-            
         }
         next();
     }catch(error){

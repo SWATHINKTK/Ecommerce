@@ -9,6 +9,7 @@ const adminRouter = express();
 
 //Local Module Import 
 const adminController = require('../controller/adminControl');
+const auth = require('../middleware/adminAuth')
 
 
 
@@ -20,7 +21,18 @@ adminRouter.use(session({
     secret:'key',
     resave : false,
     saveUninitialized : true
-}))
+}));
+
+// Admin Name Setting 
+const { loginData } = require('../models/adminModel');
+adminRouter.use(async(req,res,next) => {
+
+    if(req.session.adminId){
+        const adminName = await loginData.findOne({_id:req.session.adminId});
+        res.locals.adminName = adminName ? adminName.adminname : '';
+    }
+    next();
+})
 
 
 
@@ -65,15 +77,15 @@ const uploadCategoryImage = multer({storage:uploadCategoryImg});
 
 //*** Login Routing *** 
 adminRouter.get('/',adminController.loadAdminLogin);
-adminRouter.get('/home',adminController.loadAdminHomepage);
+adminRouter.get('/home', auth.isAdminLogin, adminController.loadAdminHomepage);
 adminRouter.post('/',adminController.verifyLogin);
 adminRouter.post('/logout',adminController.logoutAdmin);
 
 
 //*** User Route ***
-adminRouter.get('/userlist',adminController.loadUserList);
-adminRouter.get('/searchuser',adminController.searchUser);
-adminRouter.patch('/blockuser',adminController.blockUser);
+adminRouter.get('/userlist', auth.isAdminLogin, auth.isAdminLogin, adminController.loadUserList);
+adminRouter.get('/searchuser', auth.isAdminLogin, adminController.searchUser);
+adminRouter.patch('/blockuser', auth.isAdminLogin, adminController.blockUser);
 
 
 
@@ -101,10 +113,10 @@ adminRouter.patch('/categorystatusupdate',adminController.categorySatusUpdate);
 
 
 //*** Brand Routing *** 
-adminRouter.get('/viewbrand',adminController.loadBrandViewPage);
-adminRouter.get('/addbrand',adminController.loadBrandAddPage);
+adminRouter.get('/viewbrand', auth.isAdminLogin, adminController.loadBrandViewPage);
+adminRouter.get('/addbrand', auth.isAdminLogin, adminController.loadBrandAddPage);
 adminRouter.get('/editbrand:id',adminController.loadEditBrandPage);
-adminRouter.get('/searchbrand',adminController.searchBrandData);
+adminRouter.get('/searchbrand', auth.isAdminLogin, adminController.searchBrandData);
 adminRouter.post('/addbrand',uploadBrandImage.single('brandImage'),adminController.addBrandDetails);
 adminRouter.post('/editbrand',uploadBrandImage.single('editBrandImage'),adminController.editBrandDetails);
 adminRouter.get('/brandstatusupdate:id',adminController.brandStatusUpdate);

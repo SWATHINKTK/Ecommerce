@@ -2,55 +2,63 @@ const wishlistData = require('../models/wishlistModel');
 
 
 // **** ADDPRODUCT TO WISHLIST ****
-const addProductToWishlist = async(req,res) => {
+const addProductToWishlist = async(req, res, next) => {
 
-    const productId = req.params.productId;
+    try {
+        const productId = req.params.productId;
 
-    console.log(productId)
-    const userId = req.session.userId;
+        const userId = req.session.userId;
 
-    // Wishlist Exist and Wishlist Array Product Existence Checking
-    const wishlistExist = await wishlistData.findOne({userId:userId});
-    const productExistWishlist = wishlistExist.wishlistProducts.includes(productId);
+        // Wishlist Exist and Wishlist Array Product Existence Checking
+        const wishlistExist = await wishlistData.findOne({userId:userId});
 
-    // Product EXistence Checking
-    if(productExistWishlist){
         
-        const removeWishlist = await wishlistData.updateOne({userId:userId},{$pull:{wishlistProducts:productId}});
-        
-        if(removeWishlist){
-            res.json({status:true,removed:true});
-        }
-        return;
-    }
+        // Wishlist Existence Checking
+        if(wishlistExist){
 
-    
-    // Wishlist Existence Check.Not Existing else Condition To Create.Other Wise Update The Array.
-    if(wishlistExist){
+            const productExistWishlist = wishlistExist.wishlistProducts.includes(productId);
 
-        const addToWishlist = await wishlistData.updateOne({userId:userId},{$push:{wishlistProducts:productId}});
+            // This Product is Existing That wishlist Checking Condition
+            if(productExistWishlist){
+            
+                const removeWishlist = await wishlistData.updateOne({userId:userId},{$pull:{wishlistProducts:productId}});
+                
+                if(removeWishlist){
+                    res.json({status:true,removed:true});
+                }else{
+                    throw new Error('Data is Not Found');
+                }
+                return;
 
-        if(addToWishlist){
-            res.json({status:true})
+            }else{
+
+                const addToWishlist = await wishlistData.updateOne({userId:userId},{$push:{wishlistProducts:productId}});
+
+                if(addToWishlist){
+                    res.json({status:true})
+                }else{
+                    res.json({status:false});
+                }
+            }
+
         }else{
-            res.json({status:false});
-        }
+            
+            const newList = wishlistData({
+                userId:userId,
+                wishlistProducts:productId
+            });
 
-    }else{
+            const createNewWishlist = await newList.save();
+
+            if(createNewWishlist){
+                res.json({status:true})
+            }else{
+                res.json({status:false})
+            }
+        }
         
-        const newList = wishlistData({
-            userId:userId,
-            wishlistProducts:productId
-        });
-
-        const createNewWishlist = await newList.save();
-
-        console.log(newList,createNewWishlist)
-        if(createNewWishlist){
-            res.json({status:true})
-        }else{
-            res.json({status:false})
-        }
+    } catch (error) {
+        next(error);
     }
 };
 
@@ -58,7 +66,7 @@ const addProductToWishlist = async(req,res) => {
 
 
 // **** VIEW WISHLIST PRODUCT ****
-const viewWishlistProduct = async(req,res) => {
+const viewWishlistProduct = async(req, res, next) => {
     try {
 
         const checkLogin = req.session.userId ? true : false;
@@ -79,11 +87,14 @@ const viewWishlistProduct = async(req,res) => {
             }
         ]);
 
-
-        res.render('user/viewWishlistProduct',{user:true, title:'Wishlist', login:checkLogin ,wishlistData:wishList})
+        if(wishList){
+            res.render('user/viewWishlistProduct',{user:true, title:'Wishlist', login:checkLogin ,wishlistData:wishList});
+        }else{
+            throw new Error('Data is Not Found');
+        }
         
     } catch (error) {
-        console.log(error.message);
+        next(error);
     }
 }
 
@@ -108,7 +119,7 @@ const removeWishlistProduct = async(req,res)=>{
         }
 
     } catch (error) {
-        console.log(error.message);
+        next(error);
     }
 }
 

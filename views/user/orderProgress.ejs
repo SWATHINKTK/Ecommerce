@@ -88,6 +88,18 @@
                                                     minute: 'numeric',
                                                     second: 'numeric'
                                                 }).format(new Date()); %>, Today</span></p>
+
+                                          <div class="d-flex mt-4">
+                                            <div>
+                                              <h6 class=" font-weight-bold">Shipping Address : </h6>
+                                            </div>
+                                            <div class="pl-3">
+                                              <p class="font-weight-bold mt-0"><%= orderData[0].addressInformation.username %><span class="pl-4"><%= orderData[0].addressInformation.phonenumber %></span></p>
+                                              <p class="m-0"><%= orderData[0].addressInformation.address %> , <%= orderData[0].addressInformation.locality %> , <%= orderData[0].addressInformation.city %> , <%= orderData[0].addressInformation.district %></p>
+                                              <p class="m-0"><%= orderData[0].addressInformation.pincode %></p>
+                                              <p class="m-0"><%= orderData[0].addressInformation.alternateNumber %></p>
+                                            </div>
+                                          </div>
                                         </div>
                                         <div>
                                           <a href="/productdetails?id=<%= orderData[0].productData[0]._id %>">

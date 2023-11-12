@@ -41,15 +41,11 @@
                                         <div class="card-body">
                                             <div class="shop__sidebar__categories">
                                                 <ul class="nice-scroll">
-                                                    <li><a href="#">Men (20)</a></li>
-                                                    <li><a href="#">Women (20)</a></li>
-                                                    <li><a href="#">Bags (20)</a></li>
-                                                    <li><a href="#">Clothing (20)</a></li>
-                                                    <li><a href="#">Shoes (20)</a></li>
-                                                    <li><a href="#">Accessories (20)</a></li>
-                                                    <li><a href="#">Kids (20)</a></li>
-                                                    <li><a href="#">Kids (20)</a></li>
-                                                    <li><a href="#">Kids (20)</a></li>
+    
+                                                    <% for(let i = 0; i < categoryData.length ; i++ ) { %>
+                                                        <li><a href="#" name="allProductCategoryFilter" value="<%= categoryData[i]._id %>"><%= categoryData[i].categoryname %></a></li>
+                                                    <% } %>
+                                                    
                                                 </ul>
                                             </div>
                                         </div>
@@ -63,10 +59,9 @@
                                         <div class="card-body">
                                             <div class="shop__sidebar__brand">
                                                 <ul>
-                                                    <li><a href="#">Louis Vuitton</a></li>
-                                                    <li><a href="#">Chanel</a></li>
-                                                    <li><a href="#">Hermes</a></li>
-                                                    <li><a href="#">Gucci</a></li>
+                                                    <% for(let i = 0; i < brandData.length ; i++ ) { %>
+                                                        <li><a href="#" name="allProductBrandFilter" value="<%= brandData[i]._id %>"><%= brandData[i].brand_name %></a></li>
+                                                    <% } %>
                                                 </ul>
                                             </div>
                                         </div>
@@ -80,12 +75,12 @@
                                         <div class="card-body">
                                             <div class="shop__sidebar__price">
                                                 <ul>
-                                                    <li><a href="#">$0.00 - $50.00</a></li>
+                                                    <!-- <li><a href="#">$0.00 - $50.00</a></li>
                                                     <li><a href="#">$50.00 - $100.00</a></li>
                                                     <li><a href="#">$100.00 - $150.00</a></li>
                                                     <li><a href="#">$150.00 - $200.00</a></li>
                                                     <li><a href="#">$200.00 - $250.00</a></li>
-                                                    <li><a href="#">250.00+</a></li>
+                                                    <li><a href="#">250.00+</a></li> -->
                                                 </ul>
                                             </div>
                                         </div>
@@ -171,13 +166,13 @@
                                     <div id="collapseSix" class="collapse show" data-parent="#accordionExample">
                                         <div class="card-body">
                                             <div class="shop__sidebar__tags">
-                                                <a href="#">Product</a>
+                                                <!-- <a href="#">Product</a>
                                                 <a href="#">Bags</a>
                                                 <a href="#">Shoes</a>
                                                 <a href="#">Fashio</a>
                                                 <a href="#">Clothing</a>
                                                 <a href="#">Hats</a>
-                                                <a href="#">Accessories</a>
+                                                <a href="#">Accessories</a> -->
                                             </div>
                                         </div>
                                     </div>
@@ -266,6 +261,10 @@
 
                                             <h6><%= product[i].productName %></h6>
                                             <a href="/productdetails?id=<%= product[i]._id %>" class="add-cart" >+ View More</a>
+
+                                            <input type="hidden" name="filterDataForCategorys" value="<%= product[0].categoryIds %>" id="">
+                                            <input type="hidden" name="filterDataForCategorys" value="<%= product[0].brandname %>" id="">
+
                                             <div class="rating">
                                                 <i class="fa fa-star-o"></i>
                                                 <i class="fa fa-star-o"></i>

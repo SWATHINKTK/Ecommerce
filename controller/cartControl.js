@@ -4,7 +4,7 @@ const wishlistData = require('../models/wishlistModel')
 
 
 // **** VIEW PRODUCT INSIDE THE CART ******
-const loadCartPage = async(req,res)=>{
+const loadCartPage = async(req, res, next)=>{
 
     try{
 
@@ -31,25 +31,20 @@ const loadCartPage = async(req,res)=>{
 
 
     }catch(error){
-
-        console.log(error.message);
-        res.redirect('/error500');
-
+        next(error);
     }
 
 }
 
 
 // ***** PRODUCTS ADD TO THE CART DOCUMENT *****
-const productAddToCart = async(req,res)=>{
+const productAddToCart = async(req, res, next)=>{
     try{
 
         const userId = req.session.userId;
         const productId = req.body.id;
         const productQuantity = req.body.quantity;
-        const productPrice = req.body.price;
-        console.log(req.body)
-        
+        const productPrice = req.body.price; 
 
         const user = await userData.findOne({_id:userId});
 
@@ -74,14 +69,12 @@ const productAddToCart = async(req,res)=>{
             }
 
         }else{
-
-            // console.log('new data')
             
             const cartInfo = cartData({
                 userId:userId,
                 cartProducts:cartProductData
             });
-            // console.log(cartInfo)
+        
             const userUpdate = await userData.updateOne({_id:userId},{$set:{cartProducts:cartInfo._id}},{upsert:true});
             
             if(userUpdate){
@@ -108,61 +101,64 @@ const productAddToCart = async(req,res)=>{
         
 
     }catch(error){
-
-        console.log(error.message);
-        res.redirect('/error500');
-
+        next(error);
     }
 }
 
 
 
-const cartQuantityUpdate = async (req,res) => {
+const cartQuantityUpdate = async (req, res, next) => {
+    try {
+        const id = req.session.userId;
 
-    const id = req.session.userId;
+        const data = req.body;
 
-    const data = req.body;
-
-    const updateProduct = await cartData.updateOne({userId:id,'cartProducts.productId':data.id},{$set:{'cartProducts.$.quantity':data.quantity}});
-    
-    if(updateProduct.acknowledged){
-        res.json({status:true});
-    }else{
-        res.json({status:false});
+        const updateProduct = await cartData.updateOne({userId:id,'cartProducts.productId':data.id},{$set:{'cartProducts.$.quantity':data.quantity}});
+        
+        if(updateProduct.acknowledged){
+            res.json({status:true});
+        }else{
+            res.json({status:false});
+        }
+    } catch (error) {
+        next(error);
     }
 }
 
 
 
 // **** REMOVE CART ****
-const removeProductFromCart = async (req,res) => {
-    
-    const userId = req.session.userId
-    const productId = req.body.productId;
+const removeProductFromCart = async (req, res, next) => {
+    try {
+        const userId = req.session.userId
+        const productId = req.body.productId;
 
-    const cartInfo = await cartData.findOne({userId:userId});
+        const cartInfo = await cartData.findOne({userId:userId});
 
-    if(cartInfo.cartProducts.length == 1){
+        if(cartInfo.cartProducts.length == 1){
 
-        const deleteCart = await cartData.deleteOne({userId:userId});
-        const userCartId = await userData.updateOne({_id:userId},{ $unset: { cartProducts: 1 } });
-        if(userCartId){
-            res.json({status:true});
+            const deleteCart = await cartData.deleteOne({userId:userId});
+            const userCartId = await userData.updateOne({_id:userId},{ $unset: { cartProducts: 1 } });
+            if(userCartId){
+                res.json({status:true});
+            }else{
+                res.json({status:false});
+            }
+
         }else{
-            res.json({status:false});
-        }
 
-    }else{
+            const deleteProduct = await cartData.updateOne({ userId: userId }, { $pull: { cartProducts: { productId: productId } } });
 
-        const deleteProduct = await cartData.updateOne({ userId: userId }, { $pull: { cartProducts: { productId: productId } } });
+            
+            if(deleteProduct.acknowledged){
+                res.json({status:true});
+            }else{
+                res.json({status:false});
+            }
 
-        
-        if(deleteProduct.acknowledged){
-            res.json({status:true});
-        }else{
-            res.json({status:false});
-        }
-
+        }   
+    } catch (error) {
+        next(error)
     }
 }
 

@@ -5,7 +5,7 @@ const orderData = require('../models/orderModel');
 const cartData = require('../models/cartModel');
 
 
-const LoadCheckoutPage = async(req,res) => {
+const LoadCheckoutPage = async(req, res, next) => {
 
     try{
 
@@ -32,16 +32,15 @@ const LoadCheckoutPage = async(req,res) => {
         }
 
     }catch(error){
-        console.log(error.message);
+        next(error)
     }
 
 }
 
 
-const PlaceOrder = async(req,res)=>{
+const PlaceOrder = async(req, res, next)=>{
 
     try {
-        console.log('checkout')
 
         const userId = req.session.userId;
         
@@ -97,13 +96,8 @@ const PlaceOrder = async(req,res)=>{
             }));
             products.map((val) => {
                 totalPrice += val.productTotalAmount
-            })
-            // console.log(products,totalPrice)
-           
+            })         
         }
-
-
-        
 
 
         const orderSucess = orderData({
@@ -149,24 +143,27 @@ const PlaceOrder = async(req,res)=>{
 
 
     } catch (error) {
-        console.log(error.message);
+        next(error);
     }
 }
 
 
 
-const loadOrderSucess = async(req,res)=>{
+const loadOrderSucess = async(req, res, next)=>{
+    try {
+        const checkLogin = req.session.userId ? true : false;
 
-    const checkLogin = req.session.userId ? true : false;
+        const orderId = req.query.orderId;
+        const orderDetails = await orderData.findOne({_id:orderId}).populate('productInforamtion.productId');
 
-    const orderId = req.query.orderId;
-    console.log(orderId)
-    const orderDetails = await orderData.findOne({_id:orderId}).populate('productInforamtion.productId');
-    // console.log(orderDetails)
-    // console.log(orderDetails.productInforamtion)
-    // console.log(orderId)
-   
-    res.render('user/orderPlacedSucess',{user:true, title:'CheckOut', login:checkLogin, order:orderDetails});
+        if(orderDetails){
+            res.render('user/orderPlacedSucess',{user:true, title:'CheckOut', login:checkLogin, order:orderDetails});
+        }else{
+            throw new Error('Data Not Found');
+        }
+    } catch (error) {
+        next(error)
+    }
 }
 
 

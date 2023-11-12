@@ -69,7 +69,11 @@ updateOrderStatus.forEach((updateButton) => {
                     status.value == 'Delivered' ?  updateStatusSection.style.display = 'none' : '';
                 }
 
-                Swal.fire("Saved!", "", "success");
+                Swal.fire({
+                    text:"Satus Updated!",
+                    type:"success",
+                    timer:1900
+                });
             } 
           });
 

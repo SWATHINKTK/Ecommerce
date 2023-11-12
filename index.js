@@ -1,31 +1,34 @@
-// Core & NPM modules 
+// *** ENV VARIABLE REQUIRE ****
+require('dotenv').config();
+
+
+// **** CORE AND NPM MODULE IMPORT ****
 const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose')
 const app = express();
 
-// Hostname & Port Value Setting
-const port = process.env.PORT || 5000;
-const hostname = '127.0.0.1';
 
-// Server Configuration 
+
+
+// **** VIEW ENGINE SETUP ****
 app.set('view engine','ejs');
 
-// Server Path Setting 
+
+// **** SERVER PATH SETTING ****
 app.use('/asserts',express.static(path.join(__dirname,'./public/admin/assets')));
 app.use('/public',express.static(path.join(__dirname,'./public')));
 
 
 
-// Mongoose Connect 
-mongoose.connect('mongodb://127.0.0.1:27017/ecommerce')
-    .then(()=> console.log("Database Connection Successful"))
-    .catch((error) => console.log("Connection Lost  : ",error));
+// **** MOONGOSE CONNECTION SETUP ****
+const connectDB = require('./db');
+connectDB();
 
 
 
 
-// User Router 
+// **** USER ROUTER ****
 const userRouter = require('./routers/userRouter');
 app.use('/',userRouter);
 
@@ -50,10 +53,37 @@ const wishlistRouter = require('./routers/wishlistRouter');
 app.use('/api',wishlistRouter);
 
 
-// Admin Router 
+// **** ADMIN ROUTER ****
 const adminRouter = require('./routers/adminRouter');
 app.use('/admin',adminRouter);
 
+
+
+// **** ERROR HANDLING MIDDLEWARE ****
+app.use((err,req,res,next) => {
+
+    // console.log('hello')
+    const errStatus = err.statusCode || 500 ;
+    console.log(err.message)
+
+    console.log(err.stack);
+
+    if(errStatus == 404){
+        res.status(errStatus).render('partials/error404',{status:errStatus});
+
+        //     status: errStatus,message: errMsg,stack: errStack
+       
+    }else{
+        res.status(errStatus).render('partials/error-500',{status:errStatus});
+    }
+
+})
+
+
+
+// *** SERVER START ****
+const port = process.env.PORT || 5000;
+const hostname = '127.0.0.1';
 
 app.listen(5000,()=>{
     console.log(`server is runnning @ http://${hostname}:${port}/`);
