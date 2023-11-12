@@ -2,7 +2,7 @@
 // ****** PROCEED TO PAYMENT - PAYMENT OPTION DIV VIEW *****
 const proceedPaymentBtn = document.getElementById('proceed-payment-btn');
 proceedPaymentBtn.addEventListener('click',()=>{
-    // alert('d')
+
     const paymentOptionDiv = document.getElementById('payment-options');
     paymentOptionDiv.style.display = 'block';
 
@@ -11,7 +11,47 @@ proceedPaymentBtn.addEventListener('click',()=>{
 
     const editAddressDiv = document.getElementById('checkout-editAddressForm');
     editAddressDiv.style.display = 'none';
+
+    const addAddressButton = document.getElementById('addingNewAddressButton');
+    addAddressButton.style.display = 'none';
+
+    const addressCard = document.querySelectorAll("div[name='address-card']");
+    const deliveryAddress = document.querySelectorAll('input[name="CheckedAddress"]');
+    deliveryAddress.forEach((address,i)=>{
+        if(!address.checked)
+        {
+            addressCard[i].style.display = 'none';
+        }
+    });
+
+    const changeAddress = document.getElementById('change-address');
+    changeAddress.style.display = 'block';
+
+
 });
+
+
+const changeAddress = document.getElementById('change-address');
+if(changeAddress){
+    changeAddress.addEventListener('click',(event)=>{
+        event.preventDefault();
+
+        const addressCard = document.querySelectorAll("div[name='address-card']");
+        const deliveryAddress = document.querySelectorAll('input[name="CheckedAddress"]');
+        deliveryAddress.forEach((address,i)=>{
+            if(!address.checked)
+            {
+                addressCard[i].style.display = 'block';
+            }
+        });
+
+        const addAddressButton = document.getElementById('addingNewAddressButton');
+        addAddressButton.style.display = 'block';
+
+        document.getElementById('change-address').style.display = 'none';
+
+    })
+}
 
 
 
@@ -21,7 +61,7 @@ priceUpdate.addEventListener('change',(event)=>{
 
     const newProductQuantity = parseInt(event.target.value);
     const hiddenInput = document.getElementById('checkout-hidden-data');
-    // console.log(hiddenInput)
+
     const oldProductQuantity = hiddenInput.value;
     const singlePrice = hiddenInput.getAttribute('name');
 

@@ -52,7 +52,7 @@
                                             <h4 class="ml-4 mt-2 font-weight-bold mb-3"><%= cartData[i].productId.productName %></h4>
                                         </a>
 
-                                        <% if(wishlistData.wishlistProducts.includes(cartData[i].productId._id)) { %>
+                                        <% if(locals.wishlistData ? wishlistData.wishlistProducts.includes(cartData[i].productId._id) : false) { %>
                                             <a href="#" name="addToWishlist" data-cart="true" class="ml-auto bg-white" style="height: 35px;border-radius: 50%;box-shadow: 0 0 15px -2px #6f6e6e;">
                                                 <i class="fa-solid text-danger fa-heart fa-lg fa-lg  py-3 px-2" data-wishlist-productId="<%= cartData[i].productId._id %>"></i>
                                             </a>

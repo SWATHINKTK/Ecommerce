@@ -46,7 +46,7 @@ const productAddToCart = async(req, res, next)=>{
         const productQuantity = req.body.quantity;
         const productPrice = req.body.price; 
 
-        const user = await userData.findOne({_id:userId});
+        const cartExist = await cartData.findOne({userId:userId});
 
         const cartProductData ={
             quantity:productQuantity,
@@ -54,7 +54,7 @@ const productAddToCart = async(req, res, next)=>{
             productId:productId,
         }
 
-        if(user.cartProducts){
+        if(cartExist){
             
             const addMoreProduct = await cartData.updateOne({userId:userId},{$push:{cartProducts:cartProductData}});
 
@@ -69,7 +69,7 @@ const productAddToCart = async(req, res, next)=>{
             }
 
         }else{
-            
+
             const cartInfo = cartData({
                 userId:userId,
                 cartProducts:cartProductData
@@ -138,8 +138,8 @@ const removeProductFromCart = async (req, res, next) => {
         if(cartInfo.cartProducts.length == 1){
 
             const deleteCart = await cartData.deleteOne({userId:userId});
-            const userCartId = await userData.updateOne({_id:userId},{ $unset: { cartProducts: 1 } });
-            if(userCartId){
+            
+            if(deleteCart){
                 res.json({status:true});
             }else{
                 res.json({status:false});

@@ -33,7 +33,7 @@
                     
                     <% if(locals.address ? true : false){ %>
                         <% for(let i=0; i < address.length ;i++){ %>
-                            <div class="card col-sm-12 mt-2 address-card" >
+                            <div class="card col-sm-12 mt-2 address-card" name="address-card" >
                                 <div class="card-body p-3">
                                     <div class="row">
                                         <input type="radio" class="address-selector"  name="CheckedAddress"  data-addressId="<%= address[i]._id %>" <% if(i === 0) { %>checked<%} %>>
@@ -50,7 +50,7 @@
                                     </div>
                                 </div>
                             </div>
-                    <% } %>
+                        <% } %>
                     <% } else {%>
 
                         <div class="card col-sm-12 mt-2 address-card">
@@ -66,10 +66,17 @@
                     <% } %>
 
 
+                    <div class="w-100 d-flex justify-content-end mt-3" >
+                        <button class="btn btn-secondary font-weight-bold rounded-pill border mr-3" id="change-address" style="box-shadow: 0 0 4px -2px #1c1c1c; display: none;" >Change Address</button>
+                    </div>
+
+
 
                     <!-- ADD NEW ADDRESS IN CHECKOUT  -->
-                    <div class="col-sm-12  p-3 mb-5 mt-2 border d-flex align-items-center" id="checkout-AddNewAddress">
-                        <i class="fa-solid fa-plus fa-lg mr-3" style="color: #000000;"></i> <h5 class="font-weight-bold">Add New Address</h5>
+                    <div id="addingNewAddressButton">
+                        <div class="col-sm-12  p-3 mb-5 mt-2 border d-flex align-items-center" id="checkout-AddNewAddress">
+                            <i class="fa-solid fa-plus fa-lg mr-3" style="color: #000000;"></i> <h5 class="font-weight-bold">Add New Address</h5>
+                        </div>
                     </div>
 
 

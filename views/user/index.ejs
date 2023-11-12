@@ -159,22 +159,15 @@
                                     <ul class="product__hover">
 
                                         <li>
-                                            <% if( locals.wishlistData ? true : false ) {%>
-                                                <a href="#"  name="addToWishlist">
-                                                    <% if(wishlistData.wishlistProducts.includes(product._id)) {%>
-                                                        <i class="fa-solid fa-heart fa-lg text-danger fa-lg  py-3 px-2" data-wishlist-productId="<%= product._id %>"></i> 
-                                                        <span class="mr-5">Item In You Wishlist</span> 
-                                                    <% } else { %>
-                                                        <i class="fa-regular text-dark fa-heart fa-lg fa-lg  py-3 px-2" data-wishlist-productId="<%= product._id %>"></i> 
-                                                        <span class="mr-5">Add to Wishlist</span> 
-                                                    <% } %>
-                                                </a>
-                                            <% } else { %>
-                                                <a href="#"  name="addToWishlist">
+                                            <a href="#"  name="addToWishlist">
+                                                <% if(locals.wishlistData ? wishlistData.wishlistProducts.includes(product._id) : false) {%>
+                                                    <i class="fa-solid fa-heart fa-lg text-danger fa-lg  py-3 px-2" data-wishlist-productId="<%= product._id %>"></i> 
+                                                    <span class="mr-5">Item In You Wishlist</span> 
+                                                <% } else { %>
                                                     <i class="fa-regular text-dark fa-heart fa-lg fa-lg  py-3 px-2" data-wishlist-productId="<%= product._id %>"></i> 
                                                     <span class="mr-5">Add to Wishlist</span> 
-                                                </a>
-                                            <% } %>
+                                                <% } %>
+                                            </a>
                                         </li>
                                         
                                         <li id="<%= product._id %>">

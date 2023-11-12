@@ -462,16 +462,13 @@ const loadAllProductViewPage = async(req, res, next) =>{
         const userId = req.session.userId;
 
         const categoryInfo = await category.find({},{categoryname:1});
-        console.log(userId,categoryInfo)
 
         const brand = await brandInfo.find({},{brand_name:1});
-        // console.log('brand',brand)
 
         const productData = await productInfo.find({}).sort({_id:-1});
-        // console.log('product',productData)
 
         if(checkLogin){
-            console.log('hello')
+        
             const cart = await cartData.find({userId:userId});
             const wishlist = await wishlistData.find({userId:userId});
             console.log(cart,wishlist)
@@ -484,6 +481,7 @@ const loadAllProductViewPage = async(req, res, next) =>{
         res.render('user/allProductView',{ user: true,login:checkLogin, title: 'Products',product:productData, categoryData:categoryInfo, brandData:brand});
 
     } catch (error) {
+
         next(error);
     }
 }

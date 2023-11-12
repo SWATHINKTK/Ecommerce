@@ -1,5 +1,5 @@
 const addressData = require('../models/addressModel');
-const {productInfo} = require('../models/adminModel');
+const {productInfo} = require('../models/productModel');
 const {userData} = require('../models/userModal');
 const orderData = require('../models/orderModel');
 const cartData = require('../models/cartModel');
@@ -8,7 +8,7 @@ const cartData = require('../models/cartModel');
 const LoadCheckoutPage = async(req, res, next) => {
 
     try{
-
+        console.log('checkout');
         const checkLogin = req.session.userId ? true : false;
 
         const userId = req.session.userId;
@@ -19,7 +19,6 @@ const LoadCheckoutPage = async(req, res, next) => {
             const productId = req.query.id;
 
             const productData = await productInfo.findOne({_id:productId});
-            // console.log(productData,productData.length)
         
             res.render('user/checkout',{user:true, title:'CheckOut', login:checkLogin, address:addressInfo, product:productData ,single:true});
 
@@ -27,7 +26,7 @@ const LoadCheckoutPage = async(req, res, next) => {
 
             const cartProduct = await cartData.findOne({userId:userId}).populate('cartProducts.productId')
             const productData = cartProduct.cartProducts;
-            // console.log(productData,productData.length)
+     
             res.render('user/checkout',{user:true, title:'CheckOut', login:checkLogin, address:addressInfo, cartProduct:productData ,single:false});
         }
 

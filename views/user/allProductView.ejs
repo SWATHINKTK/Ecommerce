@@ -212,7 +212,7 @@
                                                 <li>
                                                     <% if( locals.wishlistData ? true : false ) {%>
                                                         <a href="#"  name="addToWishlist">
-                                                            <% if(wishlistData[0].wishlistProducts.includes(product[i]._id)) {%>
+                                                            <% if(wishlistData.length != 0 ? wishlistData[0].wishlistProducts.includes(product[i]._id) : false) {%>
                                                                 <i class="fa-solid fa-heart fa-lg text-danger fa-lg  py-3 px-2" data-wishlist-productId="<%= product[i]._id %>"></i> 
                                                                 <span class="mr-5">Item In You Wishlist</span> 
                                                             <% } else { %>
@@ -229,8 +229,8 @@
                                                 </li>
 
                                                 <li id="<%= product[i]._id %>">
-                                                    <% let InCart = locals.dataCart ? dataCart[0].cartProducts.some(item => item.productId.equals(product[i]._id)) : false %>
-                                                    <% if(!InCart && product[i].stock > 0){ %>
+                                                    <% let InCart = locals.dataCart && dataCart.length != 0 ? dataCart[0].cartProducts.some(item => item.productId.equals(product[i]._id)) : false %>
+                                                    <% if(!InCart && product[i].stock > 0 ){ %>
                                                             <a href="#" name="homePageAddToCart"> <i class="bi bi-cart-plus-fill text-dark" data-product-id="<%= product[i]._id %>" data-product-price="<%= product[i].price %>"></i><span>Add to Cart</span></a>
                                                     <% } else {%>
                                                         <% if(product[i].stock > 0) { %>

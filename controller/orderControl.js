@@ -1,5 +1,5 @@
 const orderData = require('../models/orderModel');
-const {productInfo} = require('../models/adminModel');
+const {productInfo} = require('../models/productModel');
 
 const mongoose = require('mongoose');
 

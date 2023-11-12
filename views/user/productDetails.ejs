@@ -27,7 +27,7 @@
                         <div class="d-flex">
                             <h5><%= dataBrand %></h5>
 
-                            <% if(wishlistData.wishlistProducts.includes(product._id)) { %>
+                            <% if(locals.wishlistData ? wishlistData.wishlistProducts.includes(product._id) : false) { %>
                                 <a href="#" name="addToWishlist" data-cart="true" class="ml-auto bg-white" style="height: 35px;border-radius: 50%;box-shadow: 0 0 15px -2px #6f6e6e;">
                                     <i class="fa-solid text-danger fa-heart fa-lg fa-lg  py-3 px-2" data-wishlist-productId="<%= product._id %>"></i>
                                 </a>

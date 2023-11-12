@@ -83,9 +83,15 @@ homePageAddToCart.forEach(eventTag => {
         }
 
         const response = await fetch(url,requestOption);
+
+            if(response.status == 401){
+                window.location.href = '/login';
+                return;
+            }
         
             if(!response.ok){
                 window.location.href = '/error500';
+                return;
             }
 
         const data = await response.json();
