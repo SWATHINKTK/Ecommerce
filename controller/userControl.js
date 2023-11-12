@@ -44,7 +44,7 @@ async function sendEmail(name, email, otp, html) {
         requireTLS: true,
         auth: {
             user: 'swathinktk10@gmail.com',
-            pass: 'qkxm daqx mbkn czzx'
+            pass: process.env.SMTP_PASSWORD
         }
     });
 
