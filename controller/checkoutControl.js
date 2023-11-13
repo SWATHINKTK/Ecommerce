@@ -4,6 +4,13 @@ const {userData} = require('../models/userModal');
 const orderData = require('../models/orderModel');
 const cartData = require('../models/cartModel');
 const mongoose = require('mongoose');
+const Razorpay = require('razorpay');
+
+// PAYMENT INTEGRATION KEY SETUP
+var instance = new Razorpay({
+    key_id: process.env.PAYMENT_INTEGRATION_KEY_ID,
+    key_secret: process.env.PAYMENT_INTEGRATION_KEY_SECRET,
+  });
 
 
 const LoadCheckoutPage = async(req, res, next) => {
@@ -141,8 +148,20 @@ const PlaceOrder = async(req, res, next)=>{
             const stockUpdate = await productInfo.updateOne({_id:data.ProductId},{$inc:{stock:-data.productQuantity}});
          
             if(stockUpdate){
-
-                res.json({status:true,orderId:orderSucess._id});
+                
+                if(orderSucess.paymentMethod == 'COD')
+                    res.json({status:true,orderId:orderSucess._id});
+                else if(orderSucess.paymentMethod == 'UPI'){
+                    var options = {
+                        amount: orderSucess.totalAmount,  // amount in the smallest currency unit
+                        currency: "INR",
+                        receipt: orderSucess._id
+                      };
+                      instance.orders.create(options, function(err, order) {
+                        console.log(order);
+                        res.json({sucess:true,order:order})
+                      });
+                }
             }else{
                 res.json({status:false});
             }
@@ -172,6 +191,10 @@ const PlaceOrder = async(req, res, next)=>{
     } catch (error) {
         next(error);
     }
+}
+
+const paymentVerification  = async(req,res) => {
+    console.log(req.body)
 }
 
 
@@ -232,5 +255,6 @@ async function checkStock(userId){
 module.exports = {
     LoadCheckoutPage,
     PlaceOrder,
+    paymentVerification,
     loadOrderSucess
 }

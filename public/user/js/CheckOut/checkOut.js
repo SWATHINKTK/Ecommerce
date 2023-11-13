@@ -135,6 +135,7 @@ const placeOrder = document.getElementById('placeOrder');
 if(placeOrder){
 
     placeOrder.addEventListener('click', async(event)=>{
+        event.preventDefault();
 
         const productId = event.target.getAttribute('data-product-id');
 
@@ -187,6 +188,12 @@ if(placeOrder){
 
         if(responseData.status){
             window.location.href = `/api/orderSucesss?orderId=${responseData.orderId}`;
+        }else if(responseData.sucess){
+
+            // console.log(responseData.order)
+
+            razorpayPayment(responseData.order)
+           
         }else if(!responseData.status && !responseData.singleStock){
             Swal.fire({
                 position:'bottom',
@@ -198,6 +205,58 @@ if(placeOrder){
             window.location.href = '/api/ordersucess?status=false'
         }
     })
+}
+
+
+function razorpayPayment(order){
+    console.log(order.amount)
+    const amount = parseInt(order.amount)*100;
+    alert(amount)
+    var options = {
+        "key": "rzp_test_ydy5yr6ieKyEj4", // Enter the Key ID generated from the Dashboard
+        "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+        "currency": "INR",
+        "name": "Male Fashion",
+        "description": "Test Transaction",
+        "image": "https://example.com/your_logo",
+        "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+        "handler": function (response){
+            alert(response.razorpay_payment_id);
+            alert(response.razorpay_order_id);
+            alert(response.razorpay_signature)
+
+            onlinePaymentSucess(response,order)
+        },
+        "prefill": {
+            "name": "Gaurav Kumar",
+            "email": "gaurav.kumar@example.com",
+            "contact": "9000090000"
+        },
+        "notes": {
+            "address": "Razorpay Corporate Office"
+        },
+        "theme": {
+            "color": "#3399cc"
+        }
+    };
+    var rzp1 = new Razorpay(options);
+    rzp1.open();
+}
+
+
+async function onlinePaymentSucess(response,order){
+   
+    const url = '/api/verifyPayment';
+    const requestOption = {
+        method:'POST',
+        body:JSON.stringify({
+            orderData:order,
+            Payment:response
+        }),
+        headers:{'Content-Type':'application/json'}
+    }
+
+    const paymentResponse = await fetch(url,requestOption);
 }
 
 

@@ -76,7 +76,7 @@ app.use((err,req,res,next) => {
     }else{
         res.status(errStatus).render('partials/error-500',{status:errStatus});
     }
-
+ 
 })
 
 
