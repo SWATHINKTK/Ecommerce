@@ -36,6 +36,11 @@ document.getElementById('sidebar').addEventListener('click', async function(even
             // View the Add a New Product Form Page
             const response = await fetch("/admin/addproduct");
 
+            if(response.status == 401){
+                window.location.href = '/admin'
+                return;
+            }
+
             // Response Check Field
             if(!response.ok){
 
@@ -159,6 +164,12 @@ document.getElementById('sidebar').addEventListener('click', async function(even
          // Adding a New Category Page Loading with a form
          fetch("/admin/addcategory")
             .then((response) => {
+
+                if(response.status == 401){
+                    window.location.href = '/admin'
+                    return;
+                }
+
                 if (!response.ok) {
                     throw new Error("Network response was not ok");
                 }
@@ -192,6 +203,12 @@ document.getElementById('sidebar').addEventListener('click', async function(even
         // View the Coupon Present in my appication in Table View
         fetch("/admin/couponlist")
             .then((response) => {
+
+                if(response.status == 401){
+                    window.location.href = '/admin'
+                    return;
+                }
+
                 if (!response.ok) {
                     throw new Error("Network response was not ok");
                 }
@@ -212,6 +229,12 @@ document.getElementById('sidebar').addEventListener('click', async function(even
         // Add a new Coupon adding Form is Loaded
         fetch("/admin/addcoupon")
             .then((response) => {
+
+                if(response.status == 401){
+                    window.location.href = '/admin'
+                    return;
+                }
+
                 if (!response.ok) {
                     throw new Error("Network response was not ok");
                 }

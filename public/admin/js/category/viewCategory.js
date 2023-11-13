@@ -6,6 +6,12 @@ function viewAllCategoryDetails(){
     // View Category List to a Table Form
     fetch("/admin/categorylist")
     .then((response) => {
+
+        if(response.status == 401){
+            window.location.href = '/admin'
+            return;
+        }
+        
         if (!response.ok) {
             throw new Error("Network response was not ok");
         }

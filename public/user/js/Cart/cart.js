@@ -11,10 +11,6 @@ async function addToCart(eventTag){
 
         let productQuantity = document.getElementById('product-quanitity') ? document.getElementById('product-quanitity').value : 1;
 
-        // if(stock <= 0){
-        //     productQuantity = 0;
-        // }
-
         const url = '/api/addToCart';
 
         const requestOption = {
@@ -30,9 +26,15 @@ async function addToCart(eventTag){
 
 
         const response = await fetch(url,requestOption);
+
+            if(response.status == 401){
+                window.location.href = '/login';
+                return;
+            }
         
             if(!response.ok){
                 window.location.href = '/error500';
+                return;
             }
 
         const data = await response.json();
@@ -234,7 +236,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 
                 const productId = event.target.getAttribute('data-cart-product-id');
 
-                const productQuanitity = parseInt(event.target.value);
+                let productQuanitity = parseInt(event.target.value);
 
 
                 const parent = event.target.parentNode;
@@ -251,15 +253,11 @@ document.addEventListener('DOMContentLoaded',()=>{
                         icon: 'warning',
                         showConfirmButton: false, 
                         timer: 2500,
-                        customClass: {
-                            icon: 'my-custom-icon-class', 
-                            content: 'my-custom-content-class', 
-                          }, 
                       });
                       if(stock <= 10){
                         event.target.value = stock;
                       }
-                      return;
+                      productQuanitity = stock;
                 }
     
 

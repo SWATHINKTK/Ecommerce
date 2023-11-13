@@ -187,6 +187,13 @@ if(placeOrder){
 
         if(responseData.status){
             window.location.href = `/api/orderSucesss?orderId=${responseData.orderId}`;
+        }else if(!responseData.status && !responseData.singleStock){
+            Swal.fire({
+                position:'bottom',
+                html: `${responseData.quantity} Product is Left`,
+                showConfirmButton: false, 
+                timer: 1500,
+            })
         }else{
             window.location.href = '/api/ordersucess?status=false'
         }
@@ -240,8 +247,18 @@ if(cartPlaceOrder){
         const responseData = await response.json();
 
         if(responseData.status){
+
             window.location.href = `/api/orderSucesss?orderId=${responseData.orderId}`;
-            // alert('sucess')
+
+        }else if(!responseData.status && !responseData.stock){
+
+            Swal.fire({
+                position:'bottom',
+                html: `Some Product In Cart Is Out Of Stock`,
+                showConfirmButton: false, 
+                timer: 1500,
+            });
+
         }else{
             window.location.href = '/api/ordersucess?status=false'
         }

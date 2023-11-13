@@ -44,6 +44,11 @@ async function deleteFile(filePath){
 const loadAdminLogin = (req, res,next) => {
 
     try {
+        if(req.query.authFailed){
+            res.status(401).render('admin/login', { admin: false, style: true, title: 'Admin Login' });
+            return;
+        }
+
         res.render('admin/login', { admin: false, style: true, title: 'Admin Login' });    
     } catch (error) {    
         next(error);

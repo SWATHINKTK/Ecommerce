@@ -6,10 +6,16 @@ async function productListView(){
 
     const response = await fetch("/admin/productlist");
 
-    if(!response.ok){
-        window.location.href = '/admin/error500';
-        return;
-    }
+        if(response.status == 401){
+            window.location.href = '/admin'
+            return;
+        }
+
+
+        if(!response.ok){
+            window.location.href = '/admin/error500';
+            return;
+        }
 
     const data = await response.text();
     contentPlaceholder.innerHTML = data;
@@ -82,10 +88,15 @@ async function viewMore(value){
 
         const response = await fetch(url);
 
-        if(!response.ok){
-            window.location.href = '/admin/error500';
-            return;
-        }
+            if(response.status == 401){
+                window.location.href = '/admin'
+                return;
+            }
+
+            if(!response.ok){
+                window.location.href = '/admin/error500';
+                return;
+            }
 
         const data = await response.text();
 
@@ -136,11 +147,16 @@ async function productStatusSucess(){
         const url = `/admin/productstausupdate${id}`
         const response = await fetch(url);
 
-        if(!response.ok){
+            if(response.status == 401){
+                window.location.href = '/admin'
+                return;
+            }
 
-            window.location.href = '/admin/error500';
-            return;
-        }
+            if(!response.ok){
+
+                window.location.href = '/admin/error500';
+                return;
+            }
 
         const data = await response.json();
 
@@ -188,9 +204,14 @@ async function loadEditProductPage(target,imageFile){
         const url = `/admin/editproduct${id}`
         const response = await fetch(url);
 
-        if(!response.ok){
-            window.location.href = '/admin/error500'
-        }
+            if(response.status == 401){
+                window.location.href = '/admin'
+                return;
+            }
+
+            if(!response.ok){
+                window.location.href = '/admin/error500'
+            }
 
         const data = await response.text();
         

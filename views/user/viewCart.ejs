@@ -38,6 +38,9 @@
                                     <div class="mt-2">
                                         <% if(cartData[i].productId.stock > 0 ){ %>
                                             <span class="font-weight-bold">Quanitity : </span><input type="number" class="cart-quantity text-center font-weight-bold" name="quanitity" id="cart-product-quanitity" min="1" max="10" value="<%= cartData[i].quantity %>" data-cart-product-id="<%= cartData[i].productId._id %>">
+                                                <% if( cartData[i].productId.stock < cartData[i].quantity ) {%>
+                                                    <p class="text-center font-weight-bold text-danger">only <%= cartData[i].productId.stock %> is left</p>
+                                                <% } %>
                                             <input type="hidden" id="oldData" value="<%= cartData[i].quantity %>" name="<%= cartData[i].productId.price %>" data-stock="<%= cartData[i].productId.stock %>">
                                         <% }else { %>
                                             <% sum -= cartData[i].quantity * cartData[i].productId.price %>

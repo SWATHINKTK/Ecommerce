@@ -3,12 +3,13 @@ const {productInfo} = require('../models/productModel');
 const {userData} = require('../models/userModal');
 const orderData = require('../models/orderModel');
 const cartData = require('../models/cartModel');
+const mongoose = require('mongoose');
 
 
 const LoadCheckoutPage = async(req, res, next) => {
 
     try{
-        console.log('checkout');
+
         const checkLogin = req.session.userId ? true : false;
 
         const userId = req.session.userId;
@@ -37,6 +38,8 @@ const LoadCheckoutPage = async(req, res, next) => {
 }
 
 
+
+
 const PlaceOrder = async(req, res, next)=>{
 
     try {
@@ -45,13 +48,8 @@ const PlaceOrder = async(req, res, next)=>{
         
         const data = req.body;
     
+        // **** Address Information Setting in the Order ****
         const addressInfo = await addressData.findOne({_id:data.Address});
-
-        let productData;
-        if(data.SingleProduct){
-            productData = await productInfo.findOne({_id:data.ProductId});
-        }
-
 
         const address = {
             username:addressInfo.username,
@@ -64,41 +62,69 @@ const PlaceOrder = async(req, res, next)=>{
             landmark:addressInfo.landmark,
             alternateNumber:addressInfo.alternateNumber,
         }
+        // **** End Of The Address Section *****
 
+
+
+        // *** Payment Status Setting Section ****
         let paymentStatus;
         if(data.PaymentMethod == 'COD'){
             paymentStatus = 'Pending';
         }else{
             paymentStatus = 'Processing';
         }
+        // **** End Of the Payment Status Section ****
         
+
+        // **** Product Data Storing Section Else Part Cart Order**** 
+        let productData;
         let products;
         let totalPrice = 0;
         if(data.SingleProduct){
 
-            products = {
-                productId:data.ProductId,
-                productPrice:data.ProductPrice,
-                productTotalAmount:(data.productQuantity * data.ProductPrice),
-                productquantity:data.productQuantity
+            productData = await productInfo.findOne({_id:data.ProductId});
+
+            if(productData.stock >= data.productQuantity ){
+
+                products = {
+                    productId:data.ProductId,
+                    productPrice:data.ProductPrice,
+                    productTotalAmount:(data.productQuantity * data.ProductPrice),
+                    productquantity:data.productQuantity
+                }
+                totalPrice = data.productQuantity * data.ProductPrice;
+            }else{
+                res.json({status:false, singleStock:false, quantity:productData.stock});
+                return;
             }
-            totalPrice = data.productQuantity * data.ProductPrice;
 
         }else{
 
-            const cartInfo = await cartData.findOne({userId:userId},{cartProducts:1});
-            products = cartInfo.cartProducts.map(item => ({
-                productId: item.productId,
-                productPrice:item.price,
-                productTotalAmount: (item.price * item.quantity),
-                productquantity:item.quantity
-            }));
-            products.map((val) => {
-                totalPrice += val.productTotalAmount
-            })         
+            
+            const stockChecking = await checkStock(userId);
+
+            if(stockChecking){
+
+                const cartInfo = await cartData.findOne({userId:userId},{cartProducts:1});
+                products = cartInfo.cartProducts.map(item => ({
+                    productId: item.productId,
+                    productPrice:item.price,
+                    productTotalAmount: (item.price * item.quantity),
+                    productquantity:item.quantity
+                }));
+                products.map((val) => {
+                    totalPrice += val.productTotalAmount
+                });
+
+            }else{
+                res.json({status:false, stock:false});
+                return; 
+            }        
         }
+        // **** End Of The Product Data Storing *****
 
 
+        // **** Order DataBase Store  Object Creation ****
         const orderSucess = orderData({
             addressInformation:address,
             productInforamtion:products,
@@ -106,10 +132,11 @@ const PlaceOrder = async(req, res, next)=>{
             totalAmount:totalPrice,
             paymentMethod:data.PaymentMethod,
             paymentStatus:paymentStatus
-        })
+        });
 
         const orderStore = await orderSucess.save();
 
+        // **** Stock Management in Order The Product Else Part Cart Products ****
         if(orderStore && data.SingleProduct){
             const stockUpdate = await productInfo.updateOne({_id:data.ProductId},{$inc:{stock:-data.productQuantity}});
          
@@ -139,6 +166,7 @@ const PlaceOrder = async(req, res, next)=>{
                 res.json({status:false});
             }
         }
+        // **** End Of The Stock Management ****
 
 
     } catch (error) {
@@ -163,6 +191,40 @@ const loadOrderSucess = async(req, res, next)=>{
     } catch (error) {
         next(error)
     }
+}
+
+
+
+// ######### Function in Checkout Controller Stock Check ######
+async function checkStock(userId){
+    const cartItems = await cartData.aggregate([
+        {
+            $match:{
+                userId: new mongoose.Types.ObjectId(userId)
+            }
+        },
+        {
+            $unwind:'$cartProducts'
+        },
+        {
+            $lookup:{
+                from:'products',
+                localField:'cartProducts.productId',
+                foreignField:'_id',
+                as:'productData'
+            }
+        }
+    ]);
+
+    let checkStock = true;
+    cartItems.forEach(products => {
+        console.log(products.productData[0].stock,products.cartProducts.quantity)
+        if(products.cartProducts.quantity > products.productData[0].stock){
+            checkStock = false;
+        }
+    });
+
+    return checkStock;
 }
 
 

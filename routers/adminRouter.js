@@ -90,20 +90,20 @@ adminRouter.patch('/blockuser', auth.isAdminLogin, adminController.blockUser);
 
 
 //*** Product Routing ***
-adminRouter.get('/productlist',adminController.loadProductList);
-adminRouter.get('/productmoredata:id',adminController.loadProductMoreData);
-adminRouter.get('/productstausupdate:id',adminController.productStatusUpdate);
+adminRouter.get('/productlist', auth.isAdminLogin, adminController.loadProductList);
+adminRouter.get('/productmoredata:id', auth.isAdminLogin, adminController.loadProductMoreData);
+adminRouter.get('/productstausupdate:id', auth.isAdminLogin, adminController.productStatusUpdate);
 adminRouter.get('/searchproduct:data',adminController.searchProduct);
-adminRouter.get('/addproduct',adminController.loadAddProductPage);
-adminRouter.get('/editproduct:id',adminController.loadEditProductPage);
+adminRouter.get('/addproduct', auth.isAdminLogin, adminController.loadAddProductPage);
+adminRouter.get('/editproduct:id', auth.isAdminLogin, adminController.loadEditProductPage);
 adminRouter.post('/productadd',uploadProductImage.array('productImage',4),adminController.productAdd);
 adminRouter.post('/editproduct',uploadProductImage.array('productImage',4),adminController.editProduct);
 
 
 
 //*** Category Routing ***
-adminRouter.get('/categorylist',adminController.loadCategoryList);
-adminRouter.get('/addcategory',adminController.loadAddCategoryPage);
+adminRouter.get('/categorylist', auth.isAdminLogin, adminController.loadCategoryList);
+adminRouter.get('/addcategory', auth.isAdminLogin, adminController.loadAddCategoryPage);
 adminRouter.get('/editcategory:id',adminController.loadEditCategoryPage);
 adminRouter.post('/addcategory',uploadCategoryImage.single('categoryImage'),adminController.addCategory);
 adminRouter.post('/editcategory',uploadCategoryImage.single('categoryImage'),adminController.editCategory);
@@ -125,13 +125,13 @@ adminRouter.get('/brandstatusupdate:id',adminController.brandStatusUpdate);
 
 
 //*** Banner Routing ***
-adminRouter.get('/addbanner',adminController.loadAddBannerPage);
+adminRouter.get('/addbanner', auth.isAdminLogin,  adminController.loadAddBannerPage);
 
 
 
 //*** Coupon Routing */
-adminRouter.get('/couponlist',adminController.loadCouponList);
-adminRouter.get('/addcoupon',adminController.loadAddCouponPage);
+adminRouter.get('/couponlist', auth.isAdminLogin, adminController.loadCouponList);
+adminRouter.get('/addcoupon', auth.isAdminLogin, adminController.loadAddCouponPage);
 
 
 
