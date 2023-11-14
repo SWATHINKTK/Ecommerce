@@ -78,6 +78,11 @@ userRouter.post('/updateaddress',auth.isUserLogin,userController.updateAddressDa
 userRouter.post('/editPassword',auth.isUserLogin,userController.editPassword);
 
 
+// USER WALLET HANDLING 
+userRouter.get('/viewWallet', auth.isUserLogin, userController.loadWalletPage);
+userRouter.post('/walletAmount', auth.isUserLogin, userController.addWalletAmount)
+
+
 userRouter.get('/error500',userController.load500ErrorPage);
 userRouter.get('/error404',userController.load404ErrorPage);  
 // userRouter.get('/*',userController.load500ErrorPage);

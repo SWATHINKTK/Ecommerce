@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Poppins&family=Sometype+Mono:wght@600&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600&display=swap');
 /******************************************************************
   Template Name: Male Fashion
   Description: Male Fashion - ecommerce teplate
@@ -1947,7 +1948,7 @@ form .form-control:focus {
 .Profile-sidebar{
 	background-color:#f9f9f9d5; 
 	box-shadow: 0 0 9px -4px #000000;
-	margin-left: 8rem;
+	/* margin-left: 8rem; */
 }
 
 .order-right-side{
@@ -1974,7 +1975,7 @@ form .form-control:focus {
 	box-shadow: 0 0 7px -2px #171616;
 }
 
-
+/* Remove */
 /* Order Progress */
 .gradient-custom-2 {
 	/* fallback for old browsers */
@@ -2080,6 +2081,48 @@ form .form-control:focus {
     border-radius: 50%; /* Make it a circle */
     font-weight: bold;
 }
+
+.wallet-card{
+	/* max-width: 21rem;  */
+	width: 100%;
+	margin-right: 16px;
+	border: 2px solid #e6e4e4;
+	box-shadow: 0 0 5px -2px #7f7f7f; 
+	border-radius: 13px;
+	
+}
+
+
+.wallet-card h5{
+	font-family: 'Chakra Petch', sans-serif;
+	font-weight: 800;
+	letter-spacing: 2px;
+}
+
+.wallet-card h3{
+	font-family: 'Chakra Petch', sans-serif;
+	font-weight: 800;
+	letter-spacing: 2px;
+}
+
+.wallet-card input{
+	width: 35%;
+	font-family: 'Chakra Petch', sans-serif;
+	border-radius: 6px;
+	font-weight: 800;
+}
+
+/* 
+@media only screen and (max-width: 517px) {
+	.wallet-card-mainDiv{
+		flex-direction: column;
+	}
+	.wallet-card{
+		width: 100%;
+		margin: 0;
+	}
+} */
+
 
 
 

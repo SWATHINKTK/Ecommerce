@@ -5,6 +5,7 @@ const orderData = require('../models/orderModel');
 const cartData = require('../models/cartModel');
 const mongoose = require('mongoose');
 const Razorpay = require('razorpay');
+const crypto = require('crypto');
 
 // PAYMENT INTEGRATION KEY SETUP
 var instance = new Razorpay({
@@ -100,8 +101,9 @@ const PlaceOrder = async(req, res, next)=>{
                     productquantity:data.productQuantity
                 }
                 totalPrice = data.productQuantity * data.ProductPrice;
+
             }else{
-                res.json({status:false, singleStock:false, quantity:productData.stock});
+                res.json({StockStatus:false, singleStock:false, quantity:productData.stock});
                 return;
             }
 
@@ -149,18 +151,20 @@ const PlaceOrder = async(req, res, next)=>{
          
             if(stockUpdate){
                 
-                if(orderSucess.paymentMethod == 'COD')
-                    res.json({status:true,orderId:orderSucess._id});
-                else if(orderSucess.paymentMethod == 'UPI'){
+                if(orderSucess.paymentMethod == 'COD'){
+                    res.json({CODSuccess:true,orderId:orderSucess._id});
+                }
+                else if(orderSucess.paymentMethod == 'OnlinePayment'){
+
                     var options = {
-                        amount: orderSucess.totalAmount,  // amount in the smallest currency unit
+                        amount: orderSucess.totalAmount * 100 ,  // amount in the smallest currency unit
                         currency: "INR",
                         receipt: orderSucess._id
                       };
                       instance.orders.create(options, function(err, order) {
-                        console.log(order);
-                        res.json({sucess:true,order:order})
+                            res.json({sucess:true,order:order})
                       });
+
                 }
             }else{
                 res.json({status:false});
@@ -193,8 +197,24 @@ const PlaceOrder = async(req, res, next)=>{
     }
 }
 
+
+// PAYMENT VERIFICATION IN RAZORPAY
 const paymentVerification  = async(req,res) => {
+    
+    const payment = req.body.Payment;
+    const order = req.body.orderReceipt;
     console.log(req.body)
+    let hmac = crypto.createHmac('sha256', process.env.PAYMENT_INTEGRATION_KEY_SECRET);
+    hmac.update(payment.razorpay_order_id+"|"+payment.razorpay_payment_id);
+    hmac = hmac.digest('hex');
+    if(hmac == payment.razorpay_signature){
+
+        const updatePaymentStatus = await orderData.updateOne({_id:order.receipt},{$set:{paymentStatus:'Paid'}});
+        res.json({onlinePaymentStaus:true,orderId:order.receipt});
+
+    }else{
+        console.log('failed')
+    }
 }
 
 

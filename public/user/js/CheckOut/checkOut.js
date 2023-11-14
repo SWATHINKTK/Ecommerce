@@ -186,15 +186,15 @@ if(placeOrder){
 
         const responseData = await response.json();
 
-        if(responseData.status){
-            window.location.href = `/api/orderSucesss?orderId=${responseData.orderId}`;
-        }else if(responseData.sucess){
+        if(responseData.CODSuccess){
 
-            // console.log(responseData.order)
+            window.location.href = `/api/orderSucesss?orderId=${responseData.orderId}`;
+
+        }else if(responseData.sucess){
 
             razorpayPayment(responseData.order)
            
-        }else if(!responseData.status && !responseData.singleStock){
+        }else if(!responseData.StockStatus && !responseData.singleStock){
             Swal.fire({
                 position:'bottom',
                 html: `${responseData.quantity} Product is Left`,
@@ -209,9 +209,6 @@ if(placeOrder){
 
 
 function razorpayPayment(order){
-    console.log(order.amount)
-    const amount = parseInt(order.amount)*100;
-    alert(amount)
     var options = {
         "key": "rzp_test_ydy5yr6ieKyEj4", // Enter the Key ID generated from the Dashboard
         "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
@@ -221,11 +218,9 @@ function razorpayPayment(order){
         "image": "https://example.com/your_logo",
         "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
         "handler": function (response){
-            alert(response.razorpay_payment_id);
-            alert(response.razorpay_order_id);
-            alert(response.razorpay_signature)
 
             onlinePaymentSucess(response,order)
+
         },
         "prefill": {
             "name": "Gaurav Kumar",
@@ -240,6 +235,15 @@ function razorpayPayment(order){
         }
     };
     var rzp1 = new Razorpay(options);
+//     rzp1.on('payment.failed', function (response){
+//         alert(response.error.code);
+//         alert(response.error.description);
+//         alert(response.error.source);
+//         alert(response.error.step);
+//         alert(response.error.reason);
+//         alert(response.error.metadata.order_id);
+//         alert(response.error.metadata.payment_id);
+// });
     rzp1.open();
 }
 
@@ -250,13 +254,19 @@ async function onlinePaymentSucess(response,order){
     const requestOption = {
         method:'POST',
         body:JSON.stringify({
-            orderData:order,
+            orderReceipt:order,
             Payment:response
         }),
         headers:{'Content-Type':'application/json'}
     }
 
     const paymentResponse = await fetch(url,requestOption);
+
+    const paymentResponseData = await paymentResponse.json();
+
+    if(paymentResponseData.onlinePaymentStaus){
+        window.location.href = `/api/orderSucesss?orderId=${paymentResponseData.orderId}`;
+    }
 }
 
 

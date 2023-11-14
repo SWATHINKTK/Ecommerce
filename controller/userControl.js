@@ -746,7 +746,22 @@ const editPassword = async(req, res, next)=>{
 
 }
 
+const loadWalletPage = (req, res, next) => {
+    try {
+        const checkLogin = req.session.userId ? true : false;
+        res.render('user/wallet',{ title:'Wallet' ,login:checkLogin ,user: true})
+    } catch (error) {
+        next(error)
+    }
+}
 
+const addWalletAmount = (req, res, next) => {
+    try {
+        const amount = req.body.amout;
+    } catch (error) {
+        next(error);
+    }
+}
 
 
 /* =============================================== ERROR HANDLING PAGES ==================================================== */
@@ -790,6 +805,8 @@ module.exports = {
     loadSpecificCategoryProducts,
     loadProductDetailPage,
     editUserInformations,
+    loadWalletPage,
+    addWalletAmount,
     loadUserProfile,
     loadAddressForm,
     load500ErrorPage,

@@ -15,8 +15,8 @@
         Preloader
     --------------------*/
     $(window).on('load', function () {
-        $(".loader").fadeOut();
-        $("#preloder").delay(10).fadeOut("slow");
+        // $(".loader").fadeOut();
+        $("#preloder").delay(0).fadeOut("fast");
 
         /*------------------
             Gallery filter

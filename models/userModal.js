@@ -20,6 +20,37 @@ const userRegistration = moongose.Schema({
     cartProducts : {
         type : moongose.Schema.Types.ObjectId
     },
+    walletAmount : {
+        type : Number,
+        default : 0,
+        require : true
+    },
+    walletTransaction : [{
+
+        transactionId : {
+            type : String,
+            require : true
+        },
+        transactionType: { 
+            type: String, 
+            enum: ['Deposit', 'Withdrawal', 'Purchase', 'Refund'], 
+            required: true 
+        },
+        amount: { 
+            type: Number, 
+            required: true 
+        },
+        Date : {
+            type : Date,
+            default: Date.now 
+        },
+        description : {
+            type : String
+        },
+        orderId : {
+            type : String,
+        },
+    }],
     _isVerified : {
         type : Boolean,
         require : true
