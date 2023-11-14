@@ -13,6 +13,7 @@ const { userInfo } = require('os');
 const { error } = require('console');
 const { chownSync } = require('fs');
 const { threadId } = require('worker_threads');
+const mongoose = require('mongoose');
 
 
 // PAYMENT INTEGRATION KEY SETUP
@@ -753,10 +754,33 @@ const editPassword = async(req, res, next)=>{
 
 }
 
-const loadWalletPage = (req, res, next) => {
+const loadWalletPage = async(req, res, next) => {
     try {
         const checkLogin = req.session.userId ? true : false;
-        res.render('user/wallet',{ title:'Wallet' ,login:checkLogin ,user: true})
+
+        const userId = req.session.userId;
+
+        const walletData = await userData.aggregate([
+            {
+                $match: {_id:new mongoose.Types.ObjectId(userId)}
+            },
+            {
+                $project:{
+                    _id:0,
+                    walletAmount:1,
+                    walletTransaction:1
+                }
+            }
+        ])
+
+        // if(walletData){
+
+            res.render('user/wallet',{ title:'Wallet' ,login:checkLogin ,user: true, dataWallet:walletData});
+
+        // }else{
+            
+        // }
+
     } catch (error) {
         next(error)
     }
@@ -797,6 +821,7 @@ const walletPaymentVerification = async(req, res, next) => {
     const transaction = {
         transactionId:data.Payment.razorpay_payment_id,
         transactionType:'Debit',
+        description:'Amount Added',
         amount:data.walletReceipt.amount/100,
     }
 

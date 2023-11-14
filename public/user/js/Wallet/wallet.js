@@ -1,3 +1,11 @@
+const addAmountDivShowBtn = document.getElementById('AddAmount-DivBtn')
+addAmountDivShowBtn.addEventListener('click',(event) => {
+    event.preventDefault();
+
+    document.getElementById('AddAmountWallet-Div').style.display = 'block';
+
+})
+
 const walletAmountAdd = document.getElementById('walletAmountAddBtn');
 
 if(walletAmountAdd){
@@ -114,7 +122,7 @@ async function walletPaymentSucess(response,data){
        failed.innerHTML = "Wallet Amount Adding Failed";
 
        setTimeout(() => {
-        failed.innerHTML = "";
+            failed.innerHTML = "";
        }, 2000);
     }
 }
