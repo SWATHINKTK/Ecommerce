@@ -62,6 +62,9 @@
                     <div class="right-side p-4 order-right-side pl-5">
                         <h2 class="text-center font-weight-bold"> Wallet </h2>
 
+                        <div class="alert alert-danger mt-2 font-weight-bold text-center" role="alert" id="walletPaymentFailed" style="display: none;">
+                          </div>
+
                         <div class="wallet-card-mainDiv">
                             <div class="card wallet-card mt-5">
                                 <div class="card-body">
@@ -80,9 +83,10 @@
                                         <!-- <i class="fa-solid fa-wallet ml-auto"></i>       -->
                                     </div>
                                     <!-- <h6 class="card-subtitle mb-2 text-muted"><%= locals.username %></h6> -->
-                                    <p class="mt-3 font-weight-bold text-muted">Enter Amount</p>
-                                    <input type="number" min="1" max="15000" value=""><br>
-                                    <button class="mt-2 btn btn-warning font-weight-bold btn-sm" >Add Amount</button>
+                                    <p class="mt-3 mb-0 font-weight-bold text-muted">Enter Amount</p>
+                                    <input type="number"  min="1" max="15000" value="" id="walletAmountEnter"><br>
+                                    <span class="text-danger ml-2 my-0" id="walletValidate"></span><br>
+                                    <button class=" btn btn-warning font-weight-bold btn-sm" id="walletAmountAddBtn">Add Amount</button>
                                 </div>
                             </div>
                             <h4 class="font-weight-bold mt-3">Wallet Transactions</h4>

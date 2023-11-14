@@ -33,7 +33,7 @@ const userRegistration = moongose.Schema({
         },
         transactionType: { 
             type: String, 
-            enum: ['Deposit', 'Withdrawal', 'Purchase', 'Refund'], 
+            // enum: ['Deposit', 'Withdrawal', 'Purchase', 'Refund'], 
             required: true 
         },
         amount: { 

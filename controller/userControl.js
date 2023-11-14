@@ -8,11 +8,18 @@ const { category } = require('../models/categoryModel');
 const cartData = require('../models/cartModel');
 const wishlistData = require('../models/wishlistModel');
 const addressInfo = require('../models/addressModel');
+const Razorpay = require('razorpay');
 const { userInfo } = require('os');
 const { error } = require('console');
 const { chownSync } = require('fs');
 const { threadId } = require('worker_threads');
 
+
+// PAYMENT INTEGRATION KEY SETUP
+var instance = new Razorpay({
+    key_id: process.env.PAYMENT_INTEGRATION_KEY_ID,
+    key_secret: process.env.PAYMENT_INTEGRATION_KEY_SECRET,
+  });
 
 
 
@@ -755,11 +762,52 @@ const loadWalletPage = (req, res, next) => {
     }
 }
 
-const addWalletAmount = (req, res, next) => {
+
+
+const addWalletAmount = async(req, res, next) => {
     try {
-        const amount = req.body.amout;
+        const amount = req.body.amount;
+        console.log(amount)
+
+        const customID = await generateRandomOtp(8);
+        console.log('Custom Alphabet ID:', customID);
+
+        // Razor Pay Payment Instance Generation
+            var options = {
+                amount: parseInt(amount* 100) ,  // amount in the smallest currency unit
+                currency: "INR",
+                receipt: customID.toString('hex')
+            };
+            instance.orders.create(options, function(err, order) {
+                    res.json({sucess:true,data:order});
+            });
+
     } catch (error) {
         next(error);
+    }
+}
+
+
+const walletPaymentVerification = async(req, res, next) => {
+
+    const data = req.body;
+    
+    const userId = req.session.userId;
+
+    const transaction = {
+        transactionId:data.Payment.razorpay_payment_id,
+        transactionType:'Debit',
+        amount:data.walletReceipt.amount/100,
+    }
+
+    const updateWalletAmount = await userData.updateOne({_id:userId},{ $inc: { walletAmount: data.walletReceipt.amount/100 } },{ upsert: true });
+
+    const updateWalletTransaction = await userData.updateOne({_id:userId},{ $push: { walletTransaction: transaction } },{ upsert: true });
+    
+    if(updateWalletAmount && updateWalletTransaction){
+        res.json({sucess:true})
+    }else{
+        res.json({sucess:false})
     }
 }
 
@@ -807,6 +855,7 @@ module.exports = {
     editUserInformations,
     loadWalletPage,
     addWalletAmount,
+    walletPaymentVerification,
     loadUserProfile,
     loadAddressForm,
     load500ErrorPage,

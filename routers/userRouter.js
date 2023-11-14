@@ -80,7 +80,8 @@ userRouter.post('/editPassword',auth.isUserLogin,userController.editPassword);
 
 // USER WALLET HANDLING 
 userRouter.get('/viewWallet', auth.isUserLogin, userController.loadWalletPage);
-userRouter.post('/walletAmount', auth.isUserLogin, userController.addWalletAmount)
+userRouter.post('/walletAmount', auth.isUserLogin, userController.addWalletAmount);
+userRouter.post('/walletPaymentVerify', auth.isUserLogin, userController.walletPaymentVerification);
 
 
 userRouter.get('/error500',userController.load500ErrorPage);
