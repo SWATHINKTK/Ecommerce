@@ -1,11 +1,12 @@
 const orderData = require('../models/orderModel');
-const {productInfo} = require('../models/productModel');
+const { productInfo } = require('../models/productModel');
+const { userData } = require('../models/userModal');
 
 const mongoose = require('mongoose');
 
 
 // ****** Load All Orders in View Order Page ******
-const loadOrderListViewUserSide = async(req, res, next)=>{
+const loadOrderListViewUserSide = async (req, res, next) => {
     try {
         const checkLogin = req.session.userId ? true : false;
 
@@ -15,27 +16,27 @@ const loadOrderListViewUserSide = async(req, res, next)=>{
         // Find the all order details and view on order page
         const order = await orderData.aggregate([
             {
-                $unwind:"$productInforamtion"
+                $unwind: "$productInforamtion"
             },
             {
                 $lookup: {
-                    from: 'products', 
-                    localField: 'productInforamtion.productId', 
-                    foreignField: '_id', 
-                    as: 'productData' 
+                    from: 'products',
+                    localField: 'productInforamtion.productId',
+                    foreignField: '_id',
+                    as: 'productData'
                 }
 
             },
             {
-                $sort:{_id:-1}
+                $sort: { _id: -1 }
             }
         ]);
-        
-        if(orderData){
-            res.render('user/orderDetails',{ title:'View Order' ,login:checkLogin ,user: true, orderData:order});
-        }else{
+
+        if (orderData) {
+            res.render('user/orderDetails', { title: 'View Order', login: checkLogin, user: true, orderData: order });
+        } else {
             throw new Error('Data Not Found');
-        }  
+        }
     } catch (error) {
         next(error);
     }
@@ -44,41 +45,41 @@ const loadOrderListViewUserSide = async(req, res, next)=>{
 
 
 // ***** Load ordered Product More Details ****
-const loadOrderProgressInUserSide = async(req, res, next) => {
+const loadOrderProgressInUserSide = async (req, res, next) => {
     try {
         const checkLogin = req.session.userId ? true : false;
 
         const orderId = req.query.id;
         const productId = req.query.productId;
-    
+
         // Aggregate to retrieve the details of that order 
         const order = await orderData.aggregate([
             {
                 $match: {
                     _id: new mongoose.Types.ObjectId(orderId),
-                  },
+                },
             },
             {
-                $unwind:"$productInforamtion"
-            },  
+                $unwind: "$productInforamtion"
+            },
             {
                 $lookup: {
-                    from: 'products', 
-                    localField: 'productInforamtion.productId', 
-                    foreignField: '_id', 
-                    as: 'productData' 
+                    from: 'products',
+                    localField: 'productInforamtion.productId',
+                    foreignField: '_id',
+                    as: 'productData'
                 }
-    
+
             },
             {
                 $match: {
-                    'productInforamtion.productId':new mongoose.Types.ObjectId(productId)
-                  },
+                    'productInforamtion.productId': new mongoose.Types.ObjectId(productId)
+                },
             }
         ]);
-        if(orderData){
-            res.render('user/orderProgress',{ title:'View Order' ,login:checkLogin ,user: true, orderData:order});
-        }else{
+        if (orderData) {
+            res.render('user/orderProgress', { title: 'View Order', login: checkLogin, user: true, orderData: order });
+        } else {
             throw new Error('Data is Not Found');
         }
     } catch (error) {
@@ -89,34 +90,69 @@ const loadOrderProgressInUserSide = async(req, res, next) => {
 
 
 // **** CANCEL ORDER IN ADMIN SIDE ****
-const cancelOrder = async(req, res, next) => {
-    
+const cancelOrder = async (req, res, next) => {
+
     try {
         const data = req.body;
 
         const order = await orderData.findById(data.orderId);
 
-        if(order){
+        if (order) {
             const productToUpdate = order.productInforamtion.find(orderProduct => orderProduct.productId.equals(data.productId));
-            console.log(productToUpdate)
-            
+
             // *** ORDER CANCELED STATUS CHANGE ***
-
             productToUpdate.orderStatus = 'Canceled';
-            const updateStock = await productInfo.updateOne({_id:data.productId},{$inc:{stock:data.qunatity}});
-            
-            if(updateStock){
-                const updateStatus = await order.save();
+            const updateStock = await productInfo.updateOne({ _id: data.productId }, { $inc: { stock: data.qunatity } });
 
-                if(updateStatus){
+            // Check Cancel Order Product Inventory Managed Or Not
+            if (updateStock) {
 
-                    res.json({status:true});
+                let updateStatus;
+                if (order.paymentStatus == 'Paid') {
 
-                }else{
-                    res.json({status:false});
+                    // Create Unique TransactionId
+                    const nanoidModule = await import('nanoid');
+                    nanoid = nanoidModule.nanoid;
+                    const uniqueID = nanoid();
+
+                    // Creating The Tranction History Store Object
+                    const transaction = {
+                        transactionId: uniqueID,
+                        transactionType: 'Debit',
+                        description: 'Product Cancel',
+                        amount: order.totalAmount,
+                        orderId: order._id
+                    }
+
+
+                    const returnAmount = await userData.updateOne({ _id: order.userId }, { $inc: { walletAmount: order.totalAmount } }, { upsert: true });
+                    const updateWalletTransaction = await userData.updateOne({ _id: order.userId }, { $push: { walletTransaction: transaction } }, { upsert: true });
+
+                    // Checking Wallet Update Successfull
+                    if (returnAmount && updateWalletTransaction) {
+
+                        updateStatus = await order.save();
+
+                    } else {
+
+                        return;
+                    }
+
+                } else {
+
+                    updateStatus = await order.save();
+                }
+
+
+                if (updateStatus) {
+
+                    res.json({ status: true });
+
+                } else {
+                    res.json({ status: false });
                 }
             }
-        }else{
+        } else {
             throw new Error('Data is Not Found');
         }
     } catch (error) {
@@ -128,7 +164,7 @@ const cancelOrder = async(req, res, next) => {
 
 
 // *** ORDER MANAGEMENT ADMIN SIDE ***
-const loadOrderListAdminSide = async(req, res, next) => {
+const loadOrderListAdminSide = async (req, res, next) => {
     try {
         const order = await orderData.aggregate([
             // {
@@ -136,21 +172,21 @@ const loadOrderListAdminSide = async(req, res, next) => {
             // },
             {
                 $lookup: {
-                    from: 'products', 
-                    localField: 'productInforamtion.productId', 
-                    foreignField: '_id', 
-                    as: 'productData' 
+                    from: 'products',
+                    localField: 'productInforamtion.productId',
+                    foreignField: '_id',
+                    as: 'productData'
                 }
-    
+
             },
             {
-                $sort:{_id:-1}
+                $sort: { _id: -1 }
             }
         ]);
-        
-        if(order){
-            res.render('admin/viewOrders', { admin: true, title:'Order',  orderData:order});
-        }else{
+
+        if (order) {
+            res.render('admin/viewOrders', { admin: true, title: 'Order', orderData: order });
+        } else {
             throw new Error('Data is Not Found');
         }
     } catch (error) {
@@ -162,34 +198,34 @@ const loadOrderListAdminSide = async(req, res, next) => {
 
 
 // **** LOAD ORDER MANAGEMENT PAGE VIEW ADMIN SIDE *****
-const loadOrderManagePageAdminSide = async(req, res, next)=>{
+const loadOrderManagePageAdminSide = async (req, res, next) => {
 
     try {
         const id = req.params.id;
-        
+
         const order = await orderData.aggregate([
             {
                 $match: {
-                    _id: new mongoose.Types.ObjectId(id) 
+                    _id: new mongoose.Types.ObjectId(id)
                 },
-            },  
+            },
             {
-                $unwind:"$productInforamtion"
+                $unwind: "$productInforamtion"
             },
             {
                 $lookup: {
-                    from: 'products', 
-                    localField: 'productInforamtion.productId', 
-                    foreignField: '_id', 
-                    as: 'productData' 
+                    from: 'products',
+                    localField: 'productInforamtion.productId',
+                    foreignField: '_id',
+                    as: 'productData'
                 }
-    
+
             }
         ]);
 
-        if(orderData){
-            res.render('admin/manageOrder', { admin: true, title:'Order', orderData:order});
-        }else{
+        if (orderData) {
+            res.render('admin/manageOrder', { admin: true, title: 'Order', orderData: order });
+        } else {
             throw new Error('Data is Not Found');
         }
 
@@ -201,90 +237,124 @@ const loadOrderManagePageAdminSide = async(req, res, next)=>{
 
 
 // UPDATE STATUS OF THE ORDERED PRODUCT ******
-const updateOrderStatus = async(req, res, next) => {
+const updateOrderStatus = async (req, res, next) => {
     try {
         const data = req.body;
 
         const order = await orderData.findById(data.orderId);
 
-        if(order){
+        if (order) {
             const productToUpdate = order.productInforamtion.find(orderProduct => orderProduct.productId.equals(data.productId))
-            
+
             // *** ORDER CANCELED STATUS CHANGE ***
-            if(data.orderStatus === 'Canceled'){
+            if (data.orderStatus === 'Canceled') {
 
                 productToUpdate.orderStatus = data.orderStatus;
-                const updateStock = await productInfo.updateOne({_id:data.productId},{$inc:{stock:data.productQty}});
-                
-                if(updateStock){
-                    const updateStatus = await order.save();
+                const updateStock = await productInfo.updateOne({ _id: data.productId }, { $inc: { stock: data.productQty } });
 
-                    if(updateStatus){
 
-                        res.json({status:true});
+                if (updateStock) {
 
-                    }else{
-                        res.json({status:false});
+                    let updateStatus;
+                    if (order.paymentStatus == 'Paid') {
+
+                        const nanoidModule = await import('nanoid');
+                        nanoid = nanoidModule.nanoid;
+
+                        const uniqueID = nanoid();
+
+                        const transaction = {
+                            transactionId: uniqueID,
+                            transactionType: 'Debit',
+                            description: 'Product Cancel',
+                            amount: order.totalAmount,
+                            orderId: order._id
+                        }
+                        console.log(transaction)
+
+                        const returnAmount = await userData.updateOne({ _id: order.userId }, { $inc: { walletAmount: order.totalAmount } }, { upsert: true });
+                        const updateWalletTransaction = await userData.updateOne({ _id: order.userId }, { $push: { walletTransaction: transaction } }, { upsert: true });
+
+                        if (returnAmount && updateWalletTransaction) {
+                            updateStatus = await order.save();
+                        } else {
+                            return;
+                        }
+
+                    } else {
+
+                        updateStatus = await order.save();
+                    }
+
+
+
+                    if (updateStatus) {
+
+                        res.json({ status: true });
+
+                    } else {
+                        res.json({ status: false });
                     }
                 }
             }
 
 
             // **** ORDER SHIPPED STATUS CHANGE ****
-            if(data.orderStatus === 'Shipped'){
+            if (data.orderStatus === 'Shipped') {
 
                 productToUpdate.orderStatus = data.orderStatus;
 
                 const updateStatus = await order.save();
 
-                    if(updateStatus){
+                if (updateStatus) {
 
-                        res.json({status:true});
+                    res.json({ status: true });
 
-                    }else{
-                        res.json({status:false});
-                    }
+                } else {
+                    res.json({ status: false });
+                }
             }
 
 
             // **** ORDER DELIVERED STATUS CHANGE ****
-            if(data.orderStatus === 'Delivered'){
+            if (data.orderStatus === 'Delivered') {
 
                 productToUpdate.orderStatus = data.orderStatus;
+                order.paymentStatus = 'Paid'
 
                 const updateStatus = await order.save();
 
-                    if(updateStatus){
+                if (updateStatus) {
 
-                        res.json({status:true});
+                    res.json({ status: true });
 
-                    }else{
-                        res.json({status:false});
-                    }
+                } else {
+                    res.json({ status: false });
+                }
             }
 
 
             // **** ORDER PLACED STATUS CHANGE ****
-            if(data.orderStatus === 'Placed'){
+            if (data.orderStatus === 'Placed') {
 
                 productToUpdate.orderStatus = data.orderStatus;
 
                 const updateStatus = await order.save();
 
-                    if(updateStatus){
+                if (updateStatus) {
 
-                        res.json({status:true});
+                    res.json({ status: true });
 
-                    }else{
-                        res.json({status:false});
-                    }
+                } else {
+                    res.json({ status: false });
+                }
             }
 
 
-        }else{
+        } else {
             throw new Error('This Order Data is Not Found');
         }
-        
+
     } catch (error) {
         next(error)
     }

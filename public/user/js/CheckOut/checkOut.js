@@ -190,7 +190,19 @@ if(placeOrder){
 
             window.location.href = `/api/orderSucesss?orderId=${responseData.orderId}`;
 
-        }else if(responseData.sucess){
+        }else if(responseData.walletPayment){
+
+            window.location.href = `/api/orderSucesss?orderId=${responseData.orderId}`;
+
+        }else if(responseData.walletInsufficient){
+            Swal.fire({
+                position:'bottom',
+                html: `Wallet Amount is Insufficient`,
+                showConfirmButton: false, 
+                timer: 1500,
+            });
+
+        }else if(responseData.OnlinePayment){
 
             razorpayPayment(responseData.order)
            
@@ -208,6 +220,8 @@ if(placeOrder){
 }
 
 
+
+// RazorPay Payment GateWay Page View
 function razorpayPayment(order){
     var options = {
         "key": "rzp_test_ydy5yr6ieKyEj4", // Enter the Key ID generated from the Dashboard
@@ -315,7 +329,22 @@ if(cartPlaceOrder){
 
         const responseData = await response.json();
 
-        if(responseData.status){
+        if(responseData.CODSuccess){
+
+            window.location.href = `/api/orderSucesss?orderId=${responseData.orderId}`;
+
+        }else if(responseData.OnlinePayment){
+
+            razorpayPayment(responseData.order)
+           
+        }else if(responseData.walletInsufficient){
+            Swal.fire({
+                position:'bottom',
+                html: `Wallet Amount is Insufficient`,
+                showConfirmButton: false, 
+                timer: 1500,
+            });
+        }else if(responseData.walletPayment){
 
             window.location.href = `/api/orderSucesss?orderId=${responseData.orderId}`;
 

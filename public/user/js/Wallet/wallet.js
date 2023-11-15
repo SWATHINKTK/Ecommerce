@@ -1,8 +1,15 @@
-const addAmountDivShowBtn = document.getElementById('AddAmount-DivBtn')
+const addAmountDivShowBtn = document.getElementById('AddAmount-DivBtn');
+let walletAddAmountBtnStatus = false;
 addAmountDivShowBtn.addEventListener('click',(event) => {
     event.preventDefault();
 
-    document.getElementById('AddAmountWallet-Div').style.display = 'block';
+    if(walletAddAmountBtnStatus){
+        document.getElementById('AddAmountWallet-Div').style.display = 'none';
+        walletAddAmountBtnStatus = false;
+    }else{
+        document.getElementById('AddAmountWallet-Div').style.display = 'block';
+        walletAddAmountBtnStatus = true;
+    }
 
 })
 
@@ -16,11 +23,18 @@ if(walletAmountAdd){
 
         const walletValidate = document.getElementById('walletValidate');
 
+        const currentAmount = walletValidate.getAttribute('data-wallet-Amount');
+
+
         walletValidate.innerHTML = '';
 
         if(walletAmount > 15000){
 
             walletValidate.innerHTML = '* at a time only 15000 add To Wallet';
+
+        }else if((currentAmount + walletAmount) > 50000){
+            
+            walletValidate.innerHTML = '* wallet keep only 50000 Rs';
 
         }else if(walletAmount <= 0){
 

@@ -304,14 +304,15 @@ const verifyUser = async(req, res, next) => {
         const password = req.body.password;
         
         const usernameExist = await userData.findOne({email:username});
-
-        if(usernameExist.block){
-
-            res.json({'status':false,'message':'&#10060; your account is blocked'});
-
-        }else if(!usernameExist){
+        console.log(usernameExist)
+        
+        if(!usernameExist){
 
             res.json({'status':false,'message':'&#10060; check your email address' });
+
+        }else if(usernameExist.block){
+
+            res.json({'status':false,'message':'&#10060; your account is blocked'});
 
         }else{
 
@@ -773,13 +774,13 @@ const loadWalletPage = async(req, res, next) => {
             }
         ])
 
-        // if(walletData){
+        if(walletData){
 
             res.render('user/wallet',{ title:'Wallet' ,login:checkLogin ,user: true, dataWallet:walletData});
 
-        // }else{
-            
-        // }
+        }else{
+            throw new Error('server Error');
+        }
 
     } catch (error) {
         next(error)

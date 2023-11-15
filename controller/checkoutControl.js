@@ -72,16 +72,6 @@ const PlaceOrder = async(req, res, next)=>{
         }
         // **** End Of The Address Section *****
 
-
-
-        // *** Payment Status Setting Section ****
-        let paymentStatus;
-        if(data.PaymentMethod == 'COD'){
-            paymentStatus = 'Pending';
-        }else{
-            paymentStatus = 'Processing';
-        }
-        // **** End Of the Payment Status Section ****
         
 
         // **** Product Data Storing Section Else Part Cart Order**** 
@@ -133,6 +123,33 @@ const PlaceOrder = async(req, res, next)=>{
         // **** End Of The Product Data Storing *****
 
 
+        // *** Payment Status Setting Section ****
+        let paymentStatus;
+        if(data.PaymentMethod == 'COD'){
+            
+            paymentStatus = 'Pending';
+
+        }else if(data.PaymentMethod == 'Wallet'){
+
+            const userWallet = await userData.findOne({_id:userId});
+
+            if(userWallet.walletAmount < products.productTotalAmount){
+                console.log('Wallet')
+                res.json({walletInsufficient:true});
+                return;
+            }else{
+                paymentStatus = 'Pending';
+            }
+
+        }else{
+
+            paymentStatus = 'Processing';
+
+        }
+        // **** End Of the Payment Status Section ****
+
+
+
         // **** Order DataBase Store  Object Creation ****
         const orderSucess = orderData({
             addressInformation:address,
@@ -156,18 +173,46 @@ const PlaceOrder = async(req, res, next)=>{
                 }
                 else if(orderSucess.paymentMethod == 'OnlinePayment'){
 
+                    // RazorPay Options & CreateRazorPay Instance
                     var options = {
                         amount: orderSucess.totalAmount * 100 ,  // amount in the smallest currency unit
                         currency: "INR",
                         receipt: orderSucess._id
                       };
                       instance.orders.create(options, function(err, order) {
-                            res.json({sucess:true,order:order})
+                            res.json({OnlinePayment:true,order:order})
                       });
 
+                }else if(orderSucess.paymentMethod == 'Wallet'){
+                    
+                    const nanoidModule = await import('nanoid');
+                    nanoid = nanoidModule.nanoid;
+
+                    const uniqueID = nanoid();
+
+                    const transaction = {
+                        transactionId:uniqueID,
+                        transactionType:'Credit',
+                        description:'Product Ordered',
+                        amount:orderSucess.totalAmount,
+                        orderId:orderSucess._id
+                    }
+
+                    const returnAmount = await userData.updateOne({_id:userId},{ $inc: { walletAmount: -orderSucess.totalAmount } },{ upsert: true });
+                    const updateWalletTransaction = await userData.updateOne({_id:userId},{ $push: { walletTransaction: transaction } },{ upsert: true });
+
+                    const updatePaymentStatus = await orderData.updateOne({_id:orderSucess._id},{$set:{paymentStatus:'Paid'}});
+
+                    if(returnAmount && updateWalletTransaction && updatePaymentStatus){
+                        res.json({walletPayment:true,orderId:orderSucess._id});
+                    }else{
+                        res.json({failed:true});
+                    }
+
                 }
+
             }else{
-                res.json({status:false});
+                res.json({failed:true});
             }
         }else{
 
@@ -184,7 +229,48 @@ const PlaceOrder = async(req, res, next)=>{
             
             if(stockUpdate && deleteCart && userCartId){
 
-                res.json({status:true,orderId:orderSucess._id});
+                if(orderSucess.paymentMethod == 'COD'){
+                    res.json({CODSuccess:true,orderId:orderSucess._id});
+                }
+                else if(orderSucess.paymentMethod == 'OnlinePayment'){
+
+                    var options = {
+                        amount: orderSucess.totalAmount * 100 ,  // amount in the smallest currency unit
+                        currency: "INR",
+                        receipt: orderSucess._id
+                      };
+                      instance.orders.create(options, function(err, order) {
+                            res.json({OnlinePayment:true,order:order})
+                      });
+
+                }else if(orderSucess.paymentMethod == 'Wallet'){
+                    
+                    const nanoidModule = await import('nanoid');
+                    nanoid = nanoidModule.nanoid;
+
+                    const uniqueID = nanoid();
+
+                    const transaction = {
+                        transactionId:uniqueID,
+                        transactionType:'Credit',
+                        description:'Product Ordered',
+                        amount:orderSucess.totalAmount,
+                        orderId:orderSucess._id
+                    }
+
+                    const returnAmount = await userData.updateOne({_id:userId},{ $inc: { walletAmount: -orderSucess.totalAmount } },{ upsert: true });
+                    const updateWalletTransaction = await userData.updateOne({_id:userId},{ $push: { walletTransaction: transaction } },{ upsert: true });
+
+                    const updatePaymentStatus = await orderData.updateOne({_id:orderSucess._id},{$set:{paymentStatus:'Paid'}});
+
+                    if(returnAmount && updateWalletTransaction && updatePaymentStatus){
+                        res.json({walletPayment:true,orderId:orderSucess._id});
+                    }else{
+                        res.json({failed:true});
+                    }
+
+                }
+
             }else{
                 res.json({status:false});
             }

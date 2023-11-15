@@ -1,16 +1,17 @@
 const express = require('express');
 const orderRouter = express();
 const orderController = require('../controller/orderControl');
-const auth = require('../middleware/userAuth');
+const userAuth = require('../middleware/userAuth');
+const adminAuth = require('../middleware/adminAuth')
 
-orderRouter.get('/viewOrder',auth.isUserLogin,orderController.loadOrderListViewUserSide);
-orderRouter.get('/orderDetails',auth.isUserLogin,orderController.loadOrderProgressInUserSide);
-orderRouter.delete('/cancelOrder',auth.isUserLogin,orderController.cancelOrder)
+orderRouter.get('/viewOrder',userAuth.isUserLogin, orderController.loadOrderListViewUserSide);
+orderRouter.get('/orderDetails',userAuth.isUserLogin, orderController.loadOrderProgressInUserSide);
+orderRouter.delete('/cancelOrder',userAuth.isUserLogin, orderController.cancelOrder)
 
 
 //*** Order Routing Admin Side ***
-orderRouter.get('/orderlist',orderController.loadOrderListAdminSide);
-orderRouter.get('/orderManage:id',orderController.loadOrderManagePageAdminSide);
-orderRouter.patch('/updateStatus',orderController.updateOrderStatus);
+orderRouter.get('/orderlist', adminAuth.isAdminLogin, orderController.loadOrderListAdminSide);
+orderRouter.get('/orderManage:id', adminAuth.isAdminLogin, orderController.loadOrderManagePageAdminSide);
+orderRouter.patch('/updateStatus', adminAuth.isAdminLogin, orderController.updateOrderStatus);
 
 module.exports = orderRouter;
