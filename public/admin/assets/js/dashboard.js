@@ -63,9 +63,9 @@
     }
     if ($("#transaction-history").length) {
       var areaData = {
-        labels: ["Paypal", "Stripe","Cash"],
+        labels: ["Online Payment", "Cash On Delivery", "Wallet"],
         datasets: [{
-            data: [55, 25, 20],
+            data: [10, 80, 10],
             backgroundColor: [
               "#111111","#00d25b","#ffab00"
             ]
@@ -100,9 +100,9 @@
           ctx.font = fontSize + "rem sans-serif";
           ctx.textAlign = 'left';
           ctx.textBaseline = "middle";
-          ctx.fillStyle = "#ffffff";
+          ctx.fillStyle = "#000";
       
-          var text = "$1200", 
+          var text = "$4000", 
               textX = Math.round((width - ctx.measureText(text).width) / 2),
               textY = height / 2.4;
       

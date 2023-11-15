@@ -77,8 +77,13 @@ const loadOrderProgressInUserSide = async (req, res, next) => {
                 },
             }
         ]);
+
+        const returnPolicy = new Date() ;
+        returnPolicy.setDate((order[0].updatedAt).getDate() +7 )
+        // console.log(returnPolicy)
+        // console.log(order[0].updatedAt)
         if (orderData) {
-            res.render('user/orderProgress', { title: 'View Order', login: checkLogin, user: true, orderData: order });
+            res.render('user/orderProgress', { title: 'View Order', login: checkLogin, user: true, orderData: order , returnPolicyDate:returnPolicy});
         } else {
             throw new Error('Data is Not Found');
         }
@@ -93,6 +98,7 @@ const loadOrderProgressInUserSide = async (req, res, next) => {
 const cancelOrder = async (req, res, next) => {
 
     try {
+
         const data = req.body;
 
         const order = await orderData.findById(data.orderId);
@@ -100,13 +106,16 @@ const cancelOrder = async (req, res, next) => {
         if (order) {
             const productToUpdate = order.productInforamtion.find(orderProduct => orderProduct.productId.equals(data.productId));
 
+
             // *** ORDER CANCELED STATUS CHANGE ***
             productToUpdate.orderStatus = 'Canceled';
             const updateStock = await productInfo.updateOne({ _id: data.productId }, { $inc: { stock: data.qunatity } });
 
+
             // Check Cancel Order Product Inventory Managed Or Not
             if (updateStock) {
 
+                // ORDER STATUS IS PAID THE RETURN THE AMOUNT TO WALLET
                 let updateStatus;
                 if (order.paymentStatus == 'Paid') {
 
@@ -120,14 +129,15 @@ const cancelOrder = async (req, res, next) => {
                         transactionId: uniqueID,
                         transactionType: 'Debit',
                         description: 'Product Cancel',
-                        amount: order.totalAmount,
+                        amount: productToUpdate.productTotalAmount,
                         orderId: order._id
                     }
 
-
-                    const returnAmount = await userData.updateOne({ _id: order.userId }, { $inc: { walletAmount: order.totalAmount } }, { upsert: true });
+                    // UPDATE USER WALLET DATA
+                    const returnAmount = await userData.updateOne({ _id: order.userId }, { $inc: { walletAmount: productToUpdate.productTotalAmount } }, { upsert: true });
                     const updateWalletTransaction = await userData.updateOne({ _id: order.userId }, { $push: { walletTransaction: transaction } }, { upsert: true });
 
+                    
                     // Checking Wallet Update Successfull
                     if (returnAmount && updateWalletTransaction) {
 
@@ -267,12 +277,12 @@ const updateOrderStatus = async (req, res, next) => {
                             transactionId: uniqueID,
                             transactionType: 'Debit',
                             description: 'Product Cancel',
-                            amount: order.totalAmount,
+                            amount: productToUpdate.productTotalAmount,
                             orderId: order._id
                         }
                         console.log(transaction)
 
-                        const returnAmount = await userData.updateOne({ _id: order.userId }, { $inc: { walletAmount: order.totalAmount } }, { upsert: true });
+                        const returnAmount = await userData.updateOne({ _id: order.userId }, { $inc: { walletAmount: productToUpdate.productTotalAmount } }, { upsert: true });
                         const updateWalletTransaction = await userData.updateOne({ _id: order.userId }, { $push: { walletTransaction: transaction } }, { upsert: true });
 
                         if (returnAmount && updateWalletTransaction) {
@@ -362,12 +372,84 @@ const updateOrderStatus = async (req, res, next) => {
 
 
 
+// ORDER RETURN WORKING CONTROLLER
+const orderReturn = async(req, res, next) => {
+    
+    try {
+        const data = req.body;
+
+        console.log('data',data)
+
+        const order = await orderData.findById(data.orderId);
+
+
+        if (order) {
+            const productToUpdate = order.productInforamtion.find(orderProduct => orderProduct.productId.equals(data.productId));
+
+            // *** ORDER RETURN STATUS CHANGE ***
+            productToUpdate.orderStatus = 'Return';
+            productToUpdate.reason = data.reason;
+            const updateStock = await productInfo.updateOne({ _id: data.productId }, { $inc: { stock: productToUpdate.productquantity } });
+
+            // Check Return Order Product Inventory Managed Or Not
+            if (updateStock) {
+
+                // Create Unique TransactionId
+                const nanoidModule = await import('nanoid');
+                nanoid = nanoidModule.nanoid;
+                const uniqueID = nanoid();
+
+                // Creating The Tranction History Store Object
+                const transaction = {
+                    transactionId: uniqueID,
+                    transactionType: 'Debit',
+                    description: 'Product Return Refund',
+                    amount: productToUpdate.productTotalAmount,
+                    orderId: order._id
+                }
+
+                const returnAmount = await userData.updateOne({ _id: order.userId }, { $inc: { walletAmount: productToUpdate.productTotalAmount } }, { upsert: true });
+                const updateWalletTransaction = await userData.updateOne({ _id: order.userId }, { $push: { walletTransaction: transaction } }, { upsert: true });
+
+
+                // Checking Wallet Update Successfull
+                if (returnAmount && updateWalletTransaction) {
+
+                    const updateStatus = await order.save();
+
+                    if (updateStatus) {
+                        console.log('ddddddddd')
+
+                        res.json({ status:true });
+    
+                    } else {
+                        res.json({ status:false });
+                    }
+
+                }else{
+                    throw new Error('Updation Failed');
+                } 
+    
+            }else{
+                throw new Error('Stock Manage Error');
+            }
+        } else {
+            throw new Error('Data is Not Found');
+        }
+    } catch (error) {
+        next(error)
+    }
+}
+
+
+
 
 
 module.exports = {
     loadOrderListViewUserSide,
     loadOrderProgressInUserSide,
     cancelOrder,
+    orderReturn,
     loadOrderListAdminSide,
     loadOrderManagePageAdminSide,
     updateOrderStatus

@@ -766,6 +766,9 @@ const loadWalletPage = async(req, res, next) => {
                 $match: {_id:new mongoose.Types.ObjectId(userId)}
             },
             {
+                $unwind:'$walletTransaction'
+            },
+            {
                 $project:{
                     _id:0,
                     walletAmount:1,
@@ -773,6 +776,10 @@ const loadWalletPage = async(req, res, next) => {
                 }
             }
         ])
+
+   
+        console.log('wallet')
+        console.log(walletData)
 
         if(walletData){
 

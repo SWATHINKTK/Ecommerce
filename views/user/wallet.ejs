@@ -33,6 +33,11 @@
                                 <i class="bi bi-person-fill fa-lg"></i> <span> Personal Information</span> 
                             </div>
                         </a>
+                        <a href="/viewWallet"> 
+                            <div class="mt-2 options-userprofle">
+                                <i class="fa-solid fa-wallet"></i> <span> Wallet </span>
+                            </div>
+                        </a>
                         <a href="/addressinformation">
                             <div class="mt-2 options-userprofle">
                                 <i class="fa-regular fa-address-card"></i> <span> Address</span> 
@@ -47,11 +52,6 @@
                             <div class="mt-2 options-userprofle">
                                 <i class="fa-regular fa-heart"></i> <span> Wishlist</span> 
                                 <span class="text-dark font-weight-bold"> ( <%= locals.wishlistCount %> )</span>
-                            </div>
-                        </a>
-                        <a href="/viewWallet"> 
-                            <div class="mt-2 options-userprofle">
-                                <i class="fa-solid fa-wallet"></i> <span> Wallet </span>
                             </div>
                         </a>
                         
@@ -74,7 +74,7 @@
                                     </div>
                                     <!-- <h6 class="card-subtitle mb-2 text-muted"><%= locals.username %></h6> -->
                                     <div class="d-flex align-items-end">
-                                        <h3 class="mt-3"><i class="bi bi-currency-rupee"></i> <%= dataWallet[0].walletAmount %></h3>
+                                        <h3 class="mt-3"><i class="bi bi-currency-rupee"></i> <%= locals.dataWallet.length > 0 ? dataWallet[0].walletAmount : 0 %></h3>
                                         <button class="ml-auto btn btn-warning font-weight-bold btn-sm" id="AddAmount-DivBtn">Add Amount</button>
                                     </div>
                                 </div>
@@ -88,7 +88,7 @@
                                     <!-- <h6 class="card-subtitle mb-2 text-muted"><%= locals.username %></h6> -->
                                     <p class="mt-3 mb-0 font-weight-bold text-muted">Enter Amount</p>
                                     <input type="number"  min="1" max="15000" value="" id="walletAmountEnter"><br>
-                                    <span class="text-danger ml-2 my-0" id="walletValidate" data-wallet-Amount="<%= dataWallet[0].walletAmount %>"></span><br>
+                                    <span class="text-danger ml-2 my-0" id="walletValidate" data-wallet-Amount="<%= locals.dataWallet.length > 0 ? dataWallet[0].walletAmount : 0 %>"></span><br>
                                     <button class=" btn btn-warning font-weight-bold btn-sm" id="walletAmountAddBtn">Add Amount</button>
                                 </div>
                             </div>
@@ -107,19 +107,19 @@
                                       </tr>
                                     </thead>
                                     <tbody>
-                                        <% for(let i=0; i < dataWallet[0].walletTransaction.length ; i++) { %>
+                                        <% for(let i=dataWallet.length -1; i >= 0 ; i--) { %>
                                             <tr>
-                                                <th><%= i+1 %></th>
-                                                <td><%= dataWallet[0].walletTransaction[i].transactionId %></td>
-                                                <td><%= (dataWallet[0].walletTransaction[i].Date) %></td>
+                                                <th><%= dataWallet.length - i  %></th>
+                                                <td><%= dataWallet[i].walletTransaction.transactionId %></td>
+                                                <td><%= (dataWallet[i].walletTransaction.Date) %></td>
                                                 
-                                                <td><%= dataWallet[0].walletTransaction[i].description %></td>
-                                                <% if(dataWallet[0].walletTransaction[i].transactionType == 'Debit'){ %>
-                                                    <td class="text-success"><%= dataWallet[0].walletTransaction[i].transactionType %></td>
+                                                <td><%= dataWallet[i].walletTransaction.description %></td>
+                                                <% if(dataWallet[i].walletTransaction.transactionType == 'Debit'){ %>
+                                                    <td class="text-success"><%= dataWallet[i].walletTransaction.transactionType %></td>
                                                 <% } else {%>
-                                                    <td class="text-danger"><%= dataWallet[0].walletTransaction[i].transactionType %></td>
+                                                    <td class="text-danger"><%= dataWallet[i].walletTransaction.transactionType %></td>
                                                 <% } %>
-                                                <td><%= dataWallet[0].walletTransaction[i].amount %></td>
+                                                <td><%= dataWallet[i].walletTransaction.amount %></td>
                                             </tr>
                                         <% } %> 
                                       

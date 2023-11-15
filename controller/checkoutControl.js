@@ -143,7 +143,7 @@ const PlaceOrder = async(req, res, next)=>{
 
         }else{
 
-            paymentStatus = 'Processing';
+            paymentStatus = 'Pending';
 
         }
         // **** End Of the Payment Status Section ****

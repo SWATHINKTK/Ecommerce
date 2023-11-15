@@ -48,20 +48,22 @@
                                         <h4 class="mt-3 font-weight-bold"> <i class="bi bi-currency-rupee"></i><%= orderData[i].productInforamtion.productTotalAmount %> </h4>
                                         <% if(status != 'Canceled') { %>
                                             <% if(status != 'Delivered') { %>
-                                            <div name="<%= orderData[i].productData[j]._id %>">
-                                                <span class="text-muted">Status</span><br>
-                                                <div class="d-flex">
-                                                    <select  name="District" class="order-manage" style="width: 25%; border-radius: 4px;" id="<%= orderData[i].productData[j]._id %>">
-                                                        <!-- <option value="<%= orderData[0].productInforamtion.orderStatus %>"><%= orderData[i].productInforamtion.orderStatus %></option> -->
-                                                        <option value="">- Select -</option>
-                                                        <option value="Placed">Placed</option>
-                                                        <option value="Shipped">Shipped</option>
-                                                        <option value="Delivered">Delivered</option>
-                                                        <option value="Canceled">Canceled</option>
-                                                    </select>
-                                                    <button class="ml-3 btn btn-warning text-dark" data-order-id="<%= orderData[0]._id %>" data-product-id="<%= orderData[i].productData[j]._id %>" data-product-quantity="<%= orderData[i].productInforamtion.productquantity %>" name="updateOrderStatus">Update Status</button>
-                                                </div>
-                                            </div>
+                                                <% if(status != 'Return') { %>
+                                                    <div name="<%= orderData[i].productData[j]._id %>">
+                                                        <span class="text-muted">Status</span><br>
+                                                        <div class="d-flex">
+                                                            <select  name="District" class="order-manage" style="width: 25%; border-radius: 4px;" id="<%= orderData[i].productData[j]._id %>">
+                                                                <!-- <option value="<%= orderData[0].productInforamtion.orderStatus %>"><%= orderData[i].productInforamtion.orderStatus %></option> -->
+                                                                <option value="">- Select -</option>
+                                                                <option value="Placed">Placed</option>
+                                                                <option value="Shipped">Shipped</option>
+                                                                <option value="Delivered">Delivered</option>
+                                                                <option value="Canceled">Canceled</option>
+                                                            </select>
+                                                            <button class="ml-3 btn btn-warning text-dark" data-order-id="<%= orderData[0]._id %>" data-product-id="<%= orderData[i].productData[j]._id %>" data-product-quantity="<%= orderData[i].productInforamtion.productquantity %>" name="updateOrderStatus">Update Status</button>
+                                                        </div>
+                                                    </div>
+                                                    <% } %>
                                             <% } %>
                                         <% } %>
                                     </div>

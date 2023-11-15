@@ -60,6 +60,9 @@ const orderModel = moongose.Schema({
             default:'Placed',
             require:true
         },
+        reason:{
+            type:String
+        }
     }],
     userId:{
         type:moongose.Schema.Types.ObjectId,

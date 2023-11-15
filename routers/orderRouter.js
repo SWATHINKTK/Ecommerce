@@ -4,9 +4,10 @@ const orderController = require('../controller/orderControl');
 const userAuth = require('../middleware/userAuth');
 const adminAuth = require('../middleware/adminAuth')
 
-orderRouter.get('/viewOrder',userAuth.isUserLogin, orderController.loadOrderListViewUserSide);
-orderRouter.get('/orderDetails',userAuth.isUserLogin, orderController.loadOrderProgressInUserSide);
-orderRouter.delete('/cancelOrder',userAuth.isUserLogin, orderController.cancelOrder)
+orderRouter.get('/viewOrder', userAuth.isUserLogin, orderController.loadOrderListViewUserSide);
+orderRouter.get('/orderDetails', userAuth.isUserLogin, orderController.loadOrderProgressInUserSide);
+orderRouter.delete('/cancelOrder', userAuth.isUserLogin, orderController.cancelOrder);
+orderRouter.patch('/returnOrder', userAuth.isUserLogin, orderController.orderReturn);
 
 
 //*** Order Routing Admin Side ***
