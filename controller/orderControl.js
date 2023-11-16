@@ -94,7 +94,7 @@ const loadOrderProgressInUserSide = async (req, res, next) => {
 
 
 
-// **** CANCEL ORDER IN ADMIN SIDE ****
+// **** CANCEL ORDER IN USER SIDE ****
 const cancelOrder = async (req, res, next) => {
 
     try {
@@ -117,7 +117,7 @@ const cancelOrder = async (req, res, next) => {
 
                 // ORDER STATUS IS PAID THE RETURN THE AMOUNT TO WALLET
                 let updateStatus;
-                if (order.paymentStatus == 'Paid') {
+                if (productToUpdate.paymentStatus == 'Paid') {
 
                     // Create Unique TransactionId
                     const nanoidModule = await import('nanoid');
@@ -141,6 +141,7 @@ const cancelOrder = async (req, res, next) => {
                     // Checking Wallet Update Successfull
                     if (returnAmount && updateWalletTransaction) {
 
+                        productToUpdate.paymentStatus = 'Refund'
                         updateStatus = await order.save();
 
                     } else {
@@ -266,7 +267,7 @@ const updateOrderStatus = async (req, res, next) => {
                 if (updateStock) {
 
                     let updateStatus;
-                    if (order.paymentStatus == 'Paid') {
+                    if (productToUpdate.paymentStatus == 'Paid') {
 
                         const nanoidModule = await import('nanoid');
                         nanoid = nanoidModule.nanoid;
@@ -280,12 +281,14 @@ const updateOrderStatus = async (req, res, next) => {
                             amount: productToUpdate.productTotalAmount,
                             orderId: order._id
                         }
-                        console.log(transaction)
+                    
 
                         const returnAmount = await userData.updateOne({ _id: order.userId }, { $inc: { walletAmount: productToUpdate.productTotalAmount } }, { upsert: true });
                         const updateWalletTransaction = await userData.updateOne({ _id: order.userId }, { $push: { walletTransaction: transaction } }, { upsert: true });
 
                         if (returnAmount && updateWalletTransaction) {
+
+                            productToUpdate.paymentStatus = 'Refund';
                             updateStatus = await order.save();
                         } else {
                             return;
@@ -330,7 +333,7 @@ const updateOrderStatus = async (req, res, next) => {
             if (data.orderStatus === 'Delivered') {
 
                 productToUpdate.orderStatus = data.orderStatus;
-                order.paymentStatus = 'Paid'
+                productToUpdate.paymentStatus = 'Paid';
 
                 const updateStatus = await order.save();
 
@@ -378,57 +381,65 @@ const orderReturn = async(req, res, next) => {
     try {
         const data = req.body;
 
-        console.log('data',data)
 
         const order = await orderData.findById(data.orderId);
 
 
         if (order) {
+
+            // FINDING THE PRODUCT IN THAT ORDER
             const productToUpdate = order.productInforamtion.find(orderProduct => orderProduct.productId.equals(data.productId));
 
-            // *** ORDER RETURN STATUS CHANGE ***
-            productToUpdate.orderStatus = 'Return';
-            productToUpdate.reason = data.reason;
-            const updateStock = await productInfo.updateOne({ _id: data.productId }, { $inc: { stock: productToUpdate.productquantity } });
+            // CHECK CONDITION FOR PRODUCT IS DELIVERECD OR NOT.DELIVERED PROUDUCT ONLY REFUND OPTION
+            if(productToUpdate.orderStatus == 'Delivered'){
+           
+                // *** ORDER RETURN STATUS CHANGE ***
+                productToUpdate.orderStatus = 'Return';
+                productToUpdate.paymentStatus = 'Refund';
+                productToUpdate.reason = data.reason;
+                const updateStock = await productInfo.updateOne({ _id: data.productId }, { $inc: { stock: productToUpdate.productquantity } });
 
-            // Check Return Order Product Inventory Managed Or Not
-            if (updateStock) {
+                // Check Return Order Product Inventory Managed Or Not
+                if (updateStock) {
 
-                // Create Unique TransactionId
-                const nanoidModule = await import('nanoid');
-                nanoid = nanoidModule.nanoid;
-                const uniqueID = nanoid();
+                    // Create Unique TransactionId
+                    const nanoidModule = await import('nanoid');
+                    nanoid = nanoidModule.nanoid;
+                    const uniqueID = nanoid();
 
-                // Creating The Tranction History Store Object
-                const transaction = {
-                    transactionId: uniqueID,
-                    transactionType: 'Debit',
-                    description: 'Product Return Refund',
-                    amount: productToUpdate.productTotalAmount,
-                    orderId: order._id
-                }
-
-                const returnAmount = await userData.updateOne({ _id: order.userId }, { $inc: { walletAmount: productToUpdate.productTotalAmount } }, { upsert: true });
-                const updateWalletTransaction = await userData.updateOne({ _id: order.userId }, { $push: { walletTransaction: transaction } }, { upsert: true });
-
-
-                // Checking Wallet Update Successfull
-                if (returnAmount && updateWalletTransaction) {
-
-                    const updateStatus = await order.save();
-
-                    if (updateStatus) {
-                        console.log('ddddddddd')
-
-                        res.json({ status:true });
-    
-                    } else {
-                        res.json({ status:false });
+                    // Creating The Tranction History Store Object
+                    const transaction = {
+                        transactionId: uniqueID,
+                        transactionType: 'Debit',
+                        description: 'Product Return Refund',
+                        amount: productToUpdate.productTotalAmount,
+                        orderId: order._id
                     }
 
+                    const returnAmount = await userData.updateOne({ _id: order.userId }, { $inc: { walletAmount: productToUpdate.productTotalAmount } }, { upsert: true });
+                    const updateWalletTransaction = await userData.updateOne({ _id: order.userId }, { $push: { walletTransaction: transaction } }, { upsert: true });
+
+
+                    // Checking Wallet Update Successfull
+                    if (returnAmount && updateWalletTransaction) {
+
+                        productToUpdate.paymentStatus = 'Refund';
+                        const updateStatus = await order.save();
+
+                        if (updateStatus) {
+
+                            res.json({ status:true });
+        
+                        } else {
+                            res.json({ status:false });
+                        }
+
+                    }else{
+                        throw new Error('Updation Failed');
+                    } 
                 }else{
-                    throw new Error('Updation Failed');
-                } 
+                    throw new Error('Product Must Be Delivered');
+                }
     
             }else{
                 throw new Error('Stock Manage Error');

@@ -60,6 +60,11 @@ const orderModel = moongose.Schema({
             default:'Placed',
             require:true
         },
+        paymentStatus:{
+            type:String,
+            default:'Pending',
+            require:true
+        },
         reason:{
             type:String
         }
@@ -79,6 +84,7 @@ const orderModel = moongose.Schema({
     },
     paymentStatus:{
         type:String,
+        default:'Pending',
         require:true
     },
 },{timestamps: true});

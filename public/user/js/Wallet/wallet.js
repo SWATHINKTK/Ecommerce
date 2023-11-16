@@ -32,7 +32,7 @@ if(walletAmountAdd){
 
             walletValidate.innerHTML = '* at a time only 15000 add To Wallet';
 
-        }else if((currentAmount + walletAmount) > 50000){
+        }else if((parseInt(currentAmount) + parseInt(walletAmount)) > 50000){
             
             walletValidate.innerHTML = '* wallet keep only 50000 Rs';
 

@@ -5,7 +5,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="breadcrumb__text">
-                    <h4>Address</h4>
+                    <h4>Order Progress</h4>
                     <div class="breadcrumb__links">
                         <!-- <a href="/home">Home</a>
                         <span>Shop</span> -->
@@ -86,7 +86,7 @@
                                             <h5 class="bold font-weight-bold"><%= orderData[0].productData[0].productName %></h5>
                                           </a>
                                           <p class="text-muted mt-2"> Qty: <%= orderData[0].productInforamtion.productquantity %> item</p>
-                                          <h4 class="mb-3 mt-3 font-weight-bold"> <i class="bi bi-currency-rupee"></i> <%= orderData[0].productInforamtion.productPrice %>  <span class="small text-muted"> via (<%= orderData[0].paymentMethod %>) </span></h4>
+                                          <h4 class="mb-3 mt-3 font-weight-bold"> <i class="bi bi-currency-rupee"></i> <%= orderData[0].productInforamtion.productPrice %>  <span class="small text-muted"> (<%= orderData[0].productInforamtion.paymentStatus %>) </span></h4>
                                           <p class="text-muted mt-2"> Payment Method: <span class="font-weight-bold text-body"><%= orderData[0].paymentMethod %></span></p>
                                           <p class="text-muted mt-2">Tracking Status on: <span class="text-body">
                                             <%= new Intl.DateTimeFormat('en-US', {

@@ -10,6 +10,7 @@ const { query } = require('express');
 const { connected, nextTick } = require('process');
 const { error } = require('console');
 const session = require('express-session');
+const helper = require('../controller/helper')
 
 
 /*---------------------------------------ADMIN ROUTER ACCESSING FUNCTIONS----------------------------------------------------------*/
@@ -83,9 +84,11 @@ const verifyLogin = async (req, res,next) => {
 }
 
 // VIEW Admin Home Window 
-const loadAdminHomepage = (req, res, next) => {
+const loadAdminHomepage = async(req, res, next) => {
 
    try {
+        const paidiagram = await helper.paidiagram();
+        console.log(paidiagram)
         res.render('admin/main', { admin: true, name: req.session.name, title: 'AdminHome' });  
    } catch (error) {
         next(error);

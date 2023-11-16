@@ -55,10 +55,11 @@ const PlaceOrder = async(req, res, next)=>{
         const userId = req.session.userId;
         
         const data = req.body;
+        console.log(data)
+
     
         // **** Address Information Setting in the Order ****
         const addressInfo = await addressData.findOne({_id:data.Address});
-
         const address = {
             username:addressInfo.username,
             phonenumber:addressInfo.phoneNumber,
@@ -70,7 +71,6 @@ const PlaceOrder = async(req, res, next)=>{
             landmark:addressInfo.landmark,
             alternateNumber:addressInfo.alternateNumber,
         }
-        // **** End Of The Address Section *****
 
         
 
@@ -78,20 +78,37 @@ const PlaceOrder = async(req, res, next)=>{
         let productData;
         let products;
         let totalPrice = 0;
+        const userWallet = await userData.findOne({_id:userId});
+
         if(data.SingleProduct){
 
             productData = await productInfo.findOne({_id:data.ProductId});
 
+            // CHECKING STOCK IS AVAILABLE OR NOT
             if(productData.stock >= data.productQuantity ){
 
+                // PRODUCT DATA STORING OBJECT CREATION
                 products = {
                     productId:data.ProductId,
                     productPrice:data.ProductPrice,
                     productTotalAmount:(data.productQuantity * data.ProductPrice),
                     productquantity:data.productQuantity
                 }
-                totalPrice = data.productQuantity * data.ProductPrice;
 
+                totalPrice = (data.productQuantity * data.ProductPrice);
+                // Payment Status Setting In Wallet Payment
+                if(data.PaymentMethod == 'Wallet'){
+        
+                    if(userWallet.walletAmount < products.productTotalAmount){
+                        res.json({walletInsufficient:true});
+                        return;
+                    }else{
+                        
+                        products.paymentStatus = 'Paid';
+                    }
+                }
+
+    
             }else{
                 res.json({StockStatus:false, singleStock:false, quantity:productData.stock});
                 return;
@@ -99,12 +116,14 @@ const PlaceOrder = async(req, res, next)=>{
 
         }else{
 
-            
+            // PRODUCT STOCKING CODE RETURN IN THE END OF THIS FILE 
             const stockChecking = await checkStock(userId);
 
             if(stockChecking){
 
                 const cartInfo = await cartData.findOne({userId:userId},{cartProducts:1});
+
+                // ORDER PRODUCT DATA STORING OBJECT CREATAION
                 products = cartInfo.cartProducts.map(item => ({
                     productId: item.productId,
                     productPrice:item.price,
@@ -115,65 +134,56 @@ const PlaceOrder = async(req, res, next)=>{
                     totalPrice += val.productTotalAmount
                 });
 
+
+                // Payment Wallet Payment Status Setting
+                if(data.PaymentMethod == 'Wallet'){
+        
+                    if(userWallet.walletAmount < totalPrice){
+                        res.json({walletInsufficient:true});
+                        return;
+                    }else{
+                        products.map((val) => {
+                            val.paymentStatus = 'Paid';
+                        });
+                    }
+        
+                }
+
+
             }else{
                 res.json({status:false, stock:false});
                 return; 
             }        
         }
-        // **** End Of The Product Data Storing *****
 
-
-        // *** Payment Status Setting Section ****
-        let paymentStatus;
-        if(data.PaymentMethod == 'COD'){
-            
-            paymentStatus = 'Pending';
-
-        }else if(data.PaymentMethod == 'Wallet'){
-
-            const userWallet = await userData.findOne({_id:userId});
-
-            if(userWallet.walletAmount < products.productTotalAmount){
-                console.log('Wallet')
-                res.json({walletInsufficient:true});
-                return;
-            }else{
-                paymentStatus = 'Pending';
-            }
-
-        }else{
-
-            paymentStatus = 'Pending';
-
-        }
-        // **** End Of the Payment Status Section ****
-
-
-
-        // **** Order DataBase Store  Object Creation ****
+        
+        // **** ORDER DATA STORING IN TO THE DB ****
         const orderSucess = orderData({
             addressInformation:address,
             productInforamtion:products,
             userId:userId,
             totalAmount:totalPrice,
             paymentMethod:data.PaymentMethod,
-            paymentStatus:paymentStatus
         });
-
         const orderStore = await orderSucess.save();
 
-        // **** Stock Management in Order The Product Else Part Cart Products ****
+        // **** STOCK MANAGEMENT IN EACH PRODUCT ON THE UPDATE IF TRUE SECTION HANDLE SINGLE PRODUCT ****
         if(orderStore && data.SingleProduct){
+
+            // STOCK UPDATE IN THAT PRODUCT
             const stockUpdate = await productInfo.updateOne({_id:data.ProductId},{$inc:{stock:-data.productQuantity}});
          
             if(stockUpdate){
                 
+                //ORDER SUCESS RESULT SENDING ORDER OF COD , ONLINE PAYMENT , WALLET
                 if(orderSucess.paymentMethod == 'COD'){
+
                     res.json({CODSuccess:true,orderId:orderSucess._id});
+
                 }
                 else if(orderSucess.paymentMethod == 'OnlinePayment'){
 
-                    // RazorPay Options & CreateRazorPay Instance
+                    // RAZORPAY INSTANCE CREATE AND RAZORPAY GENERATE3
                     var options = {
                         amount: orderSucess.totalAmount * 100 ,  // amount in the smallest currency unit
                         currency: "INR",
@@ -198,15 +208,18 @@ const PlaceOrder = async(req, res, next)=>{
                         orderId:orderSucess._id
                     }
 
-                    const returnAmount = await userData.updateOne({_id:userId},{ $inc: { walletAmount: -orderSucess.totalAmount } },{ upsert: true });
+                    const creditAmount = await userData.updateOne({_id:userId},{ $inc: { walletAmount: -orderSucess.totalAmount } },{ upsert: true });
                     const updateWalletTransaction = await userData.updateOne({_id:userId},{ $push: { walletTransaction: transaction } },{ upsert: true });
 
-                    const updatePaymentStatus = await orderData.updateOne({_id:orderSucess._id},{$set:{paymentStatus:'Paid'}});
+                    // WALLET PAYMENT AND AMOUNT UPDATE SUCESSSFULL
+                    if(creditAmount && updateWalletTransaction ){
 
-                    if(returnAmount && updateWalletTransaction && updatePaymentStatus){
                         res.json({walletPayment:true,orderId:orderSucess._id});
+
                     }else{
+
                         res.json({failed:true});
+
                     }
 
                 }
@@ -214,8 +227,10 @@ const PlaceOrder = async(req, res, next)=>{
             }else{
                 res.json({failed:true});
             }
+
         }else{
 
+            // STOCK MANAGEMENT IN CART PRODUCTS
             let stockUpdate;
             for(let item of products){
                 const filter = {_id:item.productId}
@@ -224,13 +239,17 @@ const PlaceOrder = async(req, res, next)=>{
                 stockUpdate = await productInfo.updateOne(filter,update);
             }
 
+            // DELETE THE CART DATA
             const deleteCart = await cartData.deleteOne({userId:userId});
             const userCartId = await userData.updateOne({_id:userId},{ $unset: { cartProducts: 1 } });
             
             if(stockUpdate && deleteCart && userCartId){
 
+                // ORDER SUCCESS MESSAGE SENDING
                 if(orderSucess.paymentMethod == 'COD'){
+
                     res.json({CODSuccess:true,orderId:orderSucess._id});
+
                 }
                 else if(orderSucess.paymentMethod == 'OnlinePayment'){
 
@@ -261,9 +280,7 @@ const PlaceOrder = async(req, res, next)=>{
                     const returnAmount = await userData.updateOne({_id:userId},{ $inc: { walletAmount: -orderSucess.totalAmount } },{ upsert: true });
                     const updateWalletTransaction = await userData.updateOne({_id:userId},{ $push: { walletTransaction: transaction } },{ upsert: true });
 
-                    const updatePaymentStatus = await orderData.updateOne({_id:orderSucess._id},{$set:{paymentStatus:'Paid'}});
-
-                    if(returnAmount && updateWalletTransaction && updatePaymentStatus){
+                    if(returnAmount && updateWalletTransaction){
                         res.json({walletPayment:true,orderId:orderSucess._id});
                     }else{
                         res.json({failed:true});
@@ -275,7 +292,6 @@ const PlaceOrder = async(req, res, next)=>{
                 res.json({status:false});
             }
         }
-        // **** End Of The Stock Management ****
 
 
     } catch (error) {
@@ -288,15 +304,25 @@ const PlaceOrder = async(req, res, next)=>{
 const paymentVerification  = async(req,res) => {
     
     const payment = req.body.Payment;
-    const order = req.body.orderReceipt;
-    console.log(req.body)
+    const orderInfo = req.body.orderReceipt;
+  
+    // CHECK ORDER SUCESS RESULT
     let hmac = crypto.createHmac('sha256', process.env.PAYMENT_INTEGRATION_KEY_SECRET);
     hmac.update(payment.razorpay_order_id+"|"+payment.razorpay_payment_id);
     hmac = hmac.digest('hex');
     if(hmac == payment.razorpay_signature){
 
-        const updatePaymentStatus = await orderData.updateOne({_id:order.receipt},{$set:{paymentStatus:'Paid'}});
-        res.json({onlinePaymentStaus:true,orderId:order.receipt});
+        // UPDATING THE ORDER STATUS
+        const order = await orderData.findById(orderInfo.receipt);
+        const productPaymentUpdate = order.productInforamtion.forEach((product) => {
+            product.paymentStatus = 'Paid';
+        });
+
+        const updateStatus = await order.save();
+        
+        if(updateStatus){
+            res.json({onlinePaymentStaus:true,orderId:orderInfo.receipt});
+        }
 
     }else{
         console.log('failed')
@@ -323,6 +349,9 @@ const loadOrderSucess = async(req, res, next)=>{
 }
 
 
+
+
+/* ------------------------------------------------- FUNCTIONS ---------------------------------------- */
 
 // ######### Function in Checkout Controller Stock Check ######
 async function checkStock(userId){
