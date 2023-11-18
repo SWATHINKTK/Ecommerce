@@ -61,17 +61,23 @@
         }
       });
     }
+    let totalRevenue = $('#totalRevenue-inWebsite').val();
+    totalRevenue = $.parseJSON(totalRevenue)
+    console.log(totalRevenue)
     if ($("#transaction-history").length) {
       var areaData = {
         labels: ["Online Payment", "Cash On Delivery", "Wallet"],
         datasets: [{
-            data: [10, 80, 10],
+            data: [totalRevenue[0].percentageAmount,totalRevenue[1].percentageAmount,totalRevenue[2].percentageAmount],
             backgroundColor: [
               "#111111","#00d25b","#ffab00"
             ]
           }
         ]
       };
+
+
+
       var areaOptions = {
         responsive: true,
         maintainAspectRatio: true,
@@ -102,7 +108,7 @@
           ctx.textBaseline = "middle";
           ctx.fillStyle = "#000";
       
-          var text = "$4000", 
+          var text =  `₹ ${totalRevenue[3].totalAmount}`, 
               textX = Math.round((width - ctx.measureText(text).width) / 2),
               textY = height / 2.4;
       
@@ -131,11 +137,13 @@
         plugins: transactionhistoryChartPlugins
       });
     }
+
+
     if ($("#transaction-history-arabic").length) {
       var areaData = {
         labels: ["Paypal", "Stripe","Cash"],
         datasets: [{
-            data: [55, 25, 20],
+            data: [88,0, 10],
             backgroundColor: [
               "#111111","#00d25b","#ffab00"
             ]
@@ -201,31 +209,96 @@
         plugins: transactionhistoryChartPlugins
       });
     }
-    if ($('#owl-carousel-basic').length) {
-      $('#owl-carousel-basic').owlCarousel({
-        loop: true,
-        margin: 10,
-        dots: false,
-        nav: true,
-        autoplay: true,
-        autoplayTimeout: 4500,
-        navText: ["<i class='mdi mdi-chevron-left'></i>", "<i class='mdi mdi-chevron-right'></i>"],
-        responsive: {
-          0: {
-            items: 1
-          },
-          600: {
-            items: 1
-          },
-          1000: {
-            items: 1
+
+    if ($('.owl-carousel').length) {
+      $('.owl-carousel').each(function() {
+        var isRtl = $("body").hasClass("rtl");
+        var navIcons = ["<i class='mdi mdi-chevron-left'></i>", "<i class='mdi mdi-chevron-right'></i>"];
+
+        $(this).owlCarousel({
+          loop: true,
+          margin: 10,
+          dots: false,
+          nav: true,
+          rtl: isRtl,
+          autoplay: true,
+          autoplayTimeout: 4500,
+          navText: isRtl ? [navIcons[1], navIcons[0]] : [navIcons[0], navIcons[1]],
+          responsive: {
+            0: {
+              items: 1
+            },
+            600: {
+              items: 1
+            },
+            1000: {
+              items: 1
+            }
           }
-        }
+        });
       });
     }
+
+  //   var areaData = {
+  //     labels: ["2013", "2014", "2015", "2016", "2017"],
+  //     datasets: [{
+  //       label: '# of Votes',
+  //       data: [12, 19, 3, 5, 2, 3],
+  //       backgroundColor: [
+  //         'rgba(255, 99, 132, 0.2)',
+  //         'rgba(54, 162, 235, 0.2)',
+  //         'rgba(255, 206, 86, 0.2)',
+  //         'rgba(75, 192, 192, 0.2)',
+  //         'rgba(153, 102, 255, 0.2)',
+  //         'rgba(255, 159, 64, 0.2)'
+  //       ],
+  //       borderColor: [
+  //         'rgba(255,99,132,1)',
+  //         'rgba(54, 162, 235, 1)',
+  //         'rgba(255, 206, 86, 1)',
+  //         'rgba(75, 192, 192, 1)',
+  //         'rgba(153, 102, 255, 1)',
+  //         'rgba(255, 159, 64, 1)'
+  //       ],
+  //       borderWidth: 1,
+  //       fill: true, // 3: no fill
+  //     }]
+  //   };
+  
+  //   var areaOptions = {
+  //     plugins: {
+  //       filler: {
+  //         propagate: true
+  //       }
+  //     },
+  //     scales: {
+  //       yAxes: [{
+  //         gridLines: {
+  //           color: "rgb(204, 204, 204)"
+  //         }
+  //       }],
+  //       xAxes: [{
+  //         gridLines: {
+  //           color: "rgb(204, 204, 204)"
+  //         }
+  //       }]
+  //     }
+  //   }
+  
+  
+
+    
+  // if ($("#areaChart").length) {
+  //   var areaChartCanvas = $("#areaChart").get(0).getContext("2d");
+  //   var areaChart = new Chart(areaChartCanvas, {
+  //     type: 'line',
+  //     data: areaData,
+  //     options: areaOptions
+  //   });
+  // }
     var isrtl = $("body").hasClass("rtl");
-    if ($('#owl-carousel-rtl').length) {
-      $('#owl-carousel-rtl').owlCarousel({
+    if ($('.owl-carousel-rtl').length) {
+      $('.owl-carousel-rtl').owlCarousel({
         loop: true,
         margin: 10,
         dots: false,
@@ -249,3 +322,64 @@
     }
     });
 })(jQuery);
+
+document.addEventListener('DOMContentLoaded', function () {
+
+  let saleData = document.getElementById('salesReportDiagram').value;
+  saleData = JSON.parse(saleData) 
+
+  const labels = saleData.map(item => item._id); // Update with the actual property of your sales data
+  const values = saleData.map(item => item.totalPercentage); // Update with the actual property of your sales data
+
+
+
+  var areaData = {
+    labels: [...labels], // Initial empty array
+    datasets: [{
+      label: '# of Sales',
+      data: [...values], // Initial empty array
+      backgroundColor: 'rgba(75, 192, 192, 0.2)',
+      borderColor: 'rgba(75, 192, 192, 1)',
+      borderWidth: 1,
+      fill: true,
+    }]
+  };
+
+  var areaOptions = {
+      plugins: {
+        filler: {
+          propagate: true
+        }
+      },
+      scales: {
+        yAxes: [{
+          ticks: {
+              suggestedMin: 2, // Set your desired starting value here
+              callback: function(value, index, values) {
+                return value; // You can customize the callback as needed
+              }
+            },
+          gridLines: {
+            color: "rgb(204, 204, 204)"
+          }
+        }],
+        xAxes: [{
+          gridLines: {
+            color: "rgb(204, 204, 204)"
+          }
+        }]
+      }
+    }
+
+  // Check if the chart canvas element exists
+  var areaChartCanvas = document.getElementById('areaChart');
+
+  if (areaChartCanvas) {
+    var areaChart = new Chart(areaChartCanvas.getContext('2d'), {
+      type: 'line',
+      data: areaData,
+      options: areaOptions
+    });
+  }
+});
+

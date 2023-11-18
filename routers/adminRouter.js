@@ -140,6 +140,7 @@ adminRouter.get('/addcoupon', auth.isAdminLogin, adminController.loadAddCouponPa
 
 
 
+
 //*** Error Routing ***
 adminRouter.get('/error500',adminController.load500ErrorPage);
 adminRouter.get('/error404',adminController.load404ErrorPage);

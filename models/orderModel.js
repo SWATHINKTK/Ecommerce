@@ -74,6 +74,10 @@ const orderModel = moongose.Schema({
         ref : 'users',
         require:true
     },
+    order_id:{
+        type : String,
+        require : true
+    },
     totalAmount:{
         type:Number,
         require:true

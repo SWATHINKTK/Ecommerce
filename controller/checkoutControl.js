@@ -157,11 +157,24 @@ const PlaceOrder = async(req, res, next)=>{
         }
 
         
+
+
+        const { customAlphabet } = await import('nanoid');
+
+        const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+
+        const idLength = 8;
+        const nanoid = customAlphabet(alphabet, idLength);
+
+        const uniqueID = nanoid()
+
+
         // **** ORDER DATA STORING IN TO THE DB ****
         const orderSucess = orderData({
             addressInformation:address,
             productInforamtion:products,
             userId:userId,
+            order_id:uniqueID,
             totalAmount:totalPrice,
             paymentMethod:data.PaymentMethod,
         });

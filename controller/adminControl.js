@@ -87,14 +87,25 @@ const verifyLogin = async (req, res,next) => {
 const loadAdminHomepage = async(req, res, next) => {
 
    try {
-        const paidiagram = await helper.paidiagram();
-        console.log(paidiagram)
-        res.render('admin/main', { admin: true, name: req.session.name, title: 'AdminHome' });  
+        const sendReport = await helper.paidiagram();
+
+        const leastProduct = await helper.leastSellingProduct();
+
+        const pendingProduct = await helper.pendingProduct();
+
+        const totalDataForFirstRow = await helper.totalDataFirstSection();
+
+        const salesChart = await helper.salesChart();
+    
+        res.render('admin/main', { admin: true, name: req.session.name, title: 'AdminHome' ,totalRevenue:sendReport ,pendingProduct:pendingProduct, mostSelling:leastProduct, totalData:totalDataForFirstRow ,salesChart});  
    } catch (error) {
         next(error);
    }
     
 }
+
+
+
 
 
 

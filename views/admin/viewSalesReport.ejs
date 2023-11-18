@@ -1,0 +1,103 @@
+<%- include('../partials/header.ejs') %>
+<h1 class="card-title text-center text-dark">Sales Report</h1>
+
+    <div class="col-12 grid-margin stretch-card" id="userview">
+    <div class="card card-div">
+      <div class="card-body  mt-5">
+        <!-- <div class="d-grid gap-4 d-md-flex justify-content-md-end mb-2 search">
+          <input type="text" class="form-control col-3 mr-2 " id="categorySearch" placeholder="User Search" name="categorySearch">
+          <button type="button" class="btn btn-search" onclick="searchUser()"><i class="bi bi-search"></i></button>
+        </div> -->
+
+        <div class="d-grid gap-4 d-md-flex justify-content-md-end mr-3">
+          <div class="form-group">
+            <div class="input-group">
+              <div class="input-group-prepend ">
+                <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="bi bi-download"></i> Download</button>
+                <div class="dropdown-menu">
+                  <button onclick="exportToExcel()" class="btn btn-dark ml-3"><i class="mdi mdi-download"></i> Excel Sheet</button>
+                  <!-- <button onclick="exportToPDF()" class="btn btn-dark mt-2 ml-3"><i class="mdi mdi-download"></i>PDF</button> -->
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-hover" id="salesReportTable">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Order Id</th>
+                <th>Customer Name</th>
+                <th>Customer Id</th>
+                <th>Product Name</th>
+                <th>Product _id</th>
+                <th>Qunatity</th>
+                <th>Price</th>
+                <th>Payment Method</th>
+                <th>Payment Status</th>
+                <th>Order Status</th>
+                <th>Order Date</th>
+                <th>Delivery Date</th>
+                <th>Amount Status</th>
+                <th>Order Price</th>
+              </tr>
+            </thead>
+            <tbody class="text-white">
+              <% for(let i = 0 ; i < totalTrancations.length ; i++) {%>
+              <tr>
+                <td><%= i + 1 %></td>
+                <td><%= totalTrancations[i].order_id %></td>
+                <td><%= totalTrancations[i].username %></td>
+                <td><%= totalTrancations[i].userId %></td>
+                <td><%= totalTrancations[i].productName %></td>
+                <td><%= totalTrancations[i].productInforamtion.productId %></td>
+                <td><%= totalTrancations[i].productInforamtion.productquantity %></td>
+                <td><%= totalTrancations[i].productInforamtion.productPrice %></td>
+                <td><%= totalTrancations[i].paymentMethod %></td>
+                <td><%= totalTrancations[i].productInforamtion.paymentStatus %></td>
+                <td><%= totalTrancations[i].productInforamtion.orderStatus %></td>
+                <td><%= totalTrancations[i].createdAt.toLocaleDateString() %></td>
+                <% if(totalTrancations[i].productInforamtion.orderStatus == 'Delivered') { %>
+                  <td><%= totalTrancations[i].updatedAt.toLocaleDateString() %></td>
+                <% } else { %>
+                  <td>Delivery Soon</td>
+                <% } %>
+                <% if(totalTrancations[i].productInforamtion.paymentStatus == 'Refund') { %>
+                  <td class="font-weight-bold text-danger">Credit</td>
+                <% } else { %>
+                  <td class="font-weight-bold text-success">Debit</td>
+                <% } %>
+                <td><%= totalTrancations[i].productInforamtion.productTotalAmount %></td>
+
+              </tr>
+              <% } %>
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal" style="display: none; width: 23rem;margin-right: 50%;margin-left: 40%; margin-top:3rem;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">User Block/Unblock</h5>
+        <button class="btn btn-transparent" onclick="modalBack()"><i class="bi bi-x cancel"></i></button>
+      </div>
+      <div class="modal-body">
+        Are you sure?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="cancel" onclick="modalBack()">Cancel</button>
+        <button type="button" class="btn btn-primary" id="user-sucess" data-category-id="" onclick="userBlock()">OK</button>
+      </div>
+    </div>
+  </div>
+  </div>
+ <script>
+
+ </script>
+<%- include('../partials/footer.ejs') %>

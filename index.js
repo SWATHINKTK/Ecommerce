@@ -57,6 +57,10 @@ app.use('/api',wishlistRouter);
 const adminRouter = require('./routers/adminRouter');
 app.use('/admin',adminRouter);
 
+// **** SALESREPORT ROUTER *****
+const salesReport = require('./routers/salesReportRouter');
+app.use('/admin',salesReport)
+
 
 
 // **** ERROR HANDLING MIDDLEWARE ****

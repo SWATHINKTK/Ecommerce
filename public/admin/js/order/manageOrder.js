@@ -67,6 +67,9 @@ updateOrderStatus.forEach((updateButton) => {
                 }else{
                     headingStatusView.setAttribute('class','ml-3 font-weight-bold text-success');
                     status.value == 'Delivered' ?  updateStatusSection.style.display = 'none' : '';
+                    if(status.value == 'Delvered'){
+                        document.getElementById('adminOrderProgress-paymentStatus').innerHTML = '( Paid )'
+                    }
                 }
 
                 Swal.fire({
