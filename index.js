@@ -16,6 +16,7 @@ app.set('view engine','ejs');
 
 
 // **** SERVER PATH SETTING ****
+app.use('/',express.static(path.join(__dirname)));
 app.use('/asserts',express.static(path.join(__dirname,'./public/admin/assets')));
 app.use('/public',express.static(path.join(__dirname,'./public')));
 
