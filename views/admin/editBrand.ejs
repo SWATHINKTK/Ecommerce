@@ -7,8 +7,8 @@
           <form class="forms-sample mb-3" id="editBrandForm" method="POST">
             <div class="form-group">
               <label for="exampleInputName1">Brand Name</label>
-              <input type="text" class="form-control" id="brandname" placeholder="Brand Name" name="brandName" value="<%= data.brand_name %>">
-              <p class="text-danger ml-2" name="validate-brand"></p>
+              <input type="text" class="form-control" id="editbrandname" placeholder="Brand Name" name="brandName" value="<%= data.brand_name %>">
+              <p class="text-danger ml-2" id="validate-editbrand"></p>
               <input type="hidden" name="brandId" value="<%= data._id %>">
               <input type="hidden" name="oldBrandName" value="<%= data.brand_name %>">
               <input type="hidden" name="brandImage" value="<%= data.brand_logo %>">
@@ -18,7 +18,8 @@
               <input type="file" class="form-control" id="editBrandImage" name="editBrandImage" accept="image/*">
               <p class="text-danger ml-2" name="validate-brand"></p>
               <div  class="ml-3">
-                <img  id="edit-brand-img-view" src="/public/admin/assets/brandImages/<%= data.brand_logo %>" data-edit-brand-image="<%= data.brand_logo %>" alt="brand Image File">
+                <img  id="edit-brand-img-view" src="/public/admin/assets/brandImages/<%= data.brand_logo %>" data-edit-brand-image="<%= data.brand_logo %>" alt="brand Image File"><br>
+                <button type="click" class="mt-2 bg-transparent addBrandCropBtn ml-auto" id="editBrandCropModalView"><i class="mdi mdi-crop"></i> Crop</button>
               </div>
             </div>
             <button type="submit" class="btn btn-primary mr-2" id="brandsubmit">Submit</button>
@@ -28,5 +29,19 @@
           </div>
         </div>
       </div>
-    </div>                                                                                                                                                                                                   
+    </div>    
+    
+    <div class="modal w-100" id="editBrandCropModal">
+      <div class="modal-dialog modal-dialog-centered w-100">
+        <div class="modal-content bg-white" style="height: 400px;">
+            <button type="button" class="close bg-white" onclick="editBrandImageCropClose()"><span aria-hidden="true">&times;</span></button>
+            <div class="d-flex justify-content-center m-2 ">
+              <button type="button" class="btn mt-2 text-dark addBrandCropBtn " id="editCropResult" style=" box-shadow: 0 3px 10px rgb(0, 0, 0,0.5); border: 1px dashed #000; border-radius: 4px;"><i class="mdi mdi-crop"></i> Crop</button>
+            </div>
+            <img id="editCroppingImageView" src="" alt="" style="height:auto; object-fit: cover;">
+
+          </div>
+        </div>
+      </div>
+    </div>
 

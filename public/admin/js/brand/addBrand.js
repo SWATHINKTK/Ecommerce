@@ -91,20 +91,29 @@ function brandImageCropClose(){
 }
 
 
+
 /*==================================== Add Brand Data To Data Base ====================================*/
 const addBrandForm = document.getElementById('addBrandForm');
+
 if(addBrandForm){
+
     addBrandForm.addEventListener('submit',async(event)=>{
         event.preventDefault();
         try{
 
             const brandName = document.getElementById('brandname').value;
             const image = document.getElementById('brandImageUpload');
+            var file = image.files[0];
+            console.log(image.files.length)
             let validate = document.querySelectorAll('p[name="validate-brand"]');
 
             if(brandName.trim() === ''){
 
                 validate[0].innerHTML = '* enter Brand name';
+
+            }else if(image.files.length < 1){
+
+                validate[1].innerHTML = '* please upload an image';
 
             }else{
 
