@@ -2,104 +2,6 @@
 <div class="main-panel" style="margin-top: -80px">
   <div class="content-wrapper">
     <div class="row">
-      <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
-        <div class="card">
-          <div class="card-body">
-            <div class="row">
-              <div class="col-9">
-                <div class="d-flex align-items-center align-self-start">
-                  <span> <i class="icon-md mdi mdi-account-multiple-outline text-dark mr-2"></i></span>
-                  <h3 class="mb-0">
-                    <%= totalData.totalUsers %>
-                  </h3>
-                 
-                  <!-- <p class="text-success ml-2 mb-0 font-weight-medium">+3.5%</p> -->
-                </div>
-              </div>
-              <div class="col-3">
-                <!-- <div class="icon icon-box-success ">
-                      <span class="mdi mdi-arrow-top-right icon-item"></span>
-                    </div> -->
-              </div>
-            </div>
-            <h6 class="text-muted font-weight-normal mt-2">Total Users</h6>
-          </div>
-        </div>
-      </div>
-      <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
-        <div class="card">
-          <div class="card-body">
-            <div class="row">
-              <div class="col-9">
-                <div class="d-flex align-items-center align-self-start">
-                  <span> <i class="icon-md mdi mdi-shopping text-dark mr-2"></i></span>
-                  <h3 class="mb-0">
-                    <%= totalData.totalProducts %>
-                  </h3>
-                 
-                  <!-- <p class="text-success ml-2 mb-0 font-weight-medium">+3.5%</p> -->
-                </div>
-              </div>
-              <div class="col-3">
-                <!-- <div class="icon icon-box-success ">
-                      <span class="mdi mdi-arrow-top-right icon-item"></span>
-                    </div> -->
-              </div>
-            </div>
-            <h6 class="text-muted font-weight-normal mt-2">Total Products</h6>
-          </div>
-        </div>
-      </div>
-      <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
-        <div class="card">
-          <div class="card-body">
-            <div class="row">
-              <div class="col-9">
-                <div class="d-flex align-items-center align-self-start">
-                  <span> <i class="icon-md mdi mdi-truck text-dark mr-2"></i></span>
-                  <h3 class="mb-0">
-                    <%= totalData.totalOrders %>
-                  </h3>
-                 
-                  <!-- <p class="text-success ml-2 mb-0 font-weight-medium">+3.5%</p> -->
-                </div>
-              </div>
-              <div class="col-3">
-                <!-- <div class="icon icon-box-success ">
-                      <span class="mdi mdi-arrow-top-right icon-item"></span>
-                    </div> -->
-              </div>
-            </div>
-            <h6 class="text-muted font-weight-normal mt-2">Total Orders</h6>
-          </div>
-        </div>
-      </div>
-      <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
-        <div class="card">
-          <div class="card-body">
-            <div class="row">
-              <div class="col-9">
-                <div class="d-flex align-items-center align-self-start">
-                  <span> <i class="icon-md mdi mdi-account-multiple-outline text-dark mr-2"></i></span>
-                  <h3 class="mb-0">
-                    <%= totalData.totalUsers %>
-                  </h3>
-                 
-                  <!-- <p class="text-success ml-2 mb-0 font-weight-medium">+3.5%</p> -->
-                </div>
-              </div>
-              <div class="col-3">
-                <!-- <div class="icon icon-box-success ">
-                      <span class="mdi mdi-arrow-top-right icon-item"></span>
-                    </div> -->
-              </div>
-            </div>
-            <h6 class="text-muted font-weight-normal mt-2">Total Users</h6>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="row">
       <div class="col-sm-4 grid-margin">
         <div class="card">
           <div class="card-body">
@@ -179,12 +81,8 @@
         <div class="card">
           <div class="card-body">
             <h4 class="card-title">Transaction History</h4>
-            <input
-              type="hidden"
-              value="<%= JSON.stringify(totalRevenue) %>"
-              id="totalRevenue-inWebsite"
-            />
-
+            <input type="hidden" value="<%= JSON.stringify(totalRevenue) %>" id="totalRevenue-inWebsite" >
+ 
             <canvas id="transaction-history" class="transaction-chart"></canvas>
             <% for(let i = 0 ; i < totalRevenue.length - 3 ; i++) { %>
             <div
@@ -276,11 +174,109 @@
       </div>
     </div>
     <div class="row">
+      <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-9">
+                <div class="d-flex align-items-center align-self-start">
+                  <span> <i class="icon-md mdi mdi-account-multiple-outline text-dark mr-2"></i></span>
+                  <h3 class="mb-0">
+                    <%= totalData.totalUsers %>
+                  </h3>
+                 
+                  <!-- <p class="text-success ml-2 mb-0 font-weight-medium">+3.5%</p> -->
+                </div>
+              </div>
+              <div class="col-3">
+                <!-- <div class="icon icon-box-success ">
+                      <span class="mdi mdi-arrow-top-right icon-item"></span>
+                    </div> -->
+              </div>
+            </div>
+            <h6 class="text-muted font-weight-normal mt-2">Total Users</h6>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-9">
+                <div class="d-flex align-items-center align-self-start">
+                  <span> <i class="icon-md mdi mdi-shopping text-dark mr-2"></i></span>
+                  <h3 class="mb-0">
+                    <%= totalData.totalProducts %>
+                  </h3>
+                 
+                  <!-- <p class="text-success ml-2 mb-0 font-weight-medium">+3.5%</p> -->
+                </div>
+              </div>
+              <div class="col-3">
+                <!-- <div class="icon icon-box-success ">
+                      <span class="mdi mdi-arrow-top-right icon-item"></span>
+                    </div> -->
+              </div>
+            </div>
+            <h6 class="text-muted font-weight-normal mt-2">Total Products</h6>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-9">
+                <div class="d-flex align-items-center align-self-start">
+                  <span> <i class="icon-md mdi mdi-truck text-dark mr-2"></i></span>
+                  <h3 class="mb-0">
+                    <%= totalData.totalOrders %>
+                  </h3>
+                 
+                  <!-- <p class="text-success ml-2 mb-0 font-weight-medium">+3.5%</p> -->
+                </div>
+              </div>
+              <div class="col-3">
+                <!-- <div class="icon icon-box-success ">
+                      <span class="mdi mdi-arrow-top-right icon-item"></span>
+                    </div> -->
+              </div>
+            </div>
+            <h6 class="text-muted font-weight-normal mt-2">Total Orders</h6>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-9">
+                <div class="d-flex align-items-center align-self-start">
+                  <span> <i class="icon-md mdi mdi-tshirt-crew text-dark mr-2"></i></span>
+                  <h3 class="mb-0">
+                    <%= totalData.totalBrands %>
+                  </h3>
+                 
+                  <!-- <p class="text-success ml-2 mb-0 font-weight-medium">+3.5%</p> -->
+                </div>
+              </div>
+              <div class="col-3">
+                <!-- <div class="icon icon-box-success ">
+                      <span class="mdi mdi-arrow-top-right icon-item"></span>
+                    </div> -->
+              </div>
+            </div>
+            <h6 class="text-muted font-weight-normal mt-2">Total Brands</h6>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
       <div class="col-6 grid-margin stretch-card" >
         <div class="card ">
           <div class="card-body">
             <h4 class="card-title">Sales Report</h4>
-            <canvas id="areaChart" style="height:250px"></canvas>
+            <canvas id="salesChart" style="height:250px"></canvas>
 
             <!-- Buttons for different report intervals -->
           <!-- <button onclick="updateChart('day')">Daily</button>
@@ -289,6 +285,15 @@
           <button onclick="updateChart('year')">Yearly</button> -->
           <input type="hidden" value="<%= JSON.stringify(salesChart) %>" id="salesReportDiagram">
           </div>
+      </div>
+    </div>
+    <div class="col-lg-6 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">Bar chart</h4>
+          <input type="hidden" value="<%= JSON.stringify(categoryReport) %>" id="categoryReport">
+          <canvas id="barChart" style="height:230px"></canvas>
+        </div>
       </div>
     </div>
     </div>

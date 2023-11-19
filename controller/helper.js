@@ -1,6 +1,7 @@
 const orderData = require('../models/orderModel');
 const {userData} = require('../models/userModal');
 const {productInfo} =  require('../models/productModel');
+const {brandInfo} = require('../models/brandModel')
 const { format } = require('date-fns');
 
 module.exports = {
@@ -221,56 +222,72 @@ module.exports = {
                 }
             }
         ])
+
+        const totalBrands = await brandInfo.aggregate([
+            {
+                $group:{
+                    _id:null,
+                    totalBrands:{$sum:1}
+                }
+            }
+        ])
         
 
         const totalData = {
             totalUsers : totalUsers[0].totalUsers,
             totalProducts : totalProducts[0].totalProducts,
             totalOrders : totalOrders[0].totalOrders,
+            totalBrands : totalBrands[0].totalBrands
         }
 
         return totalData;
     },
     salesChart:async()=>{
-        // const { interval } = req.query;
 
-        
-        let groupBy;
-    
-        // switch (interval) {
-        //     case 'week':
-        //     groupBy = { $week: '$updatedAt' };
-        //     break;
-        //     case 'month':
-        //     groupBy = { $month: '$updatedAt' };
-        //     break;
-        //     case 'year':
-        //     groupBy = { $year: '$updatedAt' };
-        //     break;
-        //     default:
-                // groupBy = { $month: '$updatedAt' };
-                groupBy = { $dayOfYear: '$updatedAt' }; 
-        // }
+        const groupBy = { $dayOfYear: '$updatedAt' }; 
     
         try {
+
             const salesData = await orderData.aggregate([
-            {
-                $unwind: '$productInforamtion' // Unwind the productInformation array
-            },
-            {
-                $match: {
-                'productInforamtion.paymentStatus': 'Paid'
+                {
+                    $unwind: '$productInforamtion' // Unwind the productInformation array
+                },
+                {
+                    $match: {
+                    'productInforamtion.paymentStatus': 'Paid'
+                    }
+                },
+                {
+                    $group: {
+                    _id: {
+                        year: { $year: '$updatedAt' },
+                        month: { $month: '$updatedAt' },
+                        day: { $dayOfMonth: '$updatedAt' }
+                    },
+                    totalSales: { $sum: '$productInforamtion.productTotalAmount' } // Update with the actual property of your sales data
+                    }
+                },
+                {
+                    $project: {
+                    _id: 1, // Exclude the default _id field
+                    date: {
+                        $concat: [
+                        { $toString: '$_id.year' },
+                        '-',
+                        { $toString: '$_id.month' },
+                        '-',
+                        { $toString: '$_id.day' }
+                        ]
+                    },
+                    totalSales: 1
+                    }
+                },
+                {
+                    $sort:{_id:1}
+                },
+                {
+                    $limit: 7
                 }
-            },
-            {
-                $group: {
-                _id: groupBy,
-                totalSales: { $sum: '$productInforamtion.productTotalAmount' } // Update with the actual property of your sales data
-                }
-            },
-            {
-                $sort:{_id:1}
-            }
             ]);
             
     
@@ -282,10 +299,114 @@ module.exports = {
             const percentageAmount = salesData.forEach(amount => {
                 amount.totalPercentage = (amount.totalSales/totalAmount)*100;
             });
+
     
           return salesData;
         }catch(error){
             console.log(error.message);
         }
+    },
+    totalCategorySale:async()=>{
+        const categorySales = await orderData.aggregate([
+            {
+                $unwind: '$productInforamtion' // Unwind the productInformation array
+            },
+            {
+                $lookup:{
+                    from:'products',
+                    localField:'productInforamtion.productId',
+                    foreignField:'_id',
+                    as:'productData'
+                }
+            },
+            {
+                $unwind:"$productData"
+            },
+            {
+                $unwind:"$productData.categoryIds"
+            },
+            {
+                $group: {
+                    _id:"$productData.categoryIds",
+                    totalSales: { $sum: '$productInforamtion.productTotalAmount' } 
+                }
+            },
+            {
+                $lookup:{
+                    from:'categorys',
+                    localField:'_id',
+                    foreignField:'_id',
+                    as:'categoryData'
+                }
+            },
+            {
+                $unwind:"$categoryData"
+            },
+            {
+                $project:{
+                    _id:0,
+                    categoryName:'$categoryData.categoryname',
+                    totalSales:1
+                }
+            },
+            // {
+            //     $sort:{
+
+            //     }
+            // }
+            
+        ]);
+
+        const totalAmount = categorySales.reduce((total,val) => {
+            return total+val.totalSales
+        },0);
+
+
+        const percentageAmount = categorySales.forEach(amount => {
+            amount.totalPercentage = (amount.totalSales/totalAmount)*100;
+        });
+
+        return categorySales;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// const { interval } = req.query;
+
+        
+// let groupBy;
+    
+// switch (interval) {
+//     case 'week':
+//     groupBy = { $week: '$updatedAt' };
+//     break;
+//     case 'month':
+//     groupBy = { $month: '$updatedAt' };
+//     break;
+//     case 'year':
+//     groupBy = { $year: '$updatedAt' };
+//     break;
+//     default:
+        // groupBy = { $month: '$updatedAt' };
+        // groupBy = { $dayOfYear: '$updatedAt' }; 
+// }

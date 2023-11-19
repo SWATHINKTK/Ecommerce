@@ -64,7 +64,7 @@ if(addCategorycropResult){
                     const customName = "cropped-Category.png";
                     const file = new File([blob], customName, { type: 'image/png' });
                     croppedImgAddCategory = file;
-                    
+
                 });
             }
 
@@ -85,7 +85,7 @@ function addCategoryCropperClose(){
 }
 
 
-
+// ADD CATEGORY SUBMIT DATA 
 
 document.getElementById("addCategoryForm").addEventListener("submit", function (event) {
         event.preventDefault(); // Prevent the default form submission
@@ -141,6 +141,8 @@ document.getElementById("addCategoryForm").addEventListener("submit", function (
                         result.innerHTML = data.message;
                         document.getElementById("addCategoryForm").reset();
                         document.getElementById('category-img-view').style.display = 'none';
+                        document.getElementById('addCategoryImagePreview').style.display = 'none';
+
                     }else{
                         result.setAttribute('class','alert alert-danger');
                         result.innerHTML = data.message;

@@ -328,16 +328,15 @@ document.addEventListener('DOMContentLoaded', function () {
   let saleData = document.getElementById('salesReportDiagram').value;
   saleData = JSON.parse(saleData) 
 
-  const labels = saleData.map(item => item._id); // Update with the actual property of your sales data
+  const labels = saleData.map(item => item.date); // Update with the actual property of your sales data
   const values = saleData.map(item => item.totalPercentage); // Update with the actual property of your sales data
 
 
-
   var areaData = {
-    labels: [...labels], // Initial empty array
+    labels: labels,
     datasets: [{
       label: '# of Sales',
-      data: [...values], // Initial empty array
+      data: values, // Initial empty array
       backgroundColor: 'rgba(75, 192, 192, 0.2)',
       borderColor: 'rgba(75, 192, 192, 1)',
       borderWidth: 1,
@@ -372,7 +371,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
   // Check if the chart canvas element exists
-  var areaChartCanvas = document.getElementById('areaChart');
+  var areaChartCanvas = document.getElementById('salesChart');
 
   if (areaChartCanvas) {
     var areaChart = new Chart(areaChartCanvas.getContext('2d'), {
@@ -381,5 +380,46 @@ document.addEventListener('DOMContentLoaded', function () {
       options: areaOptions
     });
   }
+
+  // CATEGORY BAR CHART
+  let categoryReport = document.getElementById('categoryReport').value;
+  categoryReport = JSON.parse(categoryReport) 
+
+  const labelsCategory = categoryReport.map(item => item.categoryName); // Update with the actual property of your sales data
+  const valuesCategory = categoryReport.map(item => item.totalPercentage); // Update with the actual property of your sales data
+
+  console.log(labelsCategory,valuesCategory)
+
+  // Sample data for the bar chart
+  var barChartData = {
+    labels: labelsCategory,
+    datasets: [{
+      label: 'Dataset 1',
+      backgroundColor: ['rgba(75, 192, 192, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)', 'rgba(255, 99, 132, 0.2)', 'rgba(153, 102, 255, 0.2)'],
+      borderColor: ['rgba(75, 192, 192, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)', 'rgba(255, 99, 132, 1)', 'rgba(153, 102, 255, 1)'],
+      borderWidth: 1,
+      hoverBackgroundColor: ['rgba(75, 192, 192, 0.5)', 'rgba(54, 162, 235, 0.5)', 'rgba(255, 206, 86, 0.5)', 'rgba(255, 99, 132, 0.5)', 'rgba(153, 102, 255, 0.5)'],
+      data:valuesCategory
+    }]
+  };
+
+  // Get the canvas element
+  var ctx = document.getElementById('barChart').getContext('2d');
+
+  // Create the bar chart
+  var barChart = new Chart(ctx, {
+    type: 'bar',
+    data: barChartData,
+    options: {
+      tooltips: {}, // Set tooltips to an empty object to remove the default tooltip
+      legend: {
+        display: false // Hide the legend
+      },
+      hover: {
+        mode: null // Disable hover mode
+      }
+    }
+  });
+
 });
 

@@ -96,8 +96,11 @@ const loadAdminHomepage = async(req, res, next) => {
         const totalDataForFirstRow = await helper.totalDataFirstSection();
 
         const salesChart = await helper.salesChart();
+
+        const categoryReport = await helper.totalCategorySale();
+
     
-        res.render('admin/main', { admin: true, name: req.session.name, title: 'AdminHome' ,totalRevenue:sendReport ,pendingProduct:pendingProduct, mostSelling:leastProduct, totalData:totalDataForFirstRow ,salesChart});  
+        res.render('admin/main', { admin: true, name: req.session.name, title: 'AdminHome' ,totalRevenue:sendReport ,pendingProduct:pendingProduct, mostSelling:leastProduct, totalData:totalDataForFirstRow ,salesChart, categoryReport});  
    } catch (error) {
         next(error);
    }
