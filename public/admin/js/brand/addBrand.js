@@ -12,7 +12,7 @@ if (brandImageUpload) {
         const imgTag = document.getElementById('brand-img-view');
 
         const input = event.target;
-        console.log(input);
+  
         if (input.files && input.files[0]) {
             const reader = new FileReader();
             reader.onload = function (e) {

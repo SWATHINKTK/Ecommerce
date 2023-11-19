@@ -11,10 +11,11 @@
             </div>
             <div class="form-group ">
               <label class="col-sm-3 col-form-label">Image</label>
-              <input type="file" class="form-control" id="categoryImage" name="categoryImage" accept="image/*" onchange="imageView(this)">
+              <input type="file" class="form-control" id="categoryImage" name="categoryImage" accept="image/*" onchange="categoryImageView(this)">
               <p class="text-danger ml-2" name="validate-category"></p>
-              <div  class="ml-3">
+              <div  class="ml-3" id="addCategoryImagePreview" style="display: none;">
                 <img class="category-image" id="category-img-view" src="" alt="Category Image File">
+                <button type="click" class="mt-2 bg-transparent addBrandCropBtn ml-auto" id="addCategory-CropperWindowView"><i class="mdi mdi-crop"></i> Crop</button>
               </div>
             </div>
             <div class="form-group">
@@ -29,5 +30,21 @@
           </div>
         </div>
       </div>
-    </div>                                                                                                                                                                                                   
+    </div>   
+    
+    
+    <!-- MODAL FOR IMAGE CROPPING  -->
+    <div class="modal w-100" id="addCategory-cropper-modal">
+      <div class="modal-dialog modal-dialog-centered w-100">
+        <div class="modal-content bg-white" style="height: 400px;">
+            <button type="button" class="close bg-white" onclick="addCategoryCropperClose()"><span aria-hidden="true">&times;</span></button>
+            <div class="d-flex justify-content-center m-2 ">
+              <button type="button" class="btn mt-2 text-dark addBrandCropBtn " id="cropResult" style=" box-shadow: 0 3px 10px rgb(0, 0, 0,0.5); border: 1px dashed #000; border-radius: 4px;"><i class="mdi mdi-crop"></i> Crop</button>
+            </div>
+            <img id="addCategory-cropper-Image" src="" alt="" style="height:auto; object-fit: cover;">
+
+          </div>
+        </div>
+      </div>
+    </div>
 
