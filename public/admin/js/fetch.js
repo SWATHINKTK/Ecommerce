@@ -31,35 +31,35 @@ document.getElementById('sidebar').addEventListener('click', async function(even
 
     }else if(id == 'add-product'){
 
+        addProductPageLoad();
         /*------------------------Fetch View Add Product Page------------------ */
-        try{
-            // View the Add a New Product Form Page
-            const response = await fetch("/admin/addproduct");
+        // try{
+            // // View the Add a New Product Form Page
+            // const response = await fetch("/admin/addproduct");
 
-            if(response.status == 401){
-                window.location.href = '/admin'
-                return;
-            }
+            // if(response.status == 401){
+            //     window.location.href = '/admin'
+            //     return;
+            // }
 
-            // Response Check Field
-            if(!response.ok){
+            // // Response Check Field
+            // if(!response.ok){
 
-                window.location.href = '/admin/error500';
-                return;
-            }
+            //     window.location.href = '/admin/error500';
+            //     return;
+            // }
 
-            //Response Convert to text and view
-            const html = await response.text();
-            contentPlaceholder.innerHTML = html;
+            // //Response Convert to text and view
+            // const html = await response.text();
+            // contentPlaceholder.innerHTML = html;
 
-            document.querySelector('title').innerHTML = 'Add Products'
+            // document.querySelector('title').innerHTML = 'Add Products'
 
-        }catch(error){
-            console.log(error.message)
-        }
+        // }catch(error){
+        //     console.log(error.message)
+        // }
         
         /*----------------------End of the Fetch--------------------- */
-
 
 
         /* ====================Fetch the Data and Render the Page at that time Drop down to view the Category 
@@ -119,16 +119,24 @@ document.getElementById('sidebar').addEventListener('click', async function(even
 
         // ################################ Image Remove From The View Of the Images #########################################
         document.getElementById('image-preview-main-div').addEventListener('click',(event) =>{
-            event.preventDefault()
+            event.preventDefault();
+
             
             // Product Added Image Remove
             if(event.target.classList.contains("remove")){
 
                 // Call The Fuction And Remove Images From Div. Function Present On the viewProduct.js
                 removePreviewImage(event.target,imageFile);
+
+            }else if(event.target.classList.contains("cropperBtn")){
+
+                console.log(event.target);
+                document.getElementById('addProductCropModal').style.display = 'block';
+                
             }
         })
 
+        
 
         // *********  SELECTING THE BRAND ID FROM THE BRANDED SELECT OPTION TAG  ***********
         let brandId;

@@ -328,7 +328,7 @@ module.exports = {
             {
                 $group: {
                     _id:"$productData.categoryIds",
-                    totalSales: { $sum: '$productInforamtion.productTotalAmount' } 
+                    totalSales: { $sum: '$productInforamtion.productquantity' } 
                 }
             },
             {

@@ -2,6 +2,31 @@
 // ****** PROCEED TO PAYMENT - PAYMENT OPTION DIV VIEW *****
 const proceedPaymentBtn = document.getElementById('proceed-payment-btn');
 proceedPaymentBtn.addEventListener('click',()=>{
+    
+    const addressCard = document.querySelectorAll("div[name='address-card']");
+    const deliveryAddress = document.querySelectorAll('input[name="CheckedAddress"]');
+    console.log(deliveryAddress)
+    let addressExist = false;
+    deliveryAddress.forEach((address,i)=>{
+        if(!address.checked)
+        {
+            addressCard[i].style.display = 'none';
+        }else{
+            addressExist = true;
+        }
+    });
+
+    if(!addressExist){ 
+        Swal.fire({
+            position:'bottom',
+            html: `Please Select an Address`,
+            showConfirmButton: false, 
+            timer: 1500,
+        });
+        return;
+    }
+
+
 
     const paymentOptionDiv = document.getElementById('payment-options');
     paymentOptionDiv.style.display = 'block';
@@ -15,15 +40,7 @@ proceedPaymentBtn.addEventListener('click',()=>{
     const addAddressButton = document.getElementById('addingNewAddressButton');
     addAddressButton.style.display = 'none';
 
-    const addressCard = document.querySelectorAll("div[name='address-card']");
-    const deliveryAddress = document.querySelectorAll('input[name="CheckedAddress"]');
-    deliveryAddress.forEach((address,i)=>{
-        if(!address.checked)
-        {
-            addressCard[i].style.display = 'none';
-        }
-    });
-
+    
     const changeAddress = document.getElementById('change-address');
     changeAddress.style.display = 'block';
 

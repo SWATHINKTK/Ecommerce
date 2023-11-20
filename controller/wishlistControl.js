@@ -1,3 +1,4 @@
+const { default: mongoose } = require('mongoose');
 const wishlistData = require('../models/wishlistModel');
 
 
@@ -82,6 +83,11 @@ const viewWishlistProduct = async(req, res, next) => {
         const userId = req.session.userId;
 
         const wishList = await wishlistData.aggregate([
+            {
+                $match:{
+                    userId: new mongoose.Types.ObjectId(userId)
+                }
+            },
             {
                 $unwind:'$wishlistProducts'
             },

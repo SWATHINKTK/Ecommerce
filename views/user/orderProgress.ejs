@@ -169,7 +169,7 @@
                                 
                                  <!-- **** LOAD TIME EVENT WORKING ON PROGRESS BAR  IN JS order>js*** -->
                                 <% if(orderData[0].productInforamtion.orderStatus == "Canceled"){ %>
-                                <% } else if( orderData[0].productInforamtion.orderStatus == 'Delivered'&& returnPolicyDate  ) { %>
+                                <% } else if( orderData[0].productInforamtion.orderStatus == 'Delivered'&& returnPolicyDate > new Date()) { %>
                                   <div class="card-footer p-4" id="order-progress-footer">
                                     <div class="d-flex justify-content-between">
                                       <h5 class="fw-normal mb-0"><a href="#" data-toggle="modal" data-target="#exampleModal">Return Order</a></h5>

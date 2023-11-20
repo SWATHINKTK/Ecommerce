@@ -6,7 +6,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="breadcrumb__text">
-                        <h4>User Profile</h4>
+                        <h4>Wallet</h4>
                         <div class="breadcrumb__links">
                             <!-- <a href="/home">Home</a>
                             <span>Shop</span> -->
@@ -107,21 +107,27 @@
                                       </tr>
                                     </thead>
                                     <tbody>
-                                        <% for(let i=dataWallet.length -1; i >= 0 ; i--) { %>
-                                            <tr>
-                                                <th><%= dataWallet.length - i  %></th>
-                                                <td><%= dataWallet[i].walletTransaction.transactionId %></td>
-                                                <td><%= (dataWallet[i].walletTransaction.Date) %></td>
-                                                
-                                                <td><%= dataWallet[i].walletTransaction.description %></td>
-                                                <% if(dataWallet[i].walletTransaction.transactionType == 'Debit'){ %>
-                                                    <td class="text-success"><%= dataWallet[i].walletTransaction.transactionType %></td>
-                                                <% } else {%>
-                                                    <td class="text-danger"><%= dataWallet[i].walletTransaction.transactionType %></td>
-                                                <% } %>
-                                                <td><%= dataWallet[i].walletTransaction.amount %></td>
-                                            </tr>
-                                        <% } %> 
+                                        <% if(dataWallet.length > 0) { %>
+                                            <% for(let i=dataWallet.length -1; i >= 0 ; i--) { %>
+                                                <tr>
+                                                    <th><%= dataWallet.length - i  %></th>
+                                                    <td><%= dataWallet[i].walletTransaction.transactionId %></td>
+                                                    <td><%= (dataWallet[i].walletTransaction.Date) %></td>
+                                                    
+                                                    <td><%= dataWallet[i].walletTransaction.description %></td>
+                                                    <% if(dataWallet[i].walletTransaction.transactionType == 'Debit'){ %>
+                                                        <td class="text-success"><%= dataWallet[i].walletTransaction.transactionType %></td>
+                                                    <% } else {%>
+                                                        <td class="text-danger"><%= dataWallet[i].walletTransaction.transactionType %></td>
+                                                    <% } %>
+                                                    <td><%= dataWallet[i].walletTransaction.amount %></td>
+                                                </tr>
+                                            <% } %>
+                                        <% } else {%>
+                                            <tr class="bg-danger">
+                                                <th class="text-dark text-center" colspan="6">No Wallet Transaction</th>
+                                              </tr>
+                                        <% } %>
                                       
                                     </tbody>
                                   </table>

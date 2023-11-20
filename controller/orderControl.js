@@ -11,10 +11,16 @@ const loadOrderListViewUserSide = async (req, res, next) => {
         const checkLogin = req.session.userId ? true : false;
 
         // userId
-        const id = req.session.id;
+        const id = req.session.userId;
+        console.log('userId',id)
 
         // Find the all order details and view on order page
         const order = await orderData.aggregate([
+            {
+                $match:{
+                    userId:new mongoose.Types.ObjectId(id)
+                }
+            },
             {
                 $unwind: "$productInforamtion"
             },
@@ -31,6 +37,8 @@ const loadOrderListViewUserSide = async (req, res, next) => {
                 $sort: { _id: -1 }
             }
         ]);
+
+        console.log('order',order)
 
         if (orderData) {
             res.render('user/orderDetails', { title: 'View Order', login: checkLogin, user: true, orderData: order });

@@ -127,9 +127,9 @@
                   <p class="text-danger ml-2" id="validate-addProduct"></p>
                   <div id="image-preview-main-div" class="form-style bg-white image-preview-main-div">
                     <div id="product-image-preview" class="form-style bg-white product-image-preview">
-                    
                       
                     </div>
+                    <!-- <div id="product-cropper-addDiv" class="product-cropper-addDiv" style="display: none;"></div> -->
                   </div>
                 </div>
               </div>
@@ -153,5 +153,20 @@
        
       </div>
     </div>
+    </div>
+  </div>
+
+
+  <div class="modal w-100" id="addProductCropModal">
+    <div class="modal-dialog modal-dialog-centered w-100">
+      <div class="modal-content bg-white" style="height: 400px;">
+          <button type="button" class="close bg-white" onclick="addProductImageCropClose()"><span aria-hidden="true">&times;</span></button>
+          <div class="d-flex justify-content-center m-2 ">
+            <button type="button" class="btn mt-2 text-dark addBrandCropBtn " id="addProductCropResult" style=" box-shadow: 0 3px 10px rgb(0, 0, 0,0.5); border: 1px dashed #000; border-radius: 4px;"><i class="mdi mdi-crop"></i> Crop</button>
+          </div>
+          <img id="addProductCroppingImageView" src="" alt="" style="height:auto; object-fit: cover;">
+
+        </div>
+      </div>
     </div>
   </div>

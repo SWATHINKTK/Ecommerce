@@ -55,7 +55,6 @@ const PlaceOrder = async(req, res, next)=>{
         const userId = req.session.userId;
         
         const data = req.body;
-        console.log(data)
 
     
         // **** Address Information Setting in the Order ****
@@ -180,6 +179,8 @@ const PlaceOrder = async(req, res, next)=>{
         });
         const orderStore = await orderSucess.save();
 
+        console.log(orderSucess)
+
         // **** STOCK MANAGEMENT IN EACH PRODUCT ON THE UPDATE IF TRUE SECTION HANDLE SINGLE PRODUCT ****
         if(orderStore && data.SingleProduct){
 
@@ -209,9 +210,11 @@ const PlaceOrder = async(req, res, next)=>{
                 }else if(orderSucess.paymentMethod == 'Wallet'){
                     
                     const nanoidModule = await import('nanoid');
-                    nanoid = nanoidModule.nanoid;
+                    let nanoid = nanoidModule.nanoid;
 
                     const uniqueID = nanoid();
+
+                    console.log(uniqueID)
 
                     const transaction = {
                         transactionId:uniqueID,
@@ -220,9 +223,12 @@ const PlaceOrder = async(req, res, next)=>{
                         amount:orderSucess.totalAmount,
                         orderId:orderSucess._id
                     }
-
+                    
+                    console.log(transaction)
                     const creditAmount = await userData.updateOne({_id:userId},{ $inc: { walletAmount: -orderSucess.totalAmount } },{ upsert: true });
                     const updateWalletTransaction = await userData.updateOne({_id:userId},{ $push: { walletTransaction: transaction } },{ upsert: true });
+
+                    console.log('trans',creditAmount,updateWalletTransaction)
 
                     // WALLET PAYMENT AND AMOUNT UPDATE SUCESSSFULL
                     if(creditAmount && updateWalletTransaction ){
@@ -278,7 +284,7 @@ const PlaceOrder = async(req, res, next)=>{
                 }else if(orderSucess.paymentMethod == 'Wallet'){
                     
                     const nanoidModule = await import('nanoid');
-                    nanoid = nanoidModule.nanoid;
+                    let nanoid = nanoidModule.nanoid;
 
                     const uniqueID = nanoid();
 

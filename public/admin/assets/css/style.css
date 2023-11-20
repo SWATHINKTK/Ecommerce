@@ -11758,7 +11758,19 @@ input[type="button"].btn-block {
   margin-right: 10px;
   border: none;
 }
+.product-cropper-addDiv{
+padding-bottom: 10px;
+}
+.product-cropper-addDiv button{
+  margin-left: 10px;
+  box-shadow: 0 3px 10px rgb(0, 0, 0,0.5); 
+  border: none;
+}
 
+
+.cropperBtn-product{
+  display: block;
+}
 
 
 /* .image-preview-main-div{

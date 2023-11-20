@@ -432,6 +432,9 @@ function productImagePreview(fileInput,imageFile){
     //*** Div For the Image View ***
     const imagePreview = document.getElementById('product-image-preview');
 
+    // CROPPER BUTTON
+    // const productCropperBtn = document.getElementById('product-cropper-addDiv');
+
     //*** Checking The Image Limit ***
     if(imageFile.length < 5 && fileInput.files.length <= 4){
 
@@ -453,9 +456,20 @@ function productImagePreview(fileInput,imageFile){
             btn.classList.add("remove");
             btn.innerHTML = `<i class="bi bi-x remove" id='${i}'></i>`;
 
+            // **** Cropper Btn ****
+            const cropperBtn = document.createElement('button');
+            cropperBtn.id = `cropperBtn${i}`,
+            cropperBtn.classList.add("cropperBtn-product");
+            cropperBtn.innerHTML = `<i class="mdi mdi-crop cropperBtn" id="cropperBtn${i}"></i>`;
+
+            const BtnDiv = document.createElement('div');
+            BtnDiv.id = `btnDiv${i}`,
+
             //*** Apppend That Button And Image To Preview View Div
             imagePreview.appendChild(img);
-            imagePreview.appendChild(btn);
+            imagePreview.appendChild(BtnDiv)
+            BtnDiv.appendChild(btn);
+            BtnDiv.appendChild(cropperBtn);
         }
     }else{
 
@@ -480,13 +494,21 @@ function removePreviewImage(button,imageFile){
     const imagePreview = document.getElementById('product-image-preview');
     const imageRemove = document.querySelector(`img[name="${id}"]`);
     const buttonRemove = document.querySelector(`button[id="${id}"]`);
+    const btnDiv = document.querySelector(`div[id="btnDiv${id}"]`);
+
+    // CROPPER BUTTON
+    // const productCropperBtn = document.getElementById('product-cropper-addDiv');
    
     //*** Image Remove From The Array ***
     imageFile.splice(id,1);
 
     //*** Image Remove From That Div and Remove Button ***
     imagePreview.removeChild(imageRemove);
-    imagePreview.removeChild(buttonRemove);
+    imagePreview.removeChild(btnDiv);
+    // imagePreview.removeChild(buttonRemove);
+    
+    // productCropperBtn.remove(buttonRemove);
+
 
 }
 

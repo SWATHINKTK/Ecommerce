@@ -48,7 +48,7 @@
                             <%= order.addressInformation.district %> , <%= order.addressInformation.pincode %>
                         </li>
                         <li class="mt-3"><span class="pr-2 font-weight-bold">Payment Method</span> : <%= order.paymentMethod %></li>
-                        <li class="mt-1"><span class="pr-2 font-weight-bold">Total Price</span> : <i class="bi bi-currency-rupee text-primary font-weight-bold"></i> <span class="font-weight-bold text-primary"><%= order.productInforamtion[0].productPrice %></span></li>
+                        <li class="mt-1"><span class="pr-2 font-weight-bold">Total Price</span> : <i class="bi bi-currency-rupee text-primary font-weight-bold"></i> <span class="font-weight-bold text-primary"><%= order.totalAmount %></span></li>
                     </ul>
                     <div class="d-flex justify-content-center mt-5">
                         <a href="/api/viewOrder" class="btn btn-dark rounded-pill px-3">Go  To Order</a>
