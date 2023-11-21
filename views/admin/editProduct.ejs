@@ -137,7 +137,10 @@
                     <div id="product-image-preview" class="form-style bg-white product-image-preview">
                       <% for(let i=0;i<dataProduct.productImages.length;i++){ %>
                         <img src="/public/admin/assets/productImages/<%= dataProduct.productImages[i] %>" name='<%= i %>'>
-                        <button class="remove" id='<%= i %>'><i class="bi bi-x remove" id='<%= i %>'></i></button>
+                        <div class="imagePreview-BtnDiv" id="btnDiv<%= i %>">
+                          <button id="<%= i %>" class="remove"><i class="bi bi-x remove" id="<%= i %>"></i></button>
+                          <button id="cropperBtn<%= i %>" class="cropperBtn-product"><i class="mdi mdi-crop cropperBtn" id="cropperBtn<%= i %>" name="<%= i %>"></i></button>
+                        </div>
                       <% } %>
                     </div>
                     <input type="hidden" value="<%= dataProduct.productImages %>" id="oldImages" >
@@ -163,6 +166,21 @@
         </form>
       </div>
     </div>
+    </div>
+  </div>
+
+
+  <div class="modal w-100" id="addProductCropModal">
+    <div class="modal-dialog modal-dialog-centered w-100">
+      <div class="modal-content bg-white" style="height: 400px;">
+          <button type="button" class="close bg-white" id="addProductImageCropClose"><span aria-hidden="true">&times;</span></button>
+          <div class="d-flex justify-content-center m-2 ">
+            <button type="button" class="btn mt-2 text-dark addBrandCropBtn " id="addProductCropResult" name="" style=" box-shadow: 0 3px 10px rgb(0, 0, 0,0.5); border: 1px dashed #000; border-radius: 4px;"><i class="mdi mdi-crop"></i> Crop</button>
+          </div>
+          <img id="addProductCroppingImageView" src="" alt="" style="height:auto; object-fit: cover;">
+
+        </div>
+      </div>
     </div>
   </div>
 
