@@ -388,7 +388,6 @@ document.addEventListener('DOMContentLoaded', function () {
   const labelsCategory = categoryReport.map(item => item.categoryName); // Update with the actual property of your sales data
   const valuesCategory = categoryReport.map(item => item.totalPercentage); // Update with the actual property of your sales data
 
-  console.log(labelsCategory,valuesCategory)
 
   // Sample data for the bar chart
   var barChartData = {
