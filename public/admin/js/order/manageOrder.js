@@ -87,20 +87,108 @@ updateOrderStatus.forEach((updateButton) => {
 
 
 // FILTER ORDER DATA ENTER DIV VIEW 
-const filterBtn = document.getElementById('filterBtn');
+const orderSearch = document.getElementById('orderSearchBtn');
 
-if(filterBtn){
-    filterBtn.addEventListener('click',()=>{
-        
-        const filterDiv = document.getElementById('filterOrder');
 
-        if(filterDiv.style.display == 'none'){
-            filterDiv.style.display = 'block';
-        }else{
-            filterDiv.style.display = 'none';
+if(orderSearch){
+    orderSearch.addEventListener('click',async(event)=>{
+
+        const toggleSearch = document.getElementById('toggleSearch');
+
+        if(toggleSearch.getAttribute('aria-expanded')){
+            const searchData = document.getElementById('orderSearch').value;
+
+            if(searchData.trim() == ''){
+                window.location.href = '/api/orderlist';
+                return;
+            }
+
+            window.location.href = `/api/searchOrderId?value=${searchData}`;
+            
+            // const tableBody = document.getElementById('orderDataTableBody');
+
+            // const response = await  fetch(`/api/searchOrderManagement?value=${searchData}`);
+
+            //     if(!response.ok){
+            //         window.location.href = '/admin/error500';
+            //     }
+
+            // const responseData = await response.json();
+            // console.log(responseData);
+            // console.log(tableBody)
+
+            // tableBody.innerHTML = creatingTableRows(responseData.order);
         }
     })
 }
 
+
+function creatingTableRows(data){
+
+    let rows = '';
+    if(data.length > 0){
+        // <tr>
+        //             <td><%= i+1 %></td>
+        //             <td><%= orderData[i]._id %></td>
+        //             <td><%= orderData[i].totalAmount %></td>
+        //             <td><%= orderData[i].createdAt.toLocaleDateString() %></td>
+        //             <td><%= orderData[i].updatedAt.toLocaleDateString() %></td>
+        //             <td><a href='/api/orderManage<%= orderData[i]._id %>'  class="btn btn-warning">Manage</a></td>
+        //           </tr>
+        data.forEach((order, index) => {
+            rows += '<tr>';
+            rows += '<td>' + index +1 + '</td>';
+            rows += '<td>' +  order.order_id + '</td>';
+            rows += '<td>' +  order.totalAmount + '</td>';
+            rows += '<td>' +  new Date(order.createdAt).toLocaleDateString() + '</td>';
+            rows += '<td>' +  new Date(order.createdAt).toLocaleDateString() + '</td>';
+            rows += '<td> <a class="btn btn-warning" href="/api/orderManage' +  order._id +  '">Manage</a> </td>';
+            rows += '</tr>';
+        })
+        
+    }else{
+        rows += '<tr class="bg-danger">';
+        rows += '<th class="text-dark text-center" colspan="6">NO MATCHES FOUND</th>';
+        rows += '</tr>';
+    }
+    return rows
+}
+
+
+const dateSearch = document.getElementById('dateSearch');
+
+if(dateSearch){
+
+    dateSearch.addEventListener('click',async(event)=>{
+        event.preventDefault();
+
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+        const tableBody = document.getElementById('orderDataTableBody');
+
+        if(startDate < endDate){
+            window.location.href = `/api/searchOrderManagement?startDate=${startDate}&endDate=${endDate}`;
+        }else{
+            Swal.fire({
+                text:"enter start date less than end date",
+                icon:'error',
+                type:"error",
+                timer:1900
+            });
+        }
+
+        // const response = await  fetch(`/api/searchOrderManagement?startDate=${startDate}&endDate=${endDate}`);
+
+        //     if(!response.ok){
+        //         window.location.href = '/admin/error500';
+        //     }
+
+        // const responseData = await response.json();
+        // console.log(responseData);
+        // console.log(tableBody)
+
+        // tableBody.innerHTML = creatingTableRows(responseData.order);
+    })
+}
 
 

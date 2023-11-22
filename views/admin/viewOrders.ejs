@@ -7,35 +7,37 @@
 
         <!-- BUTTON FILTER DATA BUTTONS -->
         <div class="d-grid gap-4 d-md-flex justify-content-md-end search">
-          <button type="button" class="btn btn-search" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" ><i class="bi bi-search"></i></button>
+          <button type="button" class="btn btn-search" id="toggleSearch" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" ><i class="bi bi-search"></i></button>
           <button type="button" class="btn bg-white  ml-2" data-toggle="collapse" data-target="#filterData" aria-expanded="false" aria-controls="filterData"><i class="bi bi-funnel-fill text-dark"></i></button>
         </div>
 
          <!-- SEARCH DIV -->
-        <div class="collapse" id="collapseExample">
+        <div class="<%= locals.search ? 'collapse show' : 'collapse' %>" id="collapseExample">
           <div class="card card-body pr-0">
             <div class="d-grid gap-4 d-md-flex justify-content-md-end search">
-              <input type="text" class="form-control col-3 mr-2 " id="categorySearch" placeholder="Order Id Search" name="categorySearch" value="<%= locals.search ? search : '' %>">
-              <button type="button" class="btn btn-search" ><i class="bi bi-search"></i></button>
+              <input type="text" class="form-control col-3 mr-2 " id="orderSearch" placeholder="Order Id Search" name="orderSearch" value="<%= locals.search ? search : '' %>">
+              <button type="button" class="btn btn-search" id="orderSearchBtn" style="height: 37px;"><i class="bi bi-search"></i></button>
+              <a href="/api/orderlist" class="btn btn-search pr-0 pl-1" ><i class="mdi mdi-close-circle-outline icon-md text-danger"></i></a>
             </div>
           </div>
         </div>
 
         <!-- FILTER DATE DIV -->
-        <div class="collapse" id="filterData">
+        <div class="<%= locals.startDate ? 'collapse show' : 'collapse' %>" id="filterData">
           <div class="card card-body pt-2 pr-0">
-            <div class="d-grid gap-4 d-md-flex justify-content-md-end search" >
-              <div class="form-group" style="width: 14.5%;">
-                <label for="startDate">Start Date</label>
-                <input type="date" class="form-control" id="startDate" name="startDate" placeholder="Select Start Date" value="<%= locals.search ? search : '' %>" >
+              <div class="d-grid gap-4 d-md-flex justify-content-md-end search" >
+                <div class="form-group" style="width: 14.5%;">
+                  <label for="startDate">Start Date</label>
+                  <input type="date" class="form-control" id="startDate" name="startDate" placeholder="Select Start Date" value="<%= locals.startDate ? startDate : '' %>" >
+                </div>
+              
+                <div class="form-group ml-2" style="width: 14.5%;">
+                  <label for="endDate">End Date</label>
+                  <input type="date" class="form-control" id="endDate" name="endDate" placeholder="Select End Date" value="<%= locals.endDate ? endDate : '' %>">
+                </div>  
+                <button type="button" class="btn btn-search ml-2 mt-4" id="dateSearch" style="height: 37px;"><i class="bi bi-search"></i></button>
+                <a href="/api/orderlist"  class="btn btn-search mt-4 py-1 px-1 pr-0"  style="height: 37px;"><i class="mdi mdi-close-circle-outline icon-md text-danger"></i></a>
               </div>
-            
-              <div class="form-group ml-2" style="width: 14.5%;">
-                <label for="endDate">End Date</label>
-                <input type="date" class="form-control" id="endDate" name="endDate" placeholder="Select End Date" value="<%= locals.search ? search : '' %>">
-              </div>  
-              <button type="button" class="btn btn-search ml-2 mt-4" style="height: 37px;"><i class="bi bi-search"></i></button>
-            </div>
           </div>
         </div>
         
@@ -51,7 +53,7 @@
                 <th>Manage</th>
               </tr>
             </thead>
-            <tbody class="text-white" >
+            <tbody class="text-white" id="orderDataTableBody">
               <% if(orderData.length > 0) { %>
                 <% for(let i= 0 ; i < orderData.length ; i++) { %>
                   <tr>
@@ -77,17 +79,17 @@
           <nav aria-label="Page navigation example">
             <ul class="pagination" >
               <li class="page-item" >
-                <a class="page-link <%= page == 1 ? 'btn-link disabled' : '' %>" href="?page=<%= page > 1 ? page -1 : 1  %>" >
+                <a class="page-link <%= page == 1 ? 'btn-link disabled' : '' %>" href="?page=<%= page > 1 ? page -1 : 1  %><%= locals.search ? '&value='+ search : '' %><%= locals.startDate ? '&startDate=' +startDate : '' %><%= locals.endDate ? '&endDate=' +endDate : '' %>" >
                   <span aria-hidden="true" >&laquo;</span>
                   <span class="sr-only">Previous</span>
                 </a>
               </li>
               <% for(let i = 1; i <= totalPages ;i++) { %>
-                <li class="page-item"><a class="page-link <  <%= page == i ? 'text-danger font-weight-bold' : '' %>" href="?page=<%= i %>"><%= i %></a></li>
+                <li class="page-item"><a class="page-link <  <%= page == i ? 'text-danger font-weight-bold' : '' %>" href="?page=<%= i %><%= locals.search ? '&value='+ search : '' %><%= locals.startDate ? '&startDate=' +startDate : '' %><%= locals.endDate ? '&endDate=' +endDate : '' %>"><%= i %></a></li>
               <% } %>
 
               <li class="page-item">
-                <a class="page-link <%= page == totalPages ? 'btn-link disabled' : '' %>" href="?page=<%= page < totalPages ? parseInt(page) + 1 : totalPages  %>" aria-label="Next">
+                <a class="page-link <%= page == totalPages ? 'btn-link disabled' : '' %>" href="?page=<%= page < totalPages ? parseInt(page) + 1 : totalPages  %><%= locals.search ? '&value='+ search : '' %><%= locals.startDate ? '&startDate=' +startDate : '' %><%= locals.endDate ? '&endDate=' +endDate : '' %>" aria-label="Next">
                   <span aria-hidden="true">&raquo;</span>
                   <span class="sr-only">Next</span>
                 </a>

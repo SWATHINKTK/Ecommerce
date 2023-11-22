@@ -13,6 +13,8 @@ orderRouter.patch('/returnOrder', userAuth.isUserLogin, orderController.orderRet
 //*** Order Routing Admin Side ***
 orderRouter.get('/orderlist', adminAuth.isAdminLogin, orderController.loadOrderListAdminSide);
 orderRouter.get('/orderManage:id', adminAuth.isAdminLogin, orderController.loadOrderManagePageAdminSide);
+orderRouter.get('/searchOrderId', adminAuth.isAdminLogin, orderController.searchOrderIdAdminSide);
+orderRouter.get('/searchOrderManagement', adminAuth.isAdminLogin, orderController.searchOrderAdminSide);
 orderRouter.patch('/updateStatus', adminAuth.isAdminLogin, orderController.updateOrderStatus);
 
 module.exports = orderRouter;

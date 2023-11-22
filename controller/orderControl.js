@@ -242,10 +242,13 @@ const loadOrderListAdminSide = async (req, res, next) => {
             }
         ]);
 
-        const totalOrders = await orderData.countDocuments({});
+        let totalOrders = await orderData.countDocuments({});
+
+        totalOrders = order.length > 0 ? Math.ceil(totalOrders/limit) : 0;
+
 
         if (order) {
-            res.render('admin/viewOrders', { admin: true, title: 'Order', orderData: order ,totalPages:Math.ceil(totalOrders/limit),page:page});
+            res.render('admin/viewOrders', { admin: true, title: 'Order', orderData: order ,totalPages:totalOrders ,page:page});
         } else {
             throw new Error('Data is Not Found');
         }
@@ -423,6 +426,177 @@ const updateOrderStatus = async (req, res, next) => {
 }
 
 
+// ORDER SEARCH IN ADMIN SIDE 
+const searchOrderAdminSide = async(req, res, next) => {
+
+    try {
+
+        let startDate = '';
+        let endDate = '';
+        if(req.query.startDate){
+            startDate = new Date(req.query.startDate); 
+            startDate.setHours(0, 0, 0, 0);
+        }
+
+        if(req.query.endDate){
+            endDate = new Date(req.query.endDate);
+            endDate.setHours(23, 59, 59, 999);
+        }
+
+
+        let page = 1;
+        if(req.query.page){
+            page = req.query.page;
+        }
+
+        const limit = 5;
+
+        const order = await orderData.aggregate([
+            {
+                $match:{
+                     createdAt: {
+                            $gte: startDate,
+                            $lte: endDate
+                          }
+                }
+            },
+            {
+                $lookup: {
+                    from: 'products',
+                    localField: 'productInforamtion.productId',
+                    foreignField: '_id',
+                    as: 'productData'
+                }
+
+            },
+            {
+                $sort: { _id: -1 }
+            },
+            {
+                $skip:(page - 1) * limit
+            },
+            {
+                $limit: limit * 1
+            }
+        ]);
+
+        let totalOrdersCount = await orderData.aggregate([
+            {
+                $match:{
+                        createdAt: {
+                            $gte: startDate,
+                            $lte: endDate
+                          }
+                }
+            },
+            {
+                $group:{
+                    _id:null,
+                    totalCount:{$sum:1}
+                }
+            }
+        ]);
+        
+        if(order.length > 0){
+            startDate = dateFormat(startDate);
+            endDate = dateFormat(endDate);
+        }
+        
+    
+            
+        totalOrdersCount = order.length > 0 ? Math.ceil(totalOrdersCount[0].totalCount / limit) : 0;
+
+
+        if (order) {
+            res.render('admin/viewOrders', { admin: true, title: 'Order', orderData: order , totalPages:totalOrdersCount, page:page, startDate, endDate});
+        } else {
+            throw new Error('Data is Not Found');
+        }
+
+    } catch (error) {
+        next(error)
+    }
+}
+
+
+
+function dateFormat(date){
+    let year = date.getFullYear();
+    let month = (date.getMonth() + 1).toString().padStart(2, '0');
+    let day = date.getDate().toString().padStart(2, '0');
+
+    return formattedDate = year + '-' + month + '-' + day;
+}
+
+
+
+// ORDER SEARCH BASED ON ORDER ID IN ADMIN SIDE 
+const searchOrderIdAdminSide = async(req, res, next) => {
+
+    try {
+   
+        let regexPattern = '';
+        if(req.query.value){
+            regexPattern = { $regex: new RegExp(`.*${req.query.value}.*`, 'i') }; 
+        }
+
+        let page = 1;
+        if(req.query.page){
+            page = req.query.page;
+        }
+
+        const limit = 5;
+
+        const order = await orderData.aggregate([
+            {
+                $match:{ order_id: regexPattern}
+            },
+            {
+                $lookup: {
+                    from: 'products',
+                    localField: 'productInforamtion.productId',
+                    foreignField: '_id',
+                    as: 'productData'
+                }
+
+            },
+            {
+                $sort: { _id: -1 }
+            },
+            {
+                $skip:(page - 1) * limit
+            },
+            {
+                $limit: limit * 1
+            }
+        ]);
+
+        let totalOrdersCount = await orderData.aggregate([
+            {
+                $match:{ order_id: regexPattern}
+            },
+            {
+                $group:{
+                    _id:null,
+                    totalCount:{$sum:1}
+                }
+            }
+        ]);
+        
+        totalOrdersCount = order.length > 0 ? Math.ceil(totalOrdersCount[0].totalCount / limit) : 0;
+
+
+        if (order) {
+            res.render('admin/viewOrders', { admin: true, title: 'Order', orderData: order , totalPages:totalOrdersCount, page:page, search:req.query.value});
+        } else {
+            throw new Error('Data is Not Found');
+        }
+
+    } catch (error) {
+        next(error)
+    }
+}
+
 
 // ORDER RETURN WORKING CONTROLLER
 const orderReturn = async(req, res, next) => {
@@ -512,5 +686,7 @@ module.exports = {
     orderReturn,
     loadOrderListAdminSide,
     loadOrderManagePageAdminSide,
+    searchOrderAdminSide,
+    searchOrderIdAdminSide,
     updateOrderStatus
 }
