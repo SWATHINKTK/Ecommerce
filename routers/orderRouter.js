@@ -6,6 +6,7 @@ const adminAuth = require('../middleware/adminAuth')
 
 orderRouter.get('/viewOrder', userAuth.isUserLogin, orderController.loadOrderListViewUserSide);
 orderRouter.get('/orderDetails', userAuth.isUserLogin, orderController.loadOrderProgressInUserSide);
+orderRouter.get('/invoiceDownload', userAuth.isUserLogin, orderController.orderInvoiceDownload);
 orderRouter.delete('/cancelOrder', userAuth.isUserLogin, orderController.cancelOrder);
 orderRouter.patch('/returnOrder', userAuth.isUserLogin, orderController.orderReturn);
 
