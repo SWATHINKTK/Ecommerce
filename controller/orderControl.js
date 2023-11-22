@@ -12,7 +12,13 @@ const loadOrderListViewUserSide = async (req, res, next) => {
 
         // userId
         const id = req.session.userId;
-        console.log('userId',id)
+       
+        let page = 1;
+        if(req.query.page){
+            page = req.query.page;
+        }
+
+        const limit = 5;
 
         // Find the all order details and view on order page
         const order = await orderData.aggregate([
@@ -35,13 +41,35 @@ const loadOrderListViewUserSide = async (req, res, next) => {
             },
             {
                 $sort: { _id: -1 }
+            },
+            {   $skip: (page - 1) * limit },
+            {   $limit: limit * 1 }
+          
+        ]);
+
+
+        let totalCount = await orderData.aggregate([
+            {
+                $match:{
+                    userId:new mongoose.Types.ObjectId(id)
+                }
+            },
+            {
+                $unwind: "$productInforamtion"
+            },
+            {
+                $group:{
+                    _id:null,
+                    totalCount:{$sum:1}
+                }
             }
         ]);
 
-        console.log('order',order)
+        
+        totalCount = Math.ceil(totalCount[0].totalCount / limit)
 
         if (orderData) {
-            res.render('user/orderDetails', { title: 'View Order', login: checkLogin, user: true, orderData: order });
+            res.render('user/orderDetails', { title: 'View Order', login: checkLogin, user: true, orderData: order , totalCount:totalCount ,page:page});
         } else {
             throw new Error('Data Not Found');
         }
@@ -185,10 +213,15 @@ const cancelOrder = async (req, res, next) => {
 // *** ORDER MANAGEMENT ADMIN SIDE ***
 const loadOrderListAdminSide = async (req, res, next) => {
     try {
+
+        let page = 1;
+        if(req.query.page){
+            page = req.query.page;
+        }
+
+        const limit = 5;
+
         const order = await orderData.aggregate([
-            // {
-            //     $unwind:"$productInforamtion"
-            // },
             {
                 $lookup: {
                     from: 'products',
@@ -200,11 +233,19 @@ const loadOrderListAdminSide = async (req, res, next) => {
             },
             {
                 $sort: { _id: -1 }
+            },
+            {
+                $skip:(page - 1) * limit
+            },
+            {
+                $limit: limit * 1
             }
         ]);
 
+        const totalOrders = await orderData.countDocuments({});
+
         if (order) {
-            res.render('admin/viewOrders', { admin: true, title: 'Order', orderData: order });
+            res.render('admin/viewOrders', { admin: true, title: 'Order', orderData: order ,totalPages:Math.ceil(totalOrders/limit),page:page});
         } else {
             throw new Error('Data is Not Found');
         }

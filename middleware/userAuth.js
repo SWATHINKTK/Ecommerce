@@ -3,7 +3,6 @@ const isUserLogin = async(req,res,next) =>{
     try{
 
         if(!(req.session.userId)){
-            console.log('auth')
             if(req.is('json')){
                 res.status(401).json()
             }else{

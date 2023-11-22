@@ -174,22 +174,26 @@ function validateAddress(fromData){
         errorElemetns[0].innerHTML = ' * please fill out this field.';
         is_valid = false;
 
-    }else if(!(data.Name.length >= 2 && data.Name.length <= 50)){
+    }
+    if(!(data.Name.length >= 2 && data.Name.length <= 50)){
 
         errorElemetns[0].innerHTML = ' * name must be between 2 and 50 characters. ';
         is_valid = false;
 
-    }else if(!nameRegex.test(data.Name)){
+    }
+    if(!nameRegex.test(data.Name)){
 
         errorElemetns[0].innerHTML = ' * character only allowed.';
         is_valid = false;
 
-    }else if(data.MobileNumber.split() == ''){
+    }
+    if(data.MobileNumber.split() == ''){
 
         errorElemetns[1].innerHTML = ' * enter phonenumber.';
         is_valid = false;
 
-    }else if(!numberRegex.test(data.MobileNumber)){
+    }
+    if(!numberRegex.test(data.MobileNumber)){
 
         if(data.MobileNumber.length != 10){
 
@@ -203,7 +207,8 @@ function validateAddress(fromData){
 
         }
 
-    }else if(!pincodeRegex.test(data.Pincode)){
+    }
+    if(!pincodeRegex.test(data.Pincode)){
 
         if(data.Pincode.length != 6){
 
@@ -217,27 +222,32 @@ function validateAddress(fromData){
 
         }
 
-    }else if(data.Locality.split() == ''){
+    }
+    if(data.Locality.split() == ''){
 
         errorElemetns[3].innerHTML = ' * please fill out this field.';
         is_valid = false;
 
-    }else if(data.Address.split() == ''){
+    }
+    if(data.Address.split() == ''){
 
         errorElemetns[4].innerHTML = ' * please fill out this field.';
         is_valid = false;
 
-    }else if(data.City.split() == ''){
+    }
+    if(data.City.split() == ''){
 
         errorElemetns[5].innerHTML = ' * please fill out this field.';
         is_valid = false;
 
-    }else if(data.District.split() == ''){
+    }
+    if(data.District.split() == ''){
 
         errorElemetns[6].innerHTML = ' * please select your district.';
         is_valid = false;
 
-    }else if(data.AlteranteNumber.length > 0){
+    }
+    if(data.AlteranteNumber.length > 0){
 
         if(!numberRegex.test(data.AlteranteNumber)){
 

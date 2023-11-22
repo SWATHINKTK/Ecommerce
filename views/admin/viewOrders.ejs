@@ -2,8 +2,44 @@
 <h1 class="card-title text-center text-dark">Order Details</h1>
   <div class="col-12 grid-margin stretch-card">
     <div class="card card-div">
-      <div class="card-body  mt-5">
-        <div class="table-responsive">
+      
+      <div class="card-body  mt-3" >
+
+        <!-- BUTTON FILTER DATA BUTTONS -->
+        <div class="d-grid gap-4 d-md-flex justify-content-md-end search">
+          <button type="button" class="btn btn-search" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" ><i class="bi bi-search"></i></button>
+          <button type="button" class="btn bg-white  ml-2" data-toggle="collapse" data-target="#filterData" aria-expanded="false" aria-controls="filterData"><i class="bi bi-funnel-fill text-dark"></i></button>
+        </div>
+
+         <!-- SEARCH DIV -->
+        <div class="collapse" id="collapseExample">
+          <div class="card card-body pr-0">
+            <div class="d-grid gap-4 d-md-flex justify-content-md-end search">
+              <input type="text" class="form-control col-3 mr-2 " id="categorySearch" placeholder="Order Id Search" name="categorySearch" value="<%= locals.search ? search : '' %>">
+              <button type="button" class="btn btn-search" ><i class="bi bi-search"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- FILTER DATE DIV -->
+        <div class="collapse" id="filterData">
+          <div class="card card-body pt-2 pr-0">
+            <div class="d-grid gap-4 d-md-flex justify-content-md-end search" >
+              <div class="form-group" style="width: 14.5%;">
+                <label for="startDate">Start Date</label>
+                <input type="date" class="form-control" id="startDate" name="startDate" placeholder="Select Start Date" value="<%= locals.search ? search : '' %>" >
+              </div>
+            
+              <div class="form-group ml-2" style="width: 14.5%;">
+                <label for="endDate">End Date</label>
+                <input type="date" class="form-control" id="endDate" name="endDate" placeholder="Select End Date" value="<%= locals.search ? search : '' %>">
+              </div>  
+              <button type="button" class="btn btn-search ml-2 mt-4" style="height: 37px;"><i class="bi bi-search"></i></button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="table-responsive mt-4">
           <table class="table table-hover">
             <thead>
               <tr>
@@ -35,6 +71,31 @@
             </tbody>
           </table>
         </div>
+
+        <!-- PAGENATION -->
+        <div class="d-flex justify-content-center mt-4 ">
+          <nav aria-label="Page navigation example">
+            <ul class="pagination" >
+              <li class="page-item" >
+                <a class="page-link <%= page == 1 ? 'btn-link disabled' : '' %>" href="?page=<%= page > 1 ? page -1 : 1  %>" >
+                  <span aria-hidden="true" >&laquo;</span>
+                  <span class="sr-only">Previous</span>
+                </a>
+              </li>
+              <% for(let i = 1; i <= totalPages ;i++) { %>
+                <li class="page-item"><a class="page-link <  <%= page == i ? 'text-danger font-weight-bold' : '' %>" href="?page=<%= i %>"><%= i %></a></li>
+              <% } %>
+
+              <li class="page-item">
+                <a class="page-link <%= page == totalPages ? 'btn-link disabled' : '' %>" href="?page=<%= page < totalPages ? parseInt(page) + 1 : totalPages  %>" aria-label="Next">
+                  <span aria-hidden="true">&raquo;</span>
+                  <span class="sr-only">Next</span>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+
       </div>
     </div>
   </div>

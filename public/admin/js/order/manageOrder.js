@@ -86,29 +86,21 @@ updateOrderStatus.forEach((updateButton) => {
 
 
 
+// FILTER ORDER DATA ENTER DIV VIEW 
+const filterBtn = document.getElementById('filterBtn');
 
-
-
-
-
-// document.getElementById('manageOrder').addEventListener('click',async(event)=>{
-//     event.preventDefault();
-    
-//     const eventTag = event.target;
-//     if(event.target.name == 'manage'){
-//         const url = eventTag.value;
+if(filterBtn){
+    filterBtn.addEventListener('click',()=>{
         
-//         const response = await fetch(url);
+        const filterDiv = document.getElementById('filterOrder');
 
-//         if(!response.ok){
-//             window.location.href = '/admin/error500';
-//         }
+        if(filterDiv.style.display == 'none'){
+            filterDiv.style.display = 'block';
+        }else{
+            filterDiv.style.display = 'none';
+        }
+    })
+}
 
-//         const responseData = await response.text();
 
-//         const contentPlaceholder = document.getElementById("dynamic_page");
 
-//         contentPlaceholder.innerHTML = responseData
-//     }
-    
-// })

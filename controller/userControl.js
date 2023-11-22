@@ -304,7 +304,6 @@ const verifyUser = async(req, res, next) => {
         const password = req.body.password;
         
         const usernameExist = await userData.findOne({email:username});
-        console.log(usernameExist)
         
         if(!usernameExist){
 
@@ -413,7 +412,7 @@ const guestPage = async (req, res, next) => {
         //     product.categoryData.some(category => category.categoryname === 'T-Shirts')
 
         // );
-        // console.log(productData)
+
         res.render('user/index', { user: true,login:false, title: 'Brand Unlimited', dataCategory: categoryData, dataProduct: productData })
     } catch (error) {
         next(error);
@@ -430,18 +429,15 @@ const loadProductDetailPage = async (req, res, next) => {
         const id = req.query.id;
 
         let brandData = await brandInfo.find({},{brand_name:1});
-        console.log(id,brandData)
 
         const productData = await productInfo.findOne({ _id: id });
         const categoryData = await category.find({});
-        console.log('product',productData);
-        console.log('category',categoryData)
+
 
         const cart = await cartData.findOne({cartProducts:{$elemMatch:{productId:id}}});
-        console.log('cart',cart)
+
 
         const wishlist = await wishlistData.findOne({userId:req.session.userId});
-        console.log('wishlist',wishlist);
 
 
 
@@ -480,7 +476,6 @@ const loadAllProductViewPage = async(req, res, next) =>{
         
             const cart = await cartData.find({userId:userId});
             const wishlist = await wishlistData.find({userId:userId});
-            console.log(cart,wishlist)
 
             res.render('user/allProductView',{ user: true,login:checkLogin, title: 'Products', product:productData, wishlistData:wishlist, dataCart:cart , categoryData:categoryInfo, brandData:brand});
             return;
@@ -777,10 +772,6 @@ const loadWalletPage = async(req, res, next) => {
             }
         ])
 
-   
-        console.log('wallet')
-        console.log(walletData)
-
         if(walletData){
 
             res.render('user/wallet',{ title:'Wallet' ,login:checkLogin ,user: true, dataWallet:walletData});
@@ -799,10 +790,9 @@ const loadWalletPage = async(req, res, next) => {
 const addWalletAmount = async(req, res, next) => {
     try {
         const amount = req.body.amount;
-        console.log(amount)
 
         const customID = await generateRandomOtp(8);
-        console.log('Custom Alphabet ID:', customID);
+  
 
         // Razor Pay Payment Instance Generation
             var options = {

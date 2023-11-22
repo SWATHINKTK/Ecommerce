@@ -1,145 +1,80 @@
 <%- include('../partials/header.ejs') %>
-<div class="col-12 grid-margin mt-5 addproductpage">
-    <div class="card">
-      <div class="card-body">
-        <h4 class="card-title">Add Banner</h4>
-        <form class="form-sample">
-          <p class="card-description">  </p>
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group row">
-                <label class="col-sm-3 col-form-label">First Name</label>
-                <div class="col-sm-9">
-                  <input type="text" class="form-control" />
+<h1 class="card-title text-center text-dark">Add Banner</h1>
+   <div class="col-12 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body form-style d-flex justify-content-center">
+          <form class="forms-sample mt-3 mb-3 w-50" id="addBannerForm" method="POST">
+            <div class="form-group">
+              <label for="exampleInputName1">Banner Offer Name</label>
+              <input type="text" class="form-control" id="bannerOfferName" placeholder="Offer name" name="bannerOfferName">
+              <p class="text-danger ml-2" name="validate-banner"></p>
+            </div>
+            <div class="form-group">
+              <label for="exampleInputName1">Banner Heading</label>
+              <input type="text" class="form-control" id="bannerHeading" placeholder="banner heading" name="bannerHeading">
+              <p class="text-danger ml-2" name="validate-banner"></p>
+            </div>
+            <div class="form-group">
+              <label for="exampleInputName1">Offer Page Link</label>
+              <input type="text" class="form-control" id="linkOfOfferPage" placeholder="offer page link" name="linkPag">
+              <p class="text-danger ml-2" name="validate-banner"></p>
+            </div>
+          
+            <div class="form-group ">
+              <label class="col-sm-3 col-form-label">Background</label>
+              <input type="file" class="form-control" id="bannerBackground" name="bannerBackground" accept="image/*">
+              <p class="text-danger ml-2" name="validate-banner"></p>
+
+              <div  class="ml-3" id="bannerBackgroundPreview" >
+                <div class="d-flex justify-content-end">
+                  <button type="click" class="mb-3 bg-transparent addBrandCropBtn" id="banner-background-CropperWindowView"><i class="mdi mdi-crop"></i> Crop</button>
                 </div>
+                <img class="banner-background-image w-100" src="/public/admin/assets/productImages/1699340353256-WhatsApp_Image_2023-10-20_at_09.06.10-removebg-preview.png" alt="Category Image File" >
               </div>
             </div>
-            <div class="col-md-6">
-              <div class="form-group row">
-                <label class="col-sm-3 col-form-label">Last Name</label>
-                <div class="col-sm-9">
-                  <input type="text" class="form-control" />
+
+            <div class="form-group mt-4">
+              <label class="col-sm-3 col-form-label">Image for Banner</label>
+              <input type="file" class="form-control" id="bannerImage" name="bannerImage" accept="image/*">
+              <p class="text-danger ml-2" name="validate-banner"></p>
+
+              <div  class="ml-3" id="bannerBackgroundPreview">
+                <div class="d-flex justify-content-end">
+                  <button type="click" class="mb-3 bg-transparent addBrandCropBtn" id="banner-CropperWindowView"><i class="mdi mdi-crop"></i> Crop</button>
                 </div>
+                <img class="banner-image w-100"  src="/public/admin/assets/productImages/1697554275618-img4.webp" alt="Category Image File" >
               </div>
             </div>
+
+            <div class="form-group">
+              <label for="exampleTextarea1">Banner Description</label>
+              <textarea class="form-control" id="banner-description" rows="4" name="bannerDescription" placeholder="Banner Description"></textarea>
+              <p class="text-danger ml-2" name="validate-banner"></p>
+            </div>
+            <button type="submit" class="btn btn-primary mr-2" id="categorysubmit">Submit</button>
+            <a href="/admin/home" class="btn btn-dark">Cancel</a> 
+          </form>
+          <div class="" role="alert" id="category-submit-result">
           </div>
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group row">
-                <label class="col-sm-3 col-form-label">Gender</label>
-                <div class="col-sm-9">
-                  <select class="form-control">
-                    <option>Male</option>
-                    <option>Female</option>
-                  </select>
-                </div>
-              </div>
+        </div>
+      </div>
+    </div>   
+    
+    
+    <!-- MODAL FOR IMAGE CROPPING  -->
+    <div class="modal w-100" id="addCategory-cropper-modal">
+      <div class="modal-dialog modal-dialog-centered w-100">
+        <div class="modal-content bg-white" style="height: 400px;">
+            <button type="button" class="close bg-white" onclick="addCategoryCropperClose()"><span aria-hidden="true">&times;</span></button>
+            <div class="d-flex justify-content-center m-2 ">
+              <button type="button" class="btn mt-2 text-dark addBrandCropBtn " id="cropResult" style=" box-shadow: 0 3px 10px rgb(0, 0, 0,0.5); border: 1px dashed #000; border-radius: 4px;"><i class="mdi mdi-crop"></i> Crop</button>
             </div>
-            <div class="col-md-6">
-              <div class="form-group row">
-                <label class="col-sm-3 col-form-label">Date of Birth</label>
-                <div class="col-sm-9">
-                  <input class="form-control" placeholder="dd/mm/yyyy" />
-                </div>
-              </div>
-            </div>
+            <img id="addCategory-cropper-Image" src="" alt="" style="height:auto; object-fit: cover;">
+
           </div>
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group row">
-                <label class="col-sm-3 col-form-label">Category</label>
-                <div class="col-sm-9">
-                  <select class="form-control">
-                    <option>Category1</option>
-                    <option>Category2</option>
-                    <option>Category3</option>
-                    <option>Category4</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group row">
-                <label class="col-sm-3 col-form-label">Membership</label>
-                <div class="col-sm-4">
-                  <div class="form-check">
-                    <label class="form-check-label">
-                      <input type="radio" class="form-check-input" name="membershipRadios" id="membershipRadios1" value="" checked> Free </label>
-                  </div>
-                </div>
-                <div class="col-sm-5">
-                  <div class="form-check">
-                    <label class="form-check-label">
-                      <input type="radio" class="form-check-input" name="membershipRadios" id="membershipRadios2" value="option2"> Professional </label>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <p class="card-description"> Address </p>
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group row">
-                <label class="col-sm-3 col-form-label">Address 1</label>
-                <div class="col-sm-9">
-                  <input type="text" class="form-control" />
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group row">
-                <label class="col-sm-3 col-form-label">State</label>
-                <div class="col-sm-9">
-                  <input type="text" class="form-control" />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group row">
-                <label class="col-sm-3 col-form-label">Address 2</label>
-                <div class="col-sm-9">
-                  <input type="text" class="form-control" />
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group row">
-                <label class="col-sm-3 col-form-label">Postcode</label>
-                <div class="col-sm-9">
-                  <input type="text" class="form-control" />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group row">
-                <label class="col-sm-3 col-form-label">City</label>
-                <div class="col-sm-9">
-                  <input type="text" class="form-control" />
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group row">
-                <label class="col-sm-3 col-form-label">Country</label>
-                <div class="col-sm-9">
-                  <select class="form-control">
-                    <option>America</option>
-                    <option>Italy</option>
-                    <option>Russia</option>
-                    <option>Britain</option>
-                  </select>
-                </div> 
-              </div>
-            </div>
-          </div>
-          <button type="submit" class="btn btn-primary mr-2">Submit</button>
-          <button class="btn btn-dark">Cancel</button>
-        </form>
+        </div>
       </div>
     </div>
-  </div>
+
+
 <%- include('../partials/footer.ejs') %>

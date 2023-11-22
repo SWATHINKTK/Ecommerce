@@ -135,6 +135,19 @@
                         </div>
                         <h4 class="text-center font-weight-bold">No Order <span class="text-danger font-weight-bold">Found !</span></h4>
                     <% } %>
+
+
+                    <!-- PAGINATION -->
+                    <div class="col-lg-12">
+                        <div class="product__pagination">
+                            <a href="?page=<%= page > 1 ? page - 1 : 1 %>" class="<%= page == 1 ? 'btn-link disabled' : '' %> " >&laquo;</a>
+                            <% for(let i = 1; i <= totalCount ;i++) { %>
+                                <a class="active <%= page == i ? 'text-danger' : '' %>" href="?page=<%= i %>"><%= i %></a>
+                            <% } %>
+                            <a href="?page=<%= page < totalCount ? parseInt(page) + 1 : totalCount %>" class="<%= page == totalCount ? 'btn-link disabled' : '' %> " >&raquo;</a>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
