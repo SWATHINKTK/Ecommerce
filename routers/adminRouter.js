@@ -124,10 +124,6 @@ adminRouter.get('/brandstatusupdate:id',adminController.brandStatusUpdate);
 
 
 
-//*** Banner Routing ***
-adminRouter.get('/addbanner', auth.isAdminLogin,  adminController.loadAddBannerPage);
-
-
 
 //*** Coupon Routing */
 adminRouter.get('/couponlist', auth.isAdminLogin, adminController.loadCouponList);

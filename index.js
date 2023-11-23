@@ -60,7 +60,11 @@ app.use('/admin',adminRouter);
 
 // **** SALESREPORT ROUTER *****
 const salesReport = require('./routers/salesReportRouter');
-app.use('/admin',salesReport)
+app.use('/admin',salesReport);
+
+// **** BANNER ROUTER *****
+const bannerRouter = require('./routers/bannerRouter');
+app.use('/admin', bannerRouter);
 
 
 

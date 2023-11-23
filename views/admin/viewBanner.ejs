@@ -1,0 +1,64 @@
+<%- include('../partials/header.ejs') %>
+<h1 class="card-title text-center text-dark">Branner Details</h1>
+<div class="col-12 grid-margin stretch-card">
+    <div class="card card-div">
+        <div class="card-body  mt-5">
+            <div class="d-flex justify-content-between align-items-center mb-2 search">
+            <a href="/admin/addBanner" target="_self" rel="noopener noreferrer" class="btn btn-primary"><span>Add Banner</span></a>
+            <!-- <div class="d-flex">
+                <input type="text" class="form-control col-10" id="bannerSearch" placeholder="Brand Search" name="bannerSearch">
+                <button type="button" class="btn btn-search p-2" ><i class="bi bi-search"></i></button>
+            </div> -->
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover text-dark">
+                    <thead>
+                        <tr>
+                        <th>User</th>
+                        <th>Product</th>
+                        <th>Sale</th>
+                        <th>Status</th>
+                        <th>Sale</th>
+                        <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                        <td>Jacob</td>
+                        <td>Photoshop</td>
+                        <td class="text-danger"> 28.76% <i class="mdi mdi-arrow-down"></i></td>
+                        <td><label class="badge badge-danger">Pending</label></td>
+                        </tr>
+                        <tr>
+                        <td>Messsy</td>
+                        <td>Flash</td>
+                        <td class="text-danger"> 21.06% <i class="mdi mdi-arrow-down"></i></td>
+                        <td><label class="badge badge-warning">In progress</label></td>
+                        </tr>
+                        <tr>
+                        <td>John</td>
+                        <td>Premier</td>
+                        <td class="text-danger"> 35.00% <i class="mdi mdi-arrow-down"></i></td>
+                        <td><label class="badge badge-info">Fixed</label></td>
+                        </tr>
+                        <tr>
+                        <td>Peter</td>
+                        <td>After effects</td>
+                        <td class="text-success"> 82.00% <i class="mdi mdi-arrow-up"></i></td>
+                        <td><label class="badge badge-success">Completed</label></td>
+                        </tr>
+                        <tr>
+                        <td>Dave</td>
+                        <td>53275535</td>
+                        <td class="text-success"> 98.05% <i class="mdi mdi-arrow-up"></i></td>
+                        <td><label class="badge badge-warning">In progress</label></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+  </div>
+  
+<%- include('../partials/footer.ejs') %>

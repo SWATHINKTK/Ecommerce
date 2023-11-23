@@ -993,16 +993,7 @@ const searchBrandData = async(req, res, next) =>{
 
 
 
-/*################################################### Banner Routing Functions ####################################################### */
 
-// Load Add Banner page 
-const loadAddBannerPage = (req, res, next) => {
-    try {
-        res.render('admin/addBanner', { admin: true });
-    } catch (error) {
-        next(error);
-    }
-}
 
 /*========================================================= End Of The Banner Routing ================================================= */
 
@@ -1085,7 +1076,6 @@ module.exports = {
     loadEditBrandPage,
     brandStatusUpdate,
     searchBrandData,
-    loadAddBannerPage,
     loadCouponList,
     loadAddCouponPage,
     // loadOrderList,
