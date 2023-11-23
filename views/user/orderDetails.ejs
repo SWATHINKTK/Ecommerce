@@ -118,8 +118,12 @@
                                                 <i class="fa-solid fa-circle ml-3" style="color: #ff0000;"></i><h5 class="ml-2 font-weight-bold text-danger">Canceled on <%= orderData[i].updatedAt.toLocaleDateString() %></h5>
                                             <% } else if (orderData[i].productInforamtion.orderStatus == 'Delivered') { %>
                                                 <i class="fa-solid fa-circle ml-3 text-success"></i><h5 class="ml-2 font-weight-bold text-success">Delivered on <%= orderData[i].updatedAt.toLocaleDateString() %></h5>
+                                            <% } else if (orderData[i].productInforamtion.orderStatus == 'Return_Placed' || orderData[i].productInforamtion.orderStatus == 'Order_Pickup') { %>
+                                                <h6 class="ml-3 mr-2">Return Expected &nbsp;: <span class="text-danger">3 to 4 Days to Return</span> <span class="font-weight-bold text-success ml-3"> (<%= orderData[i].productInforamtion.orderStatus %>)</span></h6>
+                                            <% } else if (orderData[i].productInforamtion.orderStatus == 'Return_Canceled') { %>
+                                                <i class="fa-solid fa-circle ml-3" style="color: #ff0000;"></i><h5 class="ml-2 font-weight-bold text-danger">Return Canceled on <%= orderData[i].updatedAt.toLocaleDateString() %></h5>
                                             <% } else { %>
-                                                <h6 class="ml-3 mr-2">Delivery Expected &nbsp;: <span class="text-danger">3 to 4 Days to Delivery</span> <span class="font-weight-bold text-success"> (<%= orderData[i].productInforamtion.orderStatus %>)</span></h6>
+                                                <h6 class="ml-3 mr-2">Delivery Expected &nbsp;: <span class="text-danger">3 to 4 Days to Delivery</span> <span class="font-weight-bold text-success ml-3"> (<%= orderData[i].productInforamtion.orderStatus %>)</span></h6>
                                             <% } %>
                                         </div>
                                         

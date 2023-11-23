@@ -11,6 +11,7 @@ window.addEventListener('load',()=>{
     const status = progressMainDiv.getAttribute('data-order-status');
     const placedOn = progressMainDiv.getAttribute('data-order-Place');
     const progressPoint = document.getElementsByClassName('progress-number');
+    const progressText = document.getElementsByClassName('text-progressbar');
 
 
     // ORDER STATUS PLACED WORKING PROGRESS BAR
@@ -85,26 +86,91 @@ window.addEventListener('load',()=>{
 
 
     // ORDER STATUS IS RETURN WORKING ON PROGRESS BAR
-    if(status === 'Return'){
+    if(status === 'Return_Canceled'){
 
         document.getElementById('progress-div').style.display = 'none';
 
         progressCanceled.style.display = 'block';
-        document.getElementById('progressEnd-text').innerHTML = 'Refunded';
-        document.getElementById('progressFirst-text').innerHTML = 'Returned';
+        document.getElementById('progressEnd-text').innerHTML = 'Return Canceled';
+        document.getElementById('progressFirst-text').innerHTML = 'Return Placed';
 
         setTimeout(() => {
 
             progress[2].style.width = '100%';
             
             progressPoint[3].style.backgroundColor = 'green';
-            progressPoint[4].style.backgroundColor = 'green';
+            progressPoint[4].style.backgroundColor = 'red';
 
             progressPoint[3].innerHTML = '&#10004;';
-            progressPoint[4].innerHTML = '&#10004;';
+            progressPoint[4].innerHTML = '<i class="bi bi-x-lg"></i>';
 
             progress[2].setAttribute('class','progress-bar progress-bar-striped bg-success')
         }, 1200);
+    }
+
+    // RETURN REQUEST IS SEND TO ADMIN
+    if(status === 'Return_Placed'){
+
+        progressText[0].innerHTML = 'Return Placed';
+        progressText[1].innerHTML = 'Order Pickup';
+        progressText[1].style.marginLeft = '-2.7rem';
+        progressText[2].innerHTML = 'Returned';
+
+        progressPoint[0].innerHTML = '&#10004';
+        progressPoint[0].style.backgroundColor = 'green';
+
+        setTimeout(() => {
+            progress[0].style.width = '20%';
+        }, 1200);
+        
+    }
+
+    if(status === 'Order_Pickup'){
+
+        progressText[0].innerHTML = 'Return Placed';
+        progressText[1].innerHTML = 'Order Pickup';
+        progressText[1].style.marginLeft = '-2.7rem';
+        progressText[2].innerHTML = 'Returned';
+
+        setTimeout(() => {
+            progress[0].style.width = '100%';
+            progressPoint[0].innerHTML = '&#10004';
+            progressPoint[1].innerHTML = '&#10004';
+
+            progressPoint[0].style.backgroundColor = 'green';
+            progressPoint[1].style.backgroundColor = 'green';
+
+            progress[0].setAttribute('class','progress-bar progress-bar-striped bg-success')
+        }, 1200);
+        
+    }
+
+    if(status == 'Return'){
+        progressText[0].innerHTML = 'Return Placed';
+        progressText[1].innerHTML = 'Order Pickup';
+        progressText[1].style.marginLeft = '-2.7rem';
+        progressText[2].innerHTML = 'Returned';
+
+        setTimeout(() => {
+            progress[0].style.width = '100%';
+            progressPoint[0].innerHTML = '&#10004';
+            progressPoint[1].innerHTML = '&#10004';
+
+            progressPoint[0].style.backgroundColor = 'green';
+            progressPoint[1].style.backgroundColor = 'green';
+
+            progress[0].setAttribute('class','progress-bar progress-bar-striped bg-success');
+
+        }, 1200);
+        setTimeout(() => {
+            progress[1].style.width = '100%';
+            progressPoint[2].innerHTML = '&#10004;';
+
+            progressPoint[2].style.backgroundColor = 'green';
+
+            progress[1].setAttribute('class','progress-bar progress-bar-striped bg-success')
+
+        }, 3000);
     }
   
 })

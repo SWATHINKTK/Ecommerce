@@ -583,6 +583,36 @@ const updateOrderStatus = async (req, res, next) => {
                 }
             }
 
+            if (data.orderStatus === 'Order_Pickup') {
+
+                productToUpdate.orderStatus = data.orderStatus;
+
+                const updateStatus = await order.save();
+
+                if (updateStatus) {
+
+                    res.json({ status: true });
+
+                } else {
+                    res.json({ status: false });
+                }
+            }
+
+            if (data.orderStatus === 'Return_Canceled') {
+
+                productToUpdate.orderStatus = data.orderStatus;
+
+                const updateStatus = await order.save();
+
+                if (updateStatus) {
+
+                    res.json({ status: true });
+
+                } else {
+                    res.json({ status: false });
+                }
+            }
+
 
         } else {
             throw new Error('This Order Data is Not Found');
@@ -785,55 +815,21 @@ const orderReturn = async(req, res, next) => {
             if(productToUpdate.orderStatus == 'Delivered'){
            
                 // *** ORDER RETURN STATUS CHANGE ***
-                productToUpdate.orderStatus = 'Return';
-                productToUpdate.paymentStatus = 'Refund';
+                productToUpdate.orderStatus = 'Return_Placed';
                 productToUpdate.reason = data.reason;
-                const updateStock = await productInfo.updateOne({ _id: data.productId }, { $inc: { stock: productToUpdate.productquantity } });
 
-                // Check Return Order Product Inventory Managed Or Not
-                if (updateStock) {
+                const updateStatus = await order.save();
 
-                    // Create Unique TransactionId
-                    const nanoidModule = await import('nanoid');
-                    nanoid = nanoidModule.nanoid;
-                    const uniqueID = nanoid();
+                if (updateStatus) {
 
-                    // Creating The Tranction History Store Object
-                    const transaction = {
-                        transactionId: uniqueID,
-                        transactionType: 'Debit',
-                        description: 'Product Return Refund',
-                        amount: productToUpdate.productTotalAmount,
-                        orderId: order._id
-                    }
+                    res.json({ status:true });
 
-                    const returnAmount = await userData.updateOne({ _id: order.userId }, { $inc: { walletAmount: productToUpdate.productTotalAmount } }, { upsert: true });
-                    const updateWalletTransaction = await userData.updateOne({ _id: order.userId }, { $push: { walletTransaction: transaction } }, { upsert: true });
-
-
-                    // Checking Wallet Update Successfull
-                    if (returnAmount && updateWalletTransaction) {
-
-                        productToUpdate.paymentStatus = 'Refund';
-                        const updateStatus = await order.save();
-
-                        if (updateStatus) {
-
-                            res.json({ status:true });
-        
-                        } else {
-                            res.json({ status:false });
-                        }
-
-                    }else{
-                        throw new Error('Updation Failed');
-                    } 
-                }else{
-                    throw new Error('Product Must Be Delivered');
+                } else {
+                    res.json({ status:false });
                 }
-    
+
             }else{
-                throw new Error('Stock Manage Error');
+                throw new Error('Deliverd Order is not Exist');
             }
         } else {
             throw new Error('Data is Not Found');
@@ -859,3 +855,89 @@ module.exports = {
     searchOrderIdAdminSide,
     updateOrderStatus
 }
+
+
+
+
+
+
+
+
+
+
+// // ORDER RETURN WORKING CONTROLLER
+// const orderReturn = async(req, res, next) => {
+    
+//     try {
+//         const data = req.body;
+
+
+//         const order = await orderData.findById(data.orderId);
+
+
+//         if (order) {
+
+//             // FINDING THE PRODUCT IN THAT ORDER
+//             const productToUpdate = order.productInforamtion.find(orderProduct => orderProduct.productId.equals(data.productId));
+
+//             // CHECK CONDITION FOR PRODUCT IS DELIVERECD OR NOT.DELIVERED PROUDUCT ONLY REFUND OPTION
+//             if(productToUpdate.orderStatus == 'Delivered'){
+           
+//                 // *** ORDER RETURN STATUS CHANGE ***
+//                 productToUpdate.orderStatus = 'Return';
+//                 productToUpdate.paymentStatus = 'Refund';
+//                 productToUpdate.reason = data.reason;
+//                 const updateStock = await productInfo.updateOne({ _id: data.productId }, { $inc: { stock: productToUpdate.productquantity } });
+
+//                 // Check Return Order Product Inventory Managed Or Not
+//                 if (updateStock) {
+
+//                     // Create Unique TransactionId
+//                     const nanoidModule = await import('nanoid');
+//                     nanoid = nanoidModule.nanoid;
+//                     const uniqueID = nanoid();
+
+//                     // Creating The Tranction History Store Object
+//                     const transaction = {
+//                         transactionId: uniqueID,
+//                         transactionType: 'Debit',
+//                         description: 'Product Return Refund',
+//                         amount: productToUpdate.productTotalAmount,
+//                         orderId: order._id
+//                     }
+
+//                     const returnAmount = await userData.updateOne({ _id: order.userId }, { $inc: { walletAmount: productToUpdate.productTotalAmount } }, { upsert: true });
+//                     const updateWalletTransaction = await userData.updateOne({ _id: order.userId }, { $push: { walletTransaction: transaction } }, { upsert: true });
+
+
+//                     // Checking Wallet Update Successfull
+//                     if (returnAmount && updateWalletTransaction) {
+
+//                         productToUpdate.paymentStatus = 'Refund';
+//                         const updateStatus = await order.save();
+
+//                         if (updateStatus) {
+
+//                             res.json({ status:true });
+        
+//                         } else {
+//                             res.json({ status:false });
+//                         }
+
+//                     }else{
+//                         throw new Error('Updation Failed');
+//                     } 
+//                 }else{
+//                     throw new Error('Product Must Be Delivered');
+//                 }
+    
+//             }else{
+//                 throw new Error('Stock Manage Error');
+//             }
+//         } else {
+//             throw new Error('Data is Not Found');
+//         }
+//     } catch (error) {
+//         next(error)
+//     }
+// }
