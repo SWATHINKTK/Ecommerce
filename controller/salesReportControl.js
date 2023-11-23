@@ -60,10 +60,17 @@ const salesReportFilter = async(req, res, next)=>{
     try {
 
         const period = req.query.period;
-        console.log(period)
         let startDate,endDate;
 
-        if(period == 'week'){
+        if(req.query.startDate){
+
+            startDate = new Date(req.query.startDate); 
+            startDate.setHours(0, 0, 0, 0);
+
+            endDate = new Date(req.query.endDate);
+            endDate.setHours(23, 59, 59, 999);
+
+        }else if(period == 'week'){
 
             endDate = new Date();
             endDate.setDate(endDate.getDate() - endDate.getDay());
@@ -136,13 +143,32 @@ const salesReportFilter = async(req, res, next)=>{
                 }
             }
         ])
+
+        // DATE IS CONVERTED TO YYYY-MM-DD FORMAT
+        let date;
+        if(req.query.startDate){
+
+            date = {
+                startDate:dateFormat(startDate),
+                endDate:dateFormat(endDate),
+            }
+            
+        }
         
-        res.render('admin/viewSalesReport', { admin: true ,totalTrancations:transactions});
+        res.render('admin/viewSalesReport', { admin: true ,totalTrancations:transactions, date});
 
 
     } catch (error) {
         next(error);
     }
+}
+
+function dateFormat(date){
+    let year = date.getFullYear();
+    let month = (date.getMonth() + 1).toString().padStart(2, '0');
+    let day = date.getDate().toString().padStart(2, '0');
+
+    return formattedDate = year + '-' + month + '-' + day;
 }
 
 

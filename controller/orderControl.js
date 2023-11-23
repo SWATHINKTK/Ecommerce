@@ -210,18 +210,31 @@ const cancelOrder = async (req, res, next) => {
 }
 
 
+
+// ORDER INVOICE DOWNLOAD
 const orderInvoiceDownload = async(req, res, next) => {
+
     try {
+
         // Generate PDF using Puppeteer
         const browser = await puppeteer.launch({ headless: 'new' });
-        // const browser = await puppeteer.launch();
         const page = await browser.newPage();
 
+
+        // CHECKING THE ORDERID . ORDERID NOT PRESENT THROE AN ERROR
         if(!req.query.orderId){
             throw new Error('Id Not Found')
         }
 
+
+        // CHECKING THE ORDER PROGUESS TO SEND THE THAT PRODUCT ONLY INVOICE CHEKING THE PRODUCTID PRESENT OR NOT
+        let productId = {$ne:''};
+        if(req.query.productId){
+            productId = new mongoose.Types.ObjectId(req.query.productId);
+        }
+
     
+        // AGGREGATE TO FETCH THAT ORDER DETAILS
         const orderDetails = await orderData.aggregate([
           {
               $match:{
@@ -239,14 +252,18 @@ const orderInvoiceDownload = async(req, res, next) => {
                   as: 'productData'
               }
   
+          },
+          {
+            $match:{'productInforamtion.productId':productId}
           }
         
       ]);
 
-      console.log(orderDetails)
 
-    //   console.log(orderDetails[0].productData)
-    
+    // CALCULATING THE TOTAL AMOUT OF THAT ORDER
+    const totalAmount = orderDetails.reduce((sum,value) => { return sum + value.productInforamtion.productTotalAmount },0);
+
+    // CREATING THAT INVOICE VIEW DATA
       const divContent = `
         <div class="col-12" >
           <div class="card border" style="height:96vh;">
@@ -300,6 +317,7 @@ const orderInvoiceDownload = async(req, res, next) => {
                   </thead>
                   <tbody>
                   ${orderDetails.map((data, index) =>
+                    
                     `<tr>
                         <th>${index + 1}</th>
                         <td>${data.productData[0].productName}</td>
@@ -311,7 +329,7 @@ const orderInvoiceDownload = async(req, res, next) => {
                     <tr>
                         <td colspan="2"><span class="font-weight-blod">Total Qunatity : </span>${orderDetails.length}</td>
                         <th colspan="2"><span class="font-weight-blod">Total Price : </span></th>
-                        <th>${orderDetails[0].totalAmount}</th>
+                        <th>${totalAmount}</th>
                     </tr>
 
                   </tbody>
