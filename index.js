@@ -67,6 +67,10 @@ const bannerRouter = require('./routers/bannerRouter');
 app.use('/admin', bannerRouter);
 
 
+// **** COUPON ROUTER *****
+const couponRouter = require('./routers/couponRouter');
+app.use('/admin',couponRouter);
+
 
 // **** ERROR HANDLING MIDDLEWARE ****
 app.use((err,req,res,next) => {

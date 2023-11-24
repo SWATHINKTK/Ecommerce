@@ -1,72 +1,59 @@
+<h1 class="card-title text-center text-dark">Coupon Details</h1>
+<div class="col-12 grid-margin stretch-card">
+    <div class="card card-div">
+        <div class="card-body  mt-5">
+            <div class="d-flex justify-content-between align-items-center mb-2 search">
+            <!-- <div class="d-flex">
+                <input type="text" class="form-control col-10" id="bannerSearch" placeholder="Brand Search" name="bannerSearch">
+                <button type="button" class="btn btn-search p-2" ><i class="bi bi-search"></i></button>
+            </div> -->
+            </div>
 
-  <div class="col-12">
-    <div class="card border">
-      <div class="card-body  mt-5">
-        <div class="pl-4 pt-4 pr-4 pb-1">
-          <ul type="none">
-              <div class="d-flex mt-4">
-                  <li class="order-manage-li">Order Id &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li><span class=" ml-5">: &nbsp;666</span>
-              </div>
-              <div class="d-flex mt-1">
-                  <li class="order-manage-li">Placed On &nbsp;&nbsp;&nbsp;</li><span class=" ml-5">: &nbsp;hhjhhh</span>
-              </div>
-              <div class="d-flex mt-2 ">
-                  <li class="order-manage-li mt-1">Shipping Address &nbsp; : </li>&nbsp; 
-                  <div class="mt-2">
-                      <h5>  &nbsp;fehgfrk &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 459439759743</h5>
-                      <p class="ml-1">fgfgfdg , dfgdgfd, gdffd , fgfdgfdgd<br>
-                      fgfdgdg</p>
-                  </div>
-              </div>
-              <div class="d-flex mt-1">
-                  <li class="order-manage-li">Payment Method &nbsp;&nbsp;</li><span class="">: &nbsp;fggfdgd</span>
-              </div>
-              <div class="d-flex mt-2">
-                  <li class="order-manage-li">Price  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li><span class=" ml-5"> : &nbsp;<i class="bi bi-currency-rupee"></i> fsdfsdfa</span>
-              </div>
-          </ul>
-      </div>
-      <hr style="border: none; border-top: 3px solid #F5F5F9;">
-        <h2 class="card-title text-center font-weight-blod">Invoice</h2>
-        <div class="d-flex ml-5">
-          <div class="mr-5 mb-5">
-            <h5 class="font-weight-blod">Shipping Address</h5>
-            gfdgd
-            fd
-          </div>
-          <div class="ml-5">
-            <h5 class="font-weight-blod">Billing Address</h5>
-            fggdgsdf
-          </div>
+            <div class="table-responsive">
+                <table class="table table-hover text-dark">
+                    <thead>
+                        <tr>
+                        <th>#</th>
+                        <th>Coupon Code</th>
+                        <th>Coupon Name</th>
+                        <th>Coupon Amount</th>
+                        <th>Offer</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <%if(couponData.length > 0) { %>
+                      <% for(let i = 0; i < couponData.length ; i++) {%>
+                        <tr id="<%= couponData[i]._id %>">
+                          <td name = 'couponSerialNumber'><%= i+1 %></td>
+                          <td><%= couponData[i].couponCode %></td>
+                          <td><%= couponData[i].couponName %></td>
+                          <td><%= couponData[i].minimumPurchase %></td>
+                          <td><%= couponData[i].OfferPercentage %> %</td>
+                          <td><%= couponData[i].startDate.toLocaleDateString() %></td>
+                          <td><%= couponData[i].endDate.toLocaleDateString() %></td>
+                          <td >
+
+                            <button type="button" class="btn  btn-primary mb-2" name="editCouponBtn" data-coupon-id="<%= couponData[i]._id %>">
+                              <i class="bi bi-pencil-square"  data-coupon-id="<%= couponData[i]._id %>"></i>
+                            </button><br>
+                            <button type="button" class="btn  btn-danger" name="deleteCouponBtn" data-coupon-id="<%= couponData[i]._id %>">
+                              <i class="bi bi-trash" name="deleteCouponBtn" data-coupon-id="<%= couponData[i]._id %>"></i>
+                            </button><br>
+                  
+                          </td>
+                        </tr>
+                      <% } %>
+                    <% } else { %>
+                      <tr class="bg-danger">
+                        <th class="text-dark text-center" colspan="8">COUPON IS NOT FOUND</th>
+                      </tr>
+                    <% } %>
+                    </tbody>
+                </table>
+            </div>
         </div>
-        <div class="table-responsive">
-          <table class="table table-bordered">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Product Name</th>
-                <th>Qty</th>
-                <th>Product Price</th>
-                <th>Total Amount</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th>1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-                <td>@mdo</td>
-              </tr>
-              <tr>
-                <td colspan="2"><span class="font-weight-blod">Total Qunatity : </span></td>
-                <td colspan="3"></td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="d-flex justify-content-end">
-            <img src="/public/admin/assets/images/logoMaleFashion.png" style="width: 200px; height: 200px;" alt="">
-          </div>
-        </div>
-      </div>
+    </div>
   </div>

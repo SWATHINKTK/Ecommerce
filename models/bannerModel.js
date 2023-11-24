@@ -22,3 +22,5 @@ const bannerSchema = moongose.Schema({
         require : true
     }
 },{timestamps: true});
+
+module.exports = moongose.model('banner',bannerSchema);

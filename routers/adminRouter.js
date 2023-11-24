@@ -125,9 +125,6 @@ adminRouter.get('/brandstatusupdate:id',adminController.brandStatusUpdate);
 
 
 
-//*** Coupon Routing */
-adminRouter.get('/couponlist', auth.isAdminLogin, adminController.loadCouponList);
-adminRouter.get('/addcoupon', auth.isAdminLogin, adminController.loadAddCouponPage);
 
 
 

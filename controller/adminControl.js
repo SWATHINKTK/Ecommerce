@@ -997,24 +997,6 @@ const searchBrandData = async(req, res, next) =>{
 
 /*========================================================= End Of The Banner Routing ================================================= */
 
-// Load  Coupon List Window
-const loadCouponList = (req, res, next) => {
-    try {
-        res.render('admin/viewCoupons', { admin: true });
-    } catch (error) {
-        next(error);
-    }
-}
-
-// Load Add Coupon page 
-const loadAddCouponPage = (req, res, next) => {
-    try {
-        res.render('admin/addCoupon', { admin: true });   
-    } catch (error) {
-        next(error);
-    }
-}
-
 
 // // Load  Order List Window
 // const loadOrderList = (req, res) => {
@@ -1076,9 +1058,6 @@ module.exports = {
     loadEditBrandPage,
     brandStatusUpdate,
     searchBrandData,
-    loadCouponList,
-    loadAddCouponPage,
-    // loadOrderList,
     logoutAdmin,
     addCategory,
     load500ErrorPage,

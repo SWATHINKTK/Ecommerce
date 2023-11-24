@@ -98,6 +98,9 @@ if(submitAddBannerData){
     submitAddBannerData.addEventListener('submit', async(event) => {
         event.preventDefault();
 
+        const bannerResult = document.getElementById('banner-submit-result');
+
+
         const form = document.getElementById('addBannerForm');
         const formData = new FormData(form);
 
@@ -120,6 +123,27 @@ if(submitAddBannerData){
 
 
             const response = await fetch(url,requestOptions);
+
+                if(!response.ok){
+                    window.location.href = '/admin/error500';
+                }
+            
+            const responseData = await response.json();
+
+            if(responseData.success){
+                
+                window.scroll(0,0);
+                bannerResult.setAttribute('class','alert alert-success');
+                bannerResult.innerHTML = 'Banner Data Added Sucessful';
+
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
+
+            }else{
+                bannerResult.setAttribute('class','alert alert-danger');
+                bannerResult.innerHTML = 'Banner Added Failed Tryagain';
+            }
         }
 
     })
@@ -132,27 +156,25 @@ function validateBanner(formData){
     const data = formData;
 
     const errorElemetns = document.querySelectorAll('p[name="validate-banner"]');
-    console.log(errorElemetns);
     removeErrorElements();
 
     let is_valid = true;
 
-    console.log(document.getElementById('bannerBackground').files.length)
     
 
-    if(data.bannerOfferName.split() == ''){
+    if(data.bannerOfferName.trim() == ''){
 
         errorElemetns[0].innerHTML = ' * please fill out this field.';
         is_valid = false;
 
     }
-    if(data.bannerHeading.split() == ''){
+    if(data.bannerHeading.trim() == ''){
 
         errorElemetns[1].innerHTML = ' * please fill out this field.';
         is_valid = false;
 
     }
-    if(data.linkPage.split() == ''){
+    if(data.linkPage.trim() == ''){
 
         errorElemetns[2].innerHTML = ' * please fill out this field.';
         is_valid = false;
@@ -164,7 +186,7 @@ function validateBanner(formData){
         is_valid = false;
 
     }
-    if(data.bannerDescription.split() == ''){
+    if(data.bannerDescription.trim() == ''){
 
         errorElemetns[4].innerHTML = ' * please fill out this field.';
         is_valid = false;

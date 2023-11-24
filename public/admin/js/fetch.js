@@ -58,29 +58,7 @@ document.getElementById('sidebar').addEventListener('click', async function(even
 
     }else if(id == 'view-couponlist'){
 
-        // View the Coupon Present in my appication in Table View
-        fetch("/admin/couponlist")
-            .then((response) => {
-
-                if(response.status == 401){
-                    window.location.href = '/admin'
-                    return;
-                }
-
-                if (!response.ok) {
-                    throw new Error("Network response was not ok");
-                }
-                return response.text();
-            })
-            .then((html) => {
-                // Update the content of the placeholder with the fetched HTML
-                contentPlaceholder.innerHTML = html;
-
-                document.querySelector('title').innerHTML = 'Coupons';
-            })
-            .catch((error) => {
-                console.error("Fetch error:", error);
-            });
+        viewCouponListPage();
 
     }else if(id == 'add-coupon'){
 
@@ -103,6 +81,9 @@ document.getElementById('sidebar').addEventListener('click', async function(even
                 contentPlaceholder.innerHTML = html;
 
                 document.querySelector('title').innerHTML = 'Add Coupons';
+
+                //ADD COUPON PAGE INSIDE FUNCTIONALIY
+                addCoupon();
             })
             .catch((error) => {
                 console.error("Fetch error:", error);
