@@ -237,13 +237,21 @@ function viewCouponlistActions(){
                             const responseData = await response.json();
             
                                 if(responseData.success){
-                                    const row = document.getElementById(`${couponId}`);
-                                    row.parentNode.removeChild(row);
+                                    // const row = document.getElementById(`${couponId}`);
+                                    // row.parentNode.removeChild(row);
             
-                                    const serialNo = document.querySelectorAll('td[name="couponSerialNumber"]');
-                                    serialNo.forEach((td, i) => {
-                                        td.innerHTML = i+1;
-                                    })
+                                    // const serialNo = document.querySelectorAll('td[name="couponSerialNumber"]');
+                                    // serialNo.forEach((td, i) => {
+                                    //     td.innerHTML = i+1;
+                                    // });
+                                    Swal.fire({
+                                        position:'bottom',
+                                        html: '<span class="font-weight-bold"><i class="mdi mdi-check-all" style="color: #2dd26c;"></i> Deleted Successfully.</span>',
+                                        showConfirmButton: false, 
+                                        timer: 1800,
+                                    });
+                                    viewCouponListPage();
+                                    // window.location.reload();
                                 }
                         }
                   })

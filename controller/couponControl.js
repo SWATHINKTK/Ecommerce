@@ -10,7 +10,7 @@ const loadCouponList = async(req, res, next) => {
                 // {is_Delete:false}
             },
             {
-                $sort:{is_Delete:1,_id:-1}
+                $sort:{is_Delete:1,updatedAt:-1}
             }
         ])
 

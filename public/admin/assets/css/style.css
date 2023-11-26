@@ -20126,7 +20126,8 @@ body.avgrund-active {
   z-index: 1500; }
 
 .swal2-modal {
-  min-height: 315px;
+  /* min-height: 315px; */
+  padding-top: 1rem;
   -webkit-align-items: center;
   align-items: center;
   -webkit-justify-content: center;

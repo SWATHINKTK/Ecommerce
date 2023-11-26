@@ -71,6 +71,9 @@ app.use('/admin', bannerRouter);
 const couponRouter = require('./routers/couponRouter');
 app.use('/admin',couponRouter);
 
+// **** OFFER ROUTER *****
+const offerRouter = require('./routers/offerRouter');
+app.use('/admin',offerRouter);
 
 // **** ERROR HANDLING MIDDLEWARE ****
 app.use((err,req,res,next) => {

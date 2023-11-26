@@ -1,0 +1,58 @@
+<%- include('../partials/header.ejs') %>
+<h1 class="card-title text-center text-dark">Offer Details</h1>
+    <div class="col-12 grid-margin stretch-card" id="userview">
+    <div class="card card-div">
+      <div class="card-body  mt-5">
+        <div class="d-flex justify-content-between align-items-center mb-2 search">
+          <a href="/admin/addOffer" target="_self" rel="noopener noreferrer" class="btn btn-primary"><span>Add Offer</span></a>
+          <!-- <div class="d-flex">
+            <input type="text" class="form-control col-10" id="brandSearch" placeholder="Brand Search" name="categorySearch">
+            <button type="button" class="btn btn-search p-2" onclick="searchBrands()"><i class="bi bi-search"></i></button>
+          </div> -->
+        </div>
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Offer Name</th>
+                <th>Ofer Percentage</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody class="text-white">
+              <% if(offerData.length > 0) { %>
+                <% for(let i = 0; i < offerData.length;i++){ %>
+                  <tr id="<%= offerData[i]._id %>">
+					<td name="offerSerialNumber"><%= i+1 %></td>
+                    <td><%= offerData[i].offerName %></td>
+                    <td><%= offerData[i].OfferPercentage %></td>
+                    <td><%= offerData[i].startDate.toLocaleDateString() %></td>
+                    <td><%= offerData[i].endDate.toLocaleDateString() %></td>
+					<% if(!offerData[i].status) { %>
+						<td>
+							<a href="/admin/editOffer<%= offerData[i]._id %>" class="btn  btn-primary mb-2" name="editCouponBtn" >
+								<i class="bi bi-pencil-square" ></i>
+							</a><br>
+
+							<button type="button" class="btn  btn-danger" name="deleteCouponBtn" data-offer-id="<%= offerData[i]._id %>">
+							<i class="bi bi-trash" name="deleteCouponBtn" data-offer-id="<%= offerData[i]._id %>"></i>
+							</button><br>
+						</td>
+					<% } %>
+                  </tr>
+                <% } %>
+              <% } else {%>
+                <tr class="bg-danger text-center">
+                  <th class="text-dark" colspan="6">OFFER IS NOT FOUND</th>
+                </tr> 
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+<%- include('../partials/footer.ejs') %>
