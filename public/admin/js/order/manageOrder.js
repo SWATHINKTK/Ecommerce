@@ -58,7 +58,7 @@ updateOrderStatus.forEach((updateButton) => {
                 // Status Update Selction Box And Button
                 const updateStatusSection = document.querySelector(`div[name='${productId}']`);
                 
-                if(status.value == 'Canceled'){
+                if(status.value == 'Canceled' || status.value == 'Return_Canceled'){
 
                     updateStatusSection.style.display = 'none';
                     headingStatusView.setAttribute('class','ml-3 font-weight-bold text-danger');

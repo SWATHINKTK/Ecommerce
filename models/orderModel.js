@@ -65,6 +65,14 @@ const orderModel = moongose.Schema({
             default:'Pending',
             require:true
         },
+        MRP:{
+            type:Number,
+            require:true
+        },
+        discountAmount:{
+            type:Number,
+            default:0
+        },
         reason:{
             type:String
         }
@@ -91,6 +99,12 @@ const orderModel = moongose.Schema({
         default:'Pending',
         require:true
     },
+    couponId:{
+        type:moongose.Schema.Types.ObjectId,
+    },
+    couponOfferPercentage:{
+        type:Number
+    }
 },{timestamps: true});
 
 

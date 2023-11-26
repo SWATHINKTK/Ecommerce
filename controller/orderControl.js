@@ -266,7 +266,7 @@ const orderInvoiceDownload = async(req, res, next) => {
     // CREATING THAT INVOICE VIEW DATA
       const divContent = `
         <div class="col-12" >
-          <div class="card border" style="height:96vh;">
+          <div class="card" style="height:96vh; border: 2px solid #000000;">
           <h2 class="card-title text-center font-weight-blod mt-5">INVOICE</h2>
             <div class="card-body mt-5">
             <div class="pl-4 pt-4 pr-4 pb-1">
@@ -297,7 +297,7 @@ const orderInvoiceDownload = async(req, res, next) => {
               <div class="d-flex ml-3 mt-3 mb-3" style="margin-left:25px; padding-bottom:15px; padding-top:25px;">
                 <div class="ml-5">
                   <h5 class="font-weight-blod">Billing Address</h5>
-                  <div class="mt-2 ml-3">
+                  <div class="mt-3 ml-3">
                       <h5>  &nbsp;${orderDetails[0].addressInformation.username} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ${orderDetails[0].addressInformation.phonenumber}</h5>
                       <p class="ml-1">${orderDetails[0].addressInformation.address} , ${orderDetails[0].addressInformation.locality} , ${orderDetails[0].addressInformation.city} , ${orderDetails[0].addressInformation.district}<br>
                       ${orderDetails[0].addressInformation.pincode}</p>
@@ -320,7 +320,7 @@ const orderInvoiceDownload = async(req, res, next) => {
                     
                     `<tr>
                         <th>${index + 1}</th>
-                        <td>${data.productData[0].productName}</td>
+                        <td>${data.productData[0].productName}<br>(size : ${data.productData[0].size} )</td>
                         <td>${data.productInforamtion.productquantity}</td>
                         <td>${data.productInforamtion.productPrice}</td>
                         <td>${data.productInforamtion.productTotalAmount}</td>
@@ -591,7 +591,7 @@ const updateOrderStatus = async (req, res, next) => {
 
                 if (updateStatus) {
 
-                    res.json({ status: true });
+                    res.json({ status: true , value:'Return_Canceled'});
 
                 } else {
                     res.json({ status: false });
@@ -610,6 +610,57 @@ const updateOrderStatus = async (req, res, next) => {
 
                 } else {
                     res.json({ status: false });
+                }
+            }
+
+            if(data.orderStatus == 'Return'){
+                           
+                // *** ORDER RETURN STATUS CHANGE ***
+                productToUpdate.orderStatus = 'Return';
+                productToUpdate.paymentStatus = 'Refund';
+                productToUpdate.reason = data.reason;
+                const updateStock = await productInfo.updateOne({ _id: data.productId }, { $inc: { stock: productToUpdate.productquantity } });
+
+                // Check Return Order Product Inventory Managed Or Not
+                if (updateStock) {
+
+                    // Create Unique TransactionId
+                    const nanoidModule = await import('nanoid');
+                    nanoid = nanoidModule.nanoid;
+                    const uniqueID = nanoid();
+
+                    // Creating The Tranction History Store Object
+                    const transaction = {
+                        transactionId: uniqueID,
+                        transactionType: 'Debit',
+                        description: 'Product Return Refund',
+                        amount: productToUpdate.productTotalAmount,
+                        orderId: order._id
+                    }
+
+                    const returnAmount = await userData.updateOne({ _id: order.userId }, { $inc: { walletAmount: productToUpdate.productTotalAmount } }, { upsert: true });
+                    const updateWalletTransaction = await userData.updateOne({ _id: order.userId }, { $push: { walletTransaction: transaction } }, { upsert: true });
+
+
+                    // Checking Wallet Update Successfull
+                    if (returnAmount && updateWalletTransaction) {
+
+                        productToUpdate.paymentStatus = 'Refund';
+                        const updateStatus = await order.save();
+
+                        if (updateStatus) {
+
+                            res.json({ status:true });
+        
+                        } else {
+                            res.json({ status:false });
+                        }
+
+                    }else{
+                        throw new Error('Updation Failed');
+                    } 
+                }else{
+                    throw new Error('Product Must Be Delivered');
                 }
             }
 
@@ -805,14 +856,16 @@ const orderReturn = async(req, res, next) => {
 
         const order = await orderData.findById(data.orderId);
 
-
+        const currentDate = new Date(order.updatedAt);
+        currentDate.setDate(currentDate.getDate() + 7);
+        
         if (order) {
 
             // FINDING THE PRODUCT IN THAT ORDER
             const productToUpdate = order.productInforamtion.find(orderProduct => orderProduct.productId.equals(data.productId));
 
             // CHECK CONDITION FOR PRODUCT IS DELIVERECD OR NOT.DELIVERED PROUDUCT ONLY REFUND OPTION
-            if(productToUpdate.orderStatus == 'Delivered'){
+            if(productToUpdate.orderStatus == 'Delivered' && order.updatedAt <= currentDate){
            
                 // *** ORDER RETURN STATUS CHANGE ***
                 productToUpdate.orderStatus = 'Return_Placed';
@@ -883,57 +936,57 @@ module.exports = {
 //             // CHECK CONDITION FOR PRODUCT IS DELIVERECD OR NOT.DELIVERED PROUDUCT ONLY REFUND OPTION
 //             if(productToUpdate.orderStatus == 'Delivered'){
            
-//                 // *** ORDER RETURN STATUS CHANGE ***
-//                 productToUpdate.orderStatus = 'Return';
-//                 productToUpdate.paymentStatus = 'Refund';
-//                 productToUpdate.reason = data.reason;
-//                 const updateStock = await productInfo.updateOne({ _id: data.productId }, { $inc: { stock: productToUpdate.productquantity } });
+            //     // *** ORDER RETURN STATUS CHANGE ***
+            //     productToUpdate.orderStatus = 'Return';
+            //     productToUpdate.paymentStatus = 'Refund';
+            //     productToUpdate.reason = data.reason;
+            //     const updateStock = await productInfo.updateOne({ _id: data.productId }, { $inc: { stock: productToUpdate.productquantity } });
 
-//                 // Check Return Order Product Inventory Managed Or Not
-//                 if (updateStock) {
+            //     // Check Return Order Product Inventory Managed Or Not
+            //     if (updateStock) {
 
-//                     // Create Unique TransactionId
-//                     const nanoidModule = await import('nanoid');
-//                     nanoid = nanoidModule.nanoid;
-//                     const uniqueID = nanoid();
+            //         // Create Unique TransactionId
+            //         const nanoidModule = await import('nanoid');
+            //         nanoid = nanoidModule.nanoid;
+            //         const uniqueID = nanoid();
 
-//                     // Creating The Tranction History Store Object
-//                     const transaction = {
-//                         transactionId: uniqueID,
-//                         transactionType: 'Debit',
-//                         description: 'Product Return Refund',
-//                         amount: productToUpdate.productTotalAmount,
-//                         orderId: order._id
-//                     }
+            //         // Creating The Tranction History Store Object
+            //         const transaction = {
+            //             transactionId: uniqueID,
+            //             transactionType: 'Debit',
+            //             description: 'Product Return Refund',
+            //             amount: productToUpdate.productTotalAmount,
+            //             orderId: order._id
+            //         }
 
-//                     const returnAmount = await userData.updateOne({ _id: order.userId }, { $inc: { walletAmount: productToUpdate.productTotalAmount } }, { upsert: true });
-//                     const updateWalletTransaction = await userData.updateOne({ _id: order.userId }, { $push: { walletTransaction: transaction } }, { upsert: true });
+            //         const returnAmount = await userData.updateOne({ _id: order.userId }, { $inc: { walletAmount: productToUpdate.productTotalAmount } }, { upsert: true });
+            //         const updateWalletTransaction = await userData.updateOne({ _id: order.userId }, { $push: { walletTransaction: transaction } }, { upsert: true });
 
 
-//                     // Checking Wallet Update Successfull
-//                     if (returnAmount && updateWalletTransaction) {
+            //         // Checking Wallet Update Successfull
+            //         if (returnAmount && updateWalletTransaction) {
 
-//                         productToUpdate.paymentStatus = 'Refund';
-//                         const updateStatus = await order.save();
+            //             productToUpdate.paymentStatus = 'Refund';
+            //             const updateStatus = await order.save();
 
-//                         if (updateStatus) {
+            //             if (updateStatus) {
 
-//                             res.json({ status:true });
+            //                 res.json({ status:true });
         
-//                         } else {
-//                             res.json({ status:false });
-//                         }
+            //             } else {
+            //                 res.json({ status:false });
+            //             }
 
-//                     }else{
-//                         throw new Error('Updation Failed');
-//                     } 
-//                 }else{
-//                     throw new Error('Product Must Be Delivered');
-//                 }
+            //         }else{
+            //             throw new Error('Updation Failed');
+            //         } 
+            //     }else{
+            //         throw new Error('Product Must Be Delivered');
+            //     }
     
-//             }else{
-//                 throw new Error('Stock Manage Error');
-//             }
+            // }else{
+            //     throw new Error('Stock Manage Error');
+            // }
 //         } else {
 //             throw new Error('Data is Not Found');
 //         }

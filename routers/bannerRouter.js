@@ -23,5 +23,6 @@ const bannerImage = multer({storage:uploadBannerImg});
 bannerRouter.get('/viewbanner', auth.isAdminLogin,  bannerController.loadBannerPage);
 bannerRouter.get('/addBanner', auth.isAdminLogin,  bannerController.loadAddBannerPage);
 bannerRouter.post('/addBanner', bannerImage.single('bannerBackground') , auth.isAdminLogin , bannerController.addNewBanner)
+bannerRouter.get('/unlist:id', auth.isAdminLogin,  bannerController.unlistBanner);
 
 module.exports = bannerRouter;

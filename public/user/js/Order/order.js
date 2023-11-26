@@ -194,7 +194,7 @@ if(cancelOrder){
             showCancelButton: true,
             confirmButtonColor: '#d33',
             cancelButtonColor: '#808080',
-            confirmButtonText: '<i class="fa-regular fa-trash-can  fa-lg" style="color: #ffffff;"></i> Delete'
+            confirmButtonText: '<i class="fa-regular fa-trash-can  fa-lg" style="color: #ffffff;"></i> Remove'
             }).then(async (result) => {
 
                 // SWAL CONFIRM BUTTON DATA SEND TO SERVER AND UPDATE THE STATUS
@@ -234,7 +234,7 @@ if(cancelOrder){
                             })
 
                             setTimeout(() => {
-                                window.location.href = `/api/orderDetails?id=${orderId}&productId=${productId}`
+                                window.location.href = `/api/orderDetails?id=${orderId}&productId=${productId}`;
                             }, 1600);
 
                             

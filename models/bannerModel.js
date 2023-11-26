@@ -20,6 +20,10 @@ const bannerSchema = moongose.Schema({
     backgroundImage:{
         type : String,
         require : true
+    },
+    is_Listed: {
+        type : Boolean,
+        default : true 
     }
 },{timestamps: true});
 

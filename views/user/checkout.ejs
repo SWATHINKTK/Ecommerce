@@ -267,13 +267,13 @@
                         <% if(single){ %>
                             <div class="row d-flex justify-content-end align-items-center mt-3 border p-2 placeorder">
                                 <div class="continue__btn  mr-3" >
-                                    <button class="btn proceed-payment" id="placeOrder" data-product-id="<%= product._id %>">Place Order</button>
+                                    <button class="btn proceed-payment" id="placeOrder" name="placeOrderBtn" data-product-id="<%= product._id %>" data-coupon="false" data-couponId="">Place Order</button>
                                 </div>
                             </div>
                         <% } else { %>
                             <div class="row d-flex justify-content-end align-items-center mt-3 border p-2 placeorder">
                                 <div class="continue__btn  mr-3" >
-                                    <button class="btn proceed-payment" id="cartPlaceOrder"  >Place Order</button>
+                                    <button class="btn proceed-payment" id="cartPlaceOrder" name="placeOrderBtn" data-coupon="false" data-couponId="">Place Order</button>
                                 </div>
                             </div>
                         <% } %>
@@ -284,101 +284,45 @@
 
                 <% if(single){ %>
                     <div class="col-lg-4">
-                        <!-- <div class="cart__discount">
-                            <h6>Discount codes</h6>
-                        </div> -->
-                        <div class="cart__total mt-3">
+                        <div class="cart__total">
                             <h6 class="cart-total-head pb-3">Price Details</h6>
                             <ul class="priceDetails">
                                 <li>Price <span><i class="bi bi-currency-rupee"></i><span name="checkout-price"><%= product.price %></span></span></li>
                                 <li>Quanitity <span name="checkout-price">1</span></li>
-                                <li>Discount <span><i class="bi bi-currency-rupee"></i> 0</span></li>
+                                <li>Discount <span><i class="bi bi-currency-rupee"></i> <span name="checkout-price">0</span></span></li>
                                 <li>Delivery Charges <span>Free</span></li>
                                 <li class="mt-2 cart-total-amount">Total Amount <span><i class="bi bi-currency-rupee"></i> <span name="checkout-price"><%= product.price %></span></span></li>
                             </ul>
                             <!-- <a href="#" class="primary-btn">Proceed to checkout</a> -->
-                        
-                            <div class="apply-coupons mt-3">
-                                <h4 class="text-center font-weight-bold">Apply Coupons</h4 >
-                                <div class="apply-coupons-cards p-2 mt-3">
-                                    <div class="card coupon-card ">
-                                        <div class="card-body">
-                                            <!-- <div class="ribbon">Your text content</div> -->
-                                            <div class="ribbon">20%</div>
-                                            <div class="d-flex justify-content-end">
-                                                <span class="font-weight-bold">Coupon Name</span>
-                                            </div>
-                                            <div class="d-flex justify-content-end">
-                                                <span class="font-weight-bold"><i class="bi bi-currency-rupee"></i>4000</span>
-                                            </div>
-                                            <div class="d-flex justify-content-end">
-                                                <p>(Minimum Amount)</p>  
-                                            </div>
-                                            <div class="d-flex justify-content-between" >
-                                                <a href="" class="primary-btn-Coupon">Apply</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card coupon-card mt-4">
-                                        <div class="card-body">
-                                            <!-- <div class="ribbon">Your text content</div> -->
-                                            <div class="ribbon">20%</div>
-                                            <div class="d-flex justify-content-end">
-                                                    couponname
-                                            </div>
-                                            <div class="d-flex justify-content-end">
-                                                234
-                                            </div>
-                                            <div class="d-flex justify-content-end">
-                                                XX-XX-XXXX to XX-XX-XXXX
-                                            </div>
-                                            <div class="d-flex justify-content-between">
-                                                <a href="" class="primary-btn-Coupon">Apply</a>
-                                                <button class="tooltip-btn"  data-toggle="popover" title="Popover Title" data-content="This is the content of the popover.">
-                                                    Popover
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card coupon-card mt-4">
-                                        <div class="card-body">
-                                            <!-- <div class="ribbon">Your text content</div> -->
-                                            <div class="ribbon">20%</div>
-                                            <div class="d-flex justify-content-end">
-                                                    couponname
-                                            </div>
-                                            <div class="d-flex justify-content-end">
-                                                234
-                                            </div>
-                                            <div class="d-flex justify-content-end">
-                                                XX-XX-XXXX to XX-XX-XXXX
-                                            </div>
-                                            <div >
-                                                <a href="" class="primary-btn-Coupon">Apply</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card coupon-card mt-3">
-                                        <div class="card-body">
-                                            <!-- <div class="ribbon">Your text content</div> -->
-                                            <div class="ribbon">20%</div>
-                                            <div class="d-flex justify-content-end">
-                                                    couponname
-                                            </div>
-                                            <div class="d-flex justify-content-end">
-                                                234
-                                            </div>
-                                            <div class="d-flex justify-content-end">
-                                                XX-XX-XXXX to XX-XX-XXXX
-                                            </div>
-                                            <div >
-                                                <a href="" class="primary-btn-Coupon">Apply</a>
-                                            </div>
-                                        </div>
-                                    </div>
+                            <% if(locals.couponData && locals.couponData.length > 0){ %>
+                                <div class="apply-coupons mb-3">
+                                    <h4 class="text-center font-weight-bold">Apply Coupons</h4 >
                                     
+                                    <div class="apply-coupons-cards p-2 mt-1">
+                                        <% for(let i = 0;i < couponData.length ;i++) { %>
+                                            <div class="card coupon-card mb-4 mt-3">
+                                                <div class="card-body">
+                                                    <div class="ribbon"><%= couponData[i].OfferPercentage %>%</div>
+                                                    <div class="d-flex justify-content-end">
+                                                        <span class="font-weight-bold"><%= couponData[i].couponName %></span>
+                                                    </div>
+                                                    <div class="d-flex justify-content-end">
+                                                        <span style="font-size: 13px;">upto <i class="bi bi-currency-rupee"></i><%= couponData[i].minimumPurchase %></span>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between align-items-end mt-1" >
+                                                        <a href="" class="primary-btn-Coupon" name="couponApplyBtn" data-single="<%= locals.single ? true : false %>" data-coupon="<%= JSON.stringify(couponData[i]) %>">Apply</a>
+                                                        <div style="display: none;" name="couponReset">
+                                                            <span class="text-primary mt-1" style="cursor: pointer;" onclick="removeAppliedCoupon()" >Reset</span>
+                                                        </div>
+                                                        <span class="font-weight-bold cursor-pointer"  onclick="instructionsOnhover('<%= couponData[i].OfferPercentage %>','<%= couponData[i].minimumPurchase %>','<%= couponData[i].startDate %>','<%= couponData[i].startDate %>')" style="cursor: pointer;">* instructions</span>
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+                                        <% } %>
+                                    </div>
                                 </div>
-                            </div>
+                            <% } %>
                         </div>
 
                         
@@ -388,19 +332,44 @@
                     
                 <% } else {%>
                     <div class="col-lg-4 ">
-                        <!-- <div class="cart__discount">
-                            <h6>Discount codes</h6>
-                        </div> -->
                         <div class="cart__total mt-3">
                             <h6 class="cart-total-head pb-3">Price Details</h6>
-                            <ul>
+                            <ul class="priceDetails">
                                 <li>Price <span><i class="bi bi-currency-rupee"></i><span name="checkout-price"><%= sum %></span></span></li>
                                 <li>Quanitity <span name="checkout-price"><%= quantity %></span></li>
-                                <li>Discount <span><i class="bi bi-currency-rupee"></i> 0</span></li>
+                                <li>Discount <span><i class="bi bi-currency-rupee"></i><span name="checkout-price">0</span></span></li>
                                 <li>Delivery Charges <span>Free</span></li>
                                 <li class="mt-2 cart-total-amount">Total Amount <span><i class="bi bi-currency-rupee"></i> <span name="checkout-price"><%= sum %></span></span></li>
                             </ul>
-
+                            <% if(locals.couponData && locals.couponData.length > 0){ %>
+                                <div class="apply-coupons mb-3">
+                                    <h4 class="text-center font-weight-bold">Apply Coupons</h4 >
+                                    
+                                    <div class="apply-coupons-cards p-2 mt-1">
+                                        <% for(let i = 0;i < couponData.length ;i++) { %>
+                                            <div class="card coupon-card mb-4 mt-3">
+                                                <div class="card-body">
+                                                    <div class="ribbon"><%= couponData[i].OfferPercentage %>%</div>
+                                                    <div class="d-flex justify-content-end">
+                                                        <span class="font-weight-bold"><%= couponData[i].couponName %></span>
+                                                    </div>
+                                                    <div class="d-flex justify-content-end">
+                                                        <span style="font-size: 13px;">upto <i class="bi bi-currency-rupee"></i><%= couponData[i].minimumPurchase %></span>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between align-items-end mt-1" >
+                                                        <a href="" class="primary-btn-Coupon" name="couponApplyBtn" data-single="<%= locals.single ? true : false %>" data-coupon="<%= JSON.stringify(couponData[i]) %>">Apply</a>
+                                                        <div style="display: none;" name="couponReset">
+                                                            <span class="text-primary mt-1" style="cursor: pointer;" onclick="removeAppliedCoupon()" >Reset</span>
+                                                        </div>
+                                                        <span class="font-weight-bold cursor-pointer"  onclick="instructionsOnhover('<%= couponData[i].OfferPercentage %>','<%= couponData[i].minimumPurchase %>','<%= couponData[i].startDate %>','<%= couponData[i].startDate %>')" style="cursor: pointer;">* instructions</span>
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+                                        <% } %>
+                                    </div>
+                                </div>
+                            <% } %>
                             <!-- <a href="#" class="primary-btn">Proceed to checkout</a> -->
                         </div>
                     </div>

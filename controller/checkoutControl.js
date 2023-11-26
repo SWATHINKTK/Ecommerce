@@ -3,9 +3,12 @@ const {productInfo} = require('../models/productModel');
 const {userData} = require('../models/userModal');
 const orderData = require('../models/orderModel');
 const cartData = require('../models/cartModel');
+const couponData = require('../models/couponModel');
 const mongoose = require('mongoose');
 const Razorpay = require('razorpay');
 const crypto = require('crypto');
+const { chown } = require('fs');
+
 
 // PAYMENT INTEGRATION KEY SETUP
 var instance = new Razorpay({
@@ -23,20 +26,44 @@ const LoadCheckoutPage = async(req, res, next) => {
         const userId = req.session.userId;
         const addressInfo = await addressData.find({userId:userId});
 
+        const coupons = await couponData.aggregate([
+            {
+                $match:{
+                    startDate:{$lte: new Date()},
+                    endDate:{$gte: new Date()},
+                    is_Delete:false,
+                    AppliedUsers:{
+                        $not: {
+                            $elemMatch: { $eq:new mongoose.Types.ObjectId(userId) }
+                        }
+                    }
+
+                }
+            }
+        ]);
+
+        // for(let coupon of coupons){
+        //     coupon.AppliedUsers.forEach((user,i) => {
+        //         if(user.equals(userId)){
+        //             coupons.splice(i,1);
+        //         }
+        //     })
+        // }
+
         if(req.query.single){
 
             const productId = req.query.id;
 
             const productData = await productInfo.findOne({_id:productId});
         
-            res.render('user/checkout',{user:true, title:'CheckOut', login:checkLogin, address:addressInfo, product:productData ,single:true});
+            res.render('user/checkout',{user:true, title:'CheckOut', login:checkLogin, address:addressInfo, product:productData ,single:true, couponData:coupons});
 
         }else{
 
             const cartProduct = await cartData.findOne({userId:userId}).populate('cartProducts.productId')
             const productData = cartProduct.cartProducts;
      
-            res.render('user/checkout',{user:true, title:'CheckOut', login:checkLogin, address:addressInfo, cartProduct:productData ,single:false});
+            res.render('user/checkout',{user:true, title:'CheckOut', login:checkLogin, address:addressInfo, cartProduct:productData ,single:false, couponData:coupons});
         }
 
     }catch(error){
@@ -71,7 +98,27 @@ const PlaceOrder = async(req, res, next)=>{
             alternateNumber:addressInfo.alternateNumber,
         }
 
-        
+        // COUPON CHECKING ORDER HAS COUPON HAS APPIED OR NOT
+        let couponStatus = false;
+        let coupon;
+        if(data.couponStatus){
+            coupon = await couponData.aggregate([
+                {
+                    $match:{
+                        _id:new mongoose.Types.ObjectId(data.couponId),
+                        startDate:{$lte: new Date()},
+                        endDate:{$gte: new Date()},
+                        is_Delete:false
+                    }
+                }
+            ]);
+
+            if(coupon.length <= 0){
+                res.json({couponError:true});
+            }else{
+                couponStatus = true;
+            }
+        }
 
         // **** Product Data Storing Section Else Part Cart Order**** 
         let productData;
@@ -83,6 +130,7 @@ const PlaceOrder = async(req, res, next)=>{
 
             productData = await productInfo.findOne({_id:data.ProductId});
 
+
             // CHECKING STOCK IS AVAILABLE OR NOT
             if(productData.stock >= data.productQuantity ){
 
@@ -91,10 +139,25 @@ const PlaceOrder = async(req, res, next)=>{
                     productId:data.ProductId,
                     productPrice:data.ProductPrice,
                     productTotalAmount:(data.productQuantity * data.ProductPrice),
+                    MRP:data.ProductPrice,
                     productquantity:data.productQuantity
                 }
 
-                totalPrice = (data.productQuantity * data.ProductPrice);
+                // COUPON APPLY TIME PRODUCT AMOUNT DETAILS STROING
+                let totalDiscountAmount;
+                if(couponStatus){
+                    totalDiscountAmount = (coupon[0].minimumPurchase * coupon[0].OfferPercentage)/100;
+                    const discountForTheProduct = ( data.ProductPrice * totalDiscountAmount ) / products.productTotalAmount;
+                    products.productPrice = (data.ProductPrice - discountForTheProduct).toFixed(2);
+                    products.productTotalAmount -= totalDiscountAmount.toFixed(2); 
+                    products.discountAmount = discountForTheProduct.toFixed(2);
+                    totalPrice = (data.productQuantity * data.ProductPrice) - totalDiscountAmount;
+                }else{
+                    totalPrice = (data.productQuantity * data.ProductPrice) ;
+                }
+
+
+
                 // Payment Status Setting In Wallet Payment
                 if(data.PaymentMethod == 'Wallet'){
         
@@ -126,12 +189,28 @@ const PlaceOrder = async(req, res, next)=>{
                 products = cartInfo.cartProducts.map(item => ({
                     productId: item.productId,
                     productPrice:item.price,
+                    MRP:item.price,
                     productTotalAmount: (item.price * item.quantity),
                     productquantity:item.quantity
                 }));
+
                 products.map((val) => {
                     totalPrice += val.productTotalAmount
                 });
+
+                // ORDER HAVE EXISTING THE COUPON CALCULATE THE DISCOUNT OFFER FOR APPLY COUPO AND CALCULATING THE PRICE
+                if(couponStatus){
+                    const totalDiscountAmount = ((coupon[0].minimumPurchase * coupon[0].OfferPercentage)/100).toFixed(2);
+                
+                    let discountForThatProduct ;
+                    products.map((value) => {
+                        discountForThatProduct = (( value.productPrice * totalDiscountAmount ) / totalPrice);
+                        value.productPrice = value.productPrice - discountForThatProduct;
+                        value.productTotalAmount = value.productquantity * value.productPrice; 
+                        value.discountAmount = discountForThatProduct;
+                        totalPrice -= (value.productquantity * value.discountAmount)
+                    });
+                }
 
 
                 // Payment Wallet Payment Status Setting
@@ -177,12 +256,22 @@ const PlaceOrder = async(req, res, next)=>{
             totalAmount:totalPrice,
             paymentMethod:data.PaymentMethod,
         });
+
+        // COUPON EXIST DATA ADDED TO ORDER DOCUMENT
+        if(couponStatus){
+            orderSucess.couponId = coupon[0]._id;
+            orderSucess.couponOfferPercentage = coupon[0].OfferPercentage;
+        }
+
         const orderStore = await orderSucess.save();
 
-        console.log(orderSucess)
 
         // **** STOCK MANAGEMENT IN EACH PRODUCT ON THE UPDATE IF TRUE SECTION HANDLE SINGLE PRODUCT ****
         if(orderStore && data.SingleProduct){
+
+            if(couponStatus){
+                const couponUpdate = await couponData.updateOne({_id:orderSucess.couponId},{$set:{AppliedUsers:userId}},{upsert:true});
+            }
 
             // STOCK UPDATE IN THAT PRODUCT
             const stockUpdate = await productInfo.updateOne({_id:data.ProductId},{$inc:{stock:-data.productQuantity}});
@@ -248,6 +337,11 @@ const PlaceOrder = async(req, res, next)=>{
             }
 
         }else{
+
+            if(couponStatus){
+                const couponUpdate = await couponData.updateOne({_id:orderSucess.couponId},{$set:{AppliedUsers:userId}},{upsert:true});
+            }
+
 
             // STOCK MANAGEMENT IN CART PRODUCTS
             let stockUpdate;

@@ -24,6 +24,10 @@ const couponSchema = moongose.Schema({
         type : Date,
         require : true
     },
+    AppliedUsers : {
+        type : [moongose.Schema.Types.ObjectId],
+        require : true
+    },
     is_Delete:{
         type : Boolean,
         default : false

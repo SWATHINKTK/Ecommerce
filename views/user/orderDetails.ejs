@@ -54,7 +54,7 @@
                             </div>
                         </a>
                 </div>
-                <div class="d-flex flex-column align-items-start mt-5 justify-content-center">
+                <!-- <div class="d-flex flex-column align-items-start mt-5 justify-content-center">
                     <h5 class="font-weight-bold mb-3">Order Filter</h5>
 
                     <div class="input-group">
@@ -77,7 +77,7 @@
                         <input type="radio" class="mb-1" name="orderFilter" id="" value="Canceled"> <span class="ml-2 font-weight-bold text-secondary">Canceled</span>
                     </div>
 
-                </div>
+                </div> -->
             </div>
             <div class="col-md-8 ml-4">
                 <!-- Right Side Div -->
@@ -115,13 +115,15 @@
                                         <div class="d-flex align-items-center m-2 mt-3">
                                             <% if(orderData[i].productInforamtion.orderStatus == 'Canceled') {%>
                                                 <!-- <i class="fa-solid fa-circle"></i> -->
-                                                <i class="fa-solid fa-circle ml-3" style="color: #ff0000;"></i><h5 class="ml-2 font-weight-bold text-danger">Canceled on <%= orderData[i].updatedAt.toLocaleDateString() %></h5>
+                                                <i class="fa-solid fa-circle ml-3 fa-sm" style="color: #ff0000;"></i><h6 class="ml-2 font-weight-bold text-danger">Canceled on <%= orderData[i].updatedAt.toLocaleDateString() %></h6>
                                             <% } else if (orderData[i].productInforamtion.orderStatus == 'Delivered') { %>
-                                                <i class="fa-solid fa-circle ml-3 text-success"></i><h5 class="ml-2 font-weight-bold text-success">Delivered on <%= orderData[i].updatedAt.toLocaleDateString() %></h5>
+                                                <i class="fa-solid fa-circle ml-3 text-success fa-sm"></i><h6 class="ml-2 font-weight-bold text-success">Delivered on <%= orderData[i].updatedAt.toLocaleDateString() %></h6>
                                             <% } else if (orderData[i].productInforamtion.orderStatus == 'Return_Placed' || orderData[i].productInforamtion.orderStatus == 'Order_Pickup') { %>
                                                 <h6 class="ml-3 mr-2">Return Expected &nbsp;: <span class="text-danger">3 to 4 Days to Return</span> <span class="font-weight-bold text-success ml-3"> (<%= orderData[i].productInforamtion.orderStatus %>)</span></h6>
                                             <% } else if (orderData[i].productInforamtion.orderStatus == 'Return_Canceled') { %>
-                                                <i class="fa-solid fa-circle ml-3" style="color: #ff0000;"></i><h5 class="ml-2 font-weight-bold text-danger">Return Canceled on <%= orderData[i].updatedAt.toLocaleDateString() %></h5>
+                                                <i class="fa-solid fa-circle ml-3 fa-sm" style="color: #ff0000;"></i><h6 class="ml-2 font-weight-bold text-danger">Return Canceled on <%= orderData[i].updatedAt.toLocaleDateString() %></h6>
+                                            <% } else if (orderData[i].productInforamtion.orderStatus == 'Return') { %>
+                                                <i class="fa-solid fa-circle ml-3 fa-sm" style="color: #ff9d00;"></i><h6 class="ml-2 font-weight-bold " style="color: #ff9d00;">Return on <%= orderData[i].updatedAt.toLocaleDateString() %></h6>
                                             <% } else { %>
                                                 <h6 class="ml-3 mr-2">Delivery Expected &nbsp;: <span class="text-danger">3 to 4 Days to Delivery</span> <span class="font-weight-bold text-success ml-3"> (<%= orderData[i].productInforamtion.orderStatus %>)</span></h6>
                                             <% } %>

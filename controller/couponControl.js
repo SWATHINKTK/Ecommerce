@@ -6,7 +6,11 @@ const loadCouponList = async(req, res, next) => {
 
         const coupons = await couponData.aggregate([
             {
-                $match:{is_Delete:false}
+                $match:{}
+                // {is_Delete:false}
+            },
+            {
+                $sort:{is_Delete:1,_id:-1}
             }
         ])
 

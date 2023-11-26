@@ -67,15 +67,18 @@
                             <!-- <div class="container py-5 h-100"> -->
                           <div class="row d-flex justify-content-center align-items-center h-100" data-order-status="<%= orderData[0].productInforamtion.orderStatus %>" id="order-Progress-ViewPage" data-order-Place="<%= orderData[0].createdAt %>">
                             <div class="col-md-12 col-lg-12 col-xl-12">
-                              <div class="card card-stepper" style="border-radius: 16px;">
-                                <div class="card-header p-4">
+                              <div class="card card-stepper" style="border-radius:6 px;">
+                                <div class="card-header">
                                   <div class="d-flex justify-content-between align-items-center">
                                     <div>
-                                      <p class="text-muted mb-2"> Order ID <span class="fw-bold text-body"> <%= orderData[0].order_id %></span></p>
-                                      <p class="text-muted mb-0"> Place On <span class="fw-bold text-body"> <%= orderData[0].createdAt.toLocaleDateString() %></span> </p>
+                                      <p class="text-muted my-0"> Order ID : <span class="font-weight-bold text-body ml-1"> <%= orderData[0].order_id %></span></p>
+                                      <p class="text-muted my-0"> Place On :<span class="font-weight-bold text-body ml-1"> <%= orderData[0].createdAt.toLocaleDateString() %></span> </p>
+                                      <p class="text-muted my-0"> Payment Status :<span class="font-weight-bold text-body ml-1"><%= orderData[0].paymentMethod %></span><span class=" text-muted"> (<%= orderData[0].productInforamtion.paymentStatus %>) </span></p>
                                     </div>
                                     <div>
-                                      <h6 class="mb-0"> <a href="/api/invoiceDownload?orderId=<%= orderData[0]._id %>&productId=<%= orderData[0].productData[0]._id %>">Download Invoice</a> </h6>
+                                      <% if(orderData[0].productInforamtion.orderStatus == 'Placed' || orderData[0].productInforamtion.orderStatus == 'Shipped' || orderData[0].productInforamtion.orderStatus == 'Delivered') { %>
+                                        <h6 class="mb-0"> <a href="/api/invoiceDownload?orderId=<%= orderData[0]._id %>&productId=<%= orderData[0].productData[0]._id %>">Download Invoice</a> </h6>
+                                      <% } %>
                                     </div>
                                   </div>
                                 </div>
@@ -86,8 +89,20 @@
                                             <h5 class="bold font-weight-bold"><%= orderData[0].productData[0].productName %></h5>
                                           </a>
                                           <p class="text-muted mt-2"> Qty: <%= orderData[0].productInforamtion.productquantity %> item</p>
-                                          <h4 class="mb-3 mt-3 font-weight-bold"> <i class="bi bi-currency-rupee"></i> <%= orderData[0].productInforamtion.productPrice %>  <span class="small text-muted"> (<%= orderData[0].productInforamtion.paymentStatus %>) </span></h4>
-                                          <p class="text-muted mt-2"> Payment Method: <span class="font-weight-bold text-body"><%= orderData[0].paymentMethod %></span></p>
+                                          <h4 class="mb-3 mt-3 font-weight-bold">
+                                            <i class="bi bi-currency-rupee"></i> 
+                                            <%= orderData[0].productInforamtion.productPrice %>  
+                                            <% if ( orderData[0].couponOfferPercentage) { %>
+                                              <p class="small mt-2 text-success font-weight-bold" style="font-size: 16px;">
+                                                <i class="bi bi-gift-fill" style="color: #17c454;"></i> 
+                                                Coupon applied 
+                                                <span style="font-size: 14px;" class="text-muted">
+                                                  ( ₹ <del class="text-muted"><%= orderData[0].productInforamtion.MRP %></del> - <del class="text-muted"><%= orderData[0].productInforamtion.discountAmount %></del> )
+                                                </span>
+                                              </p>
+                                            <% } %>
+                                            
+                                          </h4>
                                           <p class="text-muted mt-2">Tracking Status on: <span class="text-body">
                                             <%= new Intl.DateTimeFormat('en-US', {
                                                     hour: 'numeric',

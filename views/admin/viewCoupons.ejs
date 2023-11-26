@@ -20,6 +20,7 @@
                         <th>Offer</th>
                         <th>Start Date</th>
                         <th>End Date</th>
+                        <th>Status</th>
                         <th>Action</th>
                         </tr>
                     </thead>
@@ -34,14 +35,26 @@
                           <td><%= couponData[i].OfferPercentage %> %</td>
                           <td><%= couponData[i].startDate.toLocaleDateString() %></td>
                           <td><%= couponData[i].endDate.toLocaleDateString() %></td>
+                          <td>
+							<% if(couponData[i].is_Delete){%>
+								<span class="text-danger font-weight-bold">Deleted</span>
+                            <% } else if(couponData[i].startDate <= new Date() && couponData[i].endDate >= new Date()){%>
+                                <span class="text-success font-weight-bold">Active</span>
+                            <% } else if(couponData[i].startDate >= new Date()){ %>
+								<span class="text-warning font-weight-bold">Not Active</span>
+							<% } else {%>
+								<span class="text-danger font-weight-bold">Expired</span>
+							<% } %>
+                          </td>
                           <td >
-
-                            <button type="button" class="btn  btn-primary mb-2" name="editCouponBtn" data-coupon-id="<%= couponData[i]._id %>">
-                              <i class="bi bi-pencil-square"  data-coupon-id="<%= couponData[i]._id %>"></i>
-                            </button><br>
-                            <button type="button" class="btn  btn-danger" name="deleteCouponBtn" data-coupon-id="<%= couponData[i]._id %>">
-                              <i class="bi bi-trash" name="deleteCouponBtn" data-coupon-id="<%= couponData[i]._id %>"></i>
-                            </button><br>
+							<% if(!couponData[i].is_Delete){%>
+								<button type="button" class="btn  btn-primary mb-2" name="editCouponBtn" data-coupon-id="<%= couponData[i]._id %>">
+								<i class="bi bi-pencil-square"  data-coupon-id="<%= couponData[i]._id %>"></i>
+								</button><br>
+								<button type="button" class="btn  btn-danger" name="deleteCouponBtn" data-coupon-id="<%= couponData[i]._id %>">
+								<i class="bi bi-trash" name="deleteCouponBtn" data-coupon-id="<%= couponData[i]._id %>"></i>
+								</button><br>
+							<% } %>
                   
                           </td>
                         </tr>
