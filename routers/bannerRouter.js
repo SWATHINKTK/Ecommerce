@@ -10,7 +10,7 @@ const bannerController = require('../controller/bannerControl');
 // multer is used to upload file 
 const uploadBannerImg = multer.diskStorage({
     destination:(req,file,cb) => {
-        cb(null,path.join(__dirname,'../public/admin/assets/images/brannerImages'));
+        cb(null,path.join(__dirname,'../public/admin/assets/images/bannerImages'));
     },
     filename:(req,file,cb) => {
         const name = Date.now()+'-'+file.originalname;
@@ -23,6 +23,9 @@ const bannerImage = multer({storage:uploadBannerImg});
 bannerRouter.get('/viewbanner', auth.isAdminLogin,  bannerController.loadBannerPage);
 bannerRouter.get('/addBanner', auth.isAdminLogin,  bannerController.loadAddBannerPage);
 bannerRouter.post('/addBanner', bannerImage.single('bannerBackground') , auth.isAdminLogin , bannerController.addNewBanner)
-bannerRouter.get('/unlist:id', auth.isAdminLogin,  bannerController.unlistBanner);
+bannerRouter.patch('/statusChange', auth.isAdminLogin,  bannerController.bannerStatusChange);
+bannerRouter.get('/editBanner:id', auth.isAdminLogin,  bannerController.loadEditBannerPage);
+bannerRouter.post('/editBanner', bannerImage.single('bannerBackground') , auth.isAdminLogin,  bannerController.editBannerData);
+
 
 module.exports = bannerRouter;

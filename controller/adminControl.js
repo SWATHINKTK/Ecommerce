@@ -349,6 +349,7 @@ const productAdd = async (req, res, next) => {
                 brandname: data.productBrandName,
                 stock: data.productStock,
                 price: data.productPrice,
+                MRP:  data.productPrice,
                 size: data.productSize,
                 material: data.productMaterial,
                 color: data.productColor,
@@ -499,6 +500,7 @@ const editProduct = async (req, res, next) => {
             brandname: data.productBrandName,
             stock: data.productStock,
             price: data.productPrice,
+            MRP:  data.productPrice,
             size: data.productSize,
             material: data.productMaterial,
             color: data.productColor,
@@ -537,7 +539,6 @@ const editProduct = async (req, res, next) => {
 //***** View Categorys ***** 
 const loadCategoryList = async (req, res, next) => {
     try {
-
         const offers = await offerData.find({});
 
         const categoryData = await category.find({}).sort({ list: -1,_id:-1 });

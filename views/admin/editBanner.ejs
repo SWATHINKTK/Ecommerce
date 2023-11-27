@@ -1,24 +1,26 @@
 <%- include('../partials/header.ejs') %>
-<h1 class="card-title text-center text-dark">Add Banner</h1>
+<h1 class="card-title text-center text-dark">Edit Banner</h1>
    <div class="col-12 grid-margin stretch-card">
       <div class="card">
         <div class="card-body form-style d-flex justify-content-center mb-5">
-          <form class="forms-sample mt-3 mb-3 w-50" id="addBannerForm" method="POST">
+          <form class="forms-sample mt-3 mb-3 w-50" id="editBannerForm" method="POST">
+            <input type="hidden" name="bannerId" value="<%= bannerData._id %>">
+            <input type="hidden" name="bannerPreviousBackground" value="<%= bannerData.backgroundImage %>" >
             <div class="" role="alert" id="banner-submit-result">
             </div>
             <div class="form-group">
               <label for="exampleInputName1">Banner Name </label>
-              <input type="text" class="form-control" id="bannerOfferName" placeholder="Offer name" name="bannerOfferName">
+              <input type="text" class="form-control" id="bannerOfferName" placeholder="Offer name" name="bannerOfferName" value="<%= bannerData.offerName %>">
               <p class="text-danger ml-2" name="validate-banner"></p>
             </div>
             <div class="form-group">
               <label for="exampleInputName1">Banner Heading</label>
-              <input type="text" class="form-control" id="bannerHeading" placeholder="banner heading" name="bannerHeading">
+              <input type="text" class="form-control" id="bannerHeading" placeholder="banner heading" name="bannerHeading" value="<%= bannerData.offerHeading %>">
               <p class="text-danger ml-2" name="validate-banner"></p>
             </div>
             <div class="form-group">
               <label for="exampleInputName1">Page Link</label>
-              <input type="text" class="form-control" id="linkOfOfferPage" placeholder="offer page link" name="linkPage">
+              <input type="text" class="form-control" id="linkOfOfferPage" placeholder="offer page link" name="linkPage" value="<%= bannerData.pageLink %>">
               <p class="text-danger ml-2" name="validate-banner"></p>
             </div>
           
@@ -32,7 +34,7 @@
                   <button type="click" class="mb-3 bg-transparent addBrandCropBtn" id="banner-background-CropperWindowView"><i class="mdi mdi-crop"></i> Crop</button>
                 </div>
                 <div class="">
-                  <img class="banner-background-image w-100" id="bannerBackgroundImg" src="/public/admin/assets/productImages/1699340353256-WhatsApp_Image_2023-10-20_at_09.06.10-removebg-preview.png"  alt="Category Image File" >
+                  <img class="banner-background-image w-100" id="bannerBackgroundImg" src="/public/admin/assets/images/bannerImages/<%= bannerData.backgroundImage %>"  alt="Category Image File" >
                 </div>
               </div>
             </div>
@@ -41,11 +43,11 @@
 
             <div class="form-group">
               <label for="exampleTextarea1">Banner Description</label>
-              <textarea class="form-control" id="banner-description" rows="4" name="bannerDescription" placeholder="Banner Description"></textarea>
+              <textarea class="form-control" id="banner-description" rows="4" name="bannerDescription" placeholder="Banner Description"><%= bannerData.offerDescription %></textarea>
               <p class="text-danger ml-2" name="validate-banner"></p>
             </div>
-            <button type="submit" class="btn btn-primary mr-2">Submit</button>
-            <button type="click" class="btn btn-dark mr-2" id="bannerPreview" data-addBanner="true">Banner Preview</button>
+            <button type="submit" class="btn btn-primary mr-2" data-addBanner="false" id="ediBannerSubmitBtn">Submit</button>
+            <button type="click" class="btn btn-dark mr-2" id="bannerPreview" data-addBanner="false">Banner Preview</button>
           </form>
         </div>
 

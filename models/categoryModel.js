@@ -13,7 +13,13 @@ const addCategory = mongoose.Schema({
         type : String,
         require : true
     },
-    list : {
+    offerApplied : {
+        type : mongoose.Schema.Types.ObjectId
+    },
+    offerName : {
+        type : String
+    }
+    ,list : {
         type : Boolean,
         default : true
     },

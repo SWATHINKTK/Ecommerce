@@ -1,4 +1,7 @@
 const offerData = require('../models/offerModel');
+const { productInfo } = require('../models/productModel');
+const { category } = require('../models/categoryModel');
+const mongoose = require('mongoose')
 
 // LOAD OFFER LIST PAGE
 const loadOfferList = async(req, res, next) => {
@@ -135,11 +138,137 @@ const productOfferApply = async(req, res, next) => {
 const categoryOfferApply = async(req, res, next) => {
     try {
         const data = req.body;
-        console.log(data)
+
+        const offer = await offerData.findOne({_id:data.offerId});
+
+        const productData = await productInfo.aggregate([
+            {
+                $match: {
+                    categoryIds: {
+                    $elemMatch: {
+                      $eq: new mongoose.Types.ObjectId(data.categoryId)
+                    }
+                  }
+                }
+            }
+        ]);
+
+        for (const product of productData) {
+
+            try {
+
+                const productPrice = parseFloat(product.MRP)
+                let amount =  productPrice - (productPrice * offer.OfferPercentage / 100);
+                amount = amount.toFixed(2);
+
+              if(product.offerId && product.offerPercentage >= offer.OfferPercentage){
+              }else{    
+                    const offerApply = await offerUpdateCategory(product._id, offer, amount);
+              }
+
+            } catch (error) {
+                next(error);
+            }
+        }
+
+        const updateOfferData = await offerData.updateOne(
+            {
+                _id:data.offerId,
+                AppliedCategorys:{$ne:data.categoryId}
+            },
+            {
+                $push:{AppliedCategorys:data.categoryId}
+            });
+
+        const updateCategory = await category.updateOne({_id:data.categoryId},{$set:{offerApplied:offer._id,offerName:offer.offerName}},{upsert:true});
+
+        if(updateCategory){
+            res.json({offerApplied:true, offerName:offer.offerName, offerPercentage:offer.OfferPercentage});
+        }else{
+            res.json({offerApplied:false});
+        }
+
     } catch (error) {
         next(error);
     }
 }
+
+
+// CATEGORY OFFER REMOVE 
+const categoryOfferRemove = async(req, res, next) => {
+    try {
+        const data = req.body;
+        const productData = await productInfo.aggregate([
+            {
+                $match: {
+                    categoryIds: {
+                    $elemMatch: {
+                      $eq: new mongoose.Types.ObjectId(data.categoryId)
+                    }
+                  }
+                }
+            }
+        ]);
+        for (const product of productData) {
+            try {
+                const productAddCategoryOffer = await productInfo.updateOne(
+                    {
+                        _id:product._id
+                    },
+                    {
+                        $set:{price:product.MRP},
+                        $unset: {
+                            offerId: 1,
+                            offerPercentage: 1
+                        }
+                    })
+            } catch (error) {
+                next(error);
+            }
+        }
+
+        const offerUpdate = await offerData.updateOne({ _id:data.offerId },{ $pull: { AppliedCategorys: data.categoryId } });
+
+        const updateCategory = await category.updateOne({_id:data.categoryId},{$unset:{offerApplied:1,offerName:1}});
+
+        if(updateCategory){
+            res.json({offerApplied:true});
+        }else{
+            res.json({offerApplied:false});
+        }
+        
+    } catch (error) {
+        next(error);
+    }
+}
+
+
+
+// FUNCTION FOR CATEGORY OFFER APPLYING
+async function offerUpdateCategory(productId, offer, amount){
+    
+    try {
+        const productAddCategoryOffer = await productInfo.updateOne(
+            {
+                _id:productId
+            },
+            {
+                $set:{
+                    offerPercentage:offer.OfferPercentage,
+                    offerId:offer._id,
+                    price:amount
+                }
+            },
+            {
+                upsert:true
+            },
+        );
+        return productAddCategoryOffer;
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 
 // DATE FORMAT FUNCTION
 function dateFormat(date){
@@ -158,6 +287,7 @@ module.exports = {
     editOfferData,
     deleteOffer,
     productOfferApply,
-    categoryOfferApply
+    categoryOfferApply,
+    categoryOfferRemove
     
 }

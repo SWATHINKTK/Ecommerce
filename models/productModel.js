@@ -25,6 +25,16 @@ const productData = mongoose.Schema({
         type : Number,
         require : true
     },
+    MRP : {
+        type : Number,
+        require : true
+    },
+    offerPercentage : {
+        type : Number,
+    },
+    offerId : {
+        type : mongoose.Schema.Types.ObjectId,
+    },
     size : {
         type : String,
         require : true

@@ -37,6 +37,7 @@ function viewAllCategoryDetails(){
 
         categoryOfferModalListView();
         categoryOfferApply();
+        categoryOfferRemove();
         
     })
     .catch((error) => {
@@ -74,7 +75,8 @@ function categoryOfferApply(){
             const offerId = event.target.getAttribute('data-offer-id');
 
             const categoryId = document.getElementById('offerApplyingCategory').value;
-            console.log(offerId,categoryId);
+
+            const table = document.querySelector(`tr[class='${categoryId}']`);
 
 
             const url = '/admin/categoryOfferApply';
@@ -91,6 +93,83 @@ function categoryOfferApply(){
 
 
             const response = await fetch(url, requestOptions);
+
+            const responseData = await response.json();
+            console.log(responseData)
+
+            if(responseData.offerApplied){
+                Swal.fire({
+                    position:'bottom',
+                    html: '<span class="font-weight-bold"><i class="mdi mdi-check-all" style="color: #2dd26c;"></i> Offer Applied Successfully.</span>',
+                    showConfirmButton: false, 
+                    timer: 1800,
+                });
+                table.cells[7].innerHTML = `<button type="button" class="btn btn-danger" name="offerRemoveBtn" data-offer-id="${offerId}" data-category-id="${categoryId}">Remove</button>`
+                table.cells[6].innerHTML = `${responseData.offerName} `
+            }else{
+                Swal.fire({
+                    position:'bottom',
+                    html: '<span class="font-weight-bold"><i class="mdi mdi-close" style="color: #FF0000;"></i> Offer Applied Rejected Try Again.</span>',
+                    showConfirmButton: false, 
+                    timer: 1800,
+                });
+            }
+
+        })
+    })
+}
+
+
+
+
+function categoryOfferRemove(){
+    const removeOffer = document.querySelectorAll('button[name="offerRemoveBtn"]');
+
+    removeOffer.forEach(button => {
+        button.addEventListener('click', async(event)=>{
+            event.preventDefault();
+            
+            const offerId = event.target.getAttribute('data-offer-id');
+
+            const categoryId = event.target.getAttribute('data-category-id');
+
+            const table = document.querySelector(`tr[class='${categoryId}']`);
+
+
+            const url = '/admin/categoryOfferRemove';
+            const requestOptions = {
+                method:'PATCH',
+                body:JSON.stringify({
+                    offerId:offerId,
+                    categoryId:categoryId
+                }),
+                headers:{
+                    'Content-Type':'application/json'
+                }
+            };
+
+
+            const response = await fetch(url, requestOptions);
+
+            const responseData = await response.json();
+
+            if(responseData.offerApplied){
+                Swal.fire({
+                    position:'bottom',
+                    html: '<span class="font-weight-bold"><i class="mdi mdi-check-all" style="color: #2dd26c;"></i> Offer Removed Successfully.</span>',
+                    showConfirmButton: false, 
+                    timer: 1800,
+                });
+                table.cells[7].innerHTML = `<button type="button" name="categoryOfferModalViewBtn" class="btn btn-dark" data-toggle="modal" data-target="#exampleModal" data-category-id="${categoryId}">Apply</button>`
+                table.cells[6].innerHTML = ''
+            }else{
+                Swal.fire({
+                    position:'bottom',
+                    html: '<span class="font-weight-bold"><i class="mdi mdi-close" style="color: #FF0000;"></i> Offer Remove Rejected Try Again.</span>',
+                    showConfirmButton: false, 
+                    timer: 1800,
+                });
+            }
 
         })
     })
