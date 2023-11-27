@@ -16,6 +16,8 @@
                 <th>Stock</th>
                 <th>Price</th>
                 <th>View More</th>
+                <th>Offers</th>
+                <th>Apply Offers</th>
                 <th>Action</th>
                 <th>Edit</th>
               </tr>
@@ -37,6 +39,12 @@
                 <td><%= productData[i].stock %></td>
                 <td>	&#8377; <%= productData[i].price %></td>
                 <div id="product-viewmore"><td><a href="#" class="product-viewmore" data-viewmore-id="<%= productData[i]._id %>">View More <i class="bi bi-chevron-double-right"></i></a></td></div>
+                <td></td>
+                <td>
+                  <button type="button" class="btn btn-dark" name="offerModalView" data-toggle="modal" data-target="#exampleModal" data-product-id="<%= productData[i]._id %>">
+                      Apply
+                  </button>
+              </td>
                 <% if(productData[i].status) {%>
                   <td id="<%= productData[i]._id %>"><button class="btn  btn-danger pl-3 pr-3 l-u-button" name="l-u-button" data-button-id="<%= productData[i]._id %>">Unlist</button></td>
                 <% } else { %>
@@ -90,3 +98,44 @@
   </div>
 </div>
 </div>
+
+
+
+  
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="width: 30rem;">
+      <div class="modal-content" style="border: 0;">
+        <div class="modal-body">
+            <div class="d-flex justify-content-center">
+                <button type="button" class="close text-center" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>                   
+            </div>
+            <input type="hidden" id="offerApplyingProduct" value="">
+            <div style="overflow-y: scroll; max-height: 300px;">
+                <% for(let i = 0;i < offerData.length ;i++) { %>
+                    <div>
+                    <div class="col-md-12 d-flex justify-content-center">
+                        <div class="card offer-card mb-4 mt-2 col-md-9">
+                            <div class="card-body">
+                                <div class="ribbon"><%= offerData[i].OfferPercentage %>%</div><br>
+                                <div class="d-flex justify-content-end">
+                                    <span class="font-weight-bold"><%= offerData[i].offerName %></span>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-end">
+                                    <button class="btn btn-primary" name="offerApplyBtn" data-offer-id="<%= offerData[i]._id %>">Apply</button>
+                                    <span style="font-size: 13px;"> <%= offerData[i].startDate.toLocaleDateString() %> to <%= offerData[i].endDate.toLocaleDateString() %></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+                </div>
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>

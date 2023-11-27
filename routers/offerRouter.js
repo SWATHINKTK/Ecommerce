@@ -11,6 +11,8 @@ offerRouter.post('/addOffer', auth.isAdminLogin , offerControl.submitOfferData);
 offerRouter.get('/editOffer:id', auth.isAdminLogin , offerControl.loadEditOfferPage);
 offerRouter.post('/editOffer', auth.isAdminLogin , offerControl.editOfferData);
 offerRouter.delete('/deleteOffer', auth.isAdminLogin , offerControl.deleteOffer);
+offerRouter.patch('/productOfferApply', auth.isAdminLogin , offerControl.productOfferApply);
+offerRouter.patch('/categoryOfferApply', auth.isAdminLogin , offerControl.categoryOfferApply);
 
 
 module.exports = offerRouter;

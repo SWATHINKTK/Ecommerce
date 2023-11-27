@@ -16,6 +16,8 @@
               <th>Edit</th>
               <th>Status</th>
               <th>List/Unlist</th>
+              <th>Offer</th>
+              <th>Apply Offer</th>
               <!-- <th>Delete/Retrieve</th> -->
               <!-- <td class="text-danger"> 28.76% <i class="mdi mdi-arrow-down"></i></td>
               <td><label class="badge badge-danger">Pending</label></td> -->
@@ -40,7 +42,12 @@
                   <td name="<%= data[i]._id %>"><span class="text-danger font-weight-bold">&#128683; Unlisted</span></td>
                   <td id="<%= data[i]._id %>"><button class="btn btn-primary pl-4 pr-4" id="<%= data[i]._id %>" onclick="categoryList(this)"><i class="bi bi-check2-circle"> </i>list</button></td>
                 <% } %>
-
+                <td></td>
+                <td>
+                    <button type="button" name="categoryOfferModalViewBtn" class="btn btn-dark" data-toggle="modal" data-target="#exampleModal" data-category-id="<%= data[i]._id %>">
+                        Apply
+                    </button>
+                </td>
                 <!-- <% if(!(data[i].delete) ) {%>
                   <td><button class="btn btn-danger"><i class="bi bi-trash3"></i>Delete</button></label></td>
                 <% } else { %>
@@ -78,3 +85,51 @@
     </div>
   </div>
 </div>
+
+
+<!-- Button trigger modal -->
+
+  
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="width: 30rem;">
+      <div class="modal-content" style="border: 0;">
+        <div class="modal-body">
+            <div class="d-flex justify-content-center">
+                <button type="button" class="close text-center" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>                   
+            </div>
+            <input type="hidden" id="offerApplyingCategory" value="">
+            <div style="overflow-y: scroll; max-height: 300px;">
+                <% for(let i = 0;i < offerData.length ;i++) { %>
+                    <div>
+                    <div class="col-md-12 d-flex justify-content-center">
+                        <div class="card offer-card mb-4 mt-2 col-md-9">
+                            <div class="card-body">
+                                <div class="ribbon"><%= offerData[i].OfferPercentage %>%</div><br>
+                                <div class="d-flex justify-content-end">
+                                    <span class="font-weight-bold"><%= offerData[i].offerName %></span>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-end">
+                                    <button class="btn btn-primary" name="offerApplyBtn"  data-offer-id="<%= offerData[i]._id %>">Apply</button>
+                                    <span style="font-size: 13px;"> <%= offerData[i].startDate.toLocaleDateString() %> to <%= offerData[i].endDate.toLocaleDateString() %></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+                </div>
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+<div class="col-md-3">
+  
+</div>
+

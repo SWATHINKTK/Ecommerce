@@ -62,7 +62,12 @@ updateOrderStatus.forEach((updateButton) => {
 
                     updateStatusSection.style.display = 'none';
                     headingStatusView.setAttribute('class','ml-3 font-weight-bold text-danger');
-                    
+                    Swal.fire({
+                        position:'bottom',
+                        html: '<span class="font-weight-bold"><i class="mdi mdi-check-all" style="color: #2dd26c;"></i> Status Updated Successfully.</span>',
+                        showConfirmButton: false, 
+                        timer: 1800,
+                    });
 
                 }else{
                     headingStatusView.setAttribute('class','ml-3 font-weight-bold text-success');
@@ -70,13 +75,15 @@ updateOrderStatus.forEach((updateButton) => {
                     if(status.value == 'Delvered'){
                         document.getElementById('adminOrderProgress-paymentStatus').innerHTML = '( Paid )'
                     }
+
+                    Swal.fire({
+                        position:'bottom',
+                        html: '<span class="font-weight-bold"><i class="mdi mdi-check-all" style="color: #2dd26c;"></i> Status Updated Successfully.</span>',
+                        showConfirmButton: false, 
+                        timer: 1800,
+                    });
                 }
 
-                Swal.fire({
-                    text:"Satus Updated!",
-                    type:"success",
-                    timer:1900
-                });
             } 
           });
 

@@ -33,10 +33,65 @@ function viewAllCategoryDetails(){
         script.src = scriptSrc; 
         document.body.appendChild(script);
 
-        document.querySelector('title').innerHTML = 'Categorys'
+        document.querySelector('title').innerHTML = 'Categorys';
+
+        categoryOfferModalListView();
+        categoryOfferApply();
         
     })
     .catch((error) => {
         console.error("Fetch error:", error);
     });
+}
+
+
+function categoryOfferModalListView(){
+
+    const offerModalBtn = document.querySelectorAll('button[name="categoryOfferModalViewBtn"]');
+
+    offerModalBtn.forEach(button => {
+        button.addEventListener('click' ,(event) => {
+            event.preventDefault();
+
+            const categoryId = event.target.getAttribute('data-category-id');
+
+            const hiddenData = document.getElementById('offerApplyingCategory');
+
+            hiddenData.value = categoryId;
+        })
+    })
+}
+
+
+
+function categoryOfferApply(){
+    const applyBtns = document.querySelectorAll('button[name="offerApplyBtn"]');
+
+    applyBtns.forEach(button => {
+        button.addEventListener('click', async(event)=>{
+            event.preventDefault();
+
+            const offerId = event.target.getAttribute('data-offer-id');
+
+            const categoryId = document.getElementById('offerApplyingCategory').value;
+            console.log(offerId,categoryId);
+
+
+            const url = '/admin/categoryOfferApply';
+            const requestOptions = {
+                method:'PATCH',
+                body:JSON.stringify({
+                    offerId:offerId,
+                    categoryId:categoryId
+                }),
+                headers:{
+                    'Content-Type':'application/json'
+                }
+            };
+
+
+            const response = await fetch(url, requestOptions);
+
+        })
+    })
 }

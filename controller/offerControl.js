@@ -120,6 +120,27 @@ const deleteOffer = async(req, res, next) => {
     }
 }
 
+
+// PRODUCT OFFER APPLYING CONTROL
+const productOfferApply = async(req, res, next) => {
+    try {
+        const data = req.body;
+        console.log(data)
+    } catch (error) {
+        next(error);
+    }
+}
+
+// CATEGORY  OFFER APPLY
+const categoryOfferApply = async(req, res, next) => {
+    try {
+        const data = req.body;
+        console.log(data)
+    } catch (error) {
+        next(error);
+    }
+}
+
 // DATE FORMAT FUNCTION
 function dateFormat(date){
     let year = date.getFullYear();
@@ -135,5 +156,8 @@ module.exports = {
     loadEditOfferPage,
     submitOfferData,
     editOfferData,
-    deleteOffer
+    deleteOffer,
+    productOfferApply,
+    categoryOfferApply
+    
 }

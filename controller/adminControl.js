@@ -6,6 +6,7 @@ const { productInfo } = require('../models/productModel');
 const { brandInfo } = require('../models/brandModel');
 const { category } = require('../models/categoryModel');
 const { userData } = require('../models/userModal');
+const offerData = require('../models/offerModel');
 const { query } = require('express');
 const { connected, nextTick } = require('process');
 const { error } = require('console');
@@ -208,6 +209,9 @@ const searchUser = async (req, res, next) => {
 const loadProductList = async (req, res, next) => {
 
     try {
+
+        const offers = await offerData.find({});
+
         const products = await productInfo.find({}).sort({_id:-1});
         const brandData = await brandInfo.find({},{brand_name:1});
 
@@ -226,7 +230,7 @@ const loadProductList = async (req, res, next) => {
         //         }
         //     }
     
-        res.render('admin/viewProducts', { admin: true, productData: products ,dataBrand:brandData});
+        res.render('admin/viewProducts', { admin: true, productData: products ,dataBrand:brandData, offerData:offers});
         
     } catch (error) {
         next();
@@ -534,8 +538,10 @@ const editProduct = async (req, res, next) => {
 const loadCategoryList = async (req, res, next) => {
     try {
 
+        const offers = await offerData.find({});
+
         const categoryData = await category.find({}).sort({ list: -1,_id:-1 });
-        res.render('admin/viewCategorys', { admin: true, data: categoryData, title: 'Categorylist' });
+        res.render('admin/viewCategorys', { admin: true, title: 'Categorylist' ,  data: categoryData, offerData:offers});
 
     } catch (error) {
             next(error)

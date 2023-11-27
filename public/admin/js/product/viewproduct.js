@@ -22,6 +22,8 @@ async function productListView(){
 
     document.querySelector('title').innerHTML = 'Products';
     actionInViewProductTable();
+    offerModalView();
+    applyCoupon();
 }
 
 
@@ -252,4 +254,55 @@ function buttonWorkSearch(){
         document.getElementById('list-confirmation-cancel2').addEventListener('click',()=>{
             listModalDisplayHidden()
         })
+}
+
+
+
+
+function offerModalView(){
+    const offerModal = document.querySelectorAll('button[name="offerModalView"]');
+
+    offerModal.forEach(button => {
+        button.addEventListener('click',(event)=>{
+            event.preventDefault();
+            
+            const productId = event.target.getAttribute('data-product-id');
+
+            const modalHiddenField = document.getElementById('offerApplyingProduct');
+            modalHiddenField.value = productId;
+
+        })
+    })
+}
+
+
+
+
+function applyCoupon(){
+    const applyBtn = document.querySelectorAll('button[name="offerApplyBtn"]');
+
+    applyBtn.forEach(button => {
+        button.addEventListener('click', async(event)=>{
+            event.preventDefault();
+
+            const offerId = event.target.getAttribute('data-offer-id');
+            const productId = document.getElementById('offerApplyingProduct').value;
+
+            const url = '/admin/productOfferApply';
+            const requestOptions = {
+                method:'PATCH',
+                body:JSON.stringify({
+                    offerId:offerId,
+                    productId:productId
+                }),
+                headers:{
+                    'Content-Type':'application/json'
+                }
+            };
+
+
+            const response = await fetch(url, requestOptions);
+
+        })
+    })
 }
