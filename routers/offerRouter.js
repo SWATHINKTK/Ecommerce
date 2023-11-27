@@ -14,6 +14,7 @@ offerRouter.delete('/deleteOffer', auth.isAdminLogin , offerControl.deleteOffer)
 offerRouter.patch('/productOfferApply', auth.isAdminLogin , offerControl.productOfferApply);
 offerRouter.patch('/categoryOfferApply', auth.isAdminLogin , offerControl.categoryOfferApply);
 offerRouter.patch('/categoryOfferRemove', auth.isAdminLogin , offerControl.categoryOfferRemove);
+offerRouter.patch('/removeProductOffer', auth.isAdminLogin , offerControl.productOfferRemove);
 
 
 module.exports = offerRouter;

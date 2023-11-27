@@ -124,15 +124,82 @@ const deleteOffer = async(req, res, next) => {
 }
 
 
-// PRODUCT OFFER APPLYING CONTROL
+// PRODUCT OFFER APPLYING CONTROLLER
 const productOfferApply = async(req, res, next) => {
     try {
         const data = req.body;
-        console.log(data)
+        
+        const product = await productInfo.findOne({_id:data.productId});
+        
+        const offer = await offerData.findOne({_id:data.offerId});
+
+            const productPrice = parseFloat(product.MRP)
+            let amount =  productPrice - (productPrice * offer.OfferPercentage / 100);
+            amount = amount.toFixed(2);
+
+            const offerApply = await offerUpdateCategory(product._id, offer, amount);
+
+            const updateOfferData = await offerData.updateOne(
+                {
+                    _id:data.offerId,
+                    AppliedProducts:{$ne:data.productId}
+                },
+                {
+                    $push:{AppliedProducts:data.productId}
+                });
+
+            if(updateOfferData){
+                res.json({offerApplied:true});
+            }else{
+                res.json({offerApplied:false});
+            }
+
+
+        console.log(offer)
     } catch (error) {
         next(error);
     }
 }
+
+
+
+// REMOVE PRODUCT OFFER 
+const productOfferRemove = async(req, res, next) => {
+    try {
+        const data = req.body;
+
+        const product = await productInfo.findOne({_id:data.productId});
+
+        const offerRemove = await offerData.updateOne({ _id:data.offerId },{ $pull: { AppliedProducts: data.productId } });
+
+
+        const removeProductOffer = await productInfo.updateOne(
+            {
+                _id:data.productId
+            },
+            {
+                $set:{price:product.MRP},
+                $unset: {
+                    offerId: 1,
+                    offerPercentage: 1
+                }
+            });
+
+        if(removeProductOffer){
+            res.json({offerRemove:true});
+        }else{
+            res.json({offerRemove:false});
+        }
+   
+
+    } catch (error) {
+        
+    }
+}
+
+
+
+
 
 // CATEGORY  OFFER APPLY
 const categoryOfferApply = async(req, res, next) => {
@@ -211,7 +278,7 @@ const categoryOfferRemove = async(req, res, next) => {
         ]);
         for (const product of productData) {
             try {
-                const productAddCategoryOffer = await productInfo.updateOne(
+                const productCategoryOffer = await productInfo.updateOne(
                     {
                         _id:product._id
                     },
@@ -241,6 +308,10 @@ const categoryOfferRemove = async(req, res, next) => {
         next(error);
     }
 }
+
+
+
+
 
 
 
@@ -287,6 +358,7 @@ module.exports = {
     editOfferData,
     deleteOffer,
     productOfferApply,
+    productOfferRemove,
     categoryOfferApply,
     categoryOfferRemove
     

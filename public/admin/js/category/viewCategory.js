@@ -64,7 +64,7 @@ function categoryOfferModalListView(){
 }
 
 
-
+// CATEGORY OFFER APPLY 
 function categoryOfferApply(){
     const applyBtns = document.querySelectorAll('button[name="offerApplyBtn"]');
 
@@ -95,7 +95,6 @@ function categoryOfferApply(){
             const response = await fetch(url, requestOptions);
 
             const responseData = await response.json();
-            console.log(responseData)
 
             if(responseData.offerApplied){
                 Swal.fire({
@@ -109,7 +108,7 @@ function categoryOfferApply(){
             }else{
                 Swal.fire({
                     position:'bottom',
-                    html: '<span class="font-weight-bold"><i class="mdi mdi-close" style="color: #FF0000;"></i> Offer Applied Rejected Try Again.</span>',
+                    html: '<span class="font-weight-bold"><i class="mdi mdi-close" style="color: #FF0000;"></i> Offer Applied Failed Try Again.</span>',
                     showConfirmButton: false, 
                     timer: 1800,
                 });
@@ -122,6 +121,7 @@ function categoryOfferApply(){
 
 
 
+// CATEGORY OFFER REMOVE
 function categoryOfferRemove(){
     const removeOffer = document.querySelectorAll('button[name="offerRemoveBtn"]');
 
@@ -156,9 +156,9 @@ function categoryOfferRemove(){
             if(responseData.offerApplied){
                 Swal.fire({
                     position:'bottom',
-                    html: '<span class="font-weight-bold"><i class="mdi mdi-check-all" style="color: #2dd26c;"></i> Offer Removed Successfully.</span>',
+                    html: '<span class="font-weight-bold"><i class="mdi mdi-close text-danger"></i> Offer Removed Successfully.</span>',
                     showConfirmButton: false, 
-                    timer: 1800,
+                    timer: 2000,
                 });
                 table.cells[7].innerHTML = `<button type="button" name="categoryOfferModalViewBtn" class="btn btn-dark" data-toggle="modal" data-target="#exampleModal" data-category-id="${categoryId}">Apply</button>`
                 table.cells[6].innerHTML = ''
@@ -167,7 +167,7 @@ function categoryOfferRemove(){
                     position:'bottom',
                     html: '<span class="font-weight-bold"><i class="mdi mdi-close" style="color: #FF0000;"></i> Offer Remove Rejected Try Again.</span>',
                     showConfirmButton: false, 
-                    timer: 1800,
+                    timer: 2000,
                 });
             }
 

@@ -25,7 +25,7 @@
             <tbody class="text-white table-style">
               <% if(productData.length) { %>
                 <% for(let i = 0; i < productData.length ; i++) { %>
-              <tr>
+              <tr class="<%= productData[i]._id %>">
                 <td><%= i+1 %></td>
                 <td id="productTable-productname"><%= productData[i].productName %></td>
                 <td>
@@ -39,12 +39,17 @@
                 <td><%= productData[i].stock %></td>
                 <td>	&#8377; <%= productData[i].price %></td>
                 <div id="product-viewmore"><td><a href="#" class="product-viewmore" data-viewmore-id="<%= productData[i]._id %>">View More <i class="bi bi-chevron-double-right"></i></a></td></div>
-                <td></td>
-                <td>
-                  <button type="button" class="btn btn-dark" name="offerModalView" data-toggle="modal" data-target="#exampleModal" data-product-id="<%= productData[i]._id %>">
-                      Apply
-                  </button>
-              </td>
+               
+                <td class="text-success font-weight-bold"><%= productData[i].offerId ? 'Applied' : "" %></td>
+                <% if(productData[i].offerId) { %>
+                  <td>
+                    <button type="button" class="btn btn-danger px-1" name="productOfferRemoveBtn" data-offer-id="<%= productData[i].offerId %>" data-product-id="<%= productData[i]._id %>">Remove</button>
+                  </td>
+                <% } else {%>
+                  <td>
+                    <button type="button" class="btn btn-dark" name="offerModalView" data-toggle="modal" data-target="#exampleModal" data-product-id="<%= productData[i]._id %>">Apply</button>
+                  </td>
+                <% } %>
                 <% if(productData[i].status) {%>
                   <td id="<%= productData[i]._id %>"><button class="btn  btn-danger pl-3 pr-3 l-u-button" name="l-u-button" data-button-id="<%= productData[i]._id %>">Unlist</button></td>
                 <% } else { %>
@@ -124,7 +129,7 @@
                                     <span class="font-weight-bold"><%= offerData[i].offerName %></span>
                                 </div>
                                 <div class="d-flex justify-content-between align-items-end">
-                                    <button class="btn btn-primary" name="offerApplyBtn" data-offer-id="<%= offerData[i]._id %>">Apply</button>
+                                    <button class="btn btn-primary class" name="offerApplyBtn" data-offer-id="<%= offerData[i]._id %>" data-dismiss="modal" aria-label="Close">Apply</button>
                                     <span style="font-size: 13px;"> <%= offerData[i].startDate.toLocaleDateString() %> to <%= offerData[i].endDate.toLocaleDateString() %></span>
                                 </div>
                             </div>

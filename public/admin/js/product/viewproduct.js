@@ -23,7 +23,8 @@ async function productListView(){
     document.querySelector('title').innerHTML = 'Products';
     actionInViewProductTable();
     offerModalView();
-    applyCoupon();
+    applyOffer();
+    removeOffer();
 }
 
 
@@ -278,7 +279,7 @@ function offerModalView(){
 
 
 
-function applyCoupon(){
+function applyOffer(){
     const applyBtn = document.querySelectorAll('button[name="offerApplyBtn"]');
 
     applyBtn.forEach(button => {
@@ -287,6 +288,9 @@ function applyCoupon(){
 
             const offerId = event.target.getAttribute('data-offer-id');
             const productId = document.getElementById('offerApplyingProduct').value;
+
+            const table = document.querySelector(`tr[class='${productId}']`);
+            console.log(table);
 
             const url = '/admin/productOfferApply';
             const requestOptions = {
@@ -303,6 +307,84 @@ function applyCoupon(){
 
             const response = await fetch(url, requestOptions);
 
+            const responseData = await response.json();
+
+            if(responseData.offerApplied){
+                Swal.fire({
+                    position:'bottom',
+                    html: '<span class="font-weight-bold"><i class="mdi mdi-check-all" style="color: #2dd26c;"></i> Offer Applied Successfully.</span>',
+                    showConfirmButton: false, 
+                    timer: 1800,
+                });
+                    
+                table.cells[7].innerHTML = `<button type="button" class="btn btn-danger px-1" name="productOfferRemoveBtn" data-offer-id="${offerId}" data-product-id="${productId}">Remove</button>`   
+                table.cells[6].innerHTML = `Applied`
+            }else{
+                Swal.fire({
+                    position:'bottom',
+                    html: '<span class="font-weight-bold"><i class="mdi mdi-close" style="color: #FF0000;"></i> Offer Applied Faield Try Again.</span>',
+                    showConfirmButton: false, 
+                    timer: 1800,
+                });
+            }
+
         })
     })
+}
+
+
+
+
+// REMOVE OFFER FROM A PRODUCT
+function removeOffer(){
+    const removeOfferProduct = document.querySelectorAll('button[name="productOfferRemoveBtn"]');
+
+    removeOfferProduct.forEach(button => {
+        button.addEventListener('click',async(event)=>{
+            event.preventDefault();
+
+            const offerId = event.target.getAttribute('data-offer-id');
+            const productId = event.target.getAttribute('data-product-id');
+
+            const table = document.querySelector(`tr[class='${productId}']`);
+
+            const url = '/admin/removeProductOffer';
+            const requestOptions = {
+                method:'PATCH',
+                body:JSON.stringify({
+                    offerId:offerId,
+                    productId:productId
+                }),
+                headers:{
+                    'Content-Type':'application/json'
+                }
+            };
+
+
+            const response = await fetch(url, requestOptions);
+
+            const responseData = await response.json();
+
+            if(responseData.offerRemove){
+                Swal.fire({
+                    position:'bottom',
+                    html: '<span class="font-weight-bold"><i class="mdi mdi-close text-danger"></i> Offer Removed Successfully.</span>',
+                    showConfirmButton: false, 
+                    timer: 2000,
+                });
+                    
+                table.cells[7].innerHTML = `<button type="button" class="btn btn-dark" name="offerModalView" data-toggle="modal" data-target="#exampleModal" data-product-id="${productId}">Apply</button>`  
+                table.cells[6].innerHTML = ""
+            }else{
+                Swal.fire({
+                    position:'bottom',
+                    html: '<span class="font-weight-bold"><i class="mdi mdi-close" style="color: #FF0000;"></i> Offer Applied Faield Try Again.</span>',
+                    showConfirmButton: false, 
+                    timer: 2000,
+                });
+            }
+
+        })
+    })
+
 }
