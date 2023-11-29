@@ -8,6 +8,7 @@ const { category } = require('../models/categoryModel');
 const cartData = require('../models/cartModel');
 const wishlistData = require('../models/wishlistModel');
 const addressInfo = require('../models/addressModel');
+const bannerData = require('../models/bannerModel');
 const Razorpay = require('razorpay');
 const { userInfo } = require('os');
 const { error } = require('console');
@@ -104,7 +105,8 @@ async function securePassword(password) {
 // ***** USER LOGIN PAGE VIEW *****
 const loadUserLogin = (req, res, next) => {
     try {
-        res.render('user/userAuthentication', { admin: false, title: 'User' }); 
+        const userId = req.query.refer;
+        res.render('user/userAuthentication', { admin: false, title: 'User' , userId}); 
     } catch (error) {
         next(error);
     }
@@ -133,8 +135,18 @@ const storeSignupData = async (req, res, next) => {
         const email = req.body.email
 
         const data = req.body;
+        console.log(data)
+
+        const refer = data.refer;
+        if(refer.trim() != ''){
+            const referExist = await userData.findOne({_id:refer});
+            if(referExist){
+                req.session.referId = refer;
+            }
+        }
 
         const emailExist = await userData.findOne({ email: email });
+        console.log(emailExist)
        
 
         if (emailExist) {
@@ -237,7 +249,8 @@ const OTPCheck = async (req, res, next) => {
         const startTime = req.session.startTime;
         const sessionOTP = req.session.otp;
         const data = req.session.userData;
-    
+        const refer = req.session.referId;
+        console.log(refer)
 
         const emailExist = await userData.findOne({email:data.email});
 
@@ -264,6 +277,41 @@ const OTPCheck = async (req, res, next) => {
                     const sendData = await user.save();
                     
                     if(sendData){
+
+                        if(refer){
+
+                            console.log("refer",refer)
+
+                            const nanoidModule = await import('nanoid');
+                            nanoid = nanoidModule.nanoid;
+    
+                            const uniqueID = nanoid();
+    
+                            const transaction = {
+                                transactionId: uniqueID,
+                                transactionType: 'Debit',
+                                description: 'Referal Amount',
+                                amount: 100
+                            }
+                        
+    
+                            const refferingAmount = await userData.updateOne({ _id: refer }, { $inc: { walletAmount: 100 } }, { upsert: true });
+                            const updateWalletTransaction = await userData.updateOne({ _id: refer }, { $push: { walletTransaction: transaction } }, { upsert: true });
+                            
+                            const newUseUniqueId = nanoid();
+    
+                            const newUserTransaction = {
+                                transactionId: newUseUniqueId,
+                                transactionType: 'Debit',
+                                description: 'Referal Amount',
+                                amount: 50
+                            }
+                        
+    
+                            const referAmountForNewUser = await userData.updateOne({ _id: user._id }, { $inc: { walletAmount: 50 } }, { upsert: true });
+                            const updateNewUserWalletTransaction = await userData.updateOne({ _id: user._id }, { $push: { walletTransaction: newUserTransaction } }, { upsert: true }); 
+                            delete req.session.refer;
+                        }
 
                         req.session.userId = userData._id;
                         res.status(200).json({'status':true, 'message': 'Your Verification Sucessfull. &#9989;<br> Username & Password to login.' });
@@ -346,6 +394,14 @@ const loadHomePage = async (req, res, next) => {
 
         // UserId Taken From The Session
         const id = req.session.userId;
+
+        const banner = await bannerData.aggregate([{
+            $match:{
+                // startDate:{$lte: new Date()},
+                // endDate:{$gte: new Date()},
+                is_Listed:true  
+            }
+        }]);
        
 
         const categoryData = await category.find({list:true}).sort({ _id: -1});
@@ -368,7 +424,7 @@ const loadHomePage = async (req, res, next) => {
         const wishlist = await wishlistData.findOne({userId:id});
     
 
-        res.render('user/index', { user: true,login:checkLogin,  title: 'Brand Unlimited', dataCategory: categoryData, dataProduct: productData ,dataCart:cart, wishlistData:wishlist});
+        res.render('user/index', { user: true,login:checkLogin,  title: 'Brand Unlimited', dataCategory: categoryData, dataProduct: productData ,dataCart:cart, wishlistData:wishlist, bannerData:banner});
 
     } catch (error) {
         next(error);
@@ -387,6 +443,14 @@ const loadHomePage = async (req, res, next) => {
 const guestPage = async (req, res, next) => {
     try {
         const categoryData = await category.find({list:true}).sort({ _id: -1 });
+
+        const banner = await bannerData.aggregate([{
+            $match:{
+                // startDate:{$lte: new Date()},
+                // endDate:{$gte: new Date()},
+                is_Listed:true  
+            }
+        }]);
 
         const productData = await productInfo.aggregate([
             {
@@ -413,7 +477,7 @@ const guestPage = async (req, res, next) => {
 
         // );
 
-        res.render('user/index', { user: true,login:false, title: 'Brand Unlimited', dataCategory: categoryData, dataProduct: productData })
+        res.render('user/index', { user: true,login:false, title: 'Brand Unlimited', dataCategory: categoryData, dataProduct: productData ,bannerData:banner})
     } catch (error) {
         next(error);
     }
@@ -462,6 +526,14 @@ const loadAllProductViewPage = async(req, res, next) =>{
     
     try {
 
+        let page = 1;
+        if(req.query.page){
+            page = req.query.page;
+        }
+
+        const limit = 8;
+
+
         const checkLogin = req.session.userId ? true : false;
 
         const userId = req.session.userId;
@@ -470,19 +542,38 @@ const loadAllProductViewPage = async(req, res, next) =>{
 
         const brand = await brandInfo.find({},{brand_name:1});
 
-        const productData = await productInfo.find({}).sort({_id:-1});
+        // const productData = await productInfo.find({}).sort({_id:-1});
+        const productData = await productInfo.aggregate([
+            {
+                $sort: { _id: -1 }
+            },
+            {   $skip: (page - 1) * limit },
+            {   $limit: limit * 1 }
+        ]);
+
+
+        let totalCount = await productInfo.aggregate([
+            {
+                $group:{
+                    _id:null,
+                    totalCount:{$sum:1}
+                }
+            }
+        ]);
+
+        totalCount = Math.ceil(totalCount[0].totalCount / limit)
 
         if(checkLogin){
         
             const cart = await cartData.find({userId:userId});
             const wishlist = await wishlistData.find({userId:userId});
 
-            res.render('user/allProductView',{ user: true,login:checkLogin, title: 'Products', product:productData, wishlistData:wishlist, dataCart:cart , categoryData:categoryInfo, brandData:brand});
+            res.render('user/allProductView',{ user: true,login:checkLogin, title: 'Products', product:productData, wishlistData:wishlist, dataCart:cart , categoryData:categoryInfo, brandData:brand , totalPages:totalCount, pageNo:page});
             return;
 
         }
 
-        res.render('user/allProductView',{ user: true,login:checkLogin, title: 'Products',product:productData, categoryData:categoryInfo, brandData:brand});
+        res.render('user/allProductView',{ user: true,login:checkLogin, title: 'Products',product:productData, categoryData:categoryInfo, brandData:brand, totalPages:totalCount, pageNo:page});
 
     } catch (error) {
 

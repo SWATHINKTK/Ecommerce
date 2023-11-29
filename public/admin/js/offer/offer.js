@@ -195,7 +195,7 @@ if (deleteOfferBtn) {
 
 
 
-// VALIDATING THE COUPON FORM
+// VALIDATING THE OFFER FORM
 function offerValidate(data) {
 
     const errorElemetns = document.querySelectorAll('p[name="validate-offer"]');
@@ -219,7 +219,7 @@ function offerValidate(data) {
         is_valid = false;
 
     }
-    if (data.OfferPercentage > 99 || data.OfferPercentage < 0) {
+    if (data.OfferPercentage > 80 || data.OfferPercentage < 0) {
 
         errorElemetns[1].innerHTML = ' * offer percentage must included (1-99)%.';
         is_valid = false;

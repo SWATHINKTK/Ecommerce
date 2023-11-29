@@ -5,48 +5,52 @@
     <!-- Hero Section Begin -->
     <section class="hero">
         <div class="hero__slider owl-carousel">
-            <div class="hero__items set-bg" data-setbg="/public/user/img/hero/hero-1.jpg">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-xl-5 col-lg-7 col-md-8">
-                            <div class="hero__text">
-                                <h6>Summer Collection</h6>
-                                <h2>Fall - Winter Collections 2030</h2>
-                                <p>A specialist label creating luxury essentials. Ethically crafted with an unwavering
-                                commitment to exceptional quality.</p>
-                                <a href="#" class="primary-btn">Shop now <span class="arrow_right"></span></a>
-                                <div class="hero__social">
-                                    <a href="#"><i class="fa fa-facebook"></i></a>
-                                    <a href="#"><i class="fa fa-twitter"></i></a>
-                                    <a href="#"><i class="fa fa-pinterest"></i></a>
-                                    <a href="#"><i class="fa fa-instagram"></i></a>
+            <% if(bannerData.length > 0) { %>
+                <% for(let i = 0;i < bannerData.length ;i++) { %>
+                    <div class="hero__items set-bg" data-setbg="/public/admin/assets/images/bannerImages/<%= bannerData[i].backgroundImage %>">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-xl-5 col-lg-7 col-md-8">
+                                    <div class="hero__text">
+                                        <h6><%= bannerData[i].offerName %></h6>
+                                        <h2><%= bannerData[i].offerHeading %></h2>
+                                        <p><%= bannerData[i].offerDescription %>.</p>
+                                        <a href="<%= bannerData[i].pageLink %>" class="primary-btn">Shop now <span class="arrow_right"></span></a>
+                                        <!-- <div class="hero__social">
+                                            <a href="#"><i class="fa fa-facebook"></i></a>
+                                            <a href="#"><i class="fa fa-twitter"></i></a>
+                                            <a href="#"><i class="fa fa-pinterest"></i></a>
+                                            <a href="#"><i class="fa fa-instagram"></i></a>
+                                        </div> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% } %>
+            <% } else { %>
+                <div class="hero__items set-bg" data-setbg="/public/user/img/hero/hero-2.jpg">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-xl-5 col-lg-7 col-md-8">
+                                <div class="hero__text">
+                                    <h6>Summer Collection</h6>
+                                    <h2>Fall - Winter Collections 2030</h2>
+                                    <p>A specialist label creating luxury essentials. Ethically crafted with an unwavering
+                                    commitment to exceptional quality.</p>
+                                    <a href="#" class="primary-btn">Shop now <span class="arrow_right"></span></a>
+                                    <div class="hero__social">
+                                        <a href="#"><i class="fa fa-facebook"></i></a>
+                                        <a href="#"><i class="fa fa-twitter"></i></a>
+                                        <a href="#"><i class="fa fa-pinterest"></i></a>
+                                        <a href="#"><i class="fa fa-instagram"></i></a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="hero__items set-bg" data-setbg="/public/user/img/hero/hero-2.jpg">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-xl-5 col-lg-7 col-md-8">
-                            <div class="hero__text">
-                                <h6>Summer Collection</h6>
-                                <h2>Fall - Winter Collections 2030</h2>
-                                <p>A specialist label creating luxury essentials. Ethically crafted with an unwavering
-                                commitment to exceptional quality.</p>
-                                <a href="#" class="primary-btn">Shop now <span class="arrow_right"></span></a>
-                                <div class="hero__social">
-                                    <a href="#"><i class="fa fa-facebook"></i></a>
-                                    <a href="#"><i class="fa fa-twitter"></i></a>
-                                    <a href="#"><i class="fa fa-pinterest"></i></a>
-                                    <a href="#"><i class="fa fa-instagram"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <% } %>
         </div>
     </section>
     <!-- Hero Section End -->
@@ -113,6 +117,9 @@
                         <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix hot-sales">
                             <div class="product__item">
                                 <div class="product__item__pic set-bg" data-setbg="/public/admin/assets/categoryImages/<%= dataCategory[i].category_image %>">
+                                    <% if(dataCategory[i].offerApplied) { %>
+                                        <span class="label text-white" style="background-color: #FF0000; "><%= dataCategory[i].offerPercentage %>% OFF</span>
+                                    <% } %>
                                     <ul class="product__hover">
                                         <!-- <li><a href="#"><img src="/public/user/img/icon/heart.png" alt=""></a></li>
                                         <li><a href="#"><img src="/public/user/img/icon/compare.png" alt=""> <span>Compare</span></a></li>
@@ -156,6 +163,9 @@
                         <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix hot-sales">
                             <div class="product__item">
                                 <div class="product__item__pic set-bg" data-setbg="/public/admin/assets/productImages/<%= product.productImages[0] %>">
+                                    <% if(product.offerId) { %>
+                                        <span class="label text-white" style="background-color: #FF0000; "><%= product.offerPercentage %>% OFF</span>
+                                    <% } %>
                                     <ul class="product__hover">
 
                                         <li>

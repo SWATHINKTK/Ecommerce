@@ -104,7 +104,8 @@ function categoryOfferApply(){
                     timer: 1800,
                 });
                 table.cells[7].innerHTML = `<button type="button" class="btn btn-danger" name="offerRemoveBtn" data-offer-id="${offerId}" data-category-id="${categoryId}">Remove</button>`
-                table.cells[6].innerHTML = `${responseData.offerName} `
+                table.cells[6].innerHTML = `Applied`;
+                viewAllCategoryDetails();
             }else{
                 Swal.fire({
                     position:'bottom',
@@ -161,7 +162,8 @@ function categoryOfferRemove(){
                     timer: 2000,
                 });
                 table.cells[7].innerHTML = `<button type="button" name="categoryOfferModalViewBtn" class="btn btn-dark" data-toggle="modal" data-target="#exampleModal" data-category-id="${categoryId}">Apply</button>`
-                table.cells[6].innerHTML = ''
+                table.cells[6].innerHTML = '';
+                viewAllCategoryDetails();
             }else{
                 Swal.fire({
                     position:'bottom',

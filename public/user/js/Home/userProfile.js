@@ -215,3 +215,29 @@ async function submitResetPassword(){
     }
 
 }
+
+
+
+
+function referalLink() {
+    // Get the text field
+    var copyText = document.getElementById("myInput");
+  
+    // Select the text field
+    copyText.select();
+    copyText.setSelectionRange(0, 99999); // For mobile devices
+  
+    // Copy the text inside the text field
+    navigator.clipboard.writeText(copyText.value);
+    
+    // Alert the copied text
+    Swal.fire({
+        // position:'Center',
+        html: `<h5 class="font-weight-bold"> Share the Link Earn Money </h5>
+                <p class="font-weight-bold">Link is Already copied to Your Clipboard</p>
+                <p class="text-primary">${copyText.value}</p>`,
+        showConfirmButton: false, 
+        timer: 3500,
+    });
+    // alert("Copied the text: " + copyText.value);
+  }

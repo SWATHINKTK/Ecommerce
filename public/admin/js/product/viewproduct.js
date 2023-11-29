@@ -318,7 +318,8 @@ function applyOffer(){
                 });
                     
                 table.cells[7].innerHTML = `<button type="button" class="btn btn-danger px-1" name="productOfferRemoveBtn" data-offer-id="${offerId}" data-product-id="${productId}">Remove</button>`   
-                table.cells[6].innerHTML = `Applied`
+                table.cells[6].innerHTML = `Applied`;
+                productListView();
             }else{
                 Swal.fire({
                     position:'bottom',
@@ -375,6 +376,7 @@ function removeOffer(){
                     
                 table.cells[7].innerHTML = `<button type="button" class="btn btn-dark" name="offerModalView" data-toggle="modal" data-target="#exampleModal" data-product-id="${productId}">Apply</button>`  
                 table.cells[6].innerHTML = ""
+                productListView();
             }else{
                 Swal.fire({
                     position:'bottom',

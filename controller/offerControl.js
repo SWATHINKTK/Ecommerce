@@ -247,7 +247,7 @@ const categoryOfferApply = async(req, res, next) => {
                 $push:{AppliedCategorys:data.categoryId}
             });
 
-        const updateCategory = await category.updateOne({_id:data.categoryId},{$set:{offerApplied:offer._id,offerName:offer.offerName}},{upsert:true});
+        const updateCategory = await category.updateOne({_id:data.categoryId},{$set:{offerApplied:offer._id,offerPercentage:offer.OfferPercentage}},{upsert:true});
 
         if(updateCategory){
             res.json({offerApplied:true, offerName:offer.offerName, offerPercentage:offer.OfferPercentage});

@@ -2,8 +2,9 @@
 
 // ****** PROCEED TO PAYMENT - PAYMENT OPTION DIV VIEW *****
 const proceedPaymentBtn = document.getElementById('proceed-payment-btn');
-proceedPaymentBtn.addEventListener('click',()=>{
-    
+proceedPaymentBtn.addEventListener('click',(event)=>{
+    event.preventDefault();
+
     const addressCard = document.querySelectorAll("div[name='address-card']");
     const deliveryAddress = document.querySelectorAll('input[name="CheckedAddress"]');
     console.log(deliveryAddress)
@@ -440,7 +441,6 @@ function instructionsOnhover(offer,amount,startDate,endDate){
 // COUPON APPLY BUTTON CLICK AND WORKING APPLY THAT COUPON FOR THAT ORDER
 const couponApplyBtn = document.querySelectorAll('a[name="couponApplyBtn"]');
 const resetCoupon = document.querySelectorAll('div[name="couponReset"]');
-console.log(resetCoupon)
 
 if(couponApplyBtn){
 
@@ -456,7 +456,6 @@ if(couponApplyBtn){
             let coupon = event.target.getAttribute('data-coupon');
             coupon = JSON.parse(coupon);
             
-            console.log(checkoutPriceUpdate[3].innerHTML,coupon.minimumPurchase)
             // CHECKING THE CONDITION FOR THE COUPON
             if(parseInt(checkoutPriceUpdate[3].innerHTML) >= parseInt(coupon.minimumPurchase)){
 
@@ -519,6 +518,13 @@ function removeAppliedCoupon(){
         button.innerHTML = 'APPLY';
         resetCoupon[i].style.display = 'none';
     });
+
+    // PRODUCT IS SINGLE QUANTITY INCREASING AFTER APPLY COUPON IS RESTRICTED
+    const quantityUpdateField = document.querySelector('#checkout-product-quanitity');
+    if(quantityUpdateField.getAttribute('data-single') == 'true'){
+        quantityUpdateField.removeAttribute("readonly");
+    }
+
 
     // CALCULATING THE PRICE OF THE PREVIOUS AND APPLIED THAT TOTAL SECTION
     const checkoutPriceUpdate = document.querySelectorAll('span[name="checkout-price"]');

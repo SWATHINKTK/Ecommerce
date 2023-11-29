@@ -126,7 +126,7 @@ function couponValidate(data){
         is_valid = false;
 
     } 
-    if(data.OfferPercentage > 99 || data.OfferPercentage < 0){
+    if(data.OfferPercentage > 80 || data.OfferPercentage < 0){
 
         errorElemetns[2].innerHTML = ' * offer percentage must included (1-99)%.';
         is_valid = false;

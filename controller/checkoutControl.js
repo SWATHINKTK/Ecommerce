@@ -42,13 +42,6 @@ const LoadCheckoutPage = async(req, res, next) => {
             }
         ]);
 
-        // for(let coupon of coupons){
-        //     coupon.AppliedUsers.forEach((user,i) => {
-        //         if(user.equals(userId)){
-        //             coupons.splice(i,1);
-        //         }
-        //     })
-        // }
 
         if(req.query.single){
 
@@ -82,6 +75,7 @@ const PlaceOrder = async(req, res, next)=>{
         const userId = req.session.userId;
         
         const data = req.body;
+
 
     
         // **** Address Information Setting in the Order ****
@@ -146,11 +140,11 @@ const PlaceOrder = async(req, res, next)=>{
                 // COUPON APPLY TIME PRODUCT AMOUNT DETAILS STROING
                 let totalDiscountAmount;
                 if(couponStatus){
-                    totalDiscountAmount = (coupon[0].minimumPurchase * coupon[0].OfferPercentage)/100;
-                    const discountForTheProduct = ( data.ProductPrice * totalDiscountAmount ) / products.productTotalAmount;
-                    products.productPrice = (data.ProductPrice - discountForTheProduct).toFixed(2);
-                    products.productTotalAmount -= totalDiscountAmount.toFixed(2); 
-                    products.discountAmount = discountForTheProduct.toFixed(2);
+                    totalDiscountAmount = parseInt( ( coupon[0].minimumPurchase * coupon[0].OfferPercentage ) / 100 );
+                    const discountForTheProduct =  parseInt( ( data.ProductPrice * totalDiscountAmount ) / products.productTotalAmount );
+                    products.productPrice = data.ProductPrice - discountForTheProduct;
+                    products.productTotalAmount -= totalDiscountAmount; 
+                    products.discountAmount = discountForTheProduct;
                     totalPrice = (data.productQuantity * data.ProductPrice) - totalDiscountAmount;
                 }else{
                     totalPrice = (data.productQuantity * data.ProductPrice) ;
@@ -200,11 +194,11 @@ const PlaceOrder = async(req, res, next)=>{
 
                 // ORDER HAVE EXISTING THE COUPON CALCULATE THE DISCOUNT OFFER FOR APPLY COUPO AND CALCULATING THE PRICE
                 if(couponStatus){
-                    const totalDiscountAmount = ((coupon[0].minimumPurchase * coupon[0].OfferPercentage)/100).toFixed(2);
+                    const totalDiscountAmount = parseInt((coupon[0].minimumPurchase * coupon[0].OfferPercentage)/100);
                 
                     let discountForThatProduct ;
                     products.map((value) => {
-                        discountForThatProduct = (( value.productPrice * totalDiscountAmount ) / totalPrice);
+                        discountForThatProduct = parseInt( ( value.productPrice * totalDiscountAmount ) / totalPrice );
                         value.productPrice = value.productPrice - discountForThatProduct;
                         value.productTotalAmount = value.productquantity * value.productPrice; 
                         value.discountAmount = discountForThatProduct;
@@ -257,6 +251,8 @@ const PlaceOrder = async(req, res, next)=>{
             paymentMethod:data.PaymentMethod,
         });
 
+        console.log(orderSucess)
+
         // COUPON EXIST DATA ADDED TO ORDER DOCUMENT
         if(couponStatus){
             orderSucess.couponId = coupon[0]._id;
@@ -268,6 +264,7 @@ const PlaceOrder = async(req, res, next)=>{
 
         // **** STOCK MANAGEMENT IN EACH PRODUCT ON THE UPDATE IF TRUE SECTION HANDLE SINGLE PRODUCT ****
         if(orderStore && data.SingleProduct){
+            console
 
             if(couponStatus){
                 const couponUpdate = await couponData.updateOne({_id:orderSucess.couponId},{$set:{AppliedUsers:userId}},{upsert:true});
@@ -286,6 +283,7 @@ const PlaceOrder = async(req, res, next)=>{
                 }
                 else if(orderSucess.paymentMethod == 'OnlinePayment'){
 
+
                     // RAZORPAY INSTANCE CREATE AND RAZORPAY GENERATE3
                     var options = {
                         amount: orderSucess.totalAmount * 100 ,  // amount in the smallest currency unit
@@ -302,8 +300,6 @@ const PlaceOrder = async(req, res, next)=>{
                     let nanoid = nanoidModule.nanoid;
 
                     const uniqueID = nanoid();
-
-                    console.log(uniqueID)
 
                     const transaction = {
                         transactionId:uniqueID,

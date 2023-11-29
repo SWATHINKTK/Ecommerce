@@ -73,7 +73,11 @@
                                         <h6 class="ml-4 mr-2">Size : </h6> <span><%= cartData[i].productId.size %></span>
                                     </div>
                                     <div class="d-flex align-items-center">
-                                        <h4 class="ml-4 mr-2 mt-2"><i class="bi bi-currency-rupee"></i> <span class="font-weight-bold"><%= cartData[i].productId.price %></span></h4>
+                                        <h4 class="ml-4 mr-2 mt-2"><i class="bi bi-currency-rupee"></i> <span class="font-weight-bold"><%= cartData[i].productId.price %>
+                                            <% if(locals.cartData[i].productId.offerId) { %>
+                                                <span class="text-muted ml-2" style="font-size: 1rem;"><del>₹<%= cartData[i].productId.MRP %></del> <span class="ml-2 font-weight-bold text-success" style="font-size: 1rem;"> <%= cartData[i].productId.offerPercentage %>% Off </span> </span>
+                                             <% } %>
+                                        </span></h4>
                                     </div>
                                     <div class="d-flex align-items-center mt-3">
                                         <button class="ml-4 mr-2 text-danger mt-3 bg-transparent border-0" name="cart-product-delete" data-cart-product-id="<%= cartData[i].productId._id %>"><i class="fa-regular fa-trash-can" style="color: #e23232;"></i> Remove</button>

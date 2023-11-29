@@ -8,6 +8,7 @@ document.getElementById('sidebar').addEventListener('click', async function(even
     if(id == 'view-productlist'){
 
         productListView(); 
+        
 
     }else if(id == 'add-product'){
 

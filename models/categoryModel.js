@@ -16,7 +16,7 @@ const addCategory = mongoose.Schema({
     offerApplied : {
         type : mongoose.Schema.Types.ObjectId
     },
-    offerName : {
+    offerPercentage : {
         type : String
     }
     ,list : {

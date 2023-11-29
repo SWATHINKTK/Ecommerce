@@ -42,7 +42,7 @@
                   <td name="<%= data[i]._id %>"><span class="text-danger font-weight-bold">&#128683; Unlisted</span></td>
                   <td id="<%= data[i]._id %>"><button class="btn btn-primary pl-4 pr-4" id="<%= data[i]._id %>" onclick="categoryList(this)"><i class="bi bi-check2-circle"> </i>list</button></td>
                 <% } %>
-               <td><%= data[i].offerApplied ? data[i].offerName : "" %></td>
+               <td><%= data[i].offerApplied ? "Applied" : "" %></td>
                 <% if(data[i].offerApplied) { %>
                   <td>
                     <button type="button" class="btn btn-danger" name="offerRemoveBtn" data-offer-id="<%= data[i].offerApplied %>" data-category-id="<%= data[i]._id %>">Remove</button>

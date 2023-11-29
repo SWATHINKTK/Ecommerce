@@ -180,7 +180,7 @@
                                 <img src="/public/admin/assets/productImages/<%= product.productImages[0] %>" alt="">
                                 <div class="mt-2">
                                     <span class="font-weight-bold">Quanitity : </span>
-                                    <input type="number" class="cart-quantity text-center font-weight-bold" name="orderProducts" id="checkout-product-quanitity" min="1" max="10" value="1">
+                                    <input type="number" class="cart-quantity text-center font-weight-bold" name="orderProducts" data-single="true" id="checkout-product-quanitity" min="1" max="10" value="1">
                                     <input type="hidden" name="<%= product.price %>" id="checkout-hidden-data" value="1" data-product-stock="<%= product.stock %>">
                                 </div>
                             </div>
@@ -359,7 +359,7 @@
                                                     <div class="d-flex justify-content-between align-items-end mt-1" >
                                                         <a href="" class="primary-btn-Coupon" name="couponApplyBtn" data-single="<%= locals.single ? true : false %>" data-coupon="<%= JSON.stringify(couponData[i]) %>">Apply</a>
                                                         <div style="display: none;" name="couponReset">
-                                                            <span class="text-primary mt-1" style="cursor: pointer;" onclick="removeAppliedCoupon()" >Reset</span>
+                                                            <span class="text-primary mt-1" style="cursor: pointer;" data-single="<%= locals.single ? true : false %>" onclick="removeAppliedCoupon()" >Reset</span>
                                                         </div>
                                                         <span class="font-weight-bold cursor-pointer"  onclick="instructionsOnhover('<%= couponData[i].OfferPercentage %>','<%= couponData[i].minimumPurchase %>','<%= couponData[i].startDate %>','<%= couponData[i].startDate %>')" style="cursor: pointer;">* instructions</span>
                                                     </div>
