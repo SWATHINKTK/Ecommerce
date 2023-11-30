@@ -99,6 +99,35 @@ textarea:focus {
 	outline: none;
 }
 
+
+.user-profile a{
+	color: #090909b0;
+	font-weight: 600;
+	font-size: 16px;
+    text-decoration: none;
+    background-color: transparent;
+}
+
+.card-body-orderprogress{
+	flex-direction: row;
+}
+
+.add-new-address-form-view{
+	background-color: rgb(255, 255, 255);
+}
+
+
+
+.user-profile a:hover{
+	color:#000000;
+}
+
+
+.user-heaading h3{
+	color: #ffffff;
+	font-weight: 700;
+}
+
 a:hover,
 a:focus {
 	text-decoration: none;
@@ -325,12 +354,14 @@ ol {
 	padding-right: 4rem;
 }
 .header {
-	background: #bcbcbc;
+	/* background-image: linear-gradient(to bottom, #f4f4f4, #f1f1f1, #efefef, #ececec, #eaeaea); */
+	/* background-color: rgba(204, 204, 204, 0.466) */
+	background-color: #ffffff;
+	/* border-bottom: 1px solid #000; */
 }
-
 .header__top {
 	background: #111111;
-	padding: 10px 0;
+	padding: 4px 0;
 }
 
 .header__top__left p {
@@ -2056,18 +2087,9 @@ form .form-control:focus {
 	max-height: 180px;
 }
 
-.Profile-sidebar{
-	background-color:#f9f9f9d5; 
-	box-shadow: 0 0 9px -4px #000000;
-	/* margin-left: 8rem; */
-}
 
-.order-right-side{
-	box-shadow: 0 0 9px -2px rgba(0, 0, 0, 0.647);
-	border: 2px solid #05050581;
-	border-radius: 6px;
 
-}
+
 
 .order-view{
 	/* border: 1px solid #41414181; */
@@ -2077,8 +2099,13 @@ form .form-control:focus {
 
 
 .order-detail-image{
-	max-width: 190px;
-	max-height: 90px;
+	/* max-width: 190px; */
+	/* max-height: 80px; */
+	
+}
+
+.order-detail-image img{
+	object-fit: cover;
 }
 
 .order-qunatity{
@@ -2732,8 +2759,34 @@ form .form-control:focus {
 -----------------------*/
 
 .breadcrumb-option {
-	background: #fff6f6;
-	padding: 10px 0;
+	background-color:#F1F1F1;
+	border: 0.5px solid #00000022;
+    padding: 4px 2rem;
+}
+
+.user-profile-sidebar{
+	background-color: #EBECF1;
+}
+
+.user-profile-conatiner{
+	overflow: hidden; 
+	background-color: #dadbdc;
+	/* background-color: #D4D7DD; */
+}
+
+.Profile-sidebar{
+	/* background-color: #213363; */
+	background-color: #F9F9F9;
+	color: #000;
+	box-shadow: 0 0 10px rgba(0, 3, 0,0.1);
+	/* margin-left: 8rem; */
+}
+
+.order-right-side{
+	box-shadow: 0 0 10px rgba(0, 3, 0, 0.212);
+	/* border: 2px solid #05050581; */
+	border-radius: 3px;
+
 }
 
 .breadcrumb__text h4 {
@@ -4476,6 +4529,53 @@ form .form-control:focus {
 		margin-top: 180px;
 	}
 }
+
+
+@media only screen and (max-width: 695px) {
+	.order-list-view{
+		flex-direction: column;
+		padding-top: 5rem;
+		justify-content: center;
+		align-items: center;
+		
+	}
+	.order-list-view-productInformations{
+		margin-left: 2rem;
+		margin-right: 2rem;
+	}
+	.order-progress-header{
+		flex-direction: column;
+	}
+	.order-progress-header div h6 {
+		margin-top: 1rem;
+	}
+	.order-progress-shippingAddress{
+		flex-direction: column;
+	}
+	.progressbar-3, .progressbar-3 div{
+		padding: 0;
+	}
+	.progress-number{
+		width: 25px;
+		height: 25px;
+	}
+	.progress-3-badge, .progress-cancel-badge{
+		padding: 0;
+	}
+	.progress-3-badge span:first-child {
+		margin-right: 0.8rem;
+	}
+	.progress-3-badge span{
+		font-size: 12px;
+	}
+	.card-body-orderprogress{
+		flex-direction: column;
+	}
+	.progress-2, .progress-2 div{
+		padding: 0;
+	}
+}
+
 
 /* Small Device = 320px */
 

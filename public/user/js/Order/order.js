@@ -111,7 +111,7 @@ window.addEventListener('load',()=>{
     // RETURN REQUEST IS SEND TO ADMIN
     if(status === 'Return_Placed'){
 
-        progressText[0].innerHTML = 'Return Placed';
+        progressText[0].innerHTML = 'Processing';
         progressText[1].innerHTML = 'Order Pickup';
         progressText[1].style.marginLeft = '-2.7rem';
         progressText[2].innerHTML = 'Returned';
@@ -127,7 +127,7 @@ window.addEventListener('load',()=>{
 
     if(status === 'Order_Pickup'){
 
-        progressText[0].innerHTML = 'Return Placed';
+        progressText[0].innerHTML = 'Processing';
         progressText[1].innerHTML = 'Order Pickup';
         progressText[1].style.marginLeft = '-2.7rem';
         progressText[2].innerHTML = 'Returned';
@@ -146,7 +146,7 @@ window.addEventListener('load',()=>{
     }
 
     if(status == 'Return'){
-        progressText[0].innerHTML = 'Return Placed';
+        progressText[0].innerHTML = 'Processing';
         progressText[1].innerHTML = 'Order Pickup';
         progressText[1].style.marginLeft = '-2.7rem';
         progressText[2].innerHTML = 'Returned';

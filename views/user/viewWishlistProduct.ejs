@@ -1,113 +1,152 @@
 <%- include('../partials/header.ejs') %>
-<%- include('../partials/navbar.ejs') %>
-<section class="breadcrumb-option">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="breadcrumb__text">
-                    <h4>Wishlist</h4>
-                    <div class="breadcrumb__links">
-                        <!-- <a href="/home">Home</a>
-                        <span>Shop</span> -->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section>
-    <div class="container-fluid p-4">
-        <div class="row">
-            <div class="col-md-1"></div>
-            <div class="col-md-2 p-4 pr-5 Profile-sidebar" >
-                <!-- Left Side Div -->
-                <div class="left-side">
-                    <div>
-                        <i class="bi bi-person-circle fa-2x"></i><span class="ml-2 font-weight-bold text-muted">My Profile</span>
-                        <h3 class="mt-2 text-center font-weight-bold"><%= locals.username %></h3>
-                    </div>
-                        <a href="/userprofile">
-                            <div class="mt-4 options-userprofle">
-                                <i class="bi bi-person-fill fa-lg"></i> <span> Personal Information</span> 
-                            </div>
-                        </a>
-                        <a href="/viewWallet"> 
-                            <div class="mt-2 options-userprofle">
-                                <i class="fa-solid fa-wallet"></i> <span> Wallet </span>
-                            </div>
-                        </a>
-                        <a href="/addressinformation">
-                            <div class="mt-2 options-userprofle">
-                                <i class="fa-regular fa-address-card"></i> <span> Address</span> 
-                            </div>
-                        </a>
-                        <a href="/api/viewOrder">
-                            <div class="mt-2 options-userprofle">
-                                <i class="bi bi-box-seam-fill"></i> <span> Orders</span> 
-                            </div>
-                        </a>
-                        <a href="#"> 
-                            <div class="mt-2 options-userprofle">
-                                <i class="fa-regular fa-heart"></i> <span> Wishlist</span> 
-                                <span class="text-dark font-weight-bold"> ( <%= locals.wishlistCount %> )</span>
-                            </div>
-                        </a>
-                </div>
-            </div>
-            <div class="col-md-8 ml-4">
-                <!-- Right Side Div -->
-                <div class="right-side p-4 order-right-side">
-
-                    <h2 class="text-center font-weight-bold mb-5">Wishlist</h2>
-
-                    <!-- Order Detials view Div -->
-                    <% if(wishlistData.length > 0){ %>
-                        <% for(let i = 0 ; i < wishlistData.length ; i++){ %>
-                            <a href="#" >
-                                <div class="pt-3 pb-3 pl-4  order-view d-flex mt-3 " id="<%= wishlistData[i].productData[0]._id %>">
-                                    <div class="order-detail-image checkout-productImg">
-                                        <a href="/productdetails?id=<%= wishlistData[i].productData[0]._id %>">
-                                            <img src="/public/admin/assets/productImages/<%= wishlistData[i].productData[0].productImages[0] %>"  alt="">
-                                        </a>
-                                    </div>
-            
-                                    <div class="ml-4 w-100" >
-                                        <div class="d-flex">
-                                            <a href="/productdetails?id=<%= wishlistData[i].productData[0]._id %>">
-                                                <h4 class="ml-4 mt-1 font-weight-bold"><%= wishlistData[i].productData[0].productName %></h4>
-                                            </a>
-                                            <a href="#" name="remove-wishlist" class="ml-auto"><i class="fa-regular fa-trash-can  fa-lg mr-4 mt-3" style="color: #f70202;"  data-wishlist-product="<%= wishlistData[i].productData[0]._id %>"></i></a>
-                                            
-                                        </div>
-                                        <div class="d-flex align-items-center">
-                                            <h5 class="ml-4 mr-2 mt-1"><i class="bi bi-currency-rupee"></i> <span class="font-weight-bold"><%= wishlistData[i].productData[0].price %>
-                                                <% if(locals.wishlistData[i].productData[0].offerId) { %>
-                                                    <span class="text-muted ml-2" style="font-size: 1rem;"><del>₹<%= wishlistData[i].productData[0].MRP %></del> <span class="ml-2 font-weight-bold text-success" style="font-size: 1rem;"> <%= wishlistData[i].productData[0].offerPercentage %>% Off </span> </span>
-                                                 <% } %>
-                                            </span></h5>
-                                        </div>   
-                                        <div class="d-flex align-items-center m-2 mt-3">
-                                            <h6 class="ml-3 mr-5">Color &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h6>&nbsp;&nbsp;&nbsp;&nbsp;:<input type="color" value="<%=wishlistData[i].productData[0].color %>" class="cart-color" disabled>
-                                        </div>
-                                        <div class="d-flex align-items-center">
-                                            <h6 class="ml-4 mr-5 ">Size  </h6> <span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <%= wishlistData[i].productData[0].size %></span>
-                                        </div>                               
-                                    </div>    
-                                </div>
-                            </a>
-                        <% } %>
-                    <% } else { %>
-                        <div class="d-flex justify-content-center p-4">
-                            <img src="/public/user/img/wishlist_empty.svg" alt="" srcset="">
+    <%- include('../partials/navbar.ejs') %>
+       <!-- Breadcrumb Section Begin -->
+       <section class="breadcrumb-option">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb__text">
+                        <div class="breadcrumb__links">
+                            <a href="<%= locals.login ? '/home' : '/'  %>">Home</a>
+                            <span class="text-muted">Wishlist</span>
                         </div>
-
-                        <h4 class="text-center font-weight-bold mt-3">Your Wish list is <span class="text-danger">Empty &#10071;</span></h4>
-
-                    <% } %>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
-<%- include('../partials/footer.ejs') %>
+    </section>
+    <!-- Breadcrumb Section End -->
+    <section class="user-profile-sidebar">
+        <div class="container-fluid  ">
+            <div class="row flex-nowrap ">
+                <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 Profile-sidebar personal-information py-4" >
+                    <!-- OPTIONS SELECTING SECTION -->
+                    <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100 ">
+                        <div class="dropdown  pt-3 mx-auto">
+                            <a href="#" class="text-decoration-none mx-auto"
+                                id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-person-circle fa-3x "></i>
+                            </a>
+                        </div>
+                        <div class="pb-4 w-100 user-heaading d-none d-sm-inline">
+                                <p class="ml-md-1 m-0 p-0 text-dark" style="font-size: 19px;">Hello ,</p>
+                                <h3 class="  m-0 p-0 text-dark text-center"><%= locals.username %></h3>
+                        </div>
+                        <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
+                            id="menu">
+                            <li class="nav-item user-profile">
+                                <a href="/userprofile" class="nav-link align-middle px-0">
+                                    <i class="fa-lg bi-person-fill pr-2"></i> <span class="ms-1 d-none d-sm-inline">
+                                        Personal Information</span>
+                                </a>
+                            </li>
+                            <li class="user-profile">
+                                <a href="/viewWallet" class="nav-link px-0 align-middle">
+                                    <i class="fs-4 fa-solid fa-wallet pr-2"></i> <span
+                                        class="ms-1 d-none d-sm-inline">Wallet</span>
+                                </a>
+                            </li>
+                            <li class="user-profile">
+                                <a href="/addressinformation" class="nav-link px-0 align-middle">
+                                    <i class="fs-4 fa-regular fa-address-card pr-2"></i> <span
+                                        class="ms-1 d-none d-sm-inline">Address</span>
+                                </a>
+                            </li>
+                            <li class="user-profile">
+                                <a href="/api/viewWishlist" class="nav-link px-0 align-middle">
+                                    <i class="fs-4 fa-regular fa-heart pr-2"></i> <span
+                                        class="ms-1 d-none d-sm-inline">Wishlist ( <%= locals.wishlistCount %>
+                                            )</span>
+                                </a>
+                            </li>
+                            <li class="user-profile">
+                                <a href="/api/viewOrder" class="nav-link px-0 align-middle">
+                                    <i class="fs-4 fa-solid fa-truck-fast pr-2"></i> <span
+                                        class="ms-1 d-none d-sm-inline">Orders</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                    <!-- RIGHT SIDE CONTENT SECTION -->
+                    <div class="col mr-md-5 ml-md-2 user-profile-rightside py-4">
+                        <div class="right-side p-4  ml-md-3 mr-md-3 order-right-side user-profile-conatiner" style="overflow: hidden;">
+
+                            <h2 class="text-center font-weight-bold mb-5">Wishlist</h2>
+
+                            <!-- Order Detials view Div -->
+                            <% if(wishlistData.length> 0){ %>
+                                <% for(let i=0 ; i < wishlistData.length ; i++){ %>
+                                    <a href="#">
+                                        <div class="pt-3 pb-3 pl-4  order-view d-flex mt-3 "
+                                            id="<%= wishlistData[i].productData[0]._id %>">
+                                            <div class="order-detail-image checkout-productImg">
+                                                <a href="/productdetails?id=<%= wishlistData[i].productData[0]._id %>">
+                                                    <img src="/public/admin/assets/productImages/<%= wishlistData[i].productData[0].productImages[0] %>"
+                                                        alt="">
+                                                </a>
+                                            </div>
+
+                                            <div class="ml-4 w-100">
+                                                <div class="d-flex">
+                                                    <a
+                                                        href="/productdetails?id=<%= wishlistData[i].productData[0]._id %>">
+                                                        <h4 class="ml-4 mt-1 font-weight-bold">
+                                                            <%= wishlistData[i].productData[0].productName %>
+                                                        </h4>
+                                                    </a>
+                                                    <a href="#" name="remove-wishlist" class="ml-auto"><i
+                                                            class="fa-regular fa-trash-can  fa-lg mr-4 mt-3"
+                                                            style="color: #f70202;"
+                                                            data-wishlist-product="<%= wishlistData[i].productData[0]._id %>"></i></a>
+
+                                                </div>
+                                                <div class="d-flex align-items-center">
+                                                    <h5 class="ml-4 mr-2 mt-1"><i class="bi bi-currency-rupee"></i>
+                                                        <span class="font-weight-bold">
+                                                            <%= wishlistData[i].productData[0].price %>
+                                                                <% if(locals.wishlistData[i].productData[0].offerId) {
+                                                                    %>
+                                                                    <span class="text-muted ml-2"
+                                                                        style="font-size: 1rem;"><del>₹<%=
+                                                                                wishlistData[i].productData[0].MRP %>
+                                                                                </del> <span
+                                                                            class="ml-2 font-weight-bold text-success"
+                                                                            style="font-size: 1rem;">
+                                                                            <%= wishlistData[i].productData[0].offerPercentage
+                                                                                %>% Off
+                                                                        </span> </span>
+                                                                    <% } %>
+                                                        </span></h5>
+                                                </div>
+                                                <div class="d-flex align-items-center m-2 mt-3">
+                                                    <h6 class="ml-3 mr-5">Color
+                                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h6>
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;:<input type="color"
+                                                        value="<%=wishlistData[i].productData[0].color %>"
+                                                        class="cart-color" disabled>
+                                                </div>
+                                                <div class="d-flex align-items-center">
+                                                    <h6 class="ml-4 mr-5 ">Size </h6> <span>
+                                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
+                                                        <%= wishlistData[i].productData[0].size %></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                            <% } %>
+                            <% } else { %>
+                                <div class="d-flex justify-content-center p-4">
+                                    <img src="/public/user/img/wishlist_empty.svg" alt="" srcset="">
+                                </div>
+
+                                <h4 class="text-center font-weight-bold mt-3">Your Wish list is 
+                                    <span class="text-danger">Empty &#10071;</span></h4>
+
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <%- include('../partials/footer.ejs') %>

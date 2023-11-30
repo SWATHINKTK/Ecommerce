@@ -1,141 +1,173 @@
 <%- include('../partials/header.ejs') %>
-<%- include('../partials/navbar.ejs') %>
-<section class="breadcrumb-option">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="breadcrumb__text">
-                    <h4>Shop</h4>
-                    <div class="breadcrumb__links">
-                        <a href="/home">Home</a>
-                        <span>Shop</span>
+    <%- include('../partials/navbar.ejs') %>
+        <!-- Breadcrumb Section Begin -->
+        <section class="breadcrumb-option">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="breadcrumb__text">
+                            <div class="breadcrumb__links">
+                                <a href="<%= locals.login ? '/home' : '/'  %>">Home</a>
+                                <a href="/addressinformation">Address</a>
+                                <span class="text-muted">Edit Address</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-</section>
+        </section>
+        <!-- Breadcrumb Section End -->
 
-<section>
-    <div class="container-fluid p-4">
-        <div class="row">
-            <div class="col-md-2 p-4 pr-5 Profile-sidebar">
-                <!-- Left Side Div -->
-                <div class="left-side">
-                    <div>
-                        <i class="bi bi-person-circle fa-2x"></i><span class="ml-2 font-weight-bold text-muted">My Profile</span>
-                        <h3 class="mt-2 text-center font-weight-bold"><%= locals.username %></h3>
+
+        <section class="user-profile-sidebar">
+            <div class="container-fluid  ">
+                <div class="row flex-nowrap ">
+                    <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 Profile-sidebar personal-information py-4" >
+                        <!-- OPTIONS SELECTING SECTION -->
+                        <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100 ">
+                            <div class="dropdown  pt-3 mx-auto">
+                                <a href="#" class="text-decoration-none mx-auto"
+                                    id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-person-circle fa-3x "></i>
+                                </a>
+                            </div>
+                            <div class="pb-4 w-100 user-heaading d-none d-sm-inline">
+                                    <p class="ml-md-1 m-0 p-0 text-dark" style="font-size: 19px;">Hello ,</p>
+                                    <h3 class="  m-0 p-0 text-dark text-center"><%= locals.username %></h3>
+                            </div>
+                            <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
+                                id="menu">
+                                <li class="nav-item user-profile">
+                                    <a href="/userprofile" class="nav-link align-middle px-0">
+                                        <i class="fa-lg bi-person-fill pr-2"></i> <span class="ms-1 d-none d-sm-inline">
+                                            Personal Information</span>
+                                    </a>
+                                </li>
+                                <li class="user-profile">
+                                    <a href="/viewWallet" class="nav-link px-0 align-middle">
+                                        <i class="fs-4 fa-solid fa-wallet pr-2"></i> <span
+                                            class="ms-1 d-none d-sm-inline">Wallet</span>
+                                    </a>
+                                </li>
+                                <li class="user-profile">
+                                    <a href="/addressinformation" class="nav-link px-0 align-middle">
+                                        <i class="fs-4 fa-regular fa-address-card pr-2"></i> <span
+                                            class="ms-1 d-none d-sm-inline">Address</span>
+                                    </a>
+                                </li>
+                                <li class="user-profile">
+                                    <a href="/api/viewWishlist" class="nav-link px-0 align-middle">
+                                        <i class="fs-4 fa-regular fa-heart pr-2"></i> <span
+                                            class="ms-1 d-none d-sm-inline">Wishlist ( <%= locals.wishlistCount %>
+                                                )</span>
+                                    </a>
+                                </li>
+                                <li class="user-profile">
+                                    <a href="/api/viewOrder" class="nav-link px-0 align-middle">
+                                        <i class="fs-4 fa-solid fa-truck-fast pr-2"></i> <span
+                                            class="ms-1 d-none d-sm-inline">Orders</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
-                        <a href="/userprofile">
-                            <div class="mt-4 options-userprofle">
-                                <i class="bi bi-person-fill fa-lg"></i> <span> Personal Information</span> 
-                            </div>
-                        </a>
-                        <a href="/viewWallet"> 
-                            <div class="mt-2 options-userprofle">
-                                <i class="fa-solid fa-wallet"></i> <span> Wallet </span>
-                            </div>
-                        </a>
-                        <a href="/addressinformation">
-                            <div class="mt-2 options-userprofle">
-                                <i class="fa-regular fa-address-card"></i>  <span> Address</span> 
-                            </div>
-                        </a>
-                        <a href="/api/viewWishlist"> 
-                            <div class="mt-2 options-userprofle">
-                                <i class="fa-regular fa-heart"></i> <span> Wishlist</span> 
-                                <span class="text-dark font-weight-bold"> ( <%= locals.wishlistCount %> )</span>
-                            </div>
-                        </a>
+                        <!-- RIGHT SIDE CONTENT SECTION -->
+                        <div class="col mr-md-5 ml-md-2 user-profile-rightside py-4">
+                            <div class="right-side p-4  ml-md-3 mr-md-3 order-right-side user-profile-conatiner" style="overflow: hidden;">
+                            <h2 class="text-center font-weight-bold mb-4">Edit Address</h2>
+
+                            <form id="editAddress">
+                                <div class="alert " role="alert" id="edit-new-address-sucess">
+
+                                </div>
+                                <div class="form-row">
+                                    <input type="hidden" class="form-control" value="<%= address._id %>"
+                                        name="addressId">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="input1">Name</label>
+                                        <input type="text" class="form-control" id="editName"
+                                            value="<%= address.username %>" name="Name">
+                                        <span class="text-danger ml-2" name="address-validate-message"></span>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="input2">Phone Number</label>
+                                        <input type="text" class="form-control" id="editPhnNumber"
+                                            value="<%= address.phoneNumber %>" name="MobileNumber">
+                                        <span class="text-danger ml-2" name="address-validate-message"></span>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="input1">Pincode</label>
+                                        <input type="text" class="form-control" id="editPincode"
+                                            value="<%= address.pincode %>" name="Pincode">
+                                        <span class="text-danger ml-2" name="address-validate-message"></span>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="input2">Locality</label>
+                                        <input type="text" class="form-control" id="editLocality"
+                                            value="<%= address.locality %>" name="Locality">
+                                        <span class="text-danger ml-2" name="address-validate-message"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="textarea">Address</label>
+                                    <textarea class="form-control" id="textarea" rows="3" name="Address"
+                                        id="editAddress"><%= address.address %></textarea>
+                                    <span class="text-danger ml-2" name="address-validate-message"></span>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="input1">City/Distict/Town</label>
+                                        <input type="text" class="form-control" id="editCity"
+                                            value="<%= address.city %>" name="City">
+                                        <span class="text-danger ml-2" name="address-validate-message"></span>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="districtSelect">Select a District:</label><br>
+                                        <select id="districtSelect" name="District" class="district">
+                                            <option value="<%= address.district %>" class="mt-2">
+                                                <%= address.district %>
+                                            </option>
+                                            <option value="Thiruvananthapuram">Thiruvananthapuram</option>
+                                            <option value="Kollam">Kollam</option>
+                                            <option value="Pathanamthitta">Pathanamthitta</option>
+                                            <option value="Alappuzha">Alappuzha</option>
+                                            <option value="Kottayam">Kottayam</option>
+                                            <option value="Idukki">Idukki</option>
+                                            <option value="Ernakulam">Ernakulam</option>
+                                            <option value="Thrissur">Thrissur</option>
+                                            <option value="Palakkad">Palakkad</option>
+                                            <option value="Malappuram">Malappuram</option>
+                                            <option value="Kozhikode">Kozhikode</option>
+                                            <option value="Wayanad">Wayanad</option>
+                                            <option value="Kannur">Kannur</option>
+                                            <option value="Kasaragod">Kasaragod</option>
+                                        </select>
+                                        <span class="text-danger ml-2" name="address-validate-message"></span>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="input1">Landmark</label>
+                                        <input type="text" class="form-control" id="editLandmark"
+                                            value="<%= locals.address.landmark ? address.landmark : '' %>"
+                                            name="Landmark">
+                                        <span class="text-danger ml-2" name="address-validate-message"></span>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="input2">Alternate Number</label>
+                                        <input type="text" class="form-control" id="editAlteranteNumber"
+                                            name="AlteranteNumber"
+                                            value="<%= locals.address.alternateNumber ? address.alternateNumber : '' %>">
+                                        <span class="text-danger ml-2" name="address-validate-message"></span>
+                                    </div>
+                                </div>
+                                <input class="btn btn-primary pl-4 pr-4" type="submit" value="Save">
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="col-md-8 ml-4">
-                <!-- Right Side Div -->
-                <div class="right-side p-4 order-right-side">
-                    <h2 class="text-center font-weight-bold mb-4">Edit Address</h2>
-                    
-                    <form id="editAddress">
-                        <div class="alert " role="alert" id="edit-new-address-sucess">
-                        
-                        </div>
-                        <div class="form-row">
-                            <input type="hidden" class="form-control" value="<%= address._id %>" name="addressId">
-                            <div class="col-md-6 mb-3">
-                                <label for="input1">Name</label>
-                                <input type="text" class="form-control" id="editName" value="<%= address.username %>" name="Name">
-                                <span class="text-danger ml-2" name="address-validate-message"></span>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="input2">Phone Number</label>
-                                <input type="text" class="form-control" id="editPhnNumber" value="<%= address.phoneNumber %>" name="MobileNumber">
-                                <span class="text-danger ml-2" name="address-validate-message"></span>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="col-md-6 mb-3">
-                                <label for="input1">Pincode</label>
-                                <input type="text" class="form-control" id="editPincode" value="<%= address.pincode %>" name="Pincode">
-                                <span class="text-danger ml-2" name="address-validate-message"></span>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="input2">Locality</label>
-                                <input type="text" class="form-control" id="editLocality" value="<%= address.locality %>" name="Locality">
-                                <span class="text-danger ml-2" name="address-validate-message"></span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="textarea">Address</label>
-                            <textarea class="form-control" id="textarea" rows="3" name="Address" id="editAddress" ><%= address.address %></textarea>
-                            <span class="text-danger ml-2" name="address-validate-message"></span>
-                        </div>
-                        <div class="form-row">
-                            <div class="col-md-6 mb-3">
-                                <label for="input1">City/Distict/Town</label>
-                                <input type="text" class="form-control" id="editCity" value="<%= address.city %>" name="City">
-                                <span class="text-danger ml-2" name="address-validate-message"></span>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="districtSelect">Select a District:</label><br>
-                                <select id="districtSelect" name="District" class="district" >
-                                    <option value="<%= address.district %>" class="mt-2"><%= address.district %></option>
-                                    <option value="Thiruvananthapuram">Thiruvananthapuram</option>
-                                    <option value="Kollam">Kollam</option>
-                                    <option value="Pathanamthitta">Pathanamthitta</option>
-                                    <option value="Alappuzha">Alappuzha</option>
-                                    <option value="Kottayam">Kottayam</option>
-                                    <option value="Idukki">Idukki</option>
-                                    <option value="Ernakulam">Ernakulam</option>
-                                    <option value="Thrissur">Thrissur</option>
-                                    <option value="Palakkad">Palakkad</option>
-                                    <option value="Malappuram">Malappuram</option>
-                                    <option value="Kozhikode">Kozhikode</option>
-                                    <option value="Wayanad">Wayanad</option>
-                                    <option value="Kannur">Kannur</option>
-                                    <option value="Kasaragod">Kasaragod</option>
-                                </select>
-                                <span class="text-danger ml-2" name="address-validate-message"></span>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="col-md-6 mb-3">
-                                <label for="input1">Landmark</label>
-                                <input type="text" class="form-control" id="editLandmark" value="<%= locals.address.landmark ? address.landmark : '' %>" name="Landmark">
-                                <span class="text-danger ml-2" name="address-validate-message"></span>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="input2">Alternate Number</label>
-                                <input type="text" class="form-control" id="editAlteranteNumber" name="AlteranteNumber" value="<%= locals.address.alternateNumber ? address.alternateNumber : '' %>">
-                                <span class="text-danger ml-2" name="address-validate-message"></span>
-                            </div>
-                        </div>
-                
-                        <input class="btn btn-primary pl-4 pr-4" type="submit" value="Save">
-                    </form>
-                
-                    
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+        </section>
 <%- include('../partials/footer.ejs') %>

@@ -1,124 +1,160 @@
 <%- include('../partials/header.ejs') %>
     <%- include('../partials/navbar.ejs') %>
 
-    <section class="breadcrumb-option">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="breadcrumb__text">
-                        <h4>User Profile</h4>
-                        <div class="breadcrumb__links">
-                            <!-- <a href="/home">Home</a>
-                            <span>Shop</span> -->
+    <section class="user-profile-main">
+        <!-- Breadcrumb Section Begin -->
+        <section class="breadcrumb-option">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="breadcrumb__text">
+                            <div class="breadcrumb__links">
+                                <a href="<%= locals.login ? '/home' : '/'  %>">Home</a>
+                                <span>User Profile</span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-   
-    <section>
-        <div class="container-fluid p-4">
-            <div class="row">
-            <div class="col-md-1"></div>
-                <div class="col-md-2 p-4 pr-5 Profile-sidebar">
-                    <!-- Left Side Div -->
-                    <div class="left-side">
-                        <div>
-                            <i class="bi bi-person-circle fa-2x"></i><span class="ml-2 font-weight-bold text-muted">My Profile</span>
-                            <h3 class="mt-2 text-center font-weight-bold"><%= locals.username %></h3>
-                            <div class="text-center mt-3">
-                                <input type="text" value="http://127.0.0.1:5000/login?refer=<%= userInfo._id %>" id="myInput" onclick="referalLink()" style="display: none;">
-                                <button onclick="referalLink()" class="mt-1 w-100 btn btn-primary">Refer And Earn</button>
+        </section>
+        <!-- Breadcrumb Section End -->
+
+        <!-- USER PROFILE SECTION -->
+        <section class="user-profile-sidebar">
+            <div class="container-fluid  ">
+                <div class="row flex-nowrap ">
+                    <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 Profile-sidebar personal-information py-4" >
+                        <!-- OPTIONS SELECTING SECTION -->
+                        <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100 ">
+                            <div class="dropdown  pt-3 mx-auto">
+                                <a href="#" class="text-decoration-none mx-auto"
+                                    id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-person-circle fa-3x "></i>
+                                </a>
                             </div>
+                            <div class="pb-4 w-100 user-heaading d-none d-sm-inline">
+                                    <p class="ml-md-1 m-0 p-0 text-dark" style="font-size: 19px;">Hello ,</p>
+                                    <h3 class="  m-0 p-0 text-dark text-center"><%= locals.username %></h3>
+                            </div>
+                            <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
+                                id="menu">
+                                <li class="nav-item user-profile">
+                                    <a href="/userprofile" class="nav-link align-middle px-0">
+                                        <i class="fa-lg bi-person-fill pr-2"></i> <span class="ms-1 d-none d-sm-inline">
+                                            Personal Information</span>
+                                    </a>
+                                </li>
+                                <li class="user-profile">
+                                    <a href="/viewWallet" class="nav-link px-0 align-middle">
+                                        <i class="fs-4 fa-solid fa-wallet pr-2"></i> <span
+                                            class="ms-1 d-none d-sm-inline">Wallet</span>
+                                    </a>
+                                </li>
+                                <li class="user-profile">
+                                    <a href="/addressinformation" class="nav-link px-0 align-middle">
+                                        <i class="fs-4 fa-regular fa-address-card pr-2"></i> <span
+                                            class="ms-1 d-none d-sm-inline">Address</span>
+                                    </a>
+                                </li>
+                                <li class="user-profile">
+                                    <a href="/api/viewWishlist" class="nav-link px-0 align-middle">
+                                        <i class="fs-4 fa-regular fa-heart pr-2"></i> <span
+                                            class="ms-1 d-none d-sm-inline">Wishlist ( <%= locals.wishlistCount %>
+                                                )</span>
+                                    </a>
+                                </li>
+                                <li class="user-profile">
+                                    <a href="/api/viewOrder" class="nav-link px-0 align-middle">
+                                        <i class="fs-4 fa-solid fa-truck-fast pr-2"></i> <span
+                                            class="ms-1 d-none d-sm-inline">Orders</span>
+                                    </a>
+                                </li>
+                            </ul>
                         </div>
-                        <a href="/userprofile">
-                            <div class="mt-4 options-userprofle">
-                                <i class="bi bi-person-fill fa-lg"></i> <span> Personal Information</span> 
-                            </div>
-                        </a>
-                        <a href="/viewWallet"> 
-                            <div class="mt-2 options-userprofle">
-                                <i class="fa-solid fa-wallet"></i> <span> Wallet </span>
-                            </div>
-                        </a>
-                        <a href="/addressinformation">
-                            <div class="mt-2 options-userprofle">
-                                <i class="fa-regular fa-address-card"></i> <span> Address</span> 
-                            </div>
-                        </a>
-                        <a href="/api/viewOrder">
-                            <div class="mt-2 options-userprofle">
-                                <i class="bi bi-box-seam-fill"></i> <span> Orders</span> 
-                            </div>
-                        </a>
-                        <a href="/api/viewWishlist"> 
-                            <div class="mt-2 options-userprofle">
-                                <i class="fa-regular fa-heart"></i> <span> Wishlist</span> 
-                                <span class="text-dark font-weight-bold"> ( <%= locals.wishlistCount %> )</span>
-                            </div>
-                        </a>
-                        
                     </div>
-                </div>
-                <div class="col-md-8 ml-4">
-                    <!-- Right Side Div -->
-                    <div class="right-side p-4 order-right-side">
-                        <h2 class="text-center font-weight-bold">Personl Information</h2>
-
-                        <form class="mt-5">
-                            <h6 class="font-weight-bold text-success mb-4" id="userupdate-result" style="display: none;"></h6>
-                            <div class="form-group">
-                                <label for="input1" class="m-0 font-weight-bold text-muted">UserName</label>
-                                <input type="text" class="form-control col-sm-4 input-userprofile p-2" id="userprofile-username" value="<%= userInfo.username %>" disabled>
-                                <span class="text-danger" name="userinfo-hint"></span>
-                            </div>
-                            <div class="form-group">
-                                <label for="input2" class="m-0 font-weight-bold text-muted">Email</label>
-                                <input type="text" class="form-control col-sm-4 input-userprofile mb-4 p-2" id="input2" value="<%= userInfo.email %>" disabled>
-                            </div>
-                            <div class="form-group">
-                                <label for="input3" class="m-0 font-weight-bold text-muted">Phone Number</label>
-                                <input type="text" class="form-control col-sm-4 input-userprofile p-2" id="userprofile-phonenumber"" value="<%= userInfo.phonenumber %>" disabled>
-                                <span class="text-danger" name="userinfo-hint"></span>
-                            </div>
-                            <div class="d-flex">
-                                <input type="button" class="btn btn-primary" value="Save" data-user-id="<%= userInfo._id %>" id="editinfomation-submit" style="display: none;">
-                                <a href="#" onclick="editUserDetails()" id="userprofile-edit">Edit Information</a> 
-                                <input type="button" id="editInformation-Cancel" class="btn btn-secondary ml-3" value="Cancel" onclick="cancelEditOperation(this)" style="display: none;">
-                                <a href="#" id="reset-password-link" class="ml-3">Reset Password</a>
-                            </div>
-                        </form>
-
-                        <div id="reset-password-div" style="display: none;">
-                            <h4 class="font-weight-bold mt-5 mb-3">Reset Password</h4>
-                            <form id="password-reset">
-                                <h6 class="" id="resetPassword-result" style="display: none;"></h6>
+                    <!-- RIGHT SIDE CONTENT SECTION -->
+                    <div class="col mr-md-5 ml-md-3 user-profile-rightside py-4">
+                        <div class="right-side p-4 order-right-side user-profile-conatiner">
+                            <h2 class="text-center font-weight-bold">Personl Information</h2>
+                            <form class="mt-5">
+                                <h6 class="font-weight-bold text-success mb-4" id="userupdate-result"
+                                    style="display: none;"></h6>
                                 <div class="form-group">
-                                    <label for="input1" class="m-0 font-weight-bold text-muted">Current Password</label>
-                                    <input type="password" class="form-control col-sm-4 input-userprofile p-2" id="currentPassword-reset" value="">
-                                    <span class="text-danger" name="resetPassword-error"></span>
+                                    <label for="input1" class="m-0 font-weight-bold text-muted">UserName</label>
+                                    <input type="text" class="form-control col-sm-4 input-userprofile p-2"
+                                        id="userprofile-username" value="<%= userInfo.username %>" disabled>
+                                    <span class="text-danger" name="userinfo-hint"></span>
                                 </div>
                                 <div class="form-group">
-                                    <label for="input2" class="m-0 font-weight-bold text-muted">New Paasword</label>
-                                    <input type="password" class="form-control col-sm-4 input-userprofile p-2" id="newPassword-reset" value="">
-                                    <span class="text-danger" name="resetPassword-error"></span>
+                                    <label for="input2" class="m-0 font-weight-bold text-muted">Email</label>
+                                    <input type="text" class="form-control col-sm-4 input-userprofile mb-4 p-2"
+                                        id="input2" value="<%= userInfo.email %>" disabled>
                                 </div>
                                 <div class="form-group">
-                                    <label for="input2" class="m-0 font-weight-bold text-muted">Confirm Password</label>
-                                    <input type="password" class="form-control col-sm-4 input-userprofile p-2" id="confirmPassword-reset" value="">
-                                    <span class="text-danger" name="resetPassword-error"></span>
+                                    <label for="input3" class="m-0 font-weight-bold text-muted">Phone Number</label>
+                                    <input type="text" class="form-control col-sm-4 input-userprofile p-2"
+                                        id="userprofile-phonenumber"" value=" <%=userInfo.phonenumber %>" disabled>
+                                    <span class="text-danger" name="userinfo-hint"></span>
                                 </div>
-                                <input type="button" class="btn btn-primary" value="Reset Paasword" onclick="submitResetPassword()">
-                                <input type="button" class="btn btn-secondary" value="Cancel" onclick="cancelResetOperation()">
+                                <div class="d-flex">
+                                    <input type="button" class="btn btn-primary" value="Save"
+                                        data-user-id="<%= userInfo._id %>" id="editinfomation-submit"
+                                        style="display: none;">
+                                    <a href="#" onclick="editUserDetails()" id="userprofile-edit">Edit Information</a>
+                                    <input type="button" id="editInformation-Cancel" class="btn btn-secondary ml-3"
+                                        value="Cancel" onclick="cancelEditOperation(this)" style="display: none;">
+                                    <a href="#" id="reset-password-link" class="ml-3">Reset Password</a>
+                                </div>
                             </form>
+                            <div id="reset-password-div" style="display: none;">
+                                <h4 class="font-weight-bold mt-5 mb-3">Reset Password</h4>
+                                <form id="password-reset">
+                                    <h6 class="" id="resetPassword-result" style="display: none;"></h6>
+                                    <div class="form-group">
+                                        <label for="input1" class="m-0 font-weight-bold text-muted">Current
+                                            Password</label>
+                                        <input type="password" class="form-control col-sm-4 input-userprofile p-2"
+                                            id="currentPassword-reset" value="">
+                                        <span class="text-danger" name="resetPassword-error"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="input2" class="m-0 font-weight-bold text-muted">New Paasword</label>
+                                        <input type="password" class="form-control col-sm-4 input-userprofile p-2"
+                                            id="newPassword-reset" value="">
+                                        <span class="text-danger" name="resetPassword-error"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="input2" class="m-0 font-weight-bold text-muted">Confirm
+                                            Password</label>
+                                        <input type="password" class="form-control col-sm-4 input-userprofile p-2"
+                                            id="confirmPassword-reset" value="">
+                                        <span class="text-danger" name="resetPassword-error"></span>
+                                    </div>
+                                    <input type="button" class="btn btn-primary" value="Reset Paasword"
+                                        onclick="submitResetPassword()">
+                                    <input type="button" class="btn btn-secondary" value="Cancel"
+                                        onclick="cancelResetOperation()">
+                                </form>
+                            </div>
                         </div>
-
-                        
+                        <div class="p-4 order-right-side  mt-5 user-profile-conatiner">
+                            <h2 class="text-center font-weight-bold mb-2">Refer & Earn</h2>
+                            <div class="d-flex justify-content-center">
+                                <img src="/public/user/img/2784130.png" alt="" style="height: 300px;">
+                            </div>
+                            <p class="text-center font-weight-bold mt-3">Refer a friend, earn ₹100. They get ₹50. It's
+                                that simple. Start sharing and saving now!</p>
+                            <div class="d-flex align-items-center justify-content-center mx-auto mt-3">
+                                <input type="text" value="http://127.0.0.1:5000/login?refer=<%= userInfo._id %>"
+                                    id="myInput" onclick="referalLink()" style="display: none;">
+                                <button class=" mx-1 font-weight-bold btn btn-primary" onclick="referalLink()"
+                                    style="color: rgb(14, 8, 8);">Refer And Earn</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
     </section>
-    
+
 <%- include('../partials/footer.ejs') %>
