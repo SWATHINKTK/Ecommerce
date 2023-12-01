@@ -25,6 +25,7 @@ const LoadCheckoutPage = async(req, res, next) => {
 
         const userId = req.session.userId;
         const addressInfo = await addressData.find({userId:userId});
+        const walletAmount = await userData.findOne({_id:userId},{_id:0,walletAmount:1});
 
         const coupons = await couponData.aggregate([
             {
@@ -49,14 +50,14 @@ const LoadCheckoutPage = async(req, res, next) => {
 
             const productData = await productInfo.findOne({_id:productId});
         
-            res.render('user/checkout',{user:true, title:'CheckOut', login:checkLogin, address:addressInfo, product:productData ,single:true, couponData:coupons});
+            res.render('user/checkout',{user:true, title:'CheckOut', login:checkLogin, address:addressInfo, product:productData ,single:true, couponData:coupons, wallet:walletAmount.walletAmount});
 
         }else{
 
             const cartProduct = await cartData.findOne({userId:userId}).populate('cartProducts.productId')
             const productData = cartProduct.cartProducts;
      
-            res.render('user/checkout',{user:true, title:'CheckOut', login:checkLogin, address:addressInfo, cartProduct:productData ,single:false, couponData:coupons});
+            res.render('user/checkout',{user:true, title:'CheckOut', login:checkLogin, address:addressInfo, cartProduct:productData ,single:false, couponData:coupons ,wallet:walletAmount.walletAmount});
         }
 
     }catch(error){

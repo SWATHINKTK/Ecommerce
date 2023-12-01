@@ -590,8 +590,11 @@ const loadSpecificCategoryProducts = async(req, res, next) => {
 
         const id = req.query.id;
         const productData = await productInfo.find({ categoryIds:id}).sort({_id:-1});
-    
-        res.render('user/allProductView',{ user: true,login:checkLogin, title: 'Products',product:productData});
+
+        const categoroys = await category.find({});
+        const brands = await brandInfo.find({});
+        
+        res.render('user/allProductView',{ user: true,login:checkLogin, title: 'Products',product:productData ,categoryData:categoroys , brandData:brands});
     } catch (error) {
         next(error);
     }
@@ -926,6 +929,18 @@ const walletPaymentVerification = async(req, res, next) => {
 }
 
 
+const loadAboutPage = (req , res , next) => {
+    try {
+        const checkLogin = req.session.userId ? true : false;
+
+        res.render('user/about',{ title:'About' ,login:checkLogin ,user: true});
+        
+    } catch (error) {
+        next(error)
+    }
+}
+
+
 /* =============================================== ERROR HANDLING PAGES ==================================================== */
 
 
@@ -973,7 +988,8 @@ module.exports = {
     loadUserProfile,
     loadAddressForm,
     load500ErrorPage,
-    load404ErrorPage
+    load404ErrorPage,
+    loadAboutPage
 }
 
 

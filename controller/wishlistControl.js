@@ -98,9 +98,13 @@ const viewWishlistProduct = async(req, res, next) => {
                     foreignField:'_id',
                     as:'productData'
                 }
+            },
+            {
+                $unwind:'$productData'
             }
         ]);
 
+        
         if(wishList){
             res.render('user/viewWishlistProduct',{user:true, title:'Wishlist', login:checkLogin ,wishlistData:wishList});
         }else{

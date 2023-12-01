@@ -46,6 +46,14 @@ proceedPaymentBtn.addEventListener('click',(event)=>{
     const changeAddress = document.getElementById('change-address');
     changeAddress.style.display = 'block';
 
+    alert(document.body.scrollHeight,document.body.scrollHeight -700)
+    console.log(document.body.scrollHeight)
+
+    window.scrollTo({
+        top: (document.body.scrollHeight - 1190),
+        behavior: 'smooth' // You can use 'auto' or 'smooth' for a smooth scroll
+      });
+
 
 });
 

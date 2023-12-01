@@ -65,6 +65,12 @@
                                         class="ms-1 d-none d-sm-inline">Orders</span>
                                 </a>
                             </li>
+                            <li class="user-profile">
+                                <a href="/logout" class="nav-link px-0 align-middle">
+                                    <i class="fs-4 fa-solid fa-arrow-right-from-bracket pr-2 text-dark"></i> 
+                                    <span class="ms-1 d-none d-sm-inline font-weight-bold text-dark">Logout</span>
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -75,14 +81,14 @@
                             <h2 class="text-center font-weight-bold mb-5">Wishlist</h2>
 
                             <!-- Order Detials view Div -->
-                            <% if(wishlistData.length> 0){ %>
-                                <% for(let i=0 ; i < wishlistData.length ; i++){ %>
+                            <% if(wishlistData.length > 0){ %>
+                                <% for(let i=0 ; i < wishlistData.length; i++){ %>
                                     <a href="#">
                                         <div class="pt-3 pb-3 pl-4  order-view d-flex mt-3 "
-                                            id="<%= wishlistData[i].productData[0]._id %>">
+                                            id="<%= wishlistData[i].productData._id %>">
                                             <div class="order-detail-image checkout-productImg">
-                                                <a href="/productdetails?id=<%= wishlistData[i].productData[0]._id %>">
-                                                    <img src="/public/admin/assets/productImages/<%= wishlistData[i].productData[0].productImages[0] %>"
+                                                <a href="/productdetails?id=<%= wishlistData[i].productData._id %>">
+                                                    <img src="/public/admin/assets/productImages/<%= wishlistData[i].productData.productImages[0] %>"
                                                         alt="">
                                                 </a>
                                             </div>
@@ -90,30 +96,30 @@
                                             <div class="ml-4 w-100">
                                                 <div class="d-flex">
                                                     <a
-                                                        href="/productdetails?id=<%= wishlistData[i].productData[0]._id %>">
+                                                        href="/productdetails?id=<%= wishlistData[i].productData._id %>">
                                                         <h4 class="ml-4 mt-1 font-weight-bold">
-                                                            <%= wishlistData[i].productData[0].productName %>
+                                                            <%= wishlistData[i].productData.productName %>
                                                         </h4>
                                                     </a>
                                                     <a href="#" name="remove-wishlist" class="ml-auto"><i
                                                             class="fa-regular fa-trash-can  fa-lg mr-4 mt-3"
                                                             style="color: #f70202;"
-                                                            data-wishlist-product="<%= wishlistData[i].productData[0]._id %>"></i></a>
+                                                            data-wishlist-product="<%= wishlistData[i].productData._id %>"></i></a>
 
                                                 </div>
                                                 <div class="d-flex align-items-center">
                                                     <h5 class="ml-4 mr-2 mt-1"><i class="bi bi-currency-rupee"></i>
                                                         <span class="font-weight-bold">
-                                                            <%= wishlistData[i].productData[0].price %>
-                                                                <% if(locals.wishlistData[i].productData[0].offerId) {
+                                                            <%= wishlistData[i].productData.price %>
+                                                                <% if(locals.wishlistData[i].productData.offerId) {
                                                                     %>
                                                                     <span class="text-muted ml-2"
                                                                         style="font-size: 1rem;"><del>₹<%=
-                                                                                wishlistData[i].productData[0].MRP %>
+                                                                                wishlistData[i].productData.MRP %>
                                                                                 </del> <span
                                                                             class="ml-2 font-weight-bold text-success"
                                                                             style="font-size: 1rem;">
-                                                                            <%= wishlistData[i].productData[0].offerPercentage
+                                                                            <%= wishlistData[i].productData.offerPercentage
                                                                                 %>% Off
                                                                         </span> </span>
                                                                     <% } %>
@@ -123,19 +129,20 @@
                                                     <h6 class="ml-3 mr-5">Color
                                                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h6>
                                                     &nbsp;&nbsp;&nbsp;&nbsp;:<input type="color"
-                                                        value="<%=wishlistData[i].productData[0].color %>"
+                                                        value="<%=wishlistData[i].productData.color %>"
                                                         class="cart-color" disabled>
                                                 </div>
                                                 <div class="d-flex align-items-center">
                                                     <h6 class="ml-4 mr-5 ">Size </h6> <span>
                                                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
-                                                        <%= wishlistData[i].productData[0].size %></span>
+                                                        <%= wishlistData[i].productData.size %></span>
                                                 </div>
                                             </div>
                                         </div>
                                     </a>
                             <% } %>
                             <% } else { %>
+                                <%= wishlistData[0].productData[0] %>
                                 <div class="d-flex justify-content-center p-4">
                                     <img src="/public/user/img/wishlist_empty.svg" alt="" srcset="">
                                 </div>

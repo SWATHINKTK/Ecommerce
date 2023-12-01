@@ -50,6 +50,7 @@ userRouter.get('/login',userController.loadUserLogin);
 userRouter.get('/logout',userController.userLogout);
 userRouter.get('/otpverification',userController.loadOTPVerification);
 userRouter.get('/home',auth.isUserLogin,userController.loadHomePage);
+userRouter.get('/about',auth.isUserLogin,userController.loadAboutPage);
 
 
 userRouter.get('/allproductview',userController.loadAllProductViewPage);

@@ -20,14 +20,16 @@ if(ImageTemp){
 const ImageView = document.getElementById('imageView-Div');
 if(ImageView){
     document.getElementById('imageView-Div').addEventListener('mouseover',()=>{
-        console.log('hello');
         let options = {
-            width:400,
+            width:590,
             zoomwidth:100,
-            scale:1,
+            zoomLensStyle: "height:200; opacity: 0.3; background-color: white;",
+            fillContainer: true,
             zoomPosition: 'original',
+            offset: { vertical: 0, horizontal: 5 }
         }
         new ImageZoom(document.getElementById("imageView-Div"), options);
+        
     })
 }
 

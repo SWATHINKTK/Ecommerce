@@ -10,7 +10,7 @@
                         <div class="breadcrumb__text">
                             <div class="breadcrumb__links">
                                 <a href="<%= locals.login ? '/home' : '/'  %>">Home</a>
-                                <span>User Profile</span>
+                                <span class="text-muted">User Profile</span>
                             </div>
                         </div>
                     </div>
@@ -36,7 +36,7 @@
                                     <p class="ml-md-1 m-0 p-0 text-dark" style="font-size: 19px;">Hello ,</p>
                                     <h3 class="  m-0 p-0 text-dark text-center"><%= locals.username %></h3>
                             </div>
-                            <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
+                            <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start mt-2"
                                 id="menu">
                                 <li class="nav-item user-profile">
                                     <a href="/userprofile" class="nav-link align-middle px-0">
@@ -67,6 +67,12 @@
                                     <a href="/api/viewOrder" class="nav-link px-0 align-middle">
                                         <i class="fs-4 fa-solid fa-truck-fast pr-2"></i> <span
                                             class="ms-1 d-none d-sm-inline">Orders</span>
+                                    </a>
+                                </li>
+                                <li class="user-profile">
+                                    <a href="/logout" class="nav-link px-0 align-middle">
+                                        <i class="fs-4 fa-solid fa-arrow-right-from-bracket pr-2 text-dark"></i> 
+                                        <span class="ms-1 d-none d-sm-inline font-weight-bold text-dark">Logout</span>
                                     </a>
                                 </li>
                             </ul>

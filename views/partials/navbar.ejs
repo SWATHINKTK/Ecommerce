@@ -158,6 +158,26 @@
       <div class="loader"></div>
     </div> -->
 
+    <!-- Offcanvas Menu Begin -->
+    <div class="offcanvas-menu-overlay"></div>
+    <div class="offcanvas-menu-wrapper">
+      <div class="offcanvas__text mb-4">
+        <p class="font-weight-bold mb-2">Free shipping, 30-day return or refund guarantee.</p>
+      </div>
+        <div class="offcanvas__nav__option">
+          <a href="/api/viewWishlist"><i class="fa-regular fa-heart fa-lg text-dark"></i></a>
+          <a href="/api/cart"><i class="bi bi-cart3 fa-lg text-dark"></i><span id="Cart-Count" class="badge badge-danger" style="margin-top: -17px; margin-left: 10px; border-radius: 50%; font-weight: 900;"><%= locals.cartCount %></span></a>
+          <a href="/userprofile"><i class="bi bi-person fa-xl text-dark"></i></a>
+        </div>
+        <div id="mobile-menu-wrap"></div>
+        <div class="offcanvas__option">
+          <div class="offcanvas__links">
+              <a href="<%= locals.login ? '/logout' : '/login'  %>" class="font-weight-bold"><%= locals.login ? 'Log Out' : 'Sign in'  %></a>
+          </div>
+      </div>
+    </div>
+    <!-- Offcanvas Menu End -->
+
     <!-- Header Section Begin -->
     <header class="header">
       <div class="header__top">
@@ -169,12 +189,12 @@
               </div>
             </div>
             <div class="col-lg-6 col-md-5">
-              <!-- <div class="header__top__right">
+              <div class="header__top__right">
                 <div class="header__top__links">
                   
-                  <a href="<%= locals.login ? '/logout' : '/login'  %>">adminhelpcenter@gmail.com</a>
+                  <a href="<%= locals.login ? '/logout' : '/login'  %>"><%= locals.login ? '' : 'Sign in'  %></a>
                 </div>
-              </div> -->
+              </div>
             </div>
           </div>
         </div>
@@ -202,7 +222,7 @@
                     <li><a href="./blog-details.html">Blog Details</a></li>
                   </ul>
                 </li>
-                <li><a href="./blog.html">Blog</a></li>
+                <li><a href="/about"> About</a></li>
                 <li><a href="./contact.html">Contacts</a></li>
               </ul>
             </nav>
@@ -221,4 +241,5 @@
       </div>
     </header>
     <!-- Header Section End -->
+
     <% } %>

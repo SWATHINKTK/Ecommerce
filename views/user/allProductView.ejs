@@ -3,11 +3,10 @@
 
     <!-- Breadcrumb Section Begin -->
     <section class="breadcrumb-option">
-        <div class="container">
+        <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="breadcrumb__text">
-                        <h4>Shop</h4>
                         <div class="breadcrumb__links">
                             <a href="/home">Home</a>
                             <span>Shop</span>
@@ -42,11 +41,11 @@
                                         <div class="card-body">
                                             <div class="shop__sidebar__categories">
                                                 <ul class="nice-scroll">
-    
-                                                    <% for(let i = 0; i < categoryData.length ; i++ ) { %>
-                                                        <li><a href="#" name="allProductCategoryFilter" value="<%= categoryData[i]._id %>"><%= categoryData[i].categoryname %></a></li>
+                                                    <% if(categoryData.length > 0) { %>
+                                                        <% for(let i = 0; i < categoryData.length ; i++ ) { %>
+                                                            <li><a href="#" name="allProductCategoryFilter" value="<%= categoryData[i]._id %>"><%= categoryData[i].categoryname %></a></li>
+                                                        <% } %>
                                                     <% } %>
-                                                    
                                                 </ul>
                                             </div>
                                         </div>
@@ -61,8 +60,10 @@
                                         <div class="card-body">
                                             <div class="shop__sidebar__brand">
                                                 <ul>
-                                                    <% for(let i = 0; i < brandData.length ; i++ ) { %>
-                                                        <li><a href="#" name="allProductBrandFilter" value="<%= brandData[i]._id %>"><%= brandData[i].brand_name %></a></li>
+                                                    <% if(brandData.length > 0) { %>
+                                                        <% for(let i = 0; i < brandData.length ; i++ ) { %>
+                                                            <li><a href="#" name="allProductBrandFilter" value="<%= brandData[i]._id %>"><%= brandData[i].brand_name %></a></li>
+                                                        <% } %>
                                                     <% } %>
                                                 </ul>
                                             </div>
@@ -258,11 +259,13 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="product__pagination">
-                                <a href="?page=<%= pageNo > 1 ? pageNo - 1 : 1 %>" class="<%= pageNo == 1 ? 'btn-link disabled' : '' %> " >&laquo;</a>
-                                <% for(let i = 1; i <= totalPages ;i++) { %>
-                                    <a class="active <%= pageNo == i ? 'text-danger' : '' %>" href="?page=<%= i %>"><%= i %></a>
+                                <% if(locals.pageNo){ %>
+                                    <a href="?page=<%= pageNo > 1 ? pageNo - 1 : 1 %>" class="<%= pageNo == 1 ? 'btn-link disabled' : '' %> " >&laquo;</a>
+                                    <% for(let i = 1; i <= totalPages ;i++) { %>
+                                        <a class="active <%= pageNo == i ? 'text-danger' : '' %>" href="?page=<%= i %>"><%= i %></a>
+                                    <% } %>
+                                    <a href="?page=<%= pageNo < totalPages ? parseInt(pageNo) + 1 : totalPages %>" class="<%= pageNo == totalPages ? 'btn-link disabled' : '' %> " >&raquo;</a>
                                 <% } %>
-                                <a href="?page=<%= pageNo < totalPages ? parseInt(pageNo) + 1 : totalPages %>" class="<%= pageNo == totalPages ? 'btn-link disabled' : '' %> " >&raquo;</a>
                             </div>
                         </div>
                     </div>
