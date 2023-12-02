@@ -19,4 +19,21 @@ const isUserLogin = async(req,res,next) =>{
    
 }
 
-module.exports = {isUserLogin};
+
+const isUserLogout = (req, res, next) => {
+    try{
+        if(req.session.userId){
+            res.redirect('/home');
+        }
+        next();
+    }catch(error){
+        console.log(error.message);
+    }
+}
+
+
+
+module.exports = {
+    isUserLogin,
+    isUserLogout
+};

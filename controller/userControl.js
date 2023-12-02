@@ -15,6 +15,7 @@ const { error } = require('console');
 const { chownSync } = require('fs');
 const { threadId } = require('worker_threads');
 const mongoose = require('mongoose');
+const { constants } = require('buffer');
 
 
 // PAYMENT INTEGRATION KEY SETUP
@@ -44,7 +45,7 @@ async function generateRandomOtp(length) {
 
 
 // ***** NODEMAILER TO SEND MAIL TO USERS *****
-async function sendEmail(name, email, otp, html) {
+async function sendEmail( email, html , fromMail = 'swathinktk10@gmail.com' ) {
 
     const transporter = nodemailer.createTransport({
         host: 'smtp.gmail.com',
@@ -58,7 +59,7 @@ async function sendEmail(name, email, otp, html) {
     });
 
     const mailOptions = {
-        from: 'swathinktk10@gmail.com',
+        from: fromMail,
         to: email,
         subject: 'For Verification OTP',
         // html : '<h2> Welcome <span style="color:blue">'+name+'<span> .</h2>'+'<h4>Your OTP :<b>'+otp+'</b></h4>'+'<h3>Thank You For Joinig...</h3>'
@@ -106,7 +107,7 @@ async function securePassword(password) {
 const loadUserLogin = (req, res, next) => {
     try {
         const userId = req.query.refer;
-        res.render('user/userAuthentication', { admin: false, title: 'User' , userId}); 
+        res.render('userAuthentication', { admin: false, title: 'User' , userId}); 
     } catch (error) {
         next(error);
     }
@@ -150,7 +151,7 @@ const storeSignupData = async (req, res, next) => {
        
 
         if (emailExist) {
-            res.render('user/userAuthentication', { admin: false,title:'Sign Up', data: ' &#10060; User email is already exist' });
+            res.render('userAuthentication', { admin: false,title:'Sign Up', data: ' &#10060; User email is already exist' });
 
         } else {
 
@@ -180,7 +181,7 @@ const storeSignupData = async (req, res, next) => {
                         
                         // Sending OTP to Thorough Email
                         const html = `<div style="width: 100%;background: #F5FEFD;text-align:center"><h2>${user.username} Welcome Our Shopping Website</h2><h6>Verification OTP</h6><h3 style="color: red;">${otp}</h3><h2>Thank You For Joining...</h2></div>`
-                        await sendEmail(user.username, user.email, otp, html);
+                        await sendEmail(user.email, html);
 
                         req.session.startTime = Date.now();
                         res.redirect('/otpVerification');
@@ -190,11 +191,11 @@ const storeSignupData = async (req, res, next) => {
                     }
 
                 } else {
-                    res.render('user/userAuthentication', { admin: false,title:'Sign Up', data: 'Must Enter Two Password Same' })
+                    res.render('userAuthentication', { admin: false,title:'Sign Up', data: 'Must Enter Two Password Same' })
                 }
             } else {
 
-                res.render('user/userAuthentication', { admin: false,title:'Sign Up', data: 'Enter All Fields and Again You can register' });
+                res.render('userAuthentication', { admin: false,title:'Sign Up', data: 'Enter All Fields and Again You can register' });
 
             }
         }
@@ -211,7 +212,7 @@ const loadOTPVerification = (req, res, next) => {
     try {
         const userdata = req.session.userData;
         const time = req.session.startTime;
-        res.render('user/otpVerification', { admin: false, title: 'User OTP', email: userdata.email, timer: time });
+        res.render('otpVerification', { admin: false, title: 'User OTP', email: userdata.email, timer: time });
     } catch (error) {
         next(error);
     }
@@ -229,7 +230,7 @@ const resendOTP = async (req, res, next) => {
         const otp = await generateRandomOtp(6);
         req.session.otp = otp;
         const html = `<div style="width: 100%;background: #F5FEFD;text-align:center"><h2>${user.username} Welcome Our Shopping Website</h2><h6>Verification OTP</h6><h3 style="color: red;">${otp}</h3><h2>Thank You For Joining...</h2></div>`;
-        await sendEmail(user.username, user.email, otp,html)
+        await sendEmail( user.email, html)
         req.session.startTime = Date.now();
         res.redirect('/otpVerification');
     } catch (error) {
@@ -424,7 +425,7 @@ const loadHomePage = async (req, res, next) => {
         const wishlist = await wishlistData.findOne({userId:id});
     
 
-        res.render('user/index', { user: true,login:checkLogin,  title: 'Brand Unlimited', dataCategory: categoryData, dataProduct: productData ,dataCart:cart, wishlistData:wishlist, bannerData:banner});
+        res.render('index', { user: true,login:checkLogin,  title: 'Brand Unlimited', dataCategory: categoryData, dataProduct: productData ,dataCart:cart, wishlistData:wishlist, bannerData:banner});
 
     } catch (error) {
         next(error);
@@ -472,12 +473,7 @@ const guestPage = async (req, res, next) => {
             {$sort:{_id:-1}}
         ]);
 
-        // const productsWithCategory = productData.filter(product =>
-        //     product.categoryData.some(category => category.categoryname === 'T-Shirts')
-
-        // );
-
-        res.render('user/index', { user: true,login:false, title: 'Brand Unlimited', dataCategory: categoryData, dataProduct: productData ,bannerData:banner})
+        res.render('index', { user: true,login:false, title: 'Brand Unlimited', dataCategory: categoryData, dataProduct: productData ,bannerData:banner})
     } catch (error) {
         next(error);
     }
@@ -510,7 +506,7 @@ const loadProductDetailPage = async (req, res, next) => {
                 brandData = brand.brand_name
         }
        
-        res.render('user/productDetails', { user: true,login:checkLogin,title: 'Products', product:productData ,category:categoryData, dataBrand:brandData ,dataCart:cart, wishlistData:wishlist})
+        res.render('productDetails', { user: true,login:checkLogin,title: 'Products', product:productData ,category:categoryData, dataBrand:brandData ,dataCart:cart, wishlistData:wishlist})
 
 
     } catch (error) {
@@ -568,18 +564,161 @@ const loadAllProductViewPage = async(req, res, next) =>{
             const cart = await cartData.find({userId:userId});
             const wishlist = await wishlistData.find({userId:userId});
 
-            res.render('user/allProductView',{ user: true,login:checkLogin, title: 'Products', product:productData, wishlistData:wishlist, dataCart:cart , categoryData:categoryInfo, brandData:brand , totalPages:totalCount, pageNo:page});
+            res.render('allProductView',{ user: true,login:checkLogin, title: 'Products',toalProduct:true ,product:productData, wishlistData:wishlist, dataCart:cart , categoryData:categoryInfo, brandData:brand , totalPages:totalCount, pageNo:page});
             return;
 
         }
 
-        res.render('user/allProductView',{ user: true,login:checkLogin, title: 'Products',product:productData, categoryData:categoryInfo, brandData:brand, totalPages:totalCount, pageNo:page});
+        res.render('allProductView',{ user: true,login:checkLogin, title: 'Products',product:productData,toalProduct:true ,categoryData:categoryInfo, brandData:brand, totalPages:totalCount, pageNo:page});
 
     } catch (error) {
 
         next(error);
     }
 }
+
+
+// SHOP PAGE PRODUCT FILTER
+const productFilterData = async(req, res, next) => {
+    try {
+        const checkLogin = req.session.userId ? true : false;
+        console.log(req.url)
+
+        // RETRIEVE THE DATA FROM CLIENT 
+        const filterCategorys = req.query.category;
+        const filterBrands = req.query.brand;
+        const filterPrice = req.query.price;
+        const search = req.query.search;
+        const page = req.query.page ? parseInt(req.query.page) : 1 ;
+
+        // RETRIEVE BRAND AND CATEGORY DATA FOR SEARCH REAULT PAGE SIDE SETTING THE DATA
+        const categoryInfo = await category.find({},{categoryname:1});
+        const brand = await brandInfo.find({},{brand_name:1});
+
+        const limit = 4;
+
+        // AGGREGATION PIPELINE CREATION FUNCTION FUNCTION PLACED BELOW
+        let pipeline = filterPipLine(filterCategorys,filterBrands,filterPrice,categoryInfo,brand,page,search);
+    
+        
+        // RETRIEVE PRODUCT DATA
+        const productData = await productInfo.aggregate(pipeline);
+
+
+        // IF THE PRODUCT EXIST CALCULATE THE DOCUMENT COUNT
+        let totalCount;
+        if(productData){
+
+            pipeline = pipeline.slice(0, pipeline.length - 2)
+
+            pipeline = pipeline.concat([
+                {
+                    $group:{
+                        _id:null,
+                        totalCount:{$sum:1}
+                    }
+                }
+            ]);
+
+            totalCount = await productInfo.aggregate(pipeline);
+        }
+
+        // IF TOTAL COUNT EXIST IT WILL SEND THE RESPONSE WITH THIS DATA OTHER WISE ANOTHER RESPONSE
+        if(totalCount.length != 0){
+
+            totalCount = Math.ceil(totalCount[0].totalCount / limit);
+            res.render('allProductView',{ user: true,login:checkLogin, title: 'Products' , url:req.url, product:productData, categoryData:categoryInfo, brandData:brand, totalPages:totalCount, pageNo:page, searchCategorys:filterCategorys, searchBrand:filterBrands, searchPrice:filterPrice});
+
+        }else{
+            res.render('allProductView',{ user: true,login:checkLogin, title: 'Products', url:req.url, product:productData, categoryData:categoryInfo, brandData:brand,searchCategorys:filterCategorys, searchBrand:filterBrands, searchPrice:filterPrice});
+        }
+
+    } catch (error) {
+        next(error)
+    }
+}
+
+
+// FILTER AGGREGATION PIPLINE CREATION
+function filterPipLine(filterCategorys,filterBrands,filterPrice,categoryInfo,brand,page,search){
+
+    let pipeline = [];
+
+    let limit = 4;
+
+    // QUERY TO GET FILTER DATA FOR CATEGORY IS DONE WITH THIS STATEMENT
+    if (filterCategorys) {
+
+        const categoryIdArray = filterCategorys ? filterCategorys.split(',').map(id => new mongoose.Types.ObjectId(id)) : [];
+
+        pipeline.push({
+          $match: {
+            categoryIds : { $in: categoryIdArray }
+          }
+        });
+    }
+
+    // BRAND FILTERING AGGREAGATION PIPLINE CREATION
+    if (filterBrands) {
+
+        const brandIdArray = filterBrands ? filterBrands.split(',').map(id => new mongoose.Types.ObjectId(id)) : [];
+
+        pipeline.push({
+          $match: {
+            brandname : { $in: brandIdArray }
+          }
+        });
+    }
+
+
+    // FILTER PROCE AGGREAGATION PIPLINE CREATION
+    if (filterPrice) {
+        const priceFilter = {};
+
+        const priceData = filterPrice.split('-');
+        minPrice = parseInt(priceData[0]);
+        maxPrice = parseInt(priceData[1]);
+      
+        if (minPrice) {
+          priceFilter.$gte = minPrice;
+        }
+      
+        if (maxPrice) {
+          priceFilter.$lte = maxPrice;
+        }
+      
+        pipeline.push({
+          $match: {
+            price : priceFilter
+          }
+        });
+    }
+
+
+    // SEARCH DATA ADDED TO PIPELINE
+    if(search){
+        pipeline.push({
+            $match: {
+                productName : { $regex: search, $options: 'i' } 
+            }
+          });
+    }
+
+
+      // Add additional aggregations 
+      pipeline = pipeline.concat([
+        {
+            $sort: { _id: -1 }
+        },
+        {   $skip: (page - 1) * limit },
+        {   $limit: limit * 1 }
+    ]);
+
+    return pipeline;
+      
+}
+
+
 
 
 
@@ -594,7 +733,7 @@ const loadSpecificCategoryProducts = async(req, res, next) => {
         const categoroys = await category.find({});
         const brands = await brandInfo.find({});
         
-        res.render('user/allProductView',{ user: true,login:checkLogin, title: 'Products',product:productData ,categoryData:categoroys , brandData:brands});
+        res.render('allProductView',{ user: true,login:checkLogin, title: 'Products',product:productData ,categoryData:categoroys , brandData:brands});
     } catch (error) {
         next(error);
     }
@@ -611,7 +750,7 @@ const loadUserProfile = async function(req, res, next){
         const id = req.session.userId;
         const data = await userData.findOne({_id:id});
         if(data){
-            res.render('user/userProfile',{user:true, login:checkLogin, userInfo:data, title:'User Profile'});
+            res.render('userProfile',{user:true, login:checkLogin, userInfo:data, title:'User Profile'});
         }else{
             throw new Error('Not Found error');
         }
@@ -660,7 +799,7 @@ const loadAddressInformation = async(req, res, next)=>{
         const addressData = await addressInfo.find({userId:id});
 
         if(addressData){
-            res.render('user/addressInformation',{title:'Address', login:checkLogin, user: true, login:checkLogin, address:addressData});
+            res.render('addressInformation',{title:'Address', login:checkLogin, user: true, login:checkLogin, address:addressData});
         }else{
             throw new Error('Not Found Error');
         }      
@@ -677,7 +816,7 @@ const loadAddressForm = async(req, res, next)=>{
     try {  
 
         const checkLogin = req.session.userId ? true : false;
-        res.render('user/addressForm',{ title:'Add New Address' ,login:checkLogin ,user: true,login:checkLogin});
+        res.render('addressForm',{ title:'Add New Address' ,login:checkLogin ,user: true,login:checkLogin});
         
     } catch (error) {
         next(error);
@@ -741,11 +880,11 @@ const loadEditAddressForm = async(req, res, next) =>  {
         if(addressData){
 
             if(req.query.url){
-                res.render('user/checkoutEditAddress',{ title:'Update Address' ,login:checkLogin , user: true, login:checkLogin, address:addressData});
+                res.render('checkoutEditAddress',{ title:'Update Address' ,login:checkLogin , user: true, login:checkLogin, address:addressData});
                 return;
             }
 
-            res.render('user/editAddress',{ title:'Update Address' ,login:checkLogin , user: true, login:checkLogin, address:addressData});
+            res.render('editAddress',{ title:'Update Address' ,login:checkLogin , user: true, login:checkLogin, address:addressData});
         }else{
             throw new Error('Data Is Not Found')
         }
@@ -868,7 +1007,7 @@ const loadWalletPage = async(req, res, next) => {
 
         if(walletData){
 
-            res.render('user/wallet',{ title:'Wallet' ,login:checkLogin ,user: true, dataWallet:walletData});
+            res.render('wallet',{ title:'Wallet' ,login:checkLogin ,user: true, dataWallet:walletData});
 
         }else{
             throw new Error('server Error');
@@ -929,14 +1068,57 @@ const walletPaymentVerification = async(req, res, next) => {
 }
 
 
-const loadAboutPage = (req , res , next) => {
+const loadAboutPage = async(req , res , next) => {
     try {
-        const checkLogin = req.session.userId ? true : false;
 
-        res.render('user/about',{ title:'About' ,login:checkLogin ,user: true});
+        const categorys = await category.countDocuments({});
+        const users = await userData.countDocuments({});
+        const brands = await brandInfo.aggregate([
+                {
+                    $match: {
+                        status: true
+                    }
+                },
+                {
+                    $group: {
+                        _id: null,
+                        totalStatusTrue: { $sum: 1 },
+                        brands: {
+                        $push: {
+                            brand_name: '$brand_name',
+                            brand_logo: '$brand_logo'
+                        }
+                        }
+                    }
+                },
+                {
+                    $project: {
+                        _id: 0,
+                        totalStatusTrue: 1,
+                        brands: 1
+                    }
+                },
+                {
+                    $unwind:"$brands"
+                }
+        ]);
+
+
+        res.render('about',{ title:'About' ,user: true ,categoryCount:categorys,userCount:users,brandData:brands});
         
     } catch (error) {
         next(error)
+    }
+} 
+
+
+
+// ABOUT PAGE LOADING
+const loadContactPage = (req, res, next) => {
+    try {
+        res.render('contact',{ title:'Contact' ,user: true });
+    } catch (error) {
+        next(error);
     }
 }
 
@@ -946,13 +1128,13 @@ const loadAboutPage = (req , res , next) => {
 
 // ***** 500 - ERROR PAGE LOADING *****
 const load500ErrorPage = (req, res) => {
-    res.render('partials/error-500', { admin: true })
+    throw new Error('Server Error');
 }
 
 
 // ****  404 - ERROR PAGE LOADING  *****
 const load404ErrorPage = (req, res) => {
-    res.render('partials/error-404')
+    throw new Error('Server Error');
 }
 
 
@@ -979,6 +1161,7 @@ module.exports = {
     deleteAddress,
     loadEditAddressForm,
     loadAllProductViewPage,
+    productFilterData,
     loadSpecificCategoryProducts,
     loadProductDetailPage,
     editUserInformations,
@@ -989,7 +1172,8 @@ module.exports = {
     loadAddressForm,
     load500ErrorPage,
     load404ErrorPage,
-    loadAboutPage
+    loadAboutPage,
+    loadContactPage
 }
 
 

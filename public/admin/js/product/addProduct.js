@@ -394,9 +394,9 @@ async function submitNewProductData(imageFile,brandId){
             body:formData
         })
 
-        if(!response.ok){
-            window.location.href = '/admin/error500'
-        }
+            if(!response.ok){
+                window.location.href = '/admin/error500'
+            }
 
         const data = await response.json();
 

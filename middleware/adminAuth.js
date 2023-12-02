@@ -1,15 +1,32 @@
 const isAdminLogin = async(req, res, next)=>{
     try {
-        // console.log(req)
-        if(!(req.session.adminId)){
-            res.status(401).redirect('/admin?authFailed=true');      
+        if(req.session.adminId){   
         }else{
-            next();
+            res.status(401).redirect('/admin?authFailed=true');
+            return;    
         }
+        next();
         
     } catch (error) {
         next(error);
     }
 }
 
-module.exports = {isAdminLogin};
+const isAdminLogout = (req, res, next) => {
+    try{
+        if(req.session.adminId){
+            res.redirect('/admin/home');
+            return;
+        }
+        next();
+    }catch(error){
+        console.log(error.message);
+    }
+}
+
+
+
+module.exports = {
+    isAdminLogin,
+    isAdminLogout
+};

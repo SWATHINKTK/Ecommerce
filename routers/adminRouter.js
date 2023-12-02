@@ -76,7 +76,7 @@ const uploadCategoryImage = multer({storage:uploadCategoryImg});
 /* =========================================================== All Routing  Request in Admin Panel Order GET > POST > PATCH==================================================== */
 
 //*** Login Routing *** 
-adminRouter.get('/',adminController.loadAdminLogin);
+adminRouter.get('/', auth.isAdminLogout, adminController.loadAdminLogin);
 adminRouter.get('/home', auth.isAdminLogin, adminController.loadAdminHomepage);
 adminRouter.post('/',adminController.verifyLogin);
 adminRouter.post('/logout',adminController.logoutAdmin);
