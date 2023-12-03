@@ -1,143 +1,193 @@
-<div class="col-12 grid-margin mt-5">
+<h1 class="card-title text-center text-dark">Edit Product Data</h1>
+<div class="col-12 grid-margin mt-5 addproductpage">
     <div class="card">
       <div class="card-body">
-        <h4 class="card-title">Edit Product</h4>
-        <form class="form-sample">
-          <p class="card-description"> Personal info </p>
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group row">
-                <label class="col-sm-3 col-form-label">First Name</label>
-                <div class="col-sm-9">
-                  <input type="text" class="form-control" />
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group row">
-                <label class="col-sm-3 col-form-label">Last Name</label>
-                <div class="col-sm-9">
-                  <input type="text" class="form-control" />
-                </div>
-              </div>
-            </div>
+      <div class="">
+        <form id="editProduct-form">
+          <div class="" role="alert" id="edit-product-submit-result">
           </div>
+          <input type="hidden" value="<%= dataProduct._id %>" name="productId">
+          <p class="card-description">  </p>
           <div class="row">
             <div class="col-md-6">
-              <div class="form-group row">
-                <label class="col-sm-3 col-form-label">Gender</label>
-                <div class="col-sm-9">
-                  <select class="form-control">
-                    <option>Male</option>
-                    <option>Female</option>
-                  </select>
+              <div class="form-group">
+                <label class="col-sm-3 col-form-label">Product Name</label>
+                <div class="col-sm-12 form-style">
+                  <input type="text" class="form-control" name="editProductName" id="productname" value="<%= dataProduct.productName %>">
+                  <p class="text-danger ml-2" name="validate-addProduct"></p>
                 </div>
               </div>
             </div>
             <div class="col-md-6">
-              <div class="form-group row">
-                <label class="col-sm-3 col-form-label">Date of Birth</label>
-                <div class="col-sm-9">
-                  <input class="form-control" placeholder="dd/mm/yyyy" />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group row">
+              <div class="form-group">
                 <label class="col-sm-3 col-form-label">Category</label>
-                <div class="col-sm-9">
-                  <select class="form-control">
-                    <option>Category1</option>
-                    <option>Category2</option>
-                    <option>Category3</option>
-                    <option>Category4</option>
-                  </select>
+                <div class="col-sm-12">
+                  <div class="multiselect">
+                    <div class="select-box form-control" id="select-box">
+                        <div class="selected-options" id="productcategory">
+                          <% for(let i=0;i<dataCategory.length;i++){ %>
+                            <%if( dataProduct.categoryIds.includes(dataCategory[i]._id)){ %>
+                              <%= dataCategory[i].categoryname %>,
+                          <% } }%>   
+                        </div>
+                        <div class="arrow">&#9660;</div>
+                    </div>
+                    <input type="hidden" value="<%= dataProduct.categoryIds %>" id="categoryHidden">
+                    <p class="text-danger ml-2" name="validate-addProduct"></p>
+                    <div class="options-container" id="options-container">
+                        <% for(let i=0;i<dataCategory.length;i++){ %>
+                        <div class="option">
+                            <label><input type="checkbox" class="option-input" data-category-id="<%= dataCategory[i]._id %>" value="<%= dataCategory[i].categoryname %>"
+                              <%= dataProduct.categoryIds.includes(dataCategory[i]._id) ? 'checked' : '' %>><%= dataCategory[i].categoryname %></label>
+                        </div>
+                        <% } %>
+                    </div>
+                </div>
+            
                 </div>
               </div>
             </div>
+          </div>
+          <div class="row form-style">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label class="col-sm-12 col-form-label">Description</label>
+                <div class="col-sm-12">
+                  <textarea class="form-control" id="productdescription" rows="4" name="productDescription"><%= dataProduct.description %></textarea>
+                  <p class="text-danger ml-2" name="validate-addProduct"></p>
+                </div>
+              </div>
+            </div>
+          </div>
+           
+          <div class="row">
+            <div class="col-md-6 form-style">
+              <div class="form-group">
+                <label class="col-sm-3 col-form-label">Brand Name</label>
+                <div class="col-sm-12">
+                  <select id="productbrandname" class="brand-dropdown" >
+                    
+                    <%for(let brand of dataBrand){
+                      if(dataProduct.brandname.equals(brand._id)){ %>
+                        <option value="<%= brand._id %>" id="productBrandId"><%= brand.brand_name %></option>
+                      <% } %> 
+                    <% } %>  
+                  </select>
+                  <p class="text-danger ml-2" name="validate-addProduct"></p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 form-style">
+              <div class="form-group ">
+                <label class="col-sm-3 col-form-label">Stock</label>
+                <div class="col-sm-12">
+                  <input type="number" class="form-control" name="productStock" id="productstock" value="<%= dataProduct.stock %>" >
+                  <p class="text-danger ml-2" name="validate-addProduct"></p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row form-style">
             <div class="col-md-6">
-              <div class="form-group row">
-                <label class="col-sm-3 col-form-label">Membership</label>
-                <div class="col-sm-4">
-                  <div class="form-check">
-                    <label class="form-check-label">
-                      <input type="radio" class="form-check-input" name="membershipRadios" id="membershipRadios1" value="" checked> Free </label>
+              <div class="form-group ">
+                <label class="col-sm-3 col-form-label">Price</label>
+                <div class="col-sm-12">
+                  <input type="number" class="form-control" name="productPrice" id="productprice" value="<%= dataProduct.price %>">
+                  <p class="text-danger ml-2" name="validate-addProduct"></p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 form-style">
+              <div class="form-group ">
+                <label class="col-sm-3 col-form-label">Size</label>
+                <div class="col-sm-12">
+                  <input type="text" class="form-control" name="productSize" id="productsize" value="<%= dataProduct.size %>">
+                  <p class="text-danger ml-2" name="validate-addProduct"></p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row form-style">
+            <div class="col-md-6">
+              <div class="form-group ">
+                <label class="col-sm-3 col-form-label">Material</label>
+                <div class="col-sm-12">
+                  <input type="text" class="form-control" name="productMaterial" id="productmaterial" value="<%= dataProduct.material %>">
+                  <p class="text-danger ml-2" name="validate-addProduct"></p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 form-style">
+              <div class="form-group ">
+                <label class="col-sm-3 col-form-label">Color</label>
+                <div class="col-sm-2 rounded-3">
+                  <input type="color" class="form-control pt-2 pb-2 color-addproduct" id="productcolor" value="<%= dataProduct.color %>" title="Choose product color" name="productColor">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row form-style">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label class="col-sm-12 col-form-label">Image</label>
+                <div class="col-sm-12">
+                  <input type="file" class="form-control" id="productImage" accept="image/*" multiple>
+                  <p class="text-danger ml-2" name="validate-addProduct"></p>
+                  <div id="edit-image-preview-main-div" class="form-style bg-white image-preview-main-div">
+                    <div id="product-image-preview" class="form-style bg-white product-image-preview">
+                      <% for(let i=0;i<dataProduct.productImages.length;i++){ %>
+                        <img src="/public/admin/assets/productImages/<%= dataProduct.productImages[i] %>" name='<%= i %>'>
+                        <div class="imagePreview-BtnDiv" id="btnDiv<%= i %>">
+                          <button id="<%= i %>" class="remove"><i class="bi bi-x remove" id="<%= i %>"></i></button>
+                          <button id="cropperBtn<%= i %>" class="cropperBtn-product"><i class="mdi mdi-crop cropperBtn" id="cropperBtn<%= i %>" name="<%= i %>"></i></button>
+                        </div>
+                      <% } %>
+                    </div>
+                    <input type="hidden" value="<%= dataProduct.productImages %>" id="oldImages" >
                   </div>
                 </div>
-                <div class="col-sm-5">
-                  <div class="form-check">
-                    <label class="form-check-label">
-                      <input type="radio" class="form-check-input" name="membershipRadios" id="membershipRadios2" value="option2"> Professional </label>
-                  </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row form-style">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label class="col-sm-12 col-form-label">Specifications</label>
+                <div class="col-sm-12">
+                  <textarea class="form-control" rows="4" id="productspecification" name="productSpecification" placeholder="*specifications seprated using commas"><%= dataProduct.specifications %></textarea>
+                  <p class="text-danger ml-2" name="validate-addProduct"></p>
                 </div>
               </div>
             </div>
           </div>
-          <p class="card-description"> Address </p>
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group row">
-                <label class="col-sm-3 col-form-label">Address 1</label>
-                <div class="col-sm-9">
-                  <input type="text" class="form-control" />
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group row">
-                <label class="col-sm-3 col-form-label">State</label>
-                <div class="col-sm-9">
-                  <input type="text" class="form-control" />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group row">
-                <label class="col-sm-3 col-form-label">Address 2</label>
-                <div class="col-sm-9">
-                  <input type="text" class="form-control" />
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group row">
-                <label class="col-sm-3 col-form-label">Postcode</label>
-                <div class="col-sm-9">
-                  <input type="text" class="form-control" />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group row">
-                <label class="col-sm-3 col-form-label">City</label>
-                <div class="col-sm-9">
-                  <input type="text" class="form-control" />
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group row">
-                <label class="col-sm-3 col-form-label">Country</label>
-                <div class="col-sm-9">
-                  <select class="form-control">
-                    <option>America</option>
-                    <option>Italy</option>
-                    <option>Russia</option>
-                    <option>Britain</option>
-                  </select>
-                </div> 
-              </div>
-            </div>
-          </div>
-          <button type="submit" class="btn btn-primary mr-2">Submit</button>
-          <button class="btn btn-dark">Cancel</button>
+          <button type="submit" class="btn btn-primary mr-3 ml-3" id="product-submit">Submit</button>
+          <a href="/admin/home" class="btn btn-dark">Cancel</a>
         </form>
       </div>
     </div>
+    </div>
   </div>
+
+
+  <div class="modal w-100" id="addProductCropModal">
+    <div class="modal-dialog modal-dialog-centered w-100">
+      <div class="modal-content bg-white" style="height: 400px;">
+          <button type="button" class="close bg-white" id="addProductImageCropClose"><span aria-hidden="true">&times;</span></button>
+          <div class="d-flex justify-content-center m-2 ">
+            <button type="button" class="btn mt-2 text-dark addBrandCropBtn " id="addProductCropResult" name="" style=" box-shadow: 0 3px 10px rgb(0, 0, 0,0.5); border: 1px dashed #000; border-radius: 4px;"><i class="mdi mdi-crop"></i> Crop</button>
+          </div>
+          <img id="addProductCroppingImageView" src="" alt="" style="height:auto; object-fit: cover;">
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+

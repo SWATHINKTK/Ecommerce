@@ -1,60 +1,104 @@
 <%- include('../partials/header.ejs') %>
-    <div class="col-12 grid-margin stretch-card">
-    <div class="card">
-      <div class="card-body  mt-5">
-        <h4 class="card-title text-center">View Orders&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
-        <!-- <p class="card-description"> Add class <code>.table-hover</code> -->
-        </p>
-        <div class="table-responsive">
+<h1 class="card-title text-center text-dark">Order Details</h1>
+  <div class="col-12 grid-margin stretch-card">
+    <div class="card card-div">
+      
+      <div class="card-body  mt-3" >
+
+        <!-- BUTTON FILTER DATA BUTTONS -->
+        <div class="d-grid gap-4 d-md-flex justify-content-md-end search">
+          <button type="button" class="btn btn-search" id="toggleSearch" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" ><i class="bi bi-search"></i></button>
+          <button type="button" class="btn bg-white  ml-2" data-toggle="collapse" data-target="#filterData" aria-expanded="false" aria-controls="filterData"><i class="bi bi-funnel-fill text-dark"></i></button>
+        </div>
+
+        
+         <!-- SEARCH DIV -->
+        <div class="<%= locals.search ? 'collapse show' : 'collapse' %>" id="collapseExample">
+          <div class="card card-body pr-0">
+            <div class="d-grid gap-4 d-md-flex justify-content-md-end search">
+              <input type="text" class="form-control col-3 mr-2 " id="orderSearch" placeholder="Order Id Search" name="orderSearch" value="<%= locals.search ? search : '' %>">
+              <button type="button" class="btn btn-search" id="orderSearchBtn" style="height: 37px;"><i class="bi bi-search"></i></button>
+              <a href="/api/orderlist" class="btn btn-search pr-0 pl-1" ><i class="mdi mdi-close-circle-outline icon-md text-danger"></i></a>
+            </div>
+          </div>
+        </div>
+
+        <!-- FILTER DATE DIV -->
+        <div class="<%= locals.startDate ? 'collapse show' : 'collapse' %>" id="filterData">
+          <div class="card card-body pt-2 pr-0">
+              <div class="d-grid gap-4 d-md-flex justify-content-md-end search" >
+                <div class="form-group" style="width: 14.5%;">
+                  <label for="startDate">Start Date</label>
+                  <input type="date" class="form-control" id="startDate" name="startDate" placeholder="Select Start Date" value="<%= locals.startDate ? startDate : '' %>" >
+                </div>
+              
+                <div class="form-group ml-2" style="width: 14.5%;">
+                  <label for="endDate">End Date</label>
+                  <input type="date" class="form-control" id="endDate" name="endDate" placeholder="Select End Date" value="<%= locals.endDate ? endDate : '' %>">
+                </div>  
+                <button type="button" class="btn btn-search ml-2 mt-4" id="dateSearch" style="height: 37px;"><i class="bi bi-search"></i></button>
+                <a href="/api/orderlist"  class="btn btn-search mt-4 py-1 px-1 pr-0"  style="height: 37px;"><i class="mdi mdi-close-circle-outline icon-md text-danger"></i></a>
+              </div>
+          </div>
+        </div>
+        
+        <div class="table-responsive mt-4">
           <table class="table table-hover">
             <thead>
               <tr>
                 <th>#</th>
-                <th>User</th>
-                <th>Product</th>
-                <th>Sale</th>
-                <th>Status</th>
+                <th>Order Id</th>
+                <th>Total</th>
+                <th>Places On</th>
+                <th>Updated On</th>
+                <th>Manage</th>
               </tr>
             </thead>
-            <tbody class="text-white">
-              <tr>
-                <td>1</td>
-                <td>Jacob</td>
-                <td>Photoshop</td>
-                <td class="text-danger"> 28.76% <i class="mdi mdi-arrow-down"></i></td>
-                <td><label class="badge badge-danger">Pending</label></td>
-              </tr>
-              <tr>
-                <td>1</td>
-                <td>Messsy</td>
-                <td>Flash</td>
-                <td class="text-danger"> 21.06% <i class="mdi mdi-arrow-down"></i></td>
-                <td><label class="badge badge-warning">In progress</label></td>
-              </tr>
-              <tr>
-                <td>1</td>
-                <td>John</td>
-                <td>Premier</td>
-                <td class="text-danger"> 35.00% <i class="mdi mdi-arrow-down"></i></td>
-                <td><label class="badge badge-info">Fixed</label></td>
-              </tr>
-              <tr>
-                <td>1</td>
-                <td>Peter</td>
-                <td>After effects</td>
-                <td class="text-success"> 82.00% <i class="mdi mdi-arrow-up"></i></td>
-                <td><label class="badge badge-success">Completed</label></td>
-              </tr>
-              <tr>
-                <td>1</td>
-                <td>Dave</td>
-                <td>53275535</td>
-                <td class="text-success"> 98.05% <i class="mdi mdi-arrow-up"></i></td>
-                <td><label class="badge badge-warning">In progress</label></td>
-              </tr>
+            <tbody class="text-white" id="orderDataTableBody">
+              <% if(orderData.length > 0) { %>
+                <% for(let i= 0 ; i < orderData.length ; i++) { %>
+                  <tr>
+                    <td><%= (5 * (page - 1)) + i+1 %></td>
+                    <td><%= orderData[i].order_id %></td>
+                    <td><%= orderData[i].totalAmount %></td>
+                    <td><%= orderData[i].createdAt.toLocaleDateString() %></td>
+                    <td><%= orderData[i].updatedAt.toLocaleDateString() %></td>
+                    <td><a href='/api/orderManage<%= orderData[i]._id %>'  class="btn btn-warning">Manage</a></td>
+                  </tr>
+                <% } %>
+              <% } else {%> 
+                <tr class="bg-danger">
+                  <th class="text-dark text-center" colspan="6">ORDER NOT EXIST</th>
+                </tr>
+              <% } %>
             </tbody>
           </table>
         </div>
+
+        <!-- PAGENATION -->
+        <div class="d-flex justify-content-center mt-4 ">
+          <nav aria-label="Page navigation example">
+            <ul class="pagination" >
+              <li class="page-item" >
+                <a class="page-link <%= page == 1 ? 'btn-link disabled' : '' %>" href="?page=<%= page > 1 ? page -1 : 1  %><%= locals.search ? '&value='+ search : '' %><%= locals.startDate ? '&startDate=' +startDate : '' %><%= locals.endDate ? '&endDate=' +endDate : '' %>" >
+                  <span aria-hidden="true" >&laquo;</span>
+                  <span class="sr-only">Previous</span>
+                </a>
+              </li>
+              <% for(let i = 1; i <= totalPages ;i++) { %>
+                <li class="page-item"><a class="page-link <  <%= page == i ? 'text-danger font-weight-bold' : '' %>" href="?page=<%= i %><%= locals.search ? '&value='+ search : '' %><%= locals.startDate ? '&startDate=' +startDate : '' %><%= locals.endDate ? '&endDate=' +endDate : '' %>"><%= i %></a></li>
+              <% } %>
+
+              <li class="page-item">
+                <a class="page-link <%= page == totalPages ? 'btn-link disabled' : '' %>" href="?page=<%= page < totalPages ? parseInt(page) + 1 : totalPages  %><%= locals.search ? '&value='+ search : '' %><%= locals.startDate ? '&startDate=' +startDate : '' %><%= locals.endDate ? '&endDate=' +endDate : '' %>" aria-label="Next">
+                  <span aria-hidden="true">&raquo;</span>
+                  <span class="sr-only">Next</span>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+
       </div>
     </div>
   </div>

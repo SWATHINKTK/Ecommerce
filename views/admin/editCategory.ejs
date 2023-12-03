@@ -1,24 +1,70 @@
+<h1 class="card-title text-center text-dark">Edit Category Details</h1>
 <div class="col-12 grid-margin stretch-card">
   <div class="card">
-    <div class="card-body">
-      <h4 class="card-title mb-4">Add Category</h4>
-      <p class="card-description" id="categorysuccess"></p>
-      <form class="forms-sample" id="addCategoryForm" method="POST">
-        <p id="response"></p>
+    <div class="card-body form-style">
+      <form class="forms-sample mb-3" id="editCategoryForm" method="POST">
         <div class="form-group">
           <label for="exampleInputName1">Category Name</label>
+<<<<<<< HEAD
           <input type="text" class="form-control" id="categoryname" placeholder="Category Name" name="categoryname" value="<%= locals.name ? name : '' %>">
         </div>
         <div class="form-group">
           <label for="exampleTextarea1">Description</label>
           <textarea class="form-control" id="description" rows="4" name="description"><%= locals.description ? description : '' %></textarea>
+=======
+          <input type="text" class="form-control" id="categoryname" placeholder="Category Name" name="categoryname" value="<%= data.categoryname %>">
+          <p class="text-danger ml-2" name="validate-category"></p>
+
+          <!-- Hidden to Take Category Name and Id -->
+          <input type="hidden" id="oldCategory" name="oldCategoryName" value="<%= data.categoryname %>">
+          <input type="hidden" id="categoryid" name="categoryid" value="<%= data._id %>">
+          <input type="hidden" id="oldImage" name="oldImage" value="<%= data.category_image %>">
+
+        </div>
+        <div class="form-group ">
+          <label class="col-sm-3 col-form-label">Image</label>
+          <input type="file" class="form-control" id="edit-categoryImage" name="categoryImage" accept="image/*" onchange="editCategoryimageView(this)">
+          <p class="text-danger ml-2" name="validate-category"></p>
+
+          <!-- Image View -->
+          <div  class="ml-3" id="editCategoryImagePreview">
+            <img class="category-image" id="edit-category-img-view" src="/public/admin/assets/categoryImages/<%= data.category_image %>" alt="Category Image File"><br>
+            <button type="click" class="mt-2 bg-transparent addBrandCropBtn ml-auto" id="editCategory-CropperWindowView"><i class="mdi mdi-crop"></i> Crop</button>
+          </div>
+
+        </div>
+        <div class="form-group">
+          <label for="exampleTextarea1">Description</label>
+          <textarea class="form-control" id="category-description" rows="4" name="categoryDescription" ><%= data.description %></textarea>
+          <p class="text-danger ml-2" name="validate-category"></p>
+>>>>>>> master
         </div>
         <button type="submit" class="btn btn-primary mr-2" id="categorysubmit">Submit</button>
-        <button class="btn btn-dark" >Cancel</button>
-        
-        <!-- <input type="button" value="submit" id="swathin"> -->
-
+        <a href="/admin/home" class="btn btn-dark">Cancel</a>
       </form>
+      <div class="" role="alert" id="edit-category-submit-result">
+      </div>
+    </div>
+  </div>
+<<<<<<< HEAD
+</div>
+=======
+</div>
+<!-- MODAL FOR IMAGE CROPPING  -->
+<div class="modal w-100" id="editCategory-cropper-modal">
+  <div class="modal-dialog modal-dialog-centered w-100">
+    <div class="modal-content bg-white" style="height: 400px;">
+        <button type="button" class="close bg-white" onclick="editCategoryCropperClose()"><span aria-hidden="true">&times;</span></button>
+        <div class="d-flex justify-content-center m-2 ">
+          <button type="button" class="btn mt-2 text-dark addBrandCropBtn " id="editCategory-cropResult" style=" box-shadow: 0 3px 10px rgb(0, 0, 0,0.5); border: 1px dashed #000; border-radius: 4px;"><i class="mdi mdi-crop"></i> Crop</button>
+        </div>
+        <img id="editCategory-cropper-Image" src="" alt="" style="height:auto; object-fit: cover;">
+
+      </div>
     </div>
   </div>
 </div>
+<script src="/public/admin/js/editCategory.js"></script>
+
+
+>>>>>>> master

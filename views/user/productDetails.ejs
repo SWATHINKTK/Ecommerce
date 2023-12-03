@@ -1,0 +1,130 @@
+<%- include('../partials/header.ejs') %>
+    <%- include('../partials/navbar.ejs') %>
+
+    <section class="user-profile-main">
+        <!-- Breadcrumb Section Begin -->
+        <section class="breadcrumb-option">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="breadcrumb__text">
+                            <div class="breadcrumb__links">
+                                <a href="<%= locals.login ? '/home' : '/'  %>">Home</a>
+                                <span class="text-muted">Product Details</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </section>
+    <section class="shop-details">
+        <div class="d-flex justify-content-center mainproductDetail-div">
+            
+            <div class="thumbnailImg">
+                <div class="productdetail-imgTemp" id="image-temp">
+                    <div class="tempImg" ><img src="/public/admin/assets/productImages/<%= product.productImages[0] %>" alt="" id="image-thumb"></div>
+                    <div class="tempImg"><img src="/public/admin/assets/productImages/<%= product.productImages[1] %>" alt="" id="image-thumb"></div>
+                    <div class="tempImg"><img src="/public/admin/assets/productImages/<%= product.productImages[2] %>" alt="" id="image-thumb"></div>
+                    <div class="tempImg"><img src="/public/admin/assets/productImages/<%= product.productImages[0] %>" alt="" id="image-thumb"></div>
+                    
+                </div>
+            </div>
+            <div class="productDetail-Img w-100" id="imageView-Div" style="overflow: hidden;">
+                <img src="/public/admin/assets/productImages/<%= product.productImages[0] %>" id="divInsideImage" >
+            </div>
+            <div class="productDetail-body">
+                <ul type="none" class="productdetail-ul">
+                    <li>
+                        <div class="d-flex">
+                            <h4 class="font-weight-bold text-muted"><%= dataBrand %></h4>
+
+                            <% if(locals.wishlistData ? wishlistData.wishlistProducts.includes(product._id) : false) { %>
+                                <a href="#" name="addToWishlist" data-cart="true" class="ml-auto bg-white" style="height: 35px;border-radius: 50%;box-shadow: 0 0 15px -2px #6f6e6e;">
+                                    <i class="fa-solid text-danger fa-heart fa-lg fa-lg  py-3 px-2" data-wishlist-productId="<%= product._id %>"></i>
+                                </a>
+                            <% } else { %> 
+                                <a href="#" name="addToWishlist" data-cart="true" class="ml-auto bg-white" style="height: 35px;border-radius: 50%;box-shadow: 0 0 15px -2px #6f6e6e;">
+                                    <i class="fa-regular text-dark fa-heart fa-lg fa-lg  py-3 px-2" data-wishlist-productId="<%= product._id %>"></i>
+                                </a>
+                            <% } %>
+                        </div>
+                    </li>
+                    <li class="text-center mt-5">
+                        <h3 class="font-weight-bold "><%= product.productName %></h3>
+                    </li>
+                    <li class="price mt-4" >
+                       <h4 class="font-weight-bold" style="font-size: 2rem;"><i class="bi bi-currency-rupee"></i><span id="product-price"><%= product.price %> </h4>
+                        <% if(locals.product.offerId) { %>
+                           <span class="text-muted" style="font-size: 1.1rem;"><del>₹<%= product.MRP %></del> <span class="ml-2 font-weight-bold text-success" style="font-size: 1rem;"> <%= product.offerPercentage %>% Off </span> </span>
+                        <% } %>
+                        </span>
+                    </li>
+                    <!-- <li class="mt-2 mb-4">
+                        <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i>
+                    </li> -->
+                    <li class="my-3">
+                        <span class="product-heading font-weight-bold">Category : </span>
+                            <% for(let i=0;i<category.length;i++){ %>
+                                <% if(product.categoryIds.includes(category[i]._id)) {%>
+                                  <%= category[i].categoryname %>&nbsp;
+                              <% } }%>
+                    </li>
+                    <li class="mb-3">
+                        <% if(product.stock > 0) {%>
+                            <span class="product-heading font-weight-bold text-success" style="font-size: 1.3rem">in stock  </span>
+                        <% } %> 
+                        <span class="text-danger font-weight-bold" style="font-size: 1.3rem">
+                            <% if(product.stock <= 0) {%>
+                                Out Of Stock
+                            <% } else if(product.stock <= 10) {%>
+                                 <%= product.stock %> left
+                            <% } %>
+                        </span> 
+                    </li>
+                    <li class="d-flex mb-3"><span class="product-heading font-weight-bold">Color : </span> <div id="productdetail-color-view" name="<%= product.color %>" ></div></li>
+                    <li class="mb-3"><span class="product-heading font-weight-bold">Size : </span> <span class="text-primary font-weight-bold"><%= product.size %> </span> </li>
+                    <li class="mb-3"><span class="product-heading font-weight-bold">Material : </span> <span class="text-primary font-weight-bold"><%= product.material %> </span> </li>
+                    <!-- <li class="mb-3"><span class="product-heading">Quanitity : </span><input type="number" class="quantity" name="quanitity" id="product-quanitity" min="1" max="<%= product.stock %>" value="1"></li> -->
+                    <div class="product__details__btns__option">
+                        <!-- <a href="#"><i class="fa fa-heart"></i> add to wishlist</a> -->
+                        
+                        <!-- <a href="#"><i class="fa fa-exchange"></i> Add To Compare</a> -->
+                    </div>
+                    <li>
+                        <div class="d-flex productDetailButtons">
+
+                            <% if(product.stock > 0 ) {%> 
+                            <div id="addToCart">
+                                <% if(!dataCart){ %>
+                                    <button class="btn btn btn-warning  btn-addToCart px-4 py-2" data-product-id="<%= product._id %>" data-stock="<%= product.stock %>" onclick="addToCart(this)">Add To Cart</button>
+                                <% } else { %>
+                                    <a href="/api/cart" class="btn btn btn-warning  btn-addToCart px-4 py-2"><i class="bi bi-cart3 fa-lg text-dark"></i> Go To Cart</a>
+                                <% } %>
+                            </div>
+                        
+                            
+                                <button class="btn btn btn-warning btn-buyNow px-5 py-2" id="buyNowBtn" data-url="/api/checkout?id=<%= product._id %>&single=true">Buy Now</button>
+                            <% } else {%>
+                                <!-- <div class="text-center"> -->
+                                    <h5 class="text-danger font-weight-bold">Restocking soon....</h5>
+                                <!-- </div> -->
+                            <% } %>
+                        </div>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="mt-5 ml-4 mr-4  productDetail-lastSection">
+        <h2>Description</h2>
+        <span>&nbsp;&nbsp;&nbsp;&nbsp;<%= product.description %></span>
+    </section>
+    <section class="mt-5 ml-4 mr-4 mb-5 productDetail-lastSection">
+        <h2>Specification</h2>
+        <span>&nbsp;&nbsp;&nbsp;&nbsp;<%= product.specifications[0] %></span>
+    </section>
+                                
+
+<%- include('../partials/footer.ejs') %>

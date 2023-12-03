@@ -1,0 +1,325 @@
+<%- include('../partials/header.ejs') %>
+    <%- include('../partials/navbar.ejs') %>
+        <!-- Breadcrumb Section Begin -->
+        <section class="breadcrumb-option">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="breadcrumb__text">
+                            <div class="breadcrumb__links">
+                                <a href="<%= locals.login ? '/home' : '/'  %>">Home</a>
+                                <span class="text-muted">Order Progress</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Breadcrumb Section End -->
+        <section class="user-profile-sidebar">
+            <div class="container-fluid  ">
+                <div class="row flex-nowrap ">
+                    <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 Profile-sidebar personal-information py-4" >
+                        <!-- OPTIONS SELECTING SECTION -->
+                        <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100 ">
+                            <div class="dropdown  pt-3 mx-auto">
+                                <a href="#" class="text-decoration-none mx-auto"
+                                    id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-person-circle fa-md-3x fa-lg"></i>
+                                </a>
+                            </div>
+                            <div class="pb-4 w-100 user-heaading d-none d-sm-inline">
+                                    <p class="ml-md-1 m-0 p-0 text-dark" style="font-size: 19px;">Hello ,</p>
+                                    <h3 class="  m-0 p-0 text-dark text-center"><%= locals.username %></h3>
+                            </div>
+                            <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
+                                id="menu">
+                                <li class="nav-item user-profile">
+                                    <a href="/userprofile" class="nav-link align-middle px-0">
+                                        <i class="fa-lg bi-person-fill pr-2"></i> <span class="ms-1 d-none d-sm-inline">
+                                            Personal Information</span>
+                                    </a>
+                                </li>
+                                <li class="user-profile">
+                                    <a href="/viewWallet" class="nav-link px-0 align-middle">
+                                        <i class="fs-4 fa-solid fa-wallet pr-2"></i> <span
+                                            class="ms-1 d-none d-sm-inline">Wallet</span>
+                                    </a>
+                                </li>
+                                <li class="user-profile">
+                                    <a href="/addressinformation" class="nav-link px-0 align-middle">
+                                        <i class="fs-4 fa-regular fa-address-card pr-2"></i> <span
+                                            class="ms-1 d-none d-sm-inline">Address</span>
+                                    </a>
+                                </li>
+                                <li class="user-profile">
+                                    <a href="/api/viewWishlist" class="nav-link px-0 align-middle">
+                                        <i class="fs-4 fa-regular fa-heart pr-2"></i> <span
+                                            class="ms-1 d-none d-sm-inline">Wishlist ( <%= locals.wishlistCount %>
+                                                )</span>
+                                    </a>
+                                </li>
+                                <li class="user-profile">
+                                    <a href="/api/viewOrder" class="nav-link px-0 align-middle">
+                                        <i class="fs-4 fa-solid fa-truck-fast pr-2"></i> <span
+                                            class="ms-1 d-none d-sm-inline">Orders</span>
+                                    </a>
+                                </li>
+                                <li class="user-profile">
+                                    <a href="/logout" class="nav-link px-0 align-middle">
+                                        <i class="fs-4 fa-solid fa-arrow-right-from-bracket pr-2 text-dark"></i> 
+                                        <span class="ms-1 d-none d-sm-inline font-weight-bold text-dark">Logout</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- RIGHT SIDE CONTENT SECTION -->
+                    <div class="col py-5" style="overflow: hidden;">
+                        <div class="container">
+                            <div class="row d-flex justify-content-center align-items-center h-100"
+                                data-order-status="<%= orderData[0].productInforamtion.orderStatus %>"
+                                id="order-Progress-ViewPage" data-order-Place="<%= orderData[0].createdAt %>">
+
+                                <div class="col-md-12 col-lg-12 col-xl-12">
+                                    <div class="card card-stepper" style="border-radius:6 px;">
+                                        <div class="card-header">
+                                            <div class="d-flex justify-content-between align-items-center order-progress-header">
+                                                <div>
+                                                    <p class="text-muted my-0"> Order ID : <span
+                                                            class="font-weight-bold text-body ml-1">
+                                                            <%= orderData[0].order_id %>
+                                                        </span></p>
+                                                    <p class="text-muted my-0"> Place On :<span
+                                                            class="font-weight-bold text-body ml-1">
+                                                            <%= orderData[0].createdAt.toLocaleDateString() %>
+                                                        </span> </p>
+                                                    <p class="text-muted my-0"> Payment Status :<span
+                                                            class="font-weight-bold text-body ml-1">
+                                                            <%= orderData[0].paymentMethod %>
+                                                        </span><span class=" text-muted"> (<%=
+                                                                orderData[0].productInforamtion.paymentStatus %>)
+                                                        </span></p>
+                                                </div>
+                                                <div>
+                                                    <% if(orderData[0].productInforamtion.orderStatus=='Placed' ||
+                                                        orderData[0].productInforamtion.orderStatus=='Shipped' ||
+                                                        orderData[0].productInforamtion.orderStatus=='Delivered' ) { %>
+                                                        <h6 class="mb-0"> 
+                                                            <a href="/api/invoiceDownload?orderId=<%= orderData[0]._id %>&productId=<%= orderData[0].productData[0]._id %>">
+                                                                <i class="fa-regular fa-file"></i> Download Invoice
+                                                            </a> 
+                                                        </h6>
+                                                    <% } %>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-body p-md-4 p-3 " >
+                                            <div class="d-flex  mb-4 pb-2  card-body-orderprogress">
+                                                <div>
+                                                    <a href="/productdetails?id=<%= orderData[0].productData[0]._id %>">
+                                                        <img class="align-self-center img-fluid"
+                                                            src="/public/admin/assets/productImages/<%= orderData[0].productData[0].productImages[0] %>"
+                                                            width="250">
+                                                    </a>
+                                                </div>
+                                                <div class="flex-fill pl-md-4" style="overflow: hidden;">
+                                                    <a href="/productdetails?id=<%= orderData[0].productData[0]._id %>">
+                                                        <h5 class="bold font-weight-bold">
+                                                            <%= orderData[0].productData[0].productName %>
+                                                        </h5>
+                                                    </a>
+                                                    <p class="text-muted mt-2"> Qty: <%=
+                                                            orderData[0].productInforamtion.productquantity %> item
+                                                    </p>
+                                                    <h4 class="mb-3 mt-3 font-weight-bold">
+                                                        <i class="bi bi-currency-rupee"></i>
+                                                        <%= orderData[0].productInforamtion.productPrice %>
+                                                            <% if ( orderData[0].couponOfferPercentage) { %>
+                                                                <p class="small mt-2 text-success font-weight-bold" style="font-size: 16px;">
+                                                                    <i class="bi bi-gift-fill" style="color: #17c454;"></i>
+                                                                    Coupon applied
+                                                                    <span style="font-size: 14px;" class="text-muted">
+                                                                        ( ₹ <del class="text-muted">
+                                                                            <%= orderData[0].productInforamtion.MRP %>
+                                                                        </del> - <del class="text-muted">
+                                                                            <%= orderData[0].productInforamtion.discountAmount
+                                                                                %>
+                                                                        </del> )
+                                                                    </span>
+                                                                </p>
+                                                                <% } %>
+
+                                                    </h4>
+                                                    <p class="text-muted mt-2">Tracking Status on: <span
+                                                            class="text-body">
+                                                            <%= new Intl.DateTimeFormat('en-US', { hour: 'numeric' ,
+                                                                minute: 'numeric' , second: 'numeric' }).format(new
+                                                                Date()); %>, Today
+                                                        </span></p>
+
+                                                    <div class="d-flex mt-4 order-progress-shippingAddress">
+                                                        <div>
+                                                            <h6 class=" font-weight-bold pb-2">Shipping Address : </h6>
+                                                        </div>
+                                                        <div class="pl-3">
+                                                            <p class="font-weight-bold mt-0">
+                                                                <%= orderData[0].addressInformation.username %><span
+                                                                        class="pl-4">
+                                                                        <%= orderData[0].addressInformation.phonenumber
+                                                                            %>
+                                                                    </span>
+                                                            </p>
+                                                            <p class="m-0">
+                                                                <%= orderData[0].addressInformation.address %> , 
+                                                                <%= orderData[0].addressInformation.locality %> ,
+                                                                <%= orderData[0].addressInformation.city %> ,
+                                                                <%= orderData[0].addressInformation.district %>
+                                                            </p>
+                                                            <p class="m-0">
+                                                                <%= orderData[0].addressInformation.pincode %>
+                                                            </p>
+                                                            <p class="m-0">
+                                                                <%= orderData[0].addressInformation.alternateNumber %>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                            </div>
+
+                                            <!-- **** LOAD TIME EVENT WORKING ON PROGRESS BAR  IN JS order>js*** -->
+                                            <div id="progress-div" >
+                                                <div class="col-md-11 d-flex progressbar-3">
+                                                    <div class="col-md-6 d-flex align-items-center">
+                                                        <span class="progress-number">1</span>
+                                                        <div class="progress" role="progressbar"
+                                                            aria-label="Default striped example" aria-valuenow="10"
+                                                            aria-valuemin="0" aria-valuemax="100"
+                                                            style="width: 95%;height: 4px;">
+                                                            <div class="progress-bar progress-bar-striped bg-success"
+                                                                name="progress-order"
+                                                                style="width: 0%; transition: width 2s ease-in-out;">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <span class="progress-number">2</span>
+                                                    </div>
+                                                    <div class="col-md-6 d-flex align-items-center">
+                                                        <div class="progress" role="progressbar"
+                                                            aria-label="Success striped example" aria-valuenow="25"
+                                                            aria-valuemin="0" aria-valuemax="100"
+                                                            style="width: 95%;height: 4px;">
+                                                            <div class="progress-bar progress-bar-striped bg-success"
+                                                                name="progress-order"
+                                                                style="width: 0%; transition: width 2s ease-in-out;">
+                                                            </div>
+                                                        </div>
+                                                        <span class="progress-number p-2">3</span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12 d-flex justify-content-between px-md-2 progress-3-badge">
+                                                    <span class="text-progressbar ml-md-2">Placed</span>
+
+                                                    <span class="text-progressbar">Shipped</span>
+
+                                                    <span class="text-progressbar mr-md-4">Delivered</span>
+
+                                                </div>
+                                            </div>
+
+
+                                            <div id="progress-div-canceled">
+                                                <div class="col-md-11 d-flex progress-2">
+                                                    <div class="col-md-12 d-flex align-items-center">
+                                                        <span class="progress-number mr-2">1</span>
+                                                        <div class="progress" role="progressbar"
+                                                            aria-label="Default striped example" aria-valuenow="10"
+                                                            aria-valuemin="0" aria-valuemax="100"
+                                                            style="width: 95%;height: 4px;">
+                                                            <div class="progress-bar progress-bar-striped bg-secondary"
+                                                                name="progress-order"
+                                                                style="width: 0%; transition: width 2s ease-in-out;">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <span class="progress-number">2</span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12 d-flex justify-content-between progress-cancel-badge">
+                                                    <span class="text-progressbar ml-md-2" id="progressFirst-text">
+                                                        Placed
+                                                    </span>
+                                                    <span class="text-progressbar mr-md-4" id="progressEnd-text">
+                                                        Canceled
+                                                    </span>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+
+                                        <!-- **** LOAD TIME EVENT WORKING ON PROGRESS BAR  IN JS order>js*** -->
+                                        <% if(orderData[0].productInforamtion.orderStatus=="Canceled" ){ %>
+                                            <% } else if( orderData[0].productInforamtion.orderStatus=='Delivered' &&
+                                                returnPolicyDate> new Date()) { %>
+
+                                                <div class="card-footer p-4" id="order-progress-footer">
+                                                    <div class="d-flex justify-content-between">
+                                                        <h5 class="fw-normal mb-0"><a href="#" data-toggle="modal"
+                                                                data-target="#exampleModal">Return Order</a></h5>
+                                                    </div>
+                                                </div>
+
+                                        <% } else if(orderData[0].productInforamtion.orderStatus=='Placed' ||
+                                            orderData[0].productInforamtion.orderStatus=='Shipped' ) { %>
+
+                                            <div class="card-footer p-4" id="order-progress-footer">
+                                                <div class="d-flex justify-content-between">
+                                                    <h5 class="fw-normal mb-0"><a href="#" id="orderCancel"
+                                                            data-product-qunatity="<%= orderData[0].productInforamtion.productquantity %>"
+                                                            data-order-id="<%= orderData[0]._id %>"
+                                                            data-product-id="<%= orderData[0].productData[0]._id %>">Cancel
+                                                            Order</a></h5>
+                                                </div>
+                                            </div>
+                                        <% } %>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+        </section>
+
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content " style="border: none; border-radius: 9px;">
+                    <div class="modal-header" style="border: none;">
+                        <h5 class="modal-title text-center w-100 font-weight-bold text-danger" id="exampleModalLabel"
+                            style="font-size:25px;">Return Product</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body pb-0 mb-0">
+                        <form>
+                            <div class="form-group">
+                                <label for="message-text" class="col-form-label">Reason for Return:</label>
+                                <textarea class="form-control" id="message-text-returnOrder"></textarea>
+                                <p class="ml-2 text-danger" id="returnReason-Validate"></p>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer d-flex flex-column mt-0 pt-0" style="border: none;">
+                        <button type="button" id="orderReturn" class="btn btn-primary w-100 rounded-pill"
+                            style="background-color: #eb4e4e; border: none;" data-order-id="<%= orderData[0]._id %>"
+                            data-product-id="<%= orderData[0].productData[0]._id %>">Send Reason</button>
+                        <button type="button" class="btn btn-secondary w-100 rounded-pill"
+                            data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <%- include('../partials/footer.ejs') %>

@@ -16,6 +16,7 @@ const adminLogin = mongoose.Schema({
 
 });
 
+<<<<<<< HEAD
 const addCategory = mongoose.Schema({
     categoryname : {
         type : String,
@@ -37,11 +38,13 @@ const addCategory = mongoose.Schema({
         type : Date
     }
 })
+=======
+
+
+>>>>>>> master
 
 const loginData = mongoose.model('adminlogin',adminLogin);
-const category = mongoose.model('categorys',addCategory)
 
 module.exports = {
-    loginData,
-    category
+    loginData
 };

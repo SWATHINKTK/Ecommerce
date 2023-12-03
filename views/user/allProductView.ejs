@@ -1,0 +1,241 @@
+<%- include('../partials/header.ejs') %>
+<%- include('../partials/navbar.ejs') %>
+
+    <!-- Breadcrumb Section Begin -->
+    <section class="breadcrumb-option">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb__text">
+                        <div class="breadcrumb__links">
+                            <a href="/home">Home</a>
+                            <span>Shop</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumb Section End -->
+
+    <!-- Shop Section Begin -->
+    <section class="shop spad">
+        <div class="container">
+            <div class="row flex-nowrap">
+                <div class="col-lg-3" id="filterSection-produc">
+                    <div class="shop__sidebar">
+                        <div class="shop__sidebar__search">
+                            <form action="#">
+                                <input type="text" placeholder="Search..."  id="searchInput" value="">
+                                <button type="click"  id="searchInput"><span class="icon_search"></span></button>
+                            </form>
+                        </div>
+                        <div class="shop__sidebar__accordion">
+                            <div class="accordion" id="accordionExample">
+                                <div class="card">
+                                    <div class="card-heading">
+                                        <a data-toggle="collapse" data-target="#collapseOne">Categories</a>
+                                    </div>
+                                    <div id="collapseOne" class="collapse show" data-parent="#accordionExample">
+                                        <div class="card-body">
+                                            <div class="shop__sidebar__brand mb-2">
+                                                <ul class="nice-scroll">
+                                                    <input type="hidden" value="<%= locals.searchCategorys ? searchCategorys : '' %>" id="searchCategoryData">
+                                                    <% if(categoryData.length > 0) { %>
+                                                        <% for(let i = 0; i < categoryData.length ; i++ ) { %>
+                                                            <li>
+                                                                <input type="checkbox"  name="allProductCategoryFilter" onclick="selectFilteData()" value="<%= categoryData[i]._id %>">
+                                                                <span class="ml-2 mt-2"><%= categoryData[i].categoryname %></span>
+                                                            </li>
+                                                        <% } %>
+                                                    <% } %>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-heading">
+                                        <a data-toggle="collapse" data-target="#collapseTwo">Branding</a>
+                                    </div>
+                                    <div id="collapseTwo" class="collapse show" data-parent="#accordionExample">
+                                        <div class="card-body">
+                                            <div class="shop__sidebar__brand mt-2">
+                                                <ul>
+                                                    <input type="hidden" value="<%= locals.searchBrand ? searchBrand : '' %>" id="searchBrandData">
+                                                    <% if(brandData.length > 0) { %>
+                                                        <% for(let i = 0; i < brandData.length ; i++ ) { %>
+                                                            <li><input type="checkbox" name="allProductBrandFilter" onclick="selectFilteData()" value="<%= brandData[i]._id %>">
+                                                                <span class="ml-2 mt-2"><%= brandData[i].brand_name %></span>
+                                                            </li>
+                                                        <% } %>
+                                                    <% } %>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-heading">
+                                        <a data-toggle="collapse" data-target="#collapseThree">Filter Price</a>
+                                    </div>
+                                    <div id="collapseThree" class="collapse show" data-parent="#accordionExample">
+                                        <div class="card-body">
+                                            <div class="shop__sidebar__price">
+                                                <input type="hidden" value="<%= locals.searchPrice ? searchPrice : '' %>" id="searchPrice">
+                                                <ul>
+                                                    <li>
+                                                        <input type="radio"  name="allProductPriceFilter" onclick="selectFilteData()" value="0" checked>
+                                                        <span class="ml-2 mt-2">₹ 0</span> 
+                                                    </li>
+                                                    <li>
+                                                        <input type="radio"  name="allProductPriceFilter" onclick="selectFilteData()" value="100-500">
+                                                        <span class="ml-2 mt-2">₹ 100 - 500</span> 
+                                                    </li>
+                                                    <li>
+                                                        <input type="radio" name="allProductPriceFilter" onclick="selectFilteData()" value="500-1000">
+                                                        <span class="ml-2 mt-2">₹ 500 - 1000</span> 
+                                                    </li>
+                                                    <li>
+                                                        <input type="radio" name="allProductPriceFilter" onclick="selectFilteData()" value="1000-1500">
+                                                        <span class="ml-2 mt-2">₹ 1000 - 1500</span> 
+                                                    </li>
+                                                    <li>
+                                                        <input type="radio" name="allProductPriceFilter" onclick="selectFilteData()" value="1500-2000">
+                                                        <span class="ml-2 mt-2">₹ 1500 - 2000</span> 
+                                                    </li>
+                                               
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-9">
+                    <div class="shop__product__option">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="shop__product__option__left">
+                                    <p>Showing 1–12 of 126 results</p>
+                                </div>
+                            </div>
+                            <!-- <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="shop__product__option__right">
+                                    <p>Sort by Price:</p>
+                                    <select>
+                                        <option value="">Low To High</option>
+                                        <option value="">$0 - $55</option>
+                                        <option value="">$55 - $100</option>
+                                    </select>
+                                </div>
+                            </div> -->
+                        </div>
+                    </div>
+                    <div class="row" id="productFilterDataView">
+                        <% for(let i = 0; i < product.length; i++) { %>
+                                <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix hot-sales">
+                                    <div class="product__item">
+                                        <div class="product__item__pic set-bg" data-setbg="/public/admin/assets/productImages/<%= product[i].productImages[0] %>">
+                                            <% if(product[i].offerId) { %>
+                                                <span class="label text-white" style="background-color: #FF0000; "><%= product[i].offerPercentage %>% OFF</span>
+                                            <% } %>
+                                            <ul class="product__hover">
+
+                                                <!-- Wishlist -->
+                                                <li>
+                                                    <% if( locals.wishlistData ? true : false ) {%>
+                                                        <a href="#"  name="addToWishlist">
+                                                            <% if(wishlistData.length != 0 ? wishlistData[0].wishlistProducts.includes(product[i]._id) : false) {%>
+                                                                <i class="fa-solid fa-heart fa-lg text-danger fa-lg  py-3 px-2" data-wishlist-productId="<%= product[i]._id %>"></i> 
+                                                                <span class="mr-5">Item In You Wishlist</span> 
+                                                            <% } else { %>
+                                                                <i class="fa-regular text-dark fa-heart fa-lg fa-lg  py-3 px-2" data-wishlist-productId="<%= product[i]._id %>"></i> 
+                                                                <span class="mr-5">Add to Wishlist</span> 
+                                                            <% } %>
+                                                        </a>
+                                                    <% } else { %>
+                                                        <a href="/login">
+                                                            <i class="fa-regular text-dark fa-heart fa-lg fa-lg  py-3 px-2" data-wishlist-productId="<%= product[i]._id %>"></i> 
+                                                            <span class="mr-5">Add to Wishlist</span> 
+                                                        </a>
+                                                    <% } %>
+                                                </li>
+
+                                                <li id="<%= product[i]._id %>">
+                                                    <% let InCart = locals.dataCart && dataCart.length != 0 ? dataCart[0].cartProducts.some(item => item.productId.equals(product[i]._id)) : false %>
+                                                    <% if(!InCart && product[i].stock > 0 ){ %>
+                                                            <a href="#" name="homePageAddToCart"> <i class="bi bi-cart-plus-fill text-dark" data-product-id="<%= product[i]._id %>" data-product-price="<%= product[i].price %>"></i><span>Add to Cart</span></a>
+                                                    <% } else {%>
+                                                        <% if(product[i].stock > 0) { %>
+                                                            <a href="/api/cart"> <i class="bi bi-cart3 text-dark"></i><span>Go to Cart</span></a>
+                                                        <% } else {%>
+                                                            <a href="/api/cart"> <i class="bi bi-cart3 text-dark"></i><span>Out Of Stock</span></a>
+                                                        <% } %>
+                                                    <% } %>
+                                                        
+                                                </li>
+
+                                                <li>
+                                                    <% if(product[i].stock > 0) { %>
+                                                        <a href="/api/checkout?id=<%= product[i]._id %>&single=true"><i class="bi bi-bag-fill text-danger"></i> <span>Buy Now</span></a>
+                                                    <% } else { %>
+                                                        <i class="bi bi-bag-fill text-danger"></i> <span>Out Of Stock</span>
+                                                    <% } %>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="product__item__text">
+
+                                            <h6><%= product[i].productName %></h6>
+                                            <a href="/productdetails?id=<%= product[i]._id %>" class="add-cart" >+ View More</a>
+
+                                            <input type="hidden" name="filterDataForCategorys" value="<%= product[0].categoryIds %>" id="">
+                                            <input type="hidden" name="filterDataForCategorys" value="<%= product[0].brandname %>" id="">
+                                            <h5>&#8377; <%= product[i].price %></h5>
+                                            <div class="product__color__select">
+                                                <label for="pc-4">
+                                                    <input type="radio" id="pc-4">
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% } %>
+                    </div>
+                </div>
+                
+            </div></div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="product__pagination">
+                                <% if(locals.pageNo  && locals.toalProduct){ %>
+                                    <a href="?page=<%= pageNo > 1 ? pageNo - 1 : 1 %>" class="<%= pageNo == 1 ? 'btn-link disabled' : '' %> " >&laquo;</a>
+                                    <% for(let i = 1; i <= totalPages ;i++) { %>
+                                        <a class="active <%= pageNo == i ? 'text-danger' : '' %>" href="?page=<%= i %>"><%= i %></a>
+                                    <% } %>
+                                    <a href="?page=<%= pageNo < totalPages ? parseInt(pageNo) + 1 : totalPages %>" class="<%= pageNo == totalPages ? 'btn-link disabled' : '' %> " >&raquo;</a>
+                                <% } else if(locals.pageNo){%>
+
+                                    <a href="#" class="<%= pageNo == 1 ? 'btn-link disabled' : '' %> " name="pagination" data-page="<%= pageNo > 1 ? pageNo - 1 : 1 %>">&laquo;</a>
+                                        <% for(let i = 1; i <= totalPages ;i++) { %>
+                                            <a class="active <%= pageNo == i ? 'text-danger' : '' %>" name="pagination" href="#" data-page="<%= i %>"><%= i %></a>
+                                        <% } %>
+                                    <a href="#" data-page="<%= pageNo < totalPages ? parseInt(pageNo) + 1 : totalPages %>" name="pagination" class="<%= pageNo == totalPages ? 'btn-link disabled' : '' %> " >&raquo;</a>
+
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Shop Section End -->
+
+    
+    <!-- Footer Section End -->
+
+    <%- include('../partials/footer.ejs') %>

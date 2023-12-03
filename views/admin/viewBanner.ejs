@@ -1,0 +1,77 @@
+<%- include('../partials/header.ejs') %>
+<h1 class="card-title text-center text-dark">Branner Details</h1>
+<div class="col-12 grid-margin stretch-card">
+    <div class="card card-div">
+        <div class="card-body  mt-5">
+            <div class="d-flex justify-content-between align-items-center mb-2 search mb-5">
+                <h3>Banner Previews</h3>
+                <a href="/admin/addBanner" target="_self" rel="noopener noreferrer" class="btn btn-primary"><span>Add Banner</span></a>
+            <!-- <div class="d-flex">
+                <input type="text" class="form-control col-10" id="bannerSearch" placeholder="Brand Search" name="bannerSearch">
+                <button type="button" class="btn btn-search p-2" ><i class="bi bi-search"></i></button>
+            </div> -->
+            </div>
+
+            
+
+            <div>
+                <% for(let i = 0; i < bannerData.length ; i++) { %>
+                    <div class="container p-5 mb-5 mt-5" id="bannerImagePreview" style="background-image: url('/public/admin/assets/images/bannerImages/<%= bannerData[i].backgroundImage %>'); background-size: cover; background-repeat: no-repeat; box-shadow: 0 10px 16px rgba(0, 0, 0, 0.549); ">
+                        <div class="form-group">
+                            <div class="input-group">
+                            <div class="input-group-prepend w-100">
+                                <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Actions</button>
+                                <div id="<%= bannerData[i]._id %>" class="ml-auto">
+                                    <% if(bannerData[i].is_Listed) { %>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="25" fill="#008000" class="bi bi-eye-fill ml-auto" viewBox="0 0 16 16">
+                                            <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
+                                            <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/>
+                                        </svg>
+                                    <% } else { %>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="25" fill="#FF0000" class="bi bi-eye-slash-fill ml-auto" viewBox="0 0 16 16">
+                                            <path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7.029 7.029 0 0 0 2.79-.588M5.21 3.088A7.028 7.028 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474L5.21 3.089z"/>
+                                            <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829l-2.83-2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12z"/>
+                                        </svg>
+                                    <% } %>
+                                </div>
+                                <div class="dropdown-menu pl-2">
+                                    <% if(bannerData[i].is_Listed) { %>
+                                        <button data-banner-id="<%= bannerData[i]._id %>" name="banneListStatus" class="btn btn-dark ml-2"><i class="bi bi-eye-slash-fill"></i> Unlist</button>
+                                    <% } else { %>
+                                        <button data-banner-id="<%= bannerData[i]._id %>" name="banneListStatus" class="btn btn-dark ml-2"><i class="bi bi-eye-fill"></i> List</button>
+                                    <% } %>
+                                    <a href="/admin/editBanner<%= bannerData[i]._id %>" class="btn btn-primary ml-2"><i class="bi bi-pencil-square"></i>Edit</a>
+                                    <a href="/admin/deleteBanner<%= bannerData[i]._id %>" class="btn btn-danger ml-2 mr-2"><i class="bi bi-trash3"></i>Delete</a>   
+                                    <!-- <i class="bi bi-eye-slash-fill"></i> -->
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <!-- <div class="d-flex justify-content-between ml-auto pl-3 pr-3" style="width: 15%;">
+                            <a href="" class=""><i class="mdi mdi-pencil-box-outline icon-md" ></i></a>
+                            <a href="" class=""><i class="mdi mdi-delete icon-md" ></i></a>
+                            <a href="" class=""><i class="mdi mdi-eye icon-md" ></i></a>
+                            mdi mdi-eye-off
+                        </div> -->
+                        <div class="row p-5">
+                            <div class="col-xl-5 col-lg-7 col-md-8">
+                                <div class="hero__text ">
+                                    <h6 name="banner"><%= bannerData[i].offerName %></h6>
+                                    <h2 name="banner"><%= bannerData[i].offerHeading %></h2>
+                                    <p name="banner"><%= bannerData[i].offerDescription %></p>
+                                    <span class="btn btn-dark">Shop now <span class="arrow_right"></span></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% } %>
+
+                
+
+            
+            </div>
+        </div>
+    </div>
+  </div>
+  
+<%- include('../partials/footer.ejs') %>

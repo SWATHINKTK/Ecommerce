@@ -1,60 +1,72 @@
+<h1 class="card-title text-center text-dark">Coupon Details</h1>
+<div class="col-12 grid-margin stretch-card">
+    <div class="card card-div">
+        <div class="card-body  mt-5">
+            <div class="d-flex justify-content-between align-items-center mb-2 search">
+            <!-- <div class="d-flex">
+                <input type="text" class="form-control col-10" id="bannerSearch" placeholder="Brand Search" name="bannerSearch">
+                <button type="button" class="btn btn-search p-2" ><i class="bi bi-search"></i></button>
+            </div> -->
+            </div>
 
-    <div class="col-12 grid-margin stretch-card">
-    <div class="card">
-      <div class="card-body  mt-5">
-        <h4 class="card-title text-center">View Coupons&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
-        <!-- <p class="card-description"> Add class <code>.table-hover</code> -->
-        </p>
-        <div class="table-responsive">
-          <table class="table table-hover">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>User</th>
-                <th>Product</th>
-                <th>Sale</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody class="text-white">
-              <tr>
-                <td>1</td>
-                <td>Jacob</td>
-                <td>Photoshop</td>
-                <td class="text-danger"> 28.76% <i class="mdi mdi-arrow-down"></i></td>
-                <td><label class="badge badge-danger">Pending</label></td>
-              </tr>
-              <tr>
-                <td>1</td>
-                <td>Messsy</td>
-                <td>Flash</td>
-                <td class="text-danger"> 21.06% <i class="mdi mdi-arrow-down"></i></td>
-                <td><label class="badge badge-warning">In progress</label></td>
-              </tr>
-              <tr>
-                <td>1</td>
-                <td>John</td>
-                <td>Premier</td>
-                <td class="text-danger"> 35.00% <i class="mdi mdi-arrow-down"></i></td>
-                <td><label class="badge badge-info">Fixed</label></td>
-              </tr>
-              <tr>
-                <td>1</td>
-                <td>Peter</td>
-                <td>After effects</td>
-                <td class="text-success"> 82.00% <i class="mdi mdi-arrow-up"></i></td>
-                <td><label class="badge badge-success">Completed</label></td>
-              </tr>
-              <tr>
-                <td>1</td>
-                <td>Dave</td>
-                <td>53275535</td>
-                <td class="text-success"> 98.05% <i class="mdi mdi-arrow-up"></i></td>
-                <td><label class="badge badge-warning">In progress</label></td>
-              </tr>
-            </tbody>
-          </table>
+            <div class="table-responsive">
+                <table class="table table-hover text-dark">
+                    <thead>
+                        <tr>
+                        <th>#</th>
+                        <th>Coupon Code</th>
+                        <th>Coupon Name</th>
+                        <th>Coupon Amount</th>
+                        <th>Offer</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <%if(couponData.length > 0) { %>
+                      <% for(let i = 0; i < couponData.length ; i++) {%>
+                        <tr id="<%= couponData[i]._id %>">
+                          <td name = 'couponSerialNumber'><%= i+1 %></td>
+                          <td><%= couponData[i].couponCode %></td>
+                          <td><%= couponData[i].couponName %></td>
+                          <td><%= couponData[i].minimumPurchase %></td>
+                          <td><%= couponData[i].OfferPercentage %> %</td>
+                          <td><%= couponData[i].startDate.toLocaleDateString() %></td>
+                          <td><%= couponData[i].endDate.toLocaleDateString() %></td>
+                          <td>
+							<% if(couponData[i].is_Delete){%>
+								<span class="text-danger font-weight-bold">Deleted</span>
+                            <% } else if(couponData[i].startDate <= new Date() && couponData[i].endDate >= new Date()){%>
+                                <span class="text-success font-weight-bold">Active</span>
+                            <% } else if(couponData[i].startDate >= new Date()){ %>
+								<span class="text-warning font-weight-bold">Not Active</span>
+							<% } else {%>
+								<span class="text-danger font-weight-bold">Expired</span>
+							<% } %>
+                          </td>
+                          <td >
+							<% if(!couponData[i].is_Delete){%>
+								<button type="button" class="btn  btn-primary mb-2" name="editCouponBtn" data-coupon-id="<%= couponData[i]._id %>">
+								<i class="bi bi-pencil-square"  data-coupon-id="<%= couponData[i]._id %>"></i>
+								</button><br>
+								<button type="button" class="btn  btn-danger" name="deleteCouponBtn" data-coupon-id="<%= couponData[i]._id %>">
+								<i class="bi bi-trash" name="deleteCouponBtn" data-coupon-id="<%= couponData[i]._id %>"></i>
+								</button><br>
+							<% } %>
+                  
+                          </td>
+                        </tr>
+                      <% } %>
+                    <% } else { %>
+                      <tr class="bg-danger">
+                        <th class="text-dark text-center" colspan="8">COUPON IS NOT FOUND</th>
+                      </tr>
+                    <% } %>
+                    </tbody>
+                </table>
+            </div>
         </div>
-      </div>
     </div>
   </div>

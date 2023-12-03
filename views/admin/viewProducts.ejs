@@ -1,58 +1,151 @@
+<h1 class="card-title text-center text-dark">Product Details</h1>
 <div class="col-12 grid-margin stretch-card">
-    <div class="card">
+    <div class="card card-div">
       <div class="card-body  mt-5">
-        <h4 class="card-title text-center">Product View&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
-        <!-- <p class="card-description"> Add class <code>.table-hover</code> -->
-        </p>
-        <div class="table-responsive">
+        <div class="d-grid gap-4 d-md-flex justify-content-md-end mb-2 search">
+          <input type="text" class="form-control col-3 mr-2" id="productSearch" placeholder="Product Search" name="categorySearch">
+          <button type="button" class="btn btn-search" id="productSearchBtn"><i class="bi bi-search"></i></button>
+        </div>
+        <div class="table-responsive" id="table-product">
           <table class="table table-hover">
             <thead>
               <tr>
                 <th>#</th>
-                <th>User</th>
-                <th>Product</th>
-                <th>Sale</th>
-                <th>Status</th>
+                <th>Product Name</th>
+                <th>Brand Name</th>
+                <th>Stock</th>
+                <th>Price</th>
+                <th>View More</th>
+                <th>Offers</th>
+                <th>Apply Offers</th>
+                <th>Action</th>
+                <th>Edit</th>
               </tr>
             </thead>
-            <tbody class="text-white">
-              <tr>
-                <td>1</td>
-                <td>Jacob</td>
-                <td>Photoshop</td>
-                <td class="text-danger"> 28.76% <i class="mdi mdi-arrow-down"></i></td>
-                <td><label class="badge badge-danger">Pending</label></td>
+            <tbody class="text-white table-style">
+              <% if(productData.length) { %>
+                <% for(let i = 0; i < productData.length ; i++) { %>
+              <tr class="<%= productData[i]._id %>">
+                <td><%= i+1 %></td>
+                <td id="productTable-productname"><%= productData[i].productName %></td>
+                <td>
+                  <%for(let brand of dataBrand){
+                        if(productData[i].brandname.equals(brand._id)){ %>
+
+                          <%= brand.brand_name %>
+                      <% } %> 
+                <% } %>   
+                </td>
+                <td><%= productData[i].stock %></td>
+                <td>	&#8377; <%= productData[i].price %></td>
+                <div id="product-viewmore"><td><a href="#" class="product-viewmore" data-viewmore-id="<%= productData[i]._id %>">View More <i class="bi bi-chevron-double-right"></i></a></td></div>
+               
+                <td class="text-success font-weight-bold"><%= productData[i].offerId ? 'Applied' : "" %></td>
+                <% if(productData[i].offerId) { %>
+                  <td>
+                    <button type="button" class="btn btn-danger px-1" name="productOfferRemoveBtn" data-offer-id="<%= productData[i].offerId %>" data-product-id="<%= productData[i]._id %>">Remove</button>
+                  </td>
+                <% } else {%>
+                  <td>
+                    <button type="button" class="btn btn-dark" name="offerModalView" data-toggle="modal" data-target="#exampleModal" data-product-id="<%= productData[i]._id %>">Apply</button>
+                  </td>
+                <% } %>
+                <% if(productData[i].status) {%>
+                  <td id="<%= productData[i]._id %>"><button class="btn  btn-danger pl-3 pr-3 l-u-button" name="l-u-button" data-button-id="<%= productData[i]._id %>">Unlist</button></td>
+                <% } else { %>
+                  <td id="<%= productData[i]._id %>"><button class="btn btn-success pl-4 pr-4 l-u-button" name="l-u-button" data-button-id="<%= productData[i]._id %>">List</button></td>
+                <% } %>
+                <td ><button class="btn btn-transparent product-edit-button" data-edit-id="<%= productData[i]._id %>"><i class="bi bi-pencil-square"></i>Edit</button></td>
+               
               </tr>
-              <tr>
-                <td>1</td>
-                <td>Messsy</td>
-                <td>Flash</td>
-                <td class="text-danger"> 21.06% <i class="mdi mdi-arrow-down"></i></td>
-                <td><label class="badge badge-warning">In progress</label></td>
-              </tr>
-              <tr>
-                <td>1</td>
-                <td>John</td>
-                <td>Premier</td>
-                <td class="text-danger"> 35.00% <i class="mdi mdi-arrow-down"></i></td>
-                <td><label class="badge badge-info">Fixed</label></td>
-              </tr>
-              <tr>
-                <td>1</td>
-                <td>Peter</td>
-                <td>After effects</td>
-                <td class="text-success"> 82.00% <i class="mdi mdi-arrow-up"></i></td>
-                <td><label class="badge badge-success">Completed</label></td>
-              </tr>
-              <tr>
-                <td>1</td>
-                <td>Dave</td>
-                <td>53275535</td>
-                <td class="text-success"> 98.05% <i class="mdi mdi-arrow-up"></i></td>
-                <td><label class="badge badge-warning">In progress</label></td>
-              </tr>
+              <% } } else { %>
+                <tr class="bg-danger">
+                  <th class="text-dark text-center" colspan="9">PRODUCT IS NOT FOUND</th>
+                </tr>
+              <% } %>
             </tbody>
           </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+<div class="modal productmoreinfo-modal" id="modal-total-div">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">More Information</h5>
+          <button class="btn btn-transparent" id="product-cancel"><i class="bi bi-x cancel"></i></button>
+      </div>
+      <div class="modal-body" id="product-modal-content">
+        
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal confirmation-modal" id="product-confirmation-modal" style="display: none; width: 23rem;margin-right: 50%;margin-left: 40%; margin-top:3rem;">
+  <div class="modal-content modal-style">
+    <div class="modal-header">
+      <h5 class="modal-title" id="staticBackdropLabel">User Block/Unblock</h5>
+      <button class="btn btn-transparent" id="list-confirmation-cancel1"><i class="bi bi-x cancel bg-primary"></i></button>
+    </div>
+    <div class="modal-body">
+      Are you sure?
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" id="list-confirmation-cancel2">Cancel</button>
+      <button type="button" class="btn btn-primary" id="list-confirmation-sucess" data-product-id="">OK</button>
+    </div>
+  </div>
+</div>
+</div>
+
+
+
+  
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="width: 30rem;">
+      <div class="modal-content" style="border: 0;">
+        <div class="modal-body">
+            <div class="d-flex justify-content-center">
+                <button type="button" class="close text-center" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>                   
+            </div>
+            <input type="hidden" id="offerApplyingProduct" value="">
+            <div style="overflow-y: scroll; max-height: 300px;">
+                <% for(let i = 0;i < offerData.length ;i++) { %>
+                    <div>
+                    <div class="col-md-12 d-flex justify-content-center">
+                        <div class="card offer-card mb-4 mt-2 col-md-9">
+                            <div class="card-body">
+                                <div class="ribbon"><%= offerData[i].OfferPercentage %>%</div><br>
+                                <div class="d-flex justify-content-end">
+                                    <span class="font-weight-bold"><%= offerData[i].offerName %></span>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-end">
+                                    <button class="btn btn-primary class" name="offerApplyBtn" data-offer-id="<%= offerData[i]._id %>" data-dismiss="modal" aria-label="Close">Apply</button>
+                                    <span style="font-size: 13px;"> <%= offerData[i].startDate.toLocaleDateString() %> to <%= offerData[i].endDate.toLocaleDateString() %></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% } %>
+                <% if(offerData.length == 0) { %>
+                  <div class="d-flex justify-content-center">
+                    <img src="/public/admin/assets/images/noOffer.png" alt="" srcset="">
+                  </div>
+                  <h3 class="text-center text-danger">No Offer Found !....</h3>
+                <% } %>
+            </div>
+                </div>
+              </div>
+            </div>
         </div>
       </div>
     </div>

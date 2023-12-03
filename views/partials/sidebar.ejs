@@ -1,10 +1,20 @@
 <nav class="sidebar sidebar-offcanvas" id="sidebar">
   <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
-    <a class="sidebar-brand brand-logo" href="/admin/home"><img src="/asserts/images/logo.svg" alt="logo" /></a>
-    <a class="sidebar-brand brand-logo-mini" href="index.html"><img src="/asserts/images/logo-mini.svg" alt="logo" /></a>
+    <a class="sidebar-brand brand-logo" href="/admin/home">ADMIN</a>
+    <!-- <a class="sidebar-brand brand-logo-mini" href="index.html">
+      <img src="/asserts/images/logo-mini.svg" alt="logo" />
+    </a> -->
+
+     <div class="navbar-menu-wrapper flex-grow d-flex align-items-stretch">
+    <button class="navbar-toggler navbar-toggler align-self-center ml-2" type="button" data-toggle="minimize">
+      <span class="mdi mdi-menu"></span>
+    </button>
+     </div>
+
+
   </div>
   <div style="position: fixed;">
-  <ul class="nav">
+  <ul class="nav" >
     <li class="nav-item profile">
       <div class="profile-desc">
         <div class="profile-pic">
@@ -13,7 +23,7 @@
             <span class="count bg-success"></span>
           </div>
           <div class="profile-name">
-            <h5 class="mb-0 font-weight-normal"><%= locals.name ? name :'' %></h5>
+            <h5 class="mb-0 font-weight-normal text-dark"><%= locals.adminName %></h5>
             <span>Gold Member</span>
           </div>
         </div>
@@ -57,7 +67,7 @@
     <li class="nav-item nav-category">
       <span class="nav-link">Navigation</span>
     </li>
-    <li class="nav-item menu-items">
+    <li class="nav-item menu-items" id="dashboard">
       <a class="nav-link" href="/admin/home">
         <span class="menu-icon">
           <i class="mdi mdi-speedometer"></i>
@@ -66,7 +76,16 @@
       </a>
     </li>
 
-    <li class="nav-item menu-items">
+    <li class="nav-item menu-items" id="salesReport">
+      <a class="nav-link" href="/admin/saleReport">
+        <span class="menu-icon">
+          <i class="mdi mdi-file-document"></i>
+        </span>
+        <span class="menu-title">Sales Report</span>
+      </a>
+    </li>
+
+    <li class="nav-item menu-items" id="users">
       <a class="nav-link" href="/admin/userlist">
         <span class="menu-icon">
           <i class="mdi mdi-account-multiple"></i>
@@ -85,31 +104,24 @@
       </a>
       <div class="collapse" id="product">
         <ul class="nav flex-column sub-menu">
-          <li class="nav-item"> 
+
+          <!-- View ProductList  -->
+          <li class="nav-item" id="view-productlist"> 
             <button class="nav-link bg-dark w-100" id="view-productlist">
-              <span class="menu-icon">
-                <i class="mdi mdi-cart"></i>
+              <span class="menu-icon" id="view-productlist">
+                <i class="mdi mdi-cart" id="view-productlist"></i>
               </span>
-              <span class="menu-title">Products</span>
+              <span class="menu-title" id="view-productlist">Products</span>
             </button>
           </li>
-          <li class="nav-item menu-items">
-            <!-- <a class="nav-link" href="/admin/addproduct"> -->
+
+          <!-- Add Product -->
+          <li class="nav-item menu-items" id="add-product">
               <button class="nav-link bg-dark w-100" id="add-product">
-              <span class="menu-icon">
-                <i class="mdi mdi-cart-plus"></i>
+              <span class="menu-icon" id="add-product">
+                <i class="mdi mdi-cart-plus" id="add-product"></i>
               </span>
-              <span class="menu-title">Add Products</span>
-            </button>
-            <!-- </a> -->
-          </li>
-      
-          <li class="nav-item menu-items">
-            <button class="nav-link bg-dark w-100" id="edit-product">
-              <span class="menu-icon">
-                <i class="mdi mdi-pencil-box-outline"></i>
-              </span>
-              <span class="menu-title">Edit Products</span>
+              <span class="menu-title" id="add-product">Add Products</span>
             </button>
           </li>
           
@@ -117,6 +129,8 @@
       </div>
     </li>
 
+
+    <!-- Category Action Buttons -->
     <li class="nav-item menu-items">
       <a class="nav-link" data-toggle="collapse" href="#category" aria-expanded="false" aria-controls="category">
         <span class="menu-icon">
@@ -127,32 +141,21 @@
       </a>
       <div class="collapse" id="category">
         <ul class="nav flex-column sub-menu">
-          <li class="nav-item menu-items">
-            <button class="nav-link bg-dark w-100" id="category-list">
-              <span class="menu-icon">
-                <i class="mdi mdi-view-grid"></i>
+          <li class="nav-item menu-items" id="view-categorylist">
+            <button class="nav-link bg-dark w-100" id="view-categorylist">
+              <span class="menu-icon" id="view-categorylist">
+                <i class="mdi mdi-view-grid" id="view-categorylist"></i>
               </span>
-              <span class="menu-title">Category</span>
+              <span class="menu-title" id="view-categorylist">Category</span>
             </button>
           </li>
 
-          <li class="nav-item menu-items">
+          <li class="nav-item menu-items" id="add-category">
             <button class="nav-link bg-dark w-100" id="add-category">
-              <!-- <a href="/admin/addcategory"> -->
-              <span class="menu-icon">
-                <i class="mdi mdi-library-plus"></i>
+              <span class="menu-icon" id="add-category">
+                <i class="mdi mdi-library-plus" id="add-category"></i>
               </span>
-              <span class="menu-title">Add Category</span>
-            <!-- </a> -->
-            </button>
-          </li>
-      
-          <li class="nav-item menu-items">
-            <button class="nav-link bg-dark w-100" id="edit-category">
-              <span class="menu-icon">
-                <i class="mdi mdi-pencil-box-outline"></i>
-              </span>
-              <span class="menu-title">Edit Category</span>
+              <span class="menu-title" id="add-category">Add Category</span>
             </button>
           </li>
           
@@ -160,49 +163,57 @@
       </div>
     </li>
 
-
-    <!-- <li class="nav-item menu-items">
-      <a class="nav-link" href="/admin/productlist">
-        <span class="menu-icon">
-          <i class="mdi mdi-cart"></i>
+    <li class="nav-item menu-items" id="addBrand">
+      <a class="nav-link" href="/admin/viewbrand">
+        <span class="menu-icon text-success">
+          <b>B</b>
         </span>
-        <span class="menu-title">Products</span>
+        <span class="menu-title">Brand</span>
       </a>
     </li>
-
-    <li class="nav-item menu-items">
-      <a class="nav-link" href="/admin/addproduct">
-        <span class="menu-icon">
-          <i class="mdi mdi-cart-plus"></i>
-        </span>
-        <span class="menu-title">Add Products</span>
-      </a>
-    </li>
-
-    <li class="nav-item menu-items">
-      <a class="nav-link" href="/admin/editproduct">
-        <span class="menu-icon">
-          <i class="mdi mdi-pencil-box-outline"></i>
-        </span>
-        <span class="menu-title">Edit Products</span>
-      </a>
-    </li> -->
-
     
 
-    
-
-    
-    
-
-    <li class="nav-item menu-items">
-      <a class="nav-link" href="/admin/addbanner">
+    <li class="nav-item menu-items" id="addbanner">
+      <a class="nav-link" href="/admin/viewbanner">
         <span class="menu-icon">
           <i class="mdi mdi-paperclip"></i>
         </span>
         <span class="menu-title">Add Banner</span>
       </a>
     </li>
+
+
+    <!-- <li class="nav-item menu-items">
+      <a class="nav-link" data-toggle="collapse" href="#Banner" aria-expanded="false" aria-controls="Banner">
+        <span class="menu-icon">
+          <i class="mdi mdi-image"></i>
+        </span>
+        <span class="menu-title">Banner</span>
+        <i class="menu-arrow"></i>
+      </a>
+      <div class="collapse" id="Banner">
+        <ul class="nav flex-column sub-menu">
+          <li class="nav-item menu-items" id="view-Banner">
+            <button class="nav-link bg-dark w-100" id="view-Banner">
+              <span class="menu-icon" id="view-Banner">
+                <i class="mdi mdi-image" id="view-Banner"></i>
+              </span>
+              <span class="menu-title" id="view-Banner">View Banner</span>
+            </button>
+          </li>
+
+          <li class="nav-item menu-items" id="add-Banner">
+            <button class="nav-link bg-dark w-100" id="add-Banner"">
+              <span class="menu-icon" id="add-Banner"">
+                <i class="mdi mdi-library-plus" id="add-Banner""></i>
+              </span>
+              <span class="menu-title" id="add-Banner"">Add Banner</span>
+            </button>
+          </li>
+          
+        </ul>
+      </div>
+    </li> -->
 
     
     <li class="nav-item menu-items">
@@ -215,34 +226,40 @@
       </a>
       <div class="collapse" id="coupon">
         <ul class="nav flex-column sub-menu">
-          <li class="nav-item menu-items">
-            <button class="nav-link bg-dark w-100" id="coupon-list">
-              <span class="menu-icon">
-                <i class="mdi mdi-gift"></i>
+          <li class="nav-item menu-items" id="view-couponlist">
+            <button class="nav-link bg-dark w-100" id="view-couponlist">
+              <span class="menu-icon" id="view-couponlist">
+                <i class="mdi mdi-gift" id="view-couponlist"></i>
               </span>
-              <span class="menu-title">Coupon</span>
+              <span class="menu-title" id="view-couponlist">Coupon</span>
             </a>
           </li>
 
-          <li class="nav-item menu-items">
+          <li class="nav-item menu-items" id="add-coupon">
             <button class="nav-link bg-dark w-100" id="add-coupon">
-              <span class="menu-icon">
-                <i class="mdi mdi-library-plus"></i>
+              <span class="menu-icon" id="add-coupon">
+                <i class="mdi mdi-library-plus" id="add-coupon"></i>
               </span>
-              <span class="menu-title">Add Coupon</span>
+              <span class="menu-title" id="add-coupon">Add Coupon</span>
             </button>
           </li>
-      
-          
         </ul>
       </div>
     </li>
     
 
+    <li class="nav-item menu-items" id="order">
+      <a class="nav-link" href="/admin/viewOfferList">
+        <span class="menu-icon">
+          <i class="mdi mdi-tag-multiple"></i>
+        </span>
+        <span class="menu-title">Offer</span>
+      </a>
+    </li>
 
 
-    <li class="nav-item menu-items">
-      <a class="nav-link" href="/admin/orderlist">
+    <li class="nav-item menu-items" id="order">
+      <a class="nav-link" href="/api/orderlist">
         <span class="menu-icon">
           <i class="mdi mdi-truck-delivery"></i>
         </span>

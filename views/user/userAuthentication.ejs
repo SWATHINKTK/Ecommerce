@@ -1,191 +1,119 @@
 <%- include('../partials/header.ejs') %>
 <div id="container" class="container col-12">
-    <!-- FORM SECTION -->
-    <div class="row">
-        <!-- SIGN UP -->
-        <div class="col align-items-center flex-col sign-up">
-            <div class="form-wrapper align-items-center">
-                <div class="form sign-up" id="hello">
-                    <form id="signupForm" method="POST" action="/signup">
-                        <div class="pt-3 pb-3">
-                            <h2>Sign up</h2>
-                        </div>
-                        <div class="input-group ">
-                            <span class="text-muted hint">Username</span>
-                            <input type="text" placeholder="Username" class="rounded-4" name="username" id="signupUsername">
-                        </div>
-                        <div class="input-group">
-                            <span class="text-muted hint">Email</span>
-                            <input type="email" placeholder="Email" class="rounded-4" name="email">
-                        </div>
-                        <div class="input-group">
-                            <span class="text-muted hint">Phone Number</span>
-                            <input type="text" placeholder="Phone number" class="rounded-4" name="phonenumber">
-                        </div>
-                        <div class="input-group">
-                            <span class="text-muted hint">Password</span>
-                            <input type="password" placeholder="Password" class="rounded-4" name="password">
-                        </div>
-                        <div class="input-group">
-                            <span class="text-muted hint">Confirm Password</span>
-                            <input type="password" placeholder="Confirm password" class="rounded-4" name="confirmPassword">
-                        </div>
-                        <button type="submit" id="signupBtn">
-                            Request OTP
-                        </button>
-                    </form>
-                    <p>
-                        <span>
-                            Already have an account?
-                        </span>
-                        <b onclick="toggle()" class="pointer">
-                            Sign in here
-                        </b>
-                    </p>
-                </div>
+  <!-- FORM SECTION -->
+  <div class="row main-div-userAuth">
+    <!-- SIGN UP -->
+    <div class="col align-items-center flex-col sign-up main-signup signup-media">
+      <div class="form-wrapper align-items-center">
+        <div class="form sign-up" id="hello">
+          <form id="signupForm" method="POST" action="/signup" onsubmit="return validateRegister()" novalidate>
+            <div class="pt-2 pb-2">
+              <h2>Sign up</h2>
             </div>
-        
+            <div class="input-group">
+              <input type="hidden" name="refer" id="" value="<%= userId %>">
+              <span class="text-muted hint">Username</span>
+              <input type="text" placeholder="Username" class="rounded-4" name="username" id="Username" >
+              <span class="text-danger" style="margin-left: 1rem;" name="validate-signup"></span>
+            </div>
+            <div class="input-group">
+              <span class="text-muted hint">Email</span>
+              <input type="email" placeholder="Email" class="rounded-4" name="email" id="email">
+              <span class="text-danger" style="margin-left: 1rem;" name="validate-signup"></span>
+            </div>
+            <div class="input-group">
+              <span class="text-muted hint">Phone Number</span>
+              <input type="text" placeholder="Phone number" class="rounded-4" name="phonenumber" id="phonenumber">
+              <span class="text-danger" style="margin-left: 1rem;" name="validate-signup"></span>
+            </div>
+            <div class="input-group">
+              <span class="text-muted hint">Password</span>
+              <input type="password" placeholder="Password" class="rounded-4" name="password" id="password">
+              <span class="text-danger" style="margin-left: 1rem;" name="validate-signup"></span>
+            </div>
+            <div class="input-group">
+              <span class="text-muted hint">Confirm Password</span>
+              <input type="password" placeholder="Confirm password" class="rounded-4" name="confirmPassword" id="confirmPassword">
+              <span class="text-danger" style="margin-left: 1rem;" name="validate-signup"></span>
+            </div>
+            <button type="submit" id="signupBtn">Request OTP</button>
+          </form>
+          <p>
+            <span> Already have an account? </span>
+            <b onclick="toggle()" class="pointer"> Sign in here </b>
+          </p>
         </div>
-        <!-- END SIGN UP -->
-        <!-- SIGN IN -->
-        <div class="col align-items-center flex-col sign-in">
-            <div class="form-wrapper align-items-center">
-                
-                <div class="form sign-in">
-                    <div class="pt-3 pb-3">
-                        <h2>Sign in</h2>
-                    </div>
-                    <div class="input-group">
-                        <span class="text-muted hint">Username</span>
-                        <input type="text" placeholder="Username" class="rounded-4" name="username">
-                    </div>
-                    <div class="input-group">
-                        <span class="text-muted hint">Password</span>
-                        <input type="password" placeholder="Password" class="rounded-4" >
-                    </div>
-                    <button>
-                        Sign In
-                    </button>
-                    <p>
-                        <b>
-                            Forgot password?
-                        </b>
-                    </p>
-                    <p>
-                        <span>
-                            Don't have an account?
-                        </span>
-                        <b onclick="toggle()" class="pointer">
-                            Sign up here
-                        </b>
-                    </p>
-                </div>
-            </div>
-            <div class="form-wrapper">
-    
-            </div>
-        </div>
-        <!-- END SIGN IN -->
+      </div>
     </div>
-    <!-- END FORM SECTION -->
-    <!-- CONTENT SECTION -->
-    <div class="row content-row welcome">
-        <!-- SIGN IN CONTENT -->
-        <div class="col align-items-center flex-col">
-            <div class="text sign-in">
-                <h2>
-                    Welcome
-                </h2>
-                
-
-            </div>
-            <div class="img sign-in">
-                <img src="/public/admin/assets/images/faces/face1.jpg">
-            </div>
+    <!-- END SIGN UP -->
+    <!-- SIGN IN -->
+    <div class="col align-items-center flex-col sign-in">
+      <h6 class="text-danger" id="verification-Result"><%= locals.data ? data : '' %></h6>
+      <div class="form-wrapper align-items-center">
+        <div class="form sign-in">
+          <form id="signinForm" method="POST" novalidate>
+              <div class="pt-3 pb-3">
+                <h2>Sign in</h2>
+              </div>
+              <div class="alert alert-danger" role="alert" id="signin-alert">
+           
+              </div>
+              <div class="input-group">
+                <span class="text-muted hint">Username</span>
+                <input type="text" placeholder="Username" class="rounded-4" name="username" id="sign-in-username">
+                <span class="text-danger" style="margin-left: 1rem;" name="validate-signin"></span>
+              </div>
+              <div class="input-group">
+                <span class="text-muted hint">Password</span>
+                <input type="password" placeholder="Password" class="rounded-4" name="password" id="sign-in-password">
+                <span class="text-danger" style="margin-left: 1rem;" name="validate-signin"></span>
+              </div>
+              <button type="submit" id="signin-btn">Sign In</button>
+          </form>
+          <p>
+            <b>
+              <!-- Forgot password? -->
+            </b>
+          </p>
+          <p>
+            <span> Don't have an account? </span>
+            <b onclick="toggle()" class="pointer"> Sign up here </b>
+          </p>
         </div>
-        <!-- END SIGN IN CONTENT -->
-        <!-- SIGN UP CONTENT -->
-        <div class="col align-items-center flex-col joinwith">
-            <div class="img sign-up">
-            
-            </div>
-            <div class="text sign-up">
-                <h2>
-                    Join with us
-                </h2>
-
-            </div>
-        </div>
-        <!-- END SIGN UP CONTENT -->
+      </div>
+      <div class="form-wrapper"></div>
     </div>
-    <!-- END CONTENT SECTION -->
+    <!-- END SIGN IN -->
+  </div>
+  <!-- END FORM SECTION -->
+  <!-- CONTENT SECTION -->
+  <div class="row content-row welcome">
+    <!-- SIGN IN CONTENT -->
+    <div class="col align-items-center flex-col">
+      <div class="text sign-in">
+        <h2>Welcome</h2>
+      </div>
+      <div class="img sign-in">
+        <img src="/public/user/img/Signup/signUp.png" />
+      </div>
+    </div>
+    <!-- END SIGN IN CONTENT -->
+    <!-- SIGN UP CONTENT -->
+    <div class="col align-items-center flex-col joinwith">
+      <div class="text sign-up main-text-signup">
+        <h2>Join with us</h2>
+      </div>
+      <div class="img sign-up">
+        <img src="/public/user/img/Signup/signIn.png" />
+      </div>
+    </div>
+    <!-- END SIGN UP CONTENT -->
+  </div>
+  <!-- END CONTENT SECTION -->
 </div>
-<script>
-    let container = document.getElementById('container')
-
-toggle = () => {
-	container.classList.toggle('sign-in')
-	container.classList.toggle('sign-up')
-}
-
-setTimeout(() => {
-	container.classList.add('sign-in')
-}, 200)
-
-// document.getElementById('signupForm').addEventListener('submit',async function(event){
-//     event.preventDefault();
-//     const formData = new FormData(this);
-
-//         // function formDataToUrlEncoded(formData) 
-//         // {
-//         //     const urlEncodedPairs = [];
-
-//         //     for (const [key, value] of formData) {
-//         //         const encodedKey = encodeURIComponent(key);
-//         //         const encodedValue = encodeURIComponent(value);
-//         //         urlEncodedPairs.push(`${encodedKey}=${encodedValue}`);
-//         //     }
-
-//         //     return urlEncodedPairs.join('&');
-//         // }
-
-//         //     const formData = new FormData(this);
-//         //     // formData.append('name', 'John Doe');
-//         //     // formData.append('email', 'johndoe@example.com');
-
-//         //     const urlEncodedData = formDataToUrlEncoded(formData);
-//         //     console.log(urlEncodedData);
-
-
-
-
-
-
-
-
-//     const form = {}
-//     for (const [key, value] of formData.entries()) {
-//         form[key] = value
-//     }
-//     console.log(form)
-//     const json = JSON.stringify(form)
-//     console.log(json)
-
-//     const response = await fetch('/signup',{
-//         method : 'POST',
-//         body : json,
-//         // headers : {'Content-Type':'application/json'}
-//         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-//     })
-//     document.getElementById('signupForm').reset()
-//     if(response.ok){
-//         console.log(json)
-//         console.log(response.text());
-//         document.getElementById('hello').innerHTML = "hello"
-//     }
-
-    
-    
-// })
-</script>
+<style>
+  #signin-btn:active {
+    background-color: rgba(10, 10, 10, 0.819);
+  }
+</style>
 <%- include('../partials/footer.ejs') %>

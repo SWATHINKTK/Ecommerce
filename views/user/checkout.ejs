@@ -1,0 +1,381 @@
+<%- include('../partials/header.ejs') %>
+<%- include('../partials/navbar.ejs') %>
+    <!-- Breadcrumb Section Begin -->
+    <section class="breadcrumb-option">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb__text">
+                        <div class="breadcrumb__links">
+                            <a href="/">Home</a>
+                            <!-- <a href="/allproductview">Shop</a> -->
+                            <a href="/allproductview">Product Details</a>
+                            <span>checkout</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumb Section End -->
+
+    <!-- Shopping Cart Section Begin -->
+    <section class="shopping-cart spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+
+                    <!-- Delivery Address -->
+                    <div class="col-sm-12  p-3 border d-flex align-items-center mb-4 checkout-heading">
+                        <h5 class="font-weight-bold">Delivery Address</h5>
+                    </div>
+                    
+                    <% if(locals.address ? true : false){ %>
+                        <% for(let i=0; i < address.length ;i++){ %>
+                            <div class="card col-sm-12 mt-2 address-card" name="address-card" >
+                                <div class="card-body p-3">
+                                    <div class="row">
+                                        <input type="radio" class="address-selector"  name="CheckedAddress"  data-addressId="<%= address[i]._id %>" <% if(i === 0) { %>checked<%} %>>
+                                        <div class="col-sm-12 pl-4 pt-1">
+                                            <div class="d-flex">
+                                                <p class="card-text font-weight-bold address-name"><%= address[i].username %><span class="ml-2"> <%= address[i].phoneNumber %> </span></p>
+                                                
+                                                <a href="#" name="editCheckoutAddress" class="text-primary ml-auto" data-addressId="<%= address[i]._id %>"><i class="bi bi-pencil-square"></i> Edit</a>
+                                            </div>
+                                            <p class="card-text m-0"><%= address[i].address %></p>
+                                            <p class="card-text m-0"><%= address[i].locality %> , <%= address[i].city %> , <%= address[i].district %></p>
+                                            <p class="card-text font-weight-bold"><%= address[i].pincode %></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <% } %>
+                    <% } else {%>
+
+                        <div class="card col-sm-12 mt-2 address-card">
+                            <div class="card-body p-3">
+                                <div class="row">
+                                    <div class="col-sm-12 text-center">
+                                        <h2 class="text-danger address-notfound">Address is Not Found Adding New Address</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    <% } %>
+
+
+                    <div class="w-100 d-flex justify-content-end mt-3" >
+                        <button class="btn btn-secondary font-weight-bold rounded-pill border mr-3" id="change-address" style="box-shadow: 0 0 4px -2px #1c1c1c; display: none;" >Change Address</button>
+                    </div>
+
+
+
+                    <!-- ADD NEW ADDRESS IN CHECKOUT  -->
+                    <div id="addingNewAddressButton">
+                        <div class="col-sm-12  p-3 mb-5 mt-2 border d-flex align-items-center" id="checkout-AddNewAddress">
+                            <i class="fa-solid fa-plus fa-lg mr-3" style="color: #000000;"></i> <h5 class="font-weight-bold">Add New Address</h5>
+                        </div>
+                    </div>
+
+
+                    <!--  EDIT EXISTING ADDRESS IN CHECKOUT -->
+                    <div id="checkout-editAddressForm" style="display: none;">
+                        
+                    </div>
+                    <!-- END EDIT EXISTING ADDRESS IN CHECKOUT -->
+                    
+
+                    <div id="checkout-addAddressForm" style="display: none;">
+                        <h2 class="text-center font-weight-bold mb-4">Add New Address</h2>
+                        <form id="newAddressAddingCheckout">
+                            <div class="alert " role="alert" id="add-new-address-sucess">
+                            
+                            </div>
+                            <div class="form-row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="input1">Name</label>
+                                    <input type="text" class="form-control" id="Name" placeholder="Name" name="Name">
+                                    <span class="text-danger ml-2" name="address-validate-message"></span>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="input2">Phone Number</label>
+                                    <input type="text" class="form-control" id="PhnNumber" placeholder="10-digit Mobile Number" name="MobileNumber">
+                                    <span class="text-danger ml-2" name="address-validate-message"></span>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="input1">Pincode</label>
+                                    <input type="text" class="form-control" id="Pincode" placeholder="6 Digit Pincode" name="Pincode">
+                                    <span class="text-danger ml-2" name="address-validate-message"></span>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="input2">Locality</label>
+                                    <input type="text" class="form-control" id="Locality" placeholder="Locality" name="Locality">
+                                    <span class="text-danger ml-2" name="address-validate-message"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="textarea">Address</label>
+                                <textarea class="form-control" id="textarea" rows="3" name="Address" id="Address" placeholder="Address (Area & Street)"></textarea>
+                                <span class="text-danger ml-2" name="address-validate-message"></span>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="input1">City/Distict/Town</label>
+                                    <input type="text" class="form-control" id="City" placeholder="City/Distict/Town" name="City">
+                                    <span class="text-danger ml-2" name="address-validate-message"></span>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="districtSelect">Select a District:</label><br>
+                                    <select id="districtSelect" name="District" class="district" >
+                                        <option value="" class="mt-2">Select District</option>
+                                        <option value="Thiruvananthapuram">Thiruvananthapuram</option>
+                                        <option value="Kollam">Kollam</option>
+                                        <option value="Pathanamthitta">Pathanamthitta</option>
+                                        <option value="Alappuzha">Alappuzha</option>
+                                        <option value="Kottayam">Kottayam</option>
+                                        <option value="Idukki">Idukki</option>
+                                        <option value="Ernakulam">Ernakulam</option>
+                                        <option value="Thrissur">Thrissur</option>
+                                        <option value="Palakkad">Palakkad</option>
+                                        <option value="Malappuram">Malappuram</option>
+                                        <option value="Kozhikode">Kozhikode</option>
+                                        <option value="Wayanad">Wayanad</option>
+                                        <option value="Kannur">Kannur</option>
+                                        <option value="Kasaragod">Kasaragod</option>
+                                    </select>
+                                    <span class="text-danger ml-2" name="address-validate-message"></span>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="input1">Landmark</label>
+                                    <input type="text" class="form-control" id="Landmark" placeholder="Landmark" name="Landmark">
+                                    <span class="text-danger ml-2" name="address-validate-message"></span>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="input2">Alternate Number</label>
+                                    <input type="text" class="form-control" id="AlteranteNumber" name="AlteranteNumber" placeholder="Alternate Mobile Number">
+                                    <span class="text-danger ml-2" name="address-validate-message"></span>
+                                </div>
+                            </div>
+                            <input class="btn btn-primary pl-4 pr-4" type="submit" value="Save">
+                        </form>
+                    </div>
+                    <!--End  Delivery Address Section -->
+
+                    <div class="col-sm-12  p-3 border d-flex align-items-center mt-5 checkout-heading ">
+                        <h5 class="font-weight-bold">Product Details</h5>
+                    </div>
+                    <% 
+                        let quantity = 0;
+                        let sum = 0; 
+                    %>
+                    <% if(single){ %>
+                        <div class="p-3 cart-product-view d-flex mt-3 pb-5" id="">
+                            <div class="cart-productImage checkout-productImg">
+                                <img src="/public/admin/assets/productImages/<%= product.productImages[0] %>" alt="">
+                                <div class="mt-2">
+                                    <span class="font-weight-bold">Quanitity : </span>
+                                    <input type="number" class="cart-quantity text-center font-weight-bold" name="orderProducts" data-single="true" id="checkout-product-quanitity" min="1" max="10" value="1">
+                                    <input type="hidden" name="<%= product.price %>" id="checkout-hidden-data" value="1" data-product-stock="<%= product.stock %>">
+                                </div>
+                            </div>
+                
+                            <div class="">
+                                <h4 class="ml-4 mt-2 font-weight-bold mb-3"><%= product.productName %></h4>
+                                <div class="d-flex align-items-center m-2">
+                                    <h6 class="ml-3 mr-2">Color : </h6><input type="color" value="<%= product.color %>" class="cart-color">
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <h6 class="ml-4 mr-2">Size : </h6> <span><%= product.size %></span>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <h4 class="ml-4 mr-2 mt-2"><i class="bi bi-currency-rupee"></i> <span class="font-weight-bold"><%= product.price %></span></h4>
+                                </div>    
+                            </div>    
+                        </div>
+                    <% } else {%>
+                        <% for(let i = 0 ; i < cartProduct.length ; i++){ %>
+                            <% quantity += cartProduct[i].quantity %>
+                            <% sum += cartProduct[i].quantity * cartProduct[i].productId.price %>
+                            <div class="p-3 cart-product-view d-flex mt-3 pb-5" id="">
+                                <div class="cart-productImage checkout-productImg">
+                                    <img src="/public/admin/assets/productImages/<%= cartProduct[i].productId.productImages[0] %>" alt="">
+                                    <div class="mt-2">
+                                        <span class="font-weight-bold">Quanitity : </span>
+                                        <input type="number" class="cart-quantity text-center font-weight-bold" name="orderProducts" id="checkout-product-quanitity" min="1" max="10" value="<%= cartProduct[i].quantity %>" readonly>
+                                        <input type="hidden" name="<%= cartProduct[i].productId.price %>" id="checkout-hidden-data" value="1">
+                                    </div>
+                                </div>
+                    
+                                <div class="">
+                                    <h4 class="ml-4 mt-2 font-weight-bold mb-3"><%= cartProduct[i].productId.productName %></h4>
+                                    <div class="d-flex align-items-center m-2">
+                                        <h6 class="ml-3 mr-2">Color : </h6><input type="color" value="<%= cartProduct[i].productId.color %>" class="cart-color">
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <h6 class="ml-4 mr-2">Size : </h6> <span><%= cartProduct[i].productId.size %></span>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <h4 class="ml-4 mr-2 mt-2"><i class="bi bi-currency-rupee"></i> <span class="font-weight-bold"><%= cartProduct[i].productId.price %></span></h4>
+                                    </div>    
+                                </div>    
+                            </div>
+                    <% }} %>
+
+
+                    <div class="row d-flex justify-content-end align-items-center sticky mb-2 mt-2 ">
+                        <div class="continue__btn  mr-3" >
+                            <button class="btn proceed-payment" id="proceed-payment-btn">Proceed To Payment</button>
+                        </div>
+                    </div>
+
+                    <!-- PAYMENT OPTION -->
+                    <div id="payment-options" style="display: none;">
+                        <ul class="border" type="none">
+                            <li class="border p-3">
+                                <input type="radio" name="Payment" checked value="OnlinePayment">
+                                <span class="payment-method-text pl-3"> 
+                                    <i class="fa-solid fa-globe"></i>
+                                     ONLINE Payment</span>
+                            </li>
+                            <!-- <li class="border p-3">
+                                <input type="radio" name="Payment" value="CARD">
+                                <span class="payment-method-text pl-3">
+                                    <i class="fa-solid fa-credit-card" style="color: #1f7bd1;"></i> 
+                                    Credit / Debit / ATM Card
+                                </span>
+                            </li> -->
+                            <li class="border p-3">
+                                <input type="radio" name="Payment" value="Wallet">
+                                <span class="payment-method-text pl-3">
+                                    <i class="fa-solid fa-wallet" style="color: #2a4779;"></i>
+                                    Wallet <span class="ml-2 font-weight-bold <%= locals.wallet <= 999 ? 'text-danger' : 'text-dark' %> ">( ₹ <%= locals.wallet ? wallet : 0%>)</span>
+                                </span>
+                            </li>
+                            <li class="border p-3">
+                                <input type="radio" name="Payment" value="COD">
+                                <span class="payment-method-text pl-3"> 
+                                    <i class="bi bi-cash-stack fa-lg"></i> 
+                                     Cash on Delivery</span>
+                            </li>
+                        </ul>
+
+                        <% if(single){ %>
+                            <div class="row d-flex justify-content-end align-items-center mt-3 border p-2 placeorder">
+                                <div class="continue__btn  mr-3" >
+                                    <button class="btn proceed-payment" id="placeOrder" name="placeOrderBtn" data-product-id="<%= product._id %>" data-coupon="false" data-couponId="">Place Order</button>
+                                </div>
+                            </div>
+                        <% } else { %>
+                            <div class="row d-flex justify-content-end align-items-center mt-3 border p-2 placeorder">
+                                <div class="continue__btn  mr-3" >
+                                    <button class="btn proceed-payment" id="cartPlaceOrder" name="placeOrderBtn" data-coupon="false" data-couponId="">Place Order</button>
+                                </div>
+                            </div>
+                        <% } %>
+
+                    </div>
+                    <!-- END PAYMENT OPTION -->
+                </div>
+
+                <% if(single){ %>
+                    <div class="col-lg-4">
+                        <div class="cart__total">
+                            <h6 class="cart-total-head pb-3">Price Details</h6>
+                            <ul class="priceDetails">
+                                <li>Price <span><i class="bi bi-currency-rupee"></i><span name="checkout-price"><%= product.price %></span></span></li>
+                                <li>Quanitity <span name="checkout-price">1</span></li>
+                                <li>Discount <span><i class="bi bi-currency-rupee"></i> <span name="checkout-price">0</span></span></li>
+                                <li>Delivery Charges <span>Free</span></li>
+                                <li class="mt-2 cart-total-amount">Total Amount <span><i class="bi bi-currency-rupee"></i> <span name="checkout-price"><%= product.price %></span></span></li>
+                            </ul>
+                            <!-- <a href="#" class="primary-btn">Proceed to checkout</a> -->
+                            <% if(locals.couponData && locals.couponData.length > 0){ %>
+                                <div class="apply-coupons mb-3">
+                                    <h4 class="text-center font-weight-bold">Apply Coupons</h4 >
+                                    
+                                    <div class="apply-coupons-cards p-2 mt-1">
+                                        <% for(let i = 0;i < couponData.length ;i++) { %>
+                                            <div class="card coupon-card mb-4 mt-3">
+                                                <div class="card-body">
+                                                    <div class="ribbon"><%= couponData[i].OfferPercentage %>%</div>
+                                                    <div class="d-flex justify-content-end">
+                                                        <span class="font-weight-bold"><%= couponData[i].couponName %></span>
+                                                    </div>
+                                                    <div class="d-flex justify-content-end">
+                                                        <span style="font-size: 13px;">upto <i class="bi bi-currency-rupee"></i><%= couponData[i].minimumPurchase %></span>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between align-items-end mt-1" >
+                                                        <a href="" class="primary-btn-Coupon" name="couponApplyBtn" data-single="<%= locals.single ? true : false %>" data-coupon="<%= JSON.stringify(couponData[i]) %>">Apply</a>
+                                                        <div style="display: none;" name="couponReset">
+                                                            <span class="text-primary mt-1" style="cursor: pointer;" onclick="removeAppliedCoupon()" >Reset</span>
+                                                        </div>
+                                                        <span class="font-weight-bold cursor-pointer"  onclick="instructionsOnhover('<%= couponData[i].OfferPercentage %>','<%= couponData[i].minimumPurchase %>','<%= couponData[i].startDate %>','<%= couponData[i].startDate %>')" style="cursor: pointer;">* instructions</span>
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+                                        <% } %>
+                                    </div>
+                                </div>
+                            <% } %>
+                        </div>
+
+                        
+
+                        
+                    </div>
+                    
+                <% } else {%>
+                    <div class="col-lg-4 ">
+                        <div class="cart__total mt-3">
+                            <h6 class="cart-total-head pb-3">Price Details</h6>
+                            <ul class="priceDetails">
+                                <li>Price <span><i class="bi bi-currency-rupee"></i><span name="checkout-price"><%= sum %></span></span></li>
+                                <li>Quanitity <span name="checkout-price"><%= quantity %></span></li>
+                                <li>Discount <span><i class="bi bi-currency-rupee"></i><span name="checkout-price">0</span></span></li>
+                                <li>Delivery Charges <span>Free</span></li>
+                                <li class="mt-2 cart-total-amount">Total Amount <span><i class="bi bi-currency-rupee"></i> <span name="checkout-price"><%= sum %></span></span></li>
+                            </ul>
+                            <% if(locals.couponData && locals.couponData.length > 0){ %>
+                                <div class="apply-coupons mb-3">
+                                    <h4 class="text-center font-weight-bold">Apply Coupons</h4 >
+                                    
+                                    <div class="apply-coupons-cards p-2 mt-1">
+                                        <% for(let i = 0;i < couponData.length ;i++) { %>
+                                            <div class="card coupon-card mb-4 mt-3">
+                                                <div class="card-body">
+                                                    <div class="ribbon"><%= couponData[i].OfferPercentage %>%</div>
+                                                    <div class="d-flex justify-content-end">
+                                                        <span class="font-weight-bold"><%= couponData[i].couponName %></span>
+                                                    </div>
+                                                    <div class="d-flex justify-content-end">
+                                                        <span style="font-size: 13px;">upto <i class="bi bi-currency-rupee"></i><%= couponData[i].minimumPurchase %></span>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between align-items-end mt-1" >
+                                                        <a href="" class="primary-btn-Coupon" name="couponApplyBtn" data-single="<%= locals.single ? true : false %>" data-coupon="<%= JSON.stringify(couponData[i]) %>">Apply</a>
+                                                        <div style="display: none;" name="couponReset">
+                                                            <span class="text-primary mt-1" style="cursor: pointer;" data-single="<%= locals.single ? true : false %>" onclick="removeAppliedCoupon()" >Reset</span>
+                                                        </div>
+                                                        <span class="font-weight-bold cursor-pointer"  onclick="instructionsOnhover('<%= couponData[i].OfferPercentage %>','<%= couponData[i].minimumPurchase %>','<%= couponData[i].startDate %>','<%= couponData[i].startDate %>')" style="cursor: pointer;">* instructions</span>
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+                                        <% } %>
+                                    </div>
+                                </div>
+                            <% } %>
+                            <!-- <a href="#" class="primary-btn">Proceed to checkout</a> -->
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+</section>
+
+<%- include('../partials/footer.ejs') %>

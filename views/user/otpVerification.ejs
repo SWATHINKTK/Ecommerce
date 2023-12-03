@@ -3,10 +3,10 @@
     <div class="otp-div">
         <form method="POST" id="verificationOTP">
             <div class="pt-3 pb-3 ">
-                <h1>Verify Your Account</h1>
-                <p>To continue, complete this verification step. We've sent an OTP to the email <span class="text-primary"><%= data.email %></span>. Please enter it below to complete verification.</p>
+                <h1 data-timer="<%= locals.timer ? timer : '' %>" id="verify-heading">Verify Your Account</h1>
+                <p>To continue, complete this verification step. We've sent an OTP to Your email. Please enter it below to complete verification.</p>
             </div>
-            <p id="result" class="text-danger"></p>
+            <p id="otp-response-message" class=""></p>
             <div class="input-group ">
                 <span class="text-muted hint">Enter OTP</span>
                 <input type="text" placeholder="6 Digit OTP" class="rounded-4" name="otp" id="otp">
@@ -18,25 +18,10 @@
         <p class="text-center">Not Receive the Code? <span id="timer"></span><span id="resend" style="display:none;"><a href='/resendotp' class="text-primary"> Resend OTP </a></span></p>
     </div>
 </div>
-<script>
-    document.getElementById('verificationOTP').addEventListener('submit',(event)=>{
-        event.preventDefault();
-        const otp ={
-            otp : document.getElementById('otp').value
-        } 
-        const jsonData = JSON.stringify(otp)
-        fetch('/otpverification', {
-        method: 'POST',
-        body: jsonData,
-        headers :{'Content-Type':'application/json'}
-        })
-        .then(response =>  response.json())
-        .then(data => {
-            if(data.message == 'success'){
 
-                document.getElementById('verifyBtn').reset();
-                window.location.href = '/home';
+<%- include('../partials/footer.ejs') %>
 
+<<<<<<< HEAD
             }else if(data.message == 'error'){
 
                 document.getElementById('verifyBtn').reset();
@@ -72,3 +57,5 @@
     start();
 </script>
 <%- include('../partials/footer.ejs') %>
+=======
+>>>>>>> master

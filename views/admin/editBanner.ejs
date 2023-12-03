@@ -1,0 +1,88 @@
+<%- include('../partials/header.ejs') %>
+<h1 class="card-title text-center text-dark">Edit Banner</h1>
+   <div class="col-12 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body form-style d-flex justify-content-center mb-5">
+          <form class="forms-sample mt-3 mb-3 w-50" id="editBannerForm" method="POST">
+            <input type="hidden" name="bannerId" value="<%= bannerData._id %>">
+            <input type="hidden" name="bannerPreviousBackground" value="<%= bannerData.backgroundImage %>" >
+            <div class="" role="alert" id="banner-submit-result">
+            </div>
+            <div class="form-group">
+              <label for="exampleInputName1">Banner Name </label>
+              <input type="text" class="form-control" id="bannerOfferName" placeholder="Offer name" name="bannerOfferName" value="<%= bannerData.offerName %>">
+              <p class="text-danger ml-2" name="validate-banner"></p>
+            </div>
+            <div class="form-group">
+              <label for="exampleInputName1">Banner Heading</label>
+              <input type="text" class="form-control" id="bannerHeading" placeholder="banner heading" name="bannerHeading" value="<%= bannerData.offerHeading %>">
+              <p class="text-danger ml-2" name="validate-banner"></p>
+            </div>
+            <div class="form-group">
+              <label for="exampleInputName1">Page Link</label>
+              <input type="text" class="form-control" id="linkOfOfferPage" placeholder="offer page link" name="linkPage" value="<%= bannerData.pageLink %>">
+              <p class="text-danger ml-2" name="validate-banner"></p>
+            </div>
+          
+            <div class="form-group ">
+              <label class="col-sm-3 col-form-label">Background</label>
+              <input type="file" class="form-control" id="bannerBackground" name="bannerBackground" accept="image/*">
+              <p class="text-danger ml-2" name="validate-banner"></p>
+
+              <div  class="ml-3" id="bannerBackgroundPreview" >
+                <div class="d-flex justify-content-end">
+                  <button type="click" class="mb-3 bg-transparent addBrandCropBtn" id="banner-background-CropperWindowView"><i class="mdi mdi-crop"></i> Crop</button>
+                </div>
+                <div class="">
+                  <img class="banner-background-image w-100" id="bannerBackgroundImg" src="/public/admin/assets/images/bannerImages/<%= bannerData.backgroundImage %>"  alt="Category Image File" >
+                </div>
+              </div>
+            </div>
+
+            
+
+            <div class="form-group">
+              <label for="exampleTextarea1">Banner Description</label>
+              <textarea class="form-control" id="banner-description" rows="4" name="bannerDescription" placeholder="Banner Description"><%= bannerData.offerDescription %></textarea>
+              <p class="text-danger ml-2" name="validate-banner"></p>
+            </div>
+            <button type="submit" class="btn btn-primary mr-2" data-addBanner="false" id="ediBannerSubmitBtn">Submit</button>
+            <button type="click" class="btn btn-dark mr-2" id="bannerPreview" data-addBanner="false">Banner Preview</button>
+          </form>
+        </div>
+
+        <!-- IMAGE PREVIEW  -->
+        <div class="container p-5 mb-5" id="bannerImagePreview" style="background-image: url('/public/user/img/hero/hero-1.jpg'); background-size: cover; background-repeat: no-repeat; box-shadow: 0 10px 16px rgba(0, 0, 0, 0.549); display:none;">
+          <div class="row p-5">
+              <div class="col-xl-5 col-lg-7 col-md-8">
+                  <div class="hero__text ">
+                      <h6 name="banner">Summer Collection</h6>
+                      <h2 name="banner">Fall - Winter Collections 2030</h2>
+                      <p name="banner">A specialist label creating luxury essentials. Ethically crafted with an unwavering
+                      commitment to exceptional quality.</p>
+                      <a href="#" class="btn btn-dark">Shop now <span class="arrow_right"></span></a>
+                  </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>   
+    
+    
+    <!-- MODAL FOR IMAGE CROPPING  -->
+    <div class="modal w-100" id="addBanner-cropper-modal">
+      <div class="modal-dialog modal-dialog-centered w-100">
+        <div class="modal-content bg-white" style="height: 400px;">
+            <button type="button" class="close bg-white" onclick="addBannerCropperClose()"><span aria-hidden="true">&times;</span></button>
+            <div class="d-flex justify-content-center m-2 ">
+              <button type="button" class="btn mt-2 text-dark addBrandCropBtn " id="bannerCropResult" style=" box-shadow: 0 3px 10px rgb(0, 0, 0,0.5); border: 1px dashed #000; border-radius: 4px;"><i class="mdi mdi-crop"></i> Crop</button>
+            </div>
+            <img id="addBanner-cropper-Image" src="" alt="" style="height:auto; object-fit: cover;">
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+<%- include('../partials/footer.ejs') %>
