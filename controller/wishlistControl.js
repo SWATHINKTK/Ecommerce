@@ -6,22 +6,17 @@ const wishlistData = require('../models/wishlistModel');
 const addProductToWishlist = async(req, res, next) => {
 
     try {
-        console.log('ok')
         const productId = req.body.productId;
-        console.log(productId)
 
         const userId = req.session.userId;
-        console.log(userId)
 
         // Wishlist Exist and Wishlist Array Product Existence Checking
         const wishlistExist = await wishlistData.findOne({userId:userId});
-        console.log(wishlistExist)
 
         
         // Wishlist Existence Checking
         if(wishlistExist){
 
-            console.log('Exist')
 
             const productExistWishlist = wishlistExist.wishlistProducts.includes(productId);
 
@@ -49,9 +44,7 @@ const addProductToWishlist = async(req, res, next) => {
             }
 
         }else{
-
-            console.log('else');
-            
+                       
             const newList = wishlistData({
                 userId:userId,
                 wishlistProducts:productId

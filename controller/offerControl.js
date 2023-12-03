@@ -154,8 +154,6 @@ const productOfferApply = async(req, res, next) => {
                 res.json({offerApplied:false});
             }
 
-
-        console.log(offer)
     } catch (error) {
         next(error);
     }
@@ -336,7 +334,7 @@ async function offerUpdateCategory(productId, offer, amount){
         );
         return productAddCategoryOffer;
     } catch (error) {
-        console.log(error.message);
+        next(error);
     }
 }
 

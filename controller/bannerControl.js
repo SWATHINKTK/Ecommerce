@@ -62,7 +62,7 @@ const bannerStatusChange = async(req, res, next) => {
     try {
 
         const id = req.body.bannerId;
-        console.log(id)
+     
         const banner = await bannerData.findOne({_id:id});
 
         let updateStatus;

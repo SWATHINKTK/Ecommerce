@@ -210,25 +210,17 @@ const loadProductList = async (req, res, next) => {
 
     try {
 
-        const offers = await offerData.find({});
+        const offers = await offerData.aggregate([
+            {
+                $match:{
+                    startDate:{$lte: new Date()},
+                    endDate:{$gte: new Date()}
+                }
+            }
+        ])
 
         const products = await productInfo.find({}).sort({_id:-1});
         const brandData = await brandInfo.find({},{brand_name:1});
-
-        // console.log(products,brandData)
-        // for(let brand of brandData){
-        //     // if(brand._id.equals(products.brandname))
-        //     //     brandData = brand.brand_name
-        //     // console.log(brand.brand_name)
-        // }
-        
-        //    for(let product of productData){
-        //         for(let brand of dataBrand){
-        //             if(product.brandname.equals(brand._id)){
-        //                 console.log(product.productName,brand.brand_name)
-        //             }
-        //         }
-        //     }
     
         res.render('admin/viewProducts', { admin: true, productData: products ,dataBrand:brandData, offerData:offers});
         
@@ -331,7 +323,7 @@ const productAdd = async (req, res, next) => {
 
         // Taken Data Come Form Clent 
         const data = req.body;
-        console.log(data);
+
         const images = [];
         req.files.forEach((file) => {
             images.push(file.filename)
@@ -357,7 +349,7 @@ const productAdd = async (req, res, next) => {
                 specifications: data.productSpecification,
                 addDate: new Date(),
             })
-            // console.log(productData)
+            
             const product = await productData.save();
 
             // Sucess result Checking
@@ -509,7 +501,7 @@ const editProduct = async (req, res, next) => {
             updateDate: new Date()
 
         })
-        // console.log(updateProduct)
+       
         if (updateProduct.acknowledged) {
 
             res.json({ status: true, message: '&#9989; Succesfully edit Product' });
@@ -539,8 +531,14 @@ const editProduct = async (req, res, next) => {
 //***** View Categorys ***** 
 const loadCategoryList = async (req, res, next) => {
     try {
-        const offers = await offerData.find({});
-
+        const offers = await offerData.aggregate([
+            {
+                $match:{
+                    startDate:{$lte: new Date()},
+                    endDate:{$gte: new Date()}
+                }
+            }
+        ])
         const categoryData = await category.find({}).sort({ list: -1,_id:-1 });
         res.render('admin/viewCategorys', { admin: true, title: 'Categorylist' ,  data: categoryData, offerData:offers});
 
@@ -555,10 +553,19 @@ const searchCategory = async (req, res, next) => {
 
     try {
 
+        const offers = await offerData.aggregate([
+            {
+                $match:{
+                    startDate:{$lte: new Date()},
+                    endDate:{$gte: new Date()}
+                }
+            }
+        ])
+
         const search = req.body.search;
         const regex = new RegExp(`^${search}`, 'i');
         const searchData = await category.find({ categoryname: { $regex: regex } });
-        res.render('admin/viewCategorys', { admin: true, data: searchData, title: 'Categorylist' });
+        res.render('admin/viewCategorys', { admin: true, data: searchData, title: 'Categorylist' ,offerData:offers});
    
     } catch (error) {
         next(error);
@@ -830,7 +837,6 @@ const addBrandDetails = async(req, res, next) => {
                     brand_logo: img,
                     brand_addDate: new Date()
                 });
-                console.log(brandData)
 
                 const sendData = await brandData.save();
                 
@@ -892,7 +898,6 @@ const editBrandDetails = async(req, res, next) => {
     try{
         const data = req.body;
         const file = req.file;
-        // console.log(data,file);
 
         let logoImg;
         if(typeof file == 'object'){

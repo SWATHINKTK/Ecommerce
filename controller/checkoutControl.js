@@ -252,7 +252,6 @@ const PlaceOrder = async(req, res, next)=>{
             paymentMethod:data.PaymentMethod,
         });
 
-        console.log(orderSucess)
 
         // COUPON EXIST DATA ADDED TO ORDER DOCUMENT
         if(couponStatus){
@@ -310,11 +309,8 @@ const PlaceOrder = async(req, res, next)=>{
                         orderId:orderSucess._id
                     }
                     
-                    console.log(transaction)
                     const creditAmount = await userData.updateOne({_id:userId},{ $inc: { walletAmount: -orderSucess.totalAmount } },{ upsert: true });
                     const updateWalletTransaction = await userData.updateOne({_id:userId},{ $push: { walletTransaction: transaction } },{ upsert: true });
-
-                    console.log('trans',creditAmount,updateWalletTransaction)
 
                     // WALLET PAYMENT AND AMOUNT UPDATE SUCESSSFULL
                     if(creditAmount && updateWalletTransaction ){
@@ -486,7 +482,6 @@ async function checkStock(userId){
 
     let checkStock = true;
     cartItems.forEach(products => {
-        console.log(products.productData[0].stock,products.cartProducts.quantity)
         if(products.cartProducts.quantity > products.productData[0].stock){
             checkStock = false;
         }

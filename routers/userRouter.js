@@ -37,6 +37,7 @@ userRouter.use(async(req,res,next) => {
         res.locals.username = user ? user.username : '';
         res.locals.wishlistCount = wishlist ? wishlist.wishlistProducts.length : '';
         res.locals.cartCount =  cart ? cart.cartProducts.length : 0; 
+        
     }
     next();
     
@@ -59,10 +60,6 @@ userRouter.get('/productFilter', userController.productFilterData);
 userRouter.get('/productFilterSearch', userController.productFilterData);
 userRouter.get('/categoryproductview',userController.loadSpecificCategoryProducts);
 userRouter.get('/resendotp',userController.resendOTP);
-<<<<<<< HEAD
-userRouter.get('/error500',userController.load500ErrorPage);
-userRouter.get('/error404',userController.load404ErrorPage);
-=======
 userRouter.get('/productdetails',userController.loadProductDetailPage);
 userRouter.get('/userprofile',auth.isUserLogin,userController.loadUserProfile);
 userRouter.get('/addressinformation',auth.isUserLogin,userController.loadAddressInformation);
@@ -75,7 +72,6 @@ userRouter.get('/editaddress:id',auth.isUserLogin,userController.loadEditAddress
 
 // DELETE REQUEST FOR USER
 userRouter.delete('/deleteaddress:id',auth.isUserLogin,userController.deleteAddress);
->>>>>>> master
 
 // POST Request For User 
 userRouter.post('/signup',userController.storeSignupData);
@@ -96,5 +92,7 @@ userRouter.post('/walletPaymentVerify', auth.isUserLogin, userController.walletP
 userRouter.get('/error500',userController.load500ErrorPage);
 userRouter.get('/error404',userController.load404ErrorPage);  
 // userRouter.get('/*',userController.load500ErrorPage);
+
+
 
 module.exports = userRouter;

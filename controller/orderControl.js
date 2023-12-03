@@ -118,8 +118,7 @@ const loadOrderProgressInUserSide = async (req, res, next) => {
 
         const returnPolicy = new Date() ;
         returnPolicy.setDate((order[0].updatedAt).getDate() +7 )
-        // console.log(returnPolicy)
-        // console.log(order[0].updatedAt)
+  
         if (orderData) {
             res.render('user/orderProgress', { title: 'View Order', login: checkLogin, user: true, orderData: order , returnPolicyDate:returnPolicy});
         } else {

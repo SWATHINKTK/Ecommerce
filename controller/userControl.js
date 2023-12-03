@@ -137,7 +137,6 @@ const storeSignupData = async (req, res, next) => {
         const email = req.body.email
 
         const data = req.body;
-        console.log(data)
 
         const refer = data.refer;
         if(refer.trim() != ''){
@@ -148,7 +147,6 @@ const storeSignupData = async (req, res, next) => {
         }
 
         const emailExist = await userData.findOne({ email: email });
-        console.log(emailExist)
        
 
         if (emailExist) {
@@ -252,7 +250,6 @@ const OTPCheck = async (req, res, next) => {
         const sessionOTP = req.session.otp;
         const data = req.session.userData;
         const refer = req.session.referId;
-        console.log(refer)
 
         const emailExist = await userData.findOne({email:data.email});
 
@@ -281,8 +278,6 @@ const OTPCheck = async (req, res, next) => {
                     if(sendData){
 
                         if(refer){
-
-                            console.log("refer",refer)
 
                             const nanoidModule = await import('nanoid');
                             nanoid = nanoidModule.nanoid;
@@ -391,42 +386,45 @@ const verifyUser = async(req, res, next) => {
 const loadHomePage = async (req, res, next) => {
 
     try {
-
         const checkLogin = req.session.userId ? true : false;
-
-        // UserId Taken From The Session
         const id = req.session.userId;
 
-        const banner = await bannerData.aggregate([{
-            $match:{
-                // startDate:{$lte: new Date()},
-                // endDate:{$gte: new Date()},
-                is_Listed:true  
-            }
-        }]);
-       
+        // Use Promise.all to run multiple queries in parallel
+        const [banner, categoryData, productData, cart, wishlist] = await Promise.all([
+            bannerData.aggregate([
+                {
+                    $match: {
+                        is_Listed: true,
+                    },
+                },
+            ]),
+            category.find({ list: true }).sort({ _id: -1 }),
+            productInfo.aggregate([
+                { $unwind: "$categoryIds" },
+                {
+                    $lookup: {
+                        from: 'categorys',
+                        localField: 'categoryIds',
+                        foreignField: '_id',
+                        as: 'categoryData',
+                    },
+                },
+            ]),
+            cartData.findOne({ userId: id }),
+            wishlistData.findOne({ userId: id }),
+        ]);
 
-        const categoryData = await category.find({list:true}).sort({ _id: -1});
 
-        const productData = await productInfo.aggregate([
-            {
-                $unwind: "$categoryIds"
-            },
-            {
-                $lookup: {
-                    from: 'categorys',
-                    localField: 'categoryIds',
-                    foreignField: '_id',
-                    as: 'categoryData'
-                }
-            }]);
-
-        const cart = await cartData.findOne({userId:id});
-
-        const wishlist = await wishlistData.findOne({userId:id});
-    
-
-        res.render('index', { user: true,login:checkLogin,  title: 'Brand Unlimited', dataCategory: categoryData, dataProduct: productData ,dataCart:cart, wishlistData:wishlist, bannerData:banner});
+        res.render('index', {
+            user: true,
+            login: checkLogin,
+            title: 'Brand Unlimited',
+            dataCategory: categoryData,
+            dataProduct: productData,
+            dataCart: cart,
+            wishlistData: wishlist,
+            bannerData: banner,
+        });
 
     } catch (error) {
         next(error);
@@ -444,37 +442,34 @@ const loadHomePage = async (req, res, next) => {
 // **** GUEST PAGE LOADING FOR EVERY USERS ****
 const guestPage = async (req, res, next) => {
     try {
-        const categoryData = await category.find({list:true}).sort({ _id: -1 });
 
-        const banner = await bannerData.aggregate([{
-            $match:{
-                // startDate:{$lte: new Date()},
-                // endDate:{$gte: new Date()},
-                is_Listed:true  
-            }
-        }]);
-
-        const productData = await productInfo.aggregate([
-            {
-                $match:{
-                    status:true
-                }
-            },
-            {
-                $unwind: "$categoryIds" 
-            },
-            {
-                $lookup: {
-                    from: 'categorys', 
-                    localField: 'categoryIds', 
-                    foreignField: '_id', 
-                    as: 'categoryData'      
-                }
-            },
-            {$sort:{_id:-1}}
+        // Use Promise.all to run database queries in parallel
+        const [categoryData, banner, productData] = await Promise.all([
+            category.find({ list: true }).sort({ _id: -1 }),
+            bannerData.aggregate([{ $match: { is_Listed: true } }]),
+            productInfo.aggregate([
+                { $match: { status: true } },
+                { $unwind: "$categoryIds" },
+                {
+                    $lookup: {
+                        from: 'categorys',
+                        localField: 'categoryIds',
+                        foreignField: '_id',
+                        as: 'categoryData'
+                    }
+                },
+                { $sort: { _id: -1 } }
+            ])
         ]);
 
-        res.render('index', { user: true,login:false, title: 'Brand Unlimited', dataCategory: categoryData, dataProduct: productData ,bannerData:banner})
+        res.render('index', {
+            user: true,
+            login: false,
+            title: 'Brand Unlimited',
+            dataCategory: categoryData,
+            dataProduct: productData,
+            bannerData: banner
+        });
     } catch (error) {
         next(error);
     }
@@ -507,7 +502,15 @@ const loadProductDetailPage = async (req, res, next) => {
                 brandData = brand.brand_name
         }
        
-        res.render('productDetails', { user: true,login:checkLogin,title: 'Products', product:productData ,category:categoryData, dataBrand:brandData ,dataCart:cart, wishlistData:wishlist})
+        res.render('productDetails', { 
+            user: true,
+            login:checkLogin,title: 'Products', 
+            product:productData ,
+            category:categoryData, 
+            dataBrand:brandData ,
+            dataCart:cart, 
+            wishlistData:wishlist
+        });
 
 
     } catch (error) {
@@ -517,15 +520,7 @@ const loadProductDetailPage = async (req, res, next) => {
 }
 
 
-// ERROR Page Loading 
-const load500ErrorPage = (req,res) =>{
-    res.render('partials/error-500',{link:'/user'})
-}
 
-<<<<<<< HEAD
-const load404ErrorPage = (req,res) =>{
-    res.render('partials/error-404',{link:'/user'})
-=======
 // ***** LOAD ALL PRODUCT DATA VIEW PAGE ******
 const loadAllProductViewPage = async(req, res, next) =>{
     
@@ -573,18 +568,38 @@ const loadAllProductViewPage = async(req, res, next) =>{
             const cart = await cartData.find({userId:userId});
             const wishlist = await wishlistData.find({userId:userId});
 
-            res.render('allProductView',{ user: true,login:checkLogin, title: 'Products',toalProduct:true ,product:productData, wishlistData:wishlist, dataCart:cart , categoryData:categoryInfo, brandData:brand , totalPages:totalCount, pageNo:page});
+            res.render('allProductView',{ user: true,
+                login:checkLogin, 
+                title: 'Products',
+                toalProduct:true ,
+                product:productData, 
+                wishlistData:wishlist, 
+                dataCart:cart , 
+                categoryData:categoryInfo, 
+                brandData:brand , 
+                totalPages:totalCount, 
+                pageNo:page
+            });
             return;
 
         }
 
-        res.render('allProductView',{ user: true,login:checkLogin, title: 'Products',product:productData,toalProduct:true ,categoryData:categoryInfo, brandData:brand, totalPages:totalCount, pageNo:page});
+        res.render('allProductView',{ 
+            user: true,
+            login:checkLogin, 
+            title: 'Products',
+            product:productData,
+            toalProduct:true ,
+            categoryData:categoryInfo, 
+            brandData:brand, 
+            totalPages:totalCount, 
+            pageNo:page
+        });
 
     } catch (error) {
 
         next(error);
     }
->>>>>>> master
 }
 
 
@@ -592,7 +607,6 @@ const loadAllProductViewPage = async(req, res, next) =>{
 const productFilterData = async(req, res, next) => {
     try {
         const checkLogin = req.session.userId ? true : false;
-        console.log(req.url)
 
         // RETRIEVE THE DATA FROM CLIENT 
         const filterCategorys = req.query.category;
@@ -637,10 +651,34 @@ const productFilterData = async(req, res, next) => {
         if(totalCount.length != 0){
 
             totalCount = Math.ceil(totalCount[0].totalCount / limit);
-            res.render('allProductView',{ user: true,login:checkLogin, title: 'Products' , url:req.url, product:productData, categoryData:categoryInfo, brandData:brand, totalPages:totalCount, pageNo:page, searchCategorys:filterCategorys, searchBrand:filterBrands, searchPrice:filterPrice});
+            res.render('allProductView',{ 
+                user: true,
+                login:checkLogin, 
+                title: 'Products' , 
+                url:req.url, 
+                product:productData, 
+                categoryData:categoryInfo, 
+                brandData:brand, 
+                totalPages:totalCount, 
+                pageNo:page, 
+                searchCategorys:filterCategorys, 
+                searchBrand:filterBrands, 
+                searchPrice:filterPrice
+            });
 
         }else{
-            res.render('allProductView',{ user: true,login:checkLogin, title: 'Products', url:req.url, product:productData, categoryData:categoryInfo, brandData:brand,searchCategorys:filterCategorys, searchBrand:filterBrands, searchPrice:filterPrice});
+            res.render('allProductView',{ 
+                user: true,
+                login:checkLogin, 
+                title: 'Products', 
+                url:req.url, 
+                product:productData, 
+                categoryData:categoryInfo, 
+                brandData:brand,
+                searchCategorys:filterCategorys, 
+                searchBrand:filterBrands, 
+                searchPrice:filterPrice
+            });
         }
 
     } catch (error) {
@@ -743,7 +781,15 @@ const loadSpecificCategoryProducts = async(req, res, next) => {
         const categoroys = await category.find({});
         const brands = await brandInfo.find({});
         
-        res.render('allProductView',{ user: true,login:checkLogin, title: 'Products',product:productData ,categoryData:categoroys , brandData:brands});
+        res.render('allProductView',{ 
+            user: true,
+            login:checkLogin, 
+            title: 'Products',
+            product:productData ,
+            categoryData:categoroys , 
+            brandData:brands
+        });
+
     } catch (error) {
         next(error);
     }
@@ -760,7 +806,13 @@ const loadUserProfile = async function(req, res, next){
         const id = req.session.userId;
         const data = await userData.findOne({_id:id});
         if(data){
-            res.render('userProfile',{user:true, login:checkLogin, userInfo:data, title:'User Profile'});
+            res.render('userProfile',{
+                user:true, 
+                login:checkLogin, 
+                userInfo:data, 
+                title:'User Profile'
+            });
+
         }else{
             throw new Error('Not Found error');
         }
@@ -809,7 +861,13 @@ const loadAddressInformation = async(req, res, next)=>{
         const addressData = await addressInfo.find({userId:id});
 
         if(addressData){
-            res.render('addressInformation',{title:'Address', login:checkLogin, user: true, login:checkLogin, address:addressData});
+            res.render('addressInformation',{
+                title:'Address', 
+                login:checkLogin, 
+                user: true, 
+                login:checkLogin, 
+                address:addressData
+            });
         }else{
             throw new Error('Not Found Error');
         }      
@@ -826,7 +884,12 @@ const loadAddressForm = async(req, res, next)=>{
     try {  
 
         const checkLogin = req.session.userId ? true : false;
-        res.render('addressForm',{ title:'Add New Address' ,login:checkLogin ,user: true,login:checkLogin});
+        res.render('addressForm',{ 
+            title:'Add New Address' ,
+            login:checkLogin ,
+            user: true,
+            login:checkLogin
+        });
         
     } catch (error) {
         next(error);
@@ -890,11 +953,23 @@ const loadEditAddressForm = async(req, res, next) =>  {
         if(addressData){
 
             if(req.query.url){
-                res.render('checkoutEditAddress',{ title:'Update Address' ,login:checkLogin , user: true, login:checkLogin, address:addressData});
+                res.render('checkoutEditAddress',{ 
+                    title:'Update Address' ,
+                    login:checkLogin , 
+                    user: true, 
+                    login:checkLogin, 
+                    address:addressData
+                });
                 return;
             }
 
-            res.render('editAddress',{ title:'Update Address' ,login:checkLogin , user: true, login:checkLogin, address:addressData});
+            res.render('editAddress',{ 
+                title:'Update Address' ,
+                login:checkLogin , 
+                user: true, 
+                login:checkLogin, 
+                address:addressData
+            });
         }else{
             throw new Error('Data Is Not Found')
         }
@@ -1114,7 +1189,13 @@ const loadAboutPage = async(req , res , next) => {
         ]);
 
 
-        res.render('about',{ title:'About' ,user: true ,categoryCount:categorys,userCount:users,brandData:brands});
+        res.render('about',{ 
+            title:'About' ,
+            user: true ,
+            categoryCount:categorys,
+            userCount:users,
+            brandData:brands
+        });
         
     } catch (error) {
         next(error)
@@ -1163,10 +1244,6 @@ module.exports = {
     OTPCheck,
     verifyUser,
     loadHomePage,
-<<<<<<< HEAD
-    load500ErrorPage,
-    load404ErrorPage
-=======
     loadAddressInformation,
     loadUserProfile,
     editPassword,
@@ -1188,7 +1265,6 @@ module.exports = {
     load404ErrorPage,
     loadAboutPage,
     loadContactPage
->>>>>>> master
 }
 
 

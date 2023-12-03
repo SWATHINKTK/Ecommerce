@@ -133,13 +133,7 @@ const removeProductFromCart = async (req, res, next) => {
         const userId = req.session.userId
         const productId = req.body.productId;
 
-        console.log('cartRemove')
-
-        console.log(productId)
-
         const cartInfo = await cartData.findOne({userId:userId});
-
-        console.log(cartInfo)
 
         if(cartInfo.cartProducts.length == 1){
 

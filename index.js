@@ -76,12 +76,8 @@ const offerRouter = require('./routers/offerRouter');
 app.use('/admin',offerRouter);
 
 
-// HADLING THE NOT DEFINED ROUTER CALL
-app.use('*',(req,res,next)=>{
-    const err=new Error('Page is Not Found');
-    err.statusCode=404;
-    next(err)
-})
+// // HADLING THE NOT DEFINED ROUTER CALL
+
 
 
 // **** ERROR HANDLING MIDDLEWARE ****
@@ -100,11 +96,25 @@ app.use((err,req,res,next) => {
             res.status(errStatus).render('errors/error404',{link:'/'});
         }
     }else{
-        res.status(errStatus).render('partials/error-500',{errorCode:errStatus});
+
+        if(req.session.adminId){
+            res.status(errStatus).render('partials/error-500',{errorCode:errStatus,user:false});
+        }else{
+            res.status(errStatus).render('partials/error-500',{errorCode:errStatus,user:true});
+        }
     }
  
 })
 
+
+app.use('*',(req,res,next)=>{
+    try {
+        throw new Error('Page is Not Found');
+    } catch (error) {
+        error.statusCode = 404;
+        next(error);
+    } 
+})
 
 
 

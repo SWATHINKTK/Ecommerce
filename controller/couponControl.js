@@ -89,7 +89,6 @@ const loadEditCouponPage = async(req, res, next) => {
 const editCouponDataSubmit = async(req, res, next) => {
     try {
         const data = req.body;
-        console.log(data)
 
         const condition = data.couponName.trim() != '' & data.minimumPurchase.trim() != '' & data.OfferPercentage.trim() != '' & data.startDate.trim() != '' & data.endDate.trim() != '';
         if(condition){

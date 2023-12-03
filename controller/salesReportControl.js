@@ -45,6 +45,9 @@ const loadSalesReportPage = async(req, res, next) => {
                     createdAt:1,
                     updatedAt:1, 
                 }
+            },
+            {
+                $sort:{updatedAt:-1}
             }
         ])
 
