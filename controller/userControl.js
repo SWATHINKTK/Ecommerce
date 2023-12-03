@@ -16,6 +16,7 @@ const { chownSync } = require('fs');
 const { threadId } = require('worker_threads');
 const mongoose = require('mongoose');
 const { constants } = require('buffer');
+const { th } = require('date-fns/locale');
 
 
 // PAYMENT INTEGRATION KEY SETUP
@@ -68,7 +69,7 @@ async function sendEmail( email, html , fromMail = 'swathinktk10@gmail.com' ) {
 
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
-            console.log(error.message);
+            throw new Error('Mail Sending Failed')
         } else {
             console.log("Email is to be sented", info.response);
         }
@@ -84,7 +85,7 @@ async function securePassword(password) {
         const secure = await bcrypt.hash(password, 10);
         return secure;
     } catch (error) {
-        console.log(error.message);
+        throw new Error('Encryption Error');
     }
 }
 

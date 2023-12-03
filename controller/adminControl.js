@@ -19,8 +19,8 @@ async function strong(pass) {
     try {
         const x = await bcrypt.hash(pass, 10)
         return x;
-    } catch (err) {
-        console.log(err)
+    } catch (error) {
+        throw new Error(error)
     }
 
 }
@@ -32,7 +32,7 @@ async function deleteFile(filePath){
     fs.unlink(filePath,(error) => {
 
         if(error){
-            console.error(error.code);
+            throw new Error(error);
         }else{
             console.log('Previous Image Delete Sucess');
         }
