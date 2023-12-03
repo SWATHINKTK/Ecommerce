@@ -210,25 +210,17 @@ const loadProductList = async (req, res, next) => {
 
     try {
 
-        const offers = await offerData.find({});
+        const offers = await offerData.aggregate([
+            {
+                $match:{
+                    startDate:{$gte:Date.now()},
+                    endDate:{$lte:Date.now()}
+                }
+            }
+        ]);
 
         const products = await productInfo.find({}).sort({_id:-1});
         const brandData = await brandInfo.find({},{brand_name:1});
-
-        // console.log(products,brandData)
-        // for(let brand of brandData){
-        //     // if(brand._id.equals(products.brandname))
-        //     //     brandData = brand.brand_name
-        //     // console.log(brand.brand_name)
-        // }
-        
-        //    for(let product of productData){
-        //         for(let brand of dataBrand){
-        //             if(product.brandname.equals(brand._id)){
-        //                 console.log(product.productName,brand.brand_name)
-        //             }
-        //         }
-        //     }
     
         res.render('admin/viewProducts', { admin: true, productData: products ,dataBrand:brandData, offerData:offers});
         
@@ -539,7 +531,14 @@ const editProduct = async (req, res, next) => {
 //***** View Categorys ***** 
 const loadCategoryList = async (req, res, next) => {
     try {
-        const offers = await offerData.find({});
+        const offers = await offerData.aggregate([
+            {
+                $match:{
+                    startDate:{$gte:Date.now()},
+                    endDate:{$lte:Date.now()}
+                }
+            }
+        ]);
 
         const categoryData = await category.find({}).sort({ list: -1,_id:-1 });
         res.render('admin/viewCategorys', { admin: true, title: 'Categorylist' ,  data: categoryData, offerData:offers});

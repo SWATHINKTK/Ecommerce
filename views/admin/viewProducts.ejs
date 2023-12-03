@@ -136,6 +136,12 @@
                         </div>
                     </div>
                 <% } %>
+                <% if(offerData.length == 0) { %>
+                  <div class="d-flex justify-content-center">
+                    <img src="/public/admin/assets/images/noOffer.png" alt="" srcset="">
+                  </div>
+                  <h3 class="text-center text-danger">No Offer Found !....</h3>
+                <% } %>
             </div>
                 </div>
               </div>
