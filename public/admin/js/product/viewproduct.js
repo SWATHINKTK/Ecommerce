@@ -189,77 +189,7 @@ function listModalDisplayHidden(){
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function buttonWorkSearch(){
-    const imageFile = [];
-        document.getElementById('table-product').addEventListener('click',function(event) {
-            const target = event.target;
-            
-            if(target.tagName == 'A' && target.classList.contains('product-viewmore')){
-                viewMore(target)
-
-            }else if(target.tagName == 'BUTTON' && target.classList.contains('l-u-button')){
-                productStatus(target);
-
-            }else if(target.tagName == 'BUTTON' && target.classList.contains('product-edit-button')){
-                loadEditProductPage(target,imageFile);
-                
-
-            }
-
-        /*---------------------------------------View More Data End------------------------------------------------*/
-
-
-
-        })
-
-
-        /* --------------------------------------------Back Button for View More Data------------------------------------------------- */
-        document.getElementById('product-cancel').addEventListener('click',()=>{
-            const modal_div = document.getElementById('modal-total-div');
-            modal_div.style.display = "none";
-        })
-
-
-
-        /*------------------------------------------Sucess Button for list unllist Product------------------------------------------- */
-        document.getElementById('list-confirmation-sucess').addEventListener('click',()=>{
-            productStatusSucess();
-        })
-
-
-
-        /*------------------------------------------ 2 Back Button for confiramation modal-------------------------------------------- */
-        document.getElementById('list-confirmation-cancel1').addEventListener('click',()=>{
-            listModalDisplayHidden()
-        })
-        document.getElementById('list-confirmation-cancel2').addEventListener('click',()=>{
-            listModalDisplayHidden()
-        })
-}
-
-
-
-
+// OFFER SELECTING MODAL VIEW
 function offerModalView(){
     const offerModal = document.querySelectorAll('button[name="offerModalView"]');
 
@@ -278,7 +208,7 @@ function offerModalView(){
 
 
 
-
+//OFFER APPLY BUTTON CLICK 
 function applyOffer(){
     const applyBtn = document.querySelectorAll('button[name="offerApplyBtn"]');
 
@@ -389,4 +319,58 @@ function removeOffer(){
         })
     })
 
+}
+
+
+function searchProduct(){
+    
+}
+
+
+function buttonWorkSearch(){
+    const imageFile = [];
+        document.getElementById('table-product').addEventListener('click',function(event) {
+            const target = event.target;
+            
+            if(target.tagName == 'A' && target.classList.contains('product-viewmore')){
+                viewMore(target)
+
+            }else if(target.tagName == 'BUTTON' && target.classList.contains('l-u-button')){
+                productStatus(target);
+
+            }else if(target.tagName == 'BUTTON' && target.classList.contains('product-edit-button')){
+                loadEditProductPage(target,imageFile);
+                
+
+            }
+
+        /*---------------------------------------View More Data End------------------------------------------------*/
+
+
+
+        })
+
+
+        /* --------------------------------------------Back Button for View More Data------------------------------------------------- */
+        document.getElementById('product-cancel').addEventListener('click',()=>{
+            const modal_div = document.getElementById('modal-total-div');
+            modal_div.style.display = "none";
+        })
+
+
+
+        /*------------------------------------------Sucess Button for list unllist Product------------------------------------------- */
+        document.getElementById('list-confirmation-sucess').addEventListener('click',()=>{
+            productStatusSucess();
+        })
+
+
+
+        /*------------------------------------------ 2 Back Button for confiramation modal-------------------------------------------- */
+        document.getElementById('list-confirmation-cancel1').addEventListener('click',()=>{
+            listModalDisplayHidden()
+        })
+        document.getElementById('list-confirmation-cancel2').addEventListener('click',()=>{
+            listModalDisplayHidden()
+        })
 }

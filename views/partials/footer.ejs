@@ -1,22 +1,23 @@
 <% if( locals.admin ? admin : false) { %>
-   </div>
     </div>
     </div>
     </div>
-        
-        <!-- content-wrapper ends -->
-          <!-- partial:partials/_footer.html -->
-          <footer class="footer">
-            <div class="d-sm-flex justify-content-center justify-content-sm-between">
-              <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © UNLIMITED.com 2023</span>
-              <!-- <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center"> Free <a href="https://www.bootstrapdash.com/bootstrap-admin-template/" target="_blank">Bootstrap admin templates</a> from Bootstrapdash.com</span> -->
-            </div>
-          </footer>
-          <!-- partial -->
+    </div>
+
+    <!-- content-wrapper ends -->
+    <!-- partial:partials/_footer.html -->
+    <footer class="footer">
+        <div class="d-sm-flex justify-content-center justify-content-sm-between">
+            <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © UNLIMITED.com
+                2023</span>
+            <!-- <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center"> Free <a href="https://www.bootstrapdash.com/bootstrap-admin-template/" target="_blank">Bootstrap admin templates</a> from Bootstrapdash.com</span> -->
         </div>
-        <!-- main-panel ends -->
-      </div>
-      <!-- page-body-wrapper ends -->
+    </footer>
+    <!-- partial -->
+    </div>
+    <!-- main-panel ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
     </div>
     <script src="/public/admin/js/main/main.js"></script>
     <script src="/public/admin/js/fetch.js"></script>
@@ -33,7 +34,7 @@
     <script src="/public/admin/js/offer/offer.js"></script>
     <script src="/public/admin/js/order/manageOrder.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
+
     <!-- Cropper Js -->
     <script src="/node_modules/cropperjs/dist/cropper.min.js"></script>
 
@@ -74,117 +75,119 @@
     <% }else if(locals.style ? style : false) { %>
         <script src="/public/admin/js/login/validate.js"></script>
     <% } else if(locals.user ? user : false) {%>
-      
 
-      <!-- Footer Section Begin -->
-      <footer class="footer">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="footer__about">
-                        <div class="footer__logo">
-                            <a href="#"><img src="/public/user/img/footer-logo.png" alt=""></a>
+
+        <!-- Footer Section Begin -->
+        <footer class="footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-3 col-md-6 col-sm-6">
+                        <div class="footer__about">
+                            <div class="footer__logo">
+                                <a href="#"><img src="/public/user/img/footer-logo.png" alt=""></a>
+                            </div>
+                            <p>The customer is at the heart of our unique business model, which includes design.</p>
+                            <a href="#"><img src="/public/user/img/payment.png" alt=""></a>
                         </div>
-                        <p>The customer is at the heart of our unique business model, which includes design.</p>
-                        <a href="#"><img src="/public/user/img/payment.png" alt=""></a>
+                    </div>
+                    <div class="col-lg-2 offset-lg-1 col-md-3 col-sm-6">
+                        <div class="footer__widget">
+                            <h6>Shopping</h6>
+                            <ul>
+                                <li><a href="/allproductview">Clothing Store</a></li>
+                                <li><a href="/categoryproductview?id=6538bdfeb9d241bcc58a8104">Trending Shirts</a></li>
+                                <li><a href="/api/cart">Cart</a></li>
+                                <li><a href="/api/viewWishlist">Wishlist</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-3 col-sm-6">
+                        <div class="footer__widget">
+                            <h6>About</h6>
+                            <ul>
+                                <li><a href="/userprofile">User Profile</a></li>
+                                <li><a href="/contact">Contact Us</a></li>
+                                <li><a href="/about">About</a></li>
+                                <!-- <li><a href="#">Return & Exchanges</a></li> -->
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 offset-lg-1 col-md-6 col-sm-6">
+                        <div class="footer__widget">
+                            <h6>Complint</h6>
+                            <div class="footer__newslatter">
+                                <p>If there any issue.Complint to Admin</p>
+                                <form action="#">
+                                    <input type="text" placeholder="Your email">
+                                    <button type="submit"><span class="icon_mail_alt"></span></button>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="col-lg-2 offset-lg-1 col-md-3 col-sm-6">
-                    <div class="footer__widget">
-                        <h6>Shopping</h6>
-                        <ul>
-                            <li><a href="#">Clothing Store</a></li>
-                            <li><a href="#">Trending Shoes</a></li>
-                            <li><a href="#">Accessories</a></li>
-                            <li><a href="#">Sale</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-3 col-sm-6">
-                    <div class="footer__widget">
-                        <h6>Shopping</h6>
-                        <ul>
-                            <li><a href="#">Contact Us</a></li>
-                            <li><a href="#">Payment Methods</a></li>
-                            <li><a href="#">Delivary</a></li>
-                            <li><a href="#">Return & Exchanges</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-3 offset-lg-1 col-md-6 col-sm-6">
-                    <div class="footer__widget">
-                        <h6>NewLetter</h6>
-                        <div class="footer__newslatter">
-                            <p>Be the first to know about new arrivals, look books, sales & promos!</p>
-                            <form action="#">
-                                <input type="text" placeholder="Your email">
-                                <button type="submit"><span class="icon_mail_alt"></span></button>
-                            </form>
+                <div class="row">
+                    <div class="col-lg-12 text-center">
+                        <div class="footer__copyright__text">
+                            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                            <p>Copyright ©
+                                <script>
+                                    document.write(new Date().getFullYear());
+                                </script>
+                                All rights reserved | This is made with <i class="fa fa-heart-o"
+                                    aria-hidden="true"></i> by <a href="#"
+                                    target="_blank">Male Fashion.</a>
+                            </p>
+                            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-lg-12 text-center">
-                    <div class="footer__copyright__text">
-                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                        <p>Copyright ©
-                            <script>
-                                document.write(new Date().getFullYear());
-                            </script>2020
-                            All rights reserved | This template is made with <i class="fa fa-heart-o"
-                            aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-                        </p>
-                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
-    <!-- Footer Section End -->
+        </footer>
+        <!-- Footer Section End -->
 
 
-   
 
 
-      <script src="/public/user/js/DesignModel/jquery-3.3.1.min.js"></script>
-      <script src="/public/user/js/DesignModel/bootstrap.min.js"></script>
-      <script src="/public/user/js/DesignModel/jquery.nice-select.min.js"></script>
-      <script src="/public/user/js/DesignModel/jquery.nicescroll.min.js"></script>
-      <script src="/public/user/js/DesignModel/jquery.magnific-popup.min.js"></script>
-      <script src="/public/user/js/DesignModel/jquery.countdown.min.js"></script>
-      <script src="/public/user/js/DesignModel/jquery.slicknav.js"></script>
-      <script src="/public/user/js/DesignModel/mixitup.min.js"></script>
-      <script src="/public/user/js/DesignModel/owl.carousel.min.js"></script>
-      <script src="/public/user/js/DesignModel/main.js"></script>
-      
+
+        <script src="/public/user/js/DesignModel/jquery-3.3.1.min.js"></script>
+        <script src="/public/user/js/DesignModel/bootstrap.min.js"></script>
+        <script src="/public/user/js/DesignModel/jquery.nice-select.min.js"></script>
+        <script src="/public/user/js/DesignModel/jquery.nicescroll.min.js"></script>
+        <script src="/public/user/js/DesignModel/jquery.magnific-popup.min.js"></script>
+        <script src="/public/user/js/DesignModel/jquery.countdown.min.js"></script>
+        <script src="/public/user/js/DesignModel/jquery.slicknav.js"></script>
+        <script src="/public/user/js/DesignModel/mixitup.min.js"></script>
+        <script src="/public/user/js/DesignModel/owl.carousel.min.js"></script>
+        <script src="/public/user/js/DesignModel/main.js"></script>
 
 
-      <script src="https://unpkg.com/js-image-zoom@0.7.0/js-image-zoom.js" type="application/javascript"></script>
-      
-      <script src="/public/user/js/Home/product.js"></script>
-      
-      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-      <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-      <script src="/public/user/js/Home/userProfile.js"></script>
-      <script src="/public/user/js/Home/address.js"></script>
-      <script src="/public/user/js/Cart/cart.js"></script>
-      <script src="/public/user/js/CheckOut/checkOut.js"></script>
-      <script src="/public/user/js/CheckOut/checkoutAddress.js"></script>
-      <script src="/public/user/js/Order/order.js"></script>
-      <script src="/public/user/js/Wishlist/wishlist.js"></script>
-      <script src="/public/user/js/Order/orderFilter.js"></script>
-      <script src="/public/user/js/Product/productFilter.js"></script>
-      <script src="/public/user/js/Wallet/wallet.js"></script>
-      <script src="/public/user/js/Rating/rating.js"></script>
+        <script src="https://unpkg.com/js-image-zoom@0.7.0/js-image-zoom.js" type="application/javascript"></script>
 
-    <% }else{ %>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-        <script src="/public/user/js/Login/validate.js"></script>
-        <script src="/public/user/js/Login/userauthentication.js"></script>
-    <% } %>
-    </body>
+        <script src="/public/user/js/Home/product.js"></script>
+
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+        <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+        <script src="/public/user/js/Home/userProfile.js"></script>
+        <script src="/public/user/js/Home/address.js"></script>
+        <script src="/public/user/js/Cart/cart.js"></script>
+        <script src="/public/user/js/CheckOut/checkOut.js"></script>
+        <script src="/public/user/js/CheckOut/checkoutAddress.js"></script>
+        <script src="/public/user/js/Order/order.js"></script>
+        <script src="/public/user/js/Wishlist/wishlist.js"></script>
+        <script src="/public/user/js/Order/orderFilter.js"></script>
+        <script src="/public/user/js/Product/productFilter.js"></script>
+        <script src="/public/user/js/Wallet/wallet.js"></script>
+        <script src="/public/user/js/Rating/rating.js"></script>
+
+        <% }else{ %>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+                crossorigin="anonymous"></script>
+            <script src="/public/user/js/Login/validate.js"></script>
+            <script src="/public/user/js/Login/userauthentication.js"></script>
+        <% } %>
+</body>
+
 </html>
-
-

@@ -2142,6 +2142,9 @@ form .form-control:focus {
 .ordersuccess-right h5{
 	font-weight: 700;
 }
+.filter-collapse{
+	display: none;
+}
 
 .order-success-product-image{
 	max-height: 200px;
@@ -4243,6 +4246,9 @@ form .form-control:focus {
 /* Tablet Device = 768px */
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
+	.shop{
+		
+	}
 	.header__menu ul li {
 		margin-right: 10px;
 	}
@@ -4746,5 +4752,8 @@ form .form-control:focus {
 	}
 	.categories__text:before {
 		height: 250px;
+	}
+	.main-div-productAllPage{
+		display: block;
 	}
 }
