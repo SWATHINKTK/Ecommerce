@@ -253,11 +253,23 @@ const loadProductMoreData = async (req, res, next) => {
 
 const searchProduct = async (req, res, next) => {
     try {
-        const search = req.params.data;
+        const search = req.query.search;
         const Regex = new RegExp(`^${search}.*`, 'i');
-        const productData = await productInfo.find({ productName: { $regex: Regex } });
+        const productData = await productInfo.find({ productName: { $regex: Regex } }).sort({_id:-1});
 
-        res.render('admin/viewProducts', { admin: true, productData: productData });
+        const offers = await offerData.aggregate([
+            {
+                $match:{
+                    startDate:{$lte: new Date()},
+                    endDate:{$gte: new Date()}
+                }
+            }
+        ])
+
+        const brandData = await brandInfo.find({},{brand_name:1});
+    
+
+        res.render('admin/viewProducts', { admin: true, productData: productData, offerData:offers ,dataBrand:brandData,});
     } catch (error) {
         next(error);
     }
@@ -1035,7 +1047,7 @@ const logoutAdmin = (req, res, next) => {
 
 // ERROR Page Loading 
 const load500ErrorPage = (req, res) => {
-    res.render('partials/error-500', { link: '/admin' })
+    throw new Error('Server Error');
 }
 
 const load404ErrorPage = (req, res) => {

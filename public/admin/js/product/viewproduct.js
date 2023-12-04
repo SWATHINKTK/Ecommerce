@@ -322,55 +322,24 @@ function removeOffer(){
 }
 
 
-function searchProduct(){
-    
-}
+// PRODUCRT SEARCHING
+async function searchProduct(){
 
+    const contentPlaceholder = document.getElementById("dynamic_page");
+        const searchData = document.getElementById('productSearch').value;
 
-function buttonWorkSearch(){
-    const imageFile = [];
-        document.getElementById('table-product').addEventListener('click',function(event) {
-            const target = event.target;
-            
-            if(target.tagName == 'A' && target.classList.contains('product-viewmore')){
-                viewMore(target)
+        const url = `/admin/searchproduct?search=${searchData}`;
+        
+        const response = await fetch(url);
 
-            }else if(target.tagName == 'BUTTON' && target.classList.contains('l-u-button')){
-                productStatus(target);
-
-            }else if(target.tagName == 'BUTTON' && target.classList.contains('product-edit-button')){
-                loadEditProductPage(target,imageFile);
-                
-
+            if(!response.ok){
+                window.location.href = '/admin/error500';
             }
 
-        /*---------------------------------------View More Data End------------------------------------------------*/
+        const data = await response.text();
 
+        contentPlaceholder.innerHTML = data;
 
-
-        })
-
-
-        /* --------------------------------------------Back Button for View More Data------------------------------------------------- */
-        document.getElementById('product-cancel').addEventListener('click',()=>{
-            const modal_div = document.getElementById('modal-total-div');
-            modal_div.style.display = "none";
-        })
-
-
-
-        /*------------------------------------------Sucess Button for list unllist Product------------------------------------------- */
-        document.getElementById('list-confirmation-sucess').addEventListener('click',()=>{
-            productStatusSucess();
-        })
-
-
-
-        /*------------------------------------------ 2 Back Button for confiramation modal-------------------------------------------- */
-        document.getElementById('list-confirmation-cancel1').addEventListener('click',()=>{
-            listModalDisplayHidden()
-        })
-        document.getElementById('list-confirmation-cancel2').addEventListener('click',()=>{
-            listModalDisplayHidden()
-        })
+        actionInViewProductTable();
 }
+

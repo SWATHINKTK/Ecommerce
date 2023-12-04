@@ -93,7 +93,7 @@ adminRouter.patch('/blockuser', auth.isAdminLogin, adminController.blockUser);
 adminRouter.get('/productlist', auth.isAdminLogin, adminController.loadProductList);
 adminRouter.get('/productmoredata:id', auth.isAdminLogin, adminController.loadProductMoreData);
 adminRouter.get('/productstausupdate:id', auth.isAdminLogin, adminController.productStatusUpdate);
-adminRouter.get('/searchproduct:data',adminController.searchProduct);
+adminRouter.get('/searchproduct',adminController.searchProduct);
 adminRouter.get('/addproduct', auth.isAdminLogin, adminController.loadAddProductPage);
 adminRouter.get('/editproduct:id', auth.isAdminLogin, adminController.loadEditProductPage);
 adminRouter.post('/productadd',uploadProductImage.array('productImage',4),adminController.productAdd);

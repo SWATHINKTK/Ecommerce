@@ -83,7 +83,7 @@ app.use('/admin',offerRouter);
 // **** ERROR HANDLING MIDDLEWARE ****
 app.use((err,req,res,next) => {
 
-    // console.log('hello')
+    console.log('hello')
     const errStatus = err.statusCode || 500 ;
     console.log(err.message)
 
@@ -98,9 +98,9 @@ app.use((err,req,res,next) => {
     }else{
 
         if(req.session.adminId){
-            res.status(errStatus).render('partials/error-500',{errorCode:errStatus,user:false});
+            res.status(errStatus).render('errors/error-500',{errorCode:errStatus, link:'/admin'});
         }else{
-            res.status(errStatus).render('partials/error-500',{errorCode:errStatus,user:true});
+            res.status(errStatus).render('errors/error-500',{errorCode:errStatus, link:'/'});
         }
     }
  
