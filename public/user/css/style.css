@@ -1728,6 +1728,7 @@ ol {
 	border-radius: 0;
 	font-size: 18px;
 	outline: none;
+	border-radius: 8px;
 }
 
 .input-userprofile:active{
@@ -2838,8 +2839,10 @@ form .form-control:focus {
 
 .user-profile-conatiner{
 	overflow: hidden; 
-	background-color: #dadbdc;
+	/* background-color: #dadbdc; */
 	/* background-color: #D4D7DD; */
+	background-color: #F5F5F5;
+	/* background-color: #F1EFEF; */
 }
 
 .Profile-sidebar{
@@ -4246,9 +4249,6 @@ form .form-control:focus {
 /* Tablet Device = 768px */
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
-	.shop{
-		
-	}
 	.header__menu ul li {
 		margin-right: 10px;
 	}

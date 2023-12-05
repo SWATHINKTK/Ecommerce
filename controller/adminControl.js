@@ -90,18 +90,45 @@ const loadAdminHomepage = async(req, res, next) => {
    try {
         const sendReport = await helper.paidiagram();
 
+        console.log('paidiagram',sendReport)
+
         const leastProduct = await helper.leastSellingProduct();
+
+        console.log('leastProducyt',leastProduct)
+
+
 
         const pendingProduct = await helper.pendingProduct();
 
+        console.log('pendingProduct',pendingProduct)
+
         const totalDataForFirstRow = await helper.totalDataFirstSection();
+
+        console.log('total',totalDataForFirstRow)
 
         const salesChart = await helper.salesChart();
 
+        console.log('saleschart',salesChart);
+
+
+
         const categoryReport = await helper.totalCategorySale();
 
+        console.log(categoryReport)
+
     
-        res.render('admin/main', { admin: true, name: req.session.name, title: 'AdminHome' ,totalRevenue:sendReport ,pendingProduct:pendingProduct, mostSelling:leastProduct, totalData:totalDataForFirstRow ,salesChart, categoryReport});  
+        res.render('admin/main', { 
+            admin: true, 
+            name: req.session.name, 
+            title: 'AdminHome',
+            totalRevenue:sendReport,
+            pendingProduct:pendingProduct, 
+            mostSelling:leastProduct, 
+            totalData:totalDataForFirstRow,
+            salesChart, 
+            categoryReport
+        }); 
+
    } catch (error) {
         next(error);
    }

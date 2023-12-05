@@ -35,6 +35,7 @@ document.addEventListener("DOMContentLoaded", function () {
     signinForm.addEventListener("submit", async function (event) {
         event.preventDefault();
 
+
         // **** CHECK VALIDATION ****
         if (validateSignin()) {
             // **** SIGIN FORM SUBMISSION START ***
@@ -124,7 +125,7 @@ document.getElementById('verificationOTP').addEventListener('submit',(event)=>{
 
         if(data.status){
 
-            otpMessage.setAttribute('class','text-success');
+            otpMessage.setAttribute('class','text-success text-center');
             otpMessage.style.fontWeight = 600;
             otpMessage.innerHTML = data.message;
             document.getElementById('verificationOTP').reset();
@@ -138,7 +139,7 @@ document.getElementById('verificationOTP').addEventListener('submit',(event)=>{
 
         }else{
 
-            otpMessage.setAttribute('class','text-danger')
+            otpMessage.setAttribute('class','text-danger text-center')
             otpMessage.innerHTML = data.message;
 
         }

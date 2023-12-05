@@ -58,9 +58,10 @@
                                 </li>
                                 <li class="user-profile">
                                     <a href="/api/viewWishlist" class="nav-link px-0 align-middle">
-                                        <i class="fs-4 fa-regular fa-heart pr-2"></i> <span
-                                            class="ms-1 d-none d-sm-inline">Wishlist ( <%= locals.wishlistCount %>
-                                                )</span>
+                                        <i class="fs-4 fa-regular fa-heart pr-2"></i> 
+                                        <span class="ms-1 d-none d-sm-inline">
+                                            Wishlist ( <%= locals.wishlistCount ? wishlistCount : 0 %> )
+                                        </span>
                                     </a>
                                 </li>
                                 <li class="user-profile">
@@ -183,6 +184,7 @@
                             <% } %>
 
 
+                            <% if(orderData.length> 0) { %>
                             <!-- PAGINATION -->
                             <div class="col-lg-12">
                                 <div class="product__pagination">
@@ -199,6 +201,7 @@
                                     </a>
                                 </div>
                             </div>
+                            <% } %>
                         </div>
                     </div>
                 </div>

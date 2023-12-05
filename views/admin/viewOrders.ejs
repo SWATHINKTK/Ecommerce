@@ -75,29 +75,31 @@
           </table>
         </div>
 
-        <!-- PAGENATION -->
-        <div class="d-flex justify-content-center mt-4 ">
-          <nav aria-label="Page navigation example">
-            <ul class="pagination" >
-              <li class="page-item" >
-                <a class="page-link <%= page == 1 ? 'btn-link disabled' : '' %>" href="?page=<%= page > 1 ? page -1 : 1  %><%= locals.search ? '&value='+ search : '' %><%= locals.startDate ? '&startDate=' +startDate : '' %><%= locals.endDate ? '&endDate=' +endDate : '' %>" >
-                  <span aria-hidden="true" >&laquo;</span>
-                  <span class="sr-only">Previous</span>
-                </a>
-              </li>
-              <% for(let i = 1; i <= totalPages ;i++) { %>
-                <li class="page-item"><a class="page-link <  <%= page == i ? 'text-danger font-weight-bold' : '' %>" href="?page=<%= i %><%= locals.search ? '&value='+ search : '' %><%= locals.startDate ? '&startDate=' +startDate : '' %><%= locals.endDate ? '&endDate=' +endDate : '' %>"><%= i %></a></li>
-              <% } %>
+        <% if(orderData.length > 0) { %>
+          <!-- PAGENATION -->
+          <div class="d-flex justify-content-center mt-4 ">
+            <nav aria-label="Page navigation example">
+              <ul class="pagination" >
+                <li class="page-item" >
+                  <a class="page-link <%= page == 1 ? 'btn-link disabled' : '' %>" href="?page=<%= page > 1 ? page -1 : 1  %><%= locals.search ? '&value='+ search : '' %><%= locals.startDate ? '&startDate=' +startDate : '' %><%= locals.endDate ? '&endDate=' +endDate : '' %>" >
+                    <span aria-hidden="true" >&laquo;</span>
+                    <span class="sr-only">Previous</span>
+                  </a>
+                </li>
+                <% for(let i = 1; i <= totalPages ;i++) { %>
+                  <li class="page-item"><a class="page-link <  <%= page == i ? 'text-danger font-weight-bold' : '' %>" href="?page=<%= i %><%= locals.search ? '&value='+ search : '' %><%= locals.startDate ? '&startDate=' +startDate : '' %><%= locals.endDate ? '&endDate=' +endDate : '' %>"><%= i %></a></li>
+                <% } %>
 
-              <li class="page-item">
-                <a class="page-link <%= page == totalPages ? 'btn-link disabled' : '' %>" href="?page=<%= page < totalPages ? parseInt(page) + 1 : totalPages  %><%= locals.search ? '&value='+ search : '' %><%= locals.startDate ? '&startDate=' +startDate : '' %><%= locals.endDate ? '&endDate=' +endDate : '' %>" aria-label="Next">
-                  <span aria-hidden="true">&raquo;</span>
-                  <span class="sr-only">Next</span>
-                </a>
-              </li>
-            </ul>
-          </nav>
-        </div>
+                <li class="page-item">
+                  <a class="page-link <%= page == totalPages ? 'btn-link disabled' : '' %>" href="?page=<%= page < totalPages ? parseInt(page) + 1 : totalPages  %><%= locals.search ? '&value='+ search : '' %><%= locals.startDate ? '&startDate=' +startDate : '' %><%= locals.endDate ? '&endDate=' +endDate : '' %>" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                    <span class="sr-only">Next</span>
+                  </a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        <% } %>
 
       </div>
     </div>

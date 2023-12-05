@@ -79,12 +79,23 @@ app.use('/admin',offerRouter);
 // // HADLING THE NOT DEFINED ROUTER CALL
 
 
+app.use('*',(req,res,next)=>{
+    try {
+        console.log(req.originalUrl)
+        throw new Error('Page is Not Found');
+    } catch (error) {
+        error.statusCode = 404;
+        next(error);
+    } 
+})
+
 
 // **** ERROR HANDLING MIDDLEWARE ****
 app.use((err,req,res,next) => {
 
     console.log('hello')
     const errStatus = err.statusCode || 500 ;
+    console.log()
     console.log(err.message)
 
     console.log(err.stack);
@@ -107,14 +118,7 @@ app.use((err,req,res,next) => {
 })
 
 
-app.use('*',(req,res,next)=>{
-    try {
-        throw new Error('Page is Not Found');
-    } catch (error) {
-        error.statusCode = 404;
-        next(error);
-    } 
-})
+
 
 
 

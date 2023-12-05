@@ -4,10 +4,6 @@
     <div class="col-12 grid-margin stretch-card" id="userview">
     <div class="card card-div">
       <div class="card-body  mt-5">
-        <!-- <div class="d-grid gap-4 d-md-flex justify-content-md-end mb-2 search">
-          <input type="text" class="form-control col-3 mr-2 " id="categorySearch" placeholder="User Search" name="categorySearch">
-          <button type="button" class="btn btn-search" onclick="searchUser()"><i class="bi bi-search"></i></button>
-        </div> -->
 
         <div class="d-grid gap-4 d-md-flex justify-content-md-end mr-3">
           <div class="mr-auto">
@@ -36,24 +32,6 @@
             </div>
           </div>
 
-          <!-- FILTER DATE DIV -->
-        <!-- <div class="<%= locals.startDate ? 'collapse show' : 'collapse' %>" id="filterData">
-          <div class="card card-body pt-2 pr-0">
-              <div class="d-grid gap-4 d-md-flex justify-content-md-end search" >
-                <div class="form-group" style="width: 14.5%;">
-                  <label for="startDate">Start Date</label>
-                  <input type="date" class="form-control" id="startDate" name="startDate" placeholder="Select Start Date" value="<%= locals.startDate ? startDate : '' %>" >
-                </div>
-              
-                <div class="form-group ml-2" style="width: 14.5%;">
-                  <label for="endDate">End Date</label>
-                  <input type="date" class="form-control" id="endDate" name="endDate" placeholder="Select End Date" value="<%= locals.endDate ? endDate : '' %>">
-                </div>  
-                <button type="button" class="btn btn-search ml-2 mt-4" id="dateSearch" style="height: 37px;"><i class="bi bi-search"></i></button>
-                <a href="/api/orderlist"  class="btn btn-search mt-4 py-1 px-1 pr-0"  style="height: 37px;"><i class="mdi mdi-close-circle-outline icon-md text-danger"></i></a>
-              </div>
-          </div>
-        </div> -->
           
           <div class="form-group">
             <div class="input-group">
@@ -61,8 +39,6 @@
                 <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="bi bi-download"></i> Download</button>
                 <div class="dropdown-menu">
                   <button onclick="exportToExcel()" class="btn btn-dark ml-3"><i class="mdi mdi-download"></i> Excel Sheet</button>
-                  <!-- <button onclick="exportToPDF()" class="btn btn-dark mt-2 ml-3"><i class="mdi mdi-download"></i>PDF</button> -->
-
                 </div>
               </div>
             </div>
@@ -118,6 +94,11 @@
                 <td><%= totalTrancations[i].productInforamtion.productTotalAmount %></td>
 
               </tr>
+              <% } %>
+              <%  if(totalTrancations.length <=0 ){ %>
+                <tr class="bg-danger">
+                  <th class="text-dark text-center" colspan="15">NO SALE IS FOUND</th>
+                </tr>
               <% } %>
               
             </tbody>

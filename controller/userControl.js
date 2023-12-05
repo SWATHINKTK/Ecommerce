@@ -6,17 +6,13 @@ const { productInfo } = require('../models/productModel');
 const { brandInfo } = require('../models/brandModel');
 const { category } = require('../models/categoryModel');
 const cartData = require('../models/cartModel');
+const orderData = require('../models/orderModel');
 const wishlistData = require('../models/wishlistModel');
 const addressInfo = require('../models/addressModel');
 const bannerData = require('../models/bannerModel');
 const Razorpay = require('razorpay');
-const { userInfo } = require('os');
-const { error } = require('console');
-const { chownSync } = require('fs');
-const { threadId } = require('worker_threads');
 const mongoose = require('mongoose');
-const { constants } = require('buffer');
-const { th } = require('date-fns/locale');
+
 
 
 // PAYMENT INTEGRATION KEY SETUP
@@ -107,11 +103,11 @@ async function securePassword(password) {
 // ***** USER LOGIN PAGE VIEW *****
 const loadUserLogin = (req, res, next) => {
     try {
-        const userId = req.query.refer;
-        res.render('userAuthentication', { admin: false, title: 'User' , userId}); 
+        res.render('userLogin',{ admin: false, title: 'User' }); 
     } catch (error) {
+        error.statusCode = 404;
         next(error);
-    }
+    } 
 }
 
 
@@ -127,6 +123,16 @@ const userLogout = (req, res, next) => {
     })
 }
 
+
+// LOADING NEW USER REGISTER PAGE
+const LoadUserRegistrationPage = (req, res, next) => {
+    try {
+        res.render('userRegistration',{ admin: false, title: 'User' }); 
+    } catch (error) {
+        error.statusCode = 404;
+        next(error);
+    }
+}
 
 
 //****** STORING USER REGISTER TIME DATA TO SESSION AND SEND A OTP MAIL ******
@@ -150,7 +156,7 @@ const storeSignupData = async (req, res, next) => {
        
 
         if (emailExist) {
-            res.render('userAuthentication', { admin: false,title:'Sign Up', data: ' &#10060; User email is already exist' });
+            res.render('userRegistration', { admin: false,title:'Sign Up', data: '  User email is already exist' });
 
         } else {
 
@@ -211,7 +217,7 @@ const loadOTPVerification = (req, res, next) => {
     try {
         const userdata = req.session.userData;
         const time = req.session.startTime;
-        res.render('otpVerification', { admin: false, title: 'User OTP', email: userdata.email, timer: time });
+        res.render('otpVerification', { admin: false, title: 'OTP Verification', email: userdata.email, timer: time });
     } catch (error) {
         next(error);
     }
@@ -398,7 +404,52 @@ const loadHomePage = async (req, res, next) => {
                     },
                 },
             ]),
-            category.find({ list: true }).sort({ _id: -1 }),
+            orderData.aggregate([
+                {
+                  $unwind: "$productInforamtion"
+                },
+                {
+                    $match:{
+                        "productInforamtion.orderStatus":'Delivered'
+                    }
+                },
+                {
+                  $lookup: {
+                    from: "products",
+                    localField: "productInforamtion.productId",
+                    foreignField: "_id",
+                    as: "productDetails"
+                  }
+                },
+                {
+                  $unwind: "$productDetails"
+                },
+                {
+                  $lookup: {
+                    from: "categorys",
+                    localField: "productDetails.categoryIds",
+                    foreignField: "_id",
+                    as: "categoryDetails"
+                  }
+                },
+                {
+                  $unwind: "$categoryDetails"
+                },
+                {
+                  $group: {
+                    _id: "$categoryDetails._id",
+                    categoryname: { $first: "$categoryDetails.categoryname" },
+                    category_image: { $first: "$categoryDetails.category_image" },
+                    totalQuantitySold: { $sum: "$productInforamtion.productquantity" }
+                  }
+                },
+                {
+                  $sort: { totalQuantitySold: -1 }
+                },
+                {
+                  $limit: 4
+                }
+              ]),
             productInfo.aggregate([
                 { $unwind: "$categoryIds" },
                 {
@@ -409,6 +460,9 @@ const loadHomePage = async (req, res, next) => {
                         as: 'categoryData',
                     },
                 },
+                { 
+                    $sort: { _id: -1 } 
+                }
             ]),
             cartData.findOne({ userId: id }),
             wishlistData.findOne({ userId: id }),
@@ -445,7 +499,52 @@ const guestPage = async (req, res, next) => {
 
         // Use Promise.all to run database queries in parallel
         const [categoryData, banner, productData] = await Promise.all([
-            category.find({ list: true }).sort({ _id: -1 }),
+            orderData.aggregate([
+                {
+                  $unwind: "$productInforamtion"
+                },
+                {
+                    $match:{
+                        "productInforamtion.orderStatus":'Delivered'
+                    }
+                },
+                {
+                  $lookup: {
+                    from: "products",
+                    localField: "productInforamtion.productId",
+                    foreignField: "_id",
+                    as: "productDetails"
+                  }
+                },
+                {
+                  $unwind: "$productDetails"
+                },
+                {
+                  $lookup: {
+                    from: "categorys",
+                    localField: "productDetails.categoryIds",
+                    foreignField: "_id",
+                    as: "categoryDetails"
+                  }
+                },
+                {
+                  $unwind: "$categoryDetails"
+                },
+                {
+                  $group: {
+                    _id: "$categoryDetails._id",
+                    categoryname: { $first: "$categoryDetails.categoryname" },
+                    category_image: { $first: "$categoryDetails.category_image" },
+                    totalQuantitySold: { $sum: "$productInforamtion.productquantity" }
+                  }
+                },
+                {
+                  $sort: { totalQuantitySold: -1 }
+                },
+                {
+                  $limit: 4
+                }
+              ]),
             bannerData.aggregate([{ $match: { is_Listed: true } }]),
             productInfo.aggregate([
                 { $match: { status: true } },
@@ -458,9 +557,13 @@ const guestPage = async (req, res, next) => {
                         as: 'categoryData'
                     }
                 },
-                { $sort: { _id: -1 } }
+                { 
+                    $sort: { _id: -1 } 
+                }
             ])
         ]);
+
+
 
         res.render('index', {
             user: true,
@@ -551,17 +654,20 @@ const loadAllProductViewPage = async(req, res, next) =>{
             {   $limit: limit * 1 }
         ]);
 
-
-        let totalCount = await productInfo.aggregate([
-            {
-                $group:{
-                    _id:null,
-                    totalCount:{$sum:1}
+        let totalCount = 0
+        if(productData.length > 0){
+            totalCount = await productInfo.aggregate([
+                {
+                    $group:{
+                        _id:null,
+                        totalCount:{$sum:1}
+                    }
                 }
-            }
-        ]);
+            ]);
+    
+            totalCount = Math.ceil(totalCount[0].totalCount / limit)
+        }
 
-        totalCount = Math.ceil(totalCount[0].totalCount / limit)
 
         if(checkLogin){
         
@@ -1188,13 +1294,40 @@ const loadAboutPage = async(req , res , next) => {
                 }
         ]);
 
+        const orderSucess = await orderData.aggregate([
+            {
+                $unwind: "$productInforamtion"
+            },
+            {
+              $group: {
+                _id: null,
+                totalOrders: { $sum: 1 },
+                totalDeliveredProducts: {
+                    $sum: {
+                      $cond: {
+                        if: { $eq: ["$productInforamtion.orderStatus", "Delivered"] },
+                        then: "$productInforamtion.productquantity",
+                        else: 0
+                      }
+                    }
+                  }
+              }
+            }
+        ]);
+
+        let orderSucessRate = 0;
+        if(orderSucess.length > 0){
+            orderSucessRate = ( orderSucess[0].totalDeliveredProducts / orderSucess[0].totalOrders ) * 100;
+        }
+
 
         res.render('about',{ 
             title:'About' ,
             user: true ,
             categoryCount:categorys,
             userCount:users,
-            brandData:brands
+            brandData:brands,
+            orderSucessRate:orderSucessRate
         });
         
     } catch (error) {
@@ -1236,6 +1369,7 @@ const load404ErrorPage = (req, res) => {
 
 module.exports = {
     guestPage,
+    LoadUserRegistrationPage,
     userLogout,
     loadUserLogin,
     storeSignupData,

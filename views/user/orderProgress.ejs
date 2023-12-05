@@ -54,9 +54,10 @@
                                 </li>
                                 <li class="user-profile">
                                     <a href="/api/viewWishlist" class="nav-link px-0 align-middle">
-                                        <i class="fs-4 fa-regular fa-heart pr-2"></i> <span
-                                            class="ms-1 d-none d-sm-inline">Wishlist ( <%= locals.wishlistCount %>
-                                                )</span>
+                                        <i class="fs-4 fa-regular fa-heart pr-2"></i> 
+                                        <span class="ms-1 d-none d-sm-inline">
+                                            Wishlist ( <%= locals.wishlistCount ? wishlistCount : 0 %> )
+                                        </span>
                                     </a>
                                 </li>
                                 <li class="user-profile">
@@ -287,7 +288,7 @@
                                             </div>
                                         <% } %>
 
-                                        <!-- <div class="card-footer p-4 d-flex justify-content-center pt-5">
+                                        <div class="card-footer p-4 d-flex justify-content-center pt-5">
                                             <div>
                                                 
                                                 <h3 class="font-weight-bold">Rating & Reviews</h3>
@@ -312,7 +313,7 @@
                                                     </div>
                                                 </form>
                                             </div>
-                                        </div> -->
+                                        </div>
                                     </div>
                                 </div>
                             </div>

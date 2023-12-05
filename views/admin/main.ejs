@@ -10,8 +10,8 @@
               <div class="col-8 col-sm-12 col-xl-8 my-auto">
                 <div class="d-flex d-sm-block d-md-flex align-items-center">
                   <h2 class="mb-0">
-                    <i class="bi bi-currency-rupee"></i><%=
-                    (totalRevenue[3].totalAmount * 0.3).toFixed(2) %>
+                    <i class="bi bi-currency-rupee"></i>
+                    <%= totalRevenue.length > 0 ? totalRevenue[3].totalAmount * 0.3.toFixed(2) :0 %>
                   </h2>
                   <!-- <p class="text-success ml-2 mb-0 font-weight-medium">+3.5%</p> -->
                 </div>
@@ -32,8 +32,8 @@
               <div class="col-8 col-sm-12 col-xl-8 my-auto">
                 <div class="d-flex d-sm-block d-md-flex align-items-center">
                   <h2 class="mb-0">
-                    <i class="bi bi-currency-rupee"></i><%=
-                    (totalRevenue[3].totalAmount).toFixed(2) %>
+                    <i class="bi bi-currency-rupee"></i>
+                    <%= totalRevenue.length > 0 ? totalRevenue[3].totalAmount.toFixed(2) : 0 %>
                   </h2>
                   <!-- <p class="text-success ml-2 mb-0 font-weight-medium">+8.3%</p> -->
                 </div>
@@ -56,13 +56,13 @@
               <div class="col-8 col-sm-12 col-xl-8 my-auto">
                 <div class="d-flex d-sm-block d-md-flex align-items-center">
                   <h2 class="mb-0">
-                    <i class="bi bi-currency-rupee"></i><%=
-                    (totalRevenue[5].totalAmount).toFixed(2) %>
+                    <i class="bi bi-currency-rupee"></i>
+                    <%=  totalRevenue.length > 0 ? totalRevenue[5].totalAmount.toFixed(2) : 0 %>
                   </h2>
                   <!-- <p class="text-danger ml-2 mb-0 font-weight-medium">-2.1% </p> -->
                 </div>
                 <h6 class="text-muted font-weight-normal">
-                  Pending Orders (<%= totalRevenue[5].totalCount %>)
+                  Pending Orders ( <%= totalRevenue.length > 0 ? totalRevenue[5].totalCount : 0 %>)
                 </h6>
               </div>
               <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
@@ -81,7 +81,7 @@
         <div class="card">
           <div class="card-body">
             <h4 class="card-title">Transaction History</h4>
-            <input type="hidden" value="<%= JSON.stringify(totalRevenue) %>" id="totalRevenue-inWebsite" >
+            <input type="hidden" value="<%= totalRevenue.length > 0 ? JSON.stringify(totalRevenue) : 0 %>" id="totalRevenue-inWebsite" >
  
             <canvas id="transaction-history" class="transaction-chart"></canvas>
             <% for(let i = 0 ; i < totalRevenue.length - 3 ; i++) { %>
@@ -98,8 +98,8 @@
                 class="align-self-center flex-grow text-right text-md-center text-xl-right py-md-2 py-xl-0"
               >
                 <h6 class="font-weight-bold mb-0">
-                  <i class="bi bi-currency-rupee"></i><%=
-                  totalRevenue[i].methodTotalAmount %>
+                  <i class="bi bi-currency-rupee"></i>
+                  <%= totalRevenue[i].methodTotalAmount %>
                 </h6>
               </div>
             </div>
@@ -119,10 +119,7 @@
               <div class="col-12">
                 <div class="preview-list">
                   <% for(let i = 0; i < pendingProduct.length ; i++) { %>
-                  <a
-                    href="/api/orderManage<%= pendingProduct[i]._id %>"
-                    style="text-decoration: none; color: rgb(30, 25, 25)"
-                  >
+                  <a href="/api/orderManage<%= pendingProduct[i]._id %>" style="text-decoration: none; color: rgb(30, 25, 25)" >
                     <div class="preview-item border-bottom">
                       <div class="preview-thumbnail">
                         <div class="preview-icon bg-primary">
@@ -138,20 +135,17 @@
                             <%= pendingProduct[i].productData[0].productName %>
                           </h6>
                           <p class="text-muted mb-0">
-                            <span class="font-weight-bold">Size</span> : <%=
-                            pendingProduct[i].productData[0].size %>
+                            <span class="font-weight-bold">Size</span> : 
+                            <%= pendingProduct[i].productData[0].size %>
                           </p>
                         </div>
                         <div class="mr-auto text-sm-right pt-2 pt-sm-0">
                           <p class="text-muted">
-                            <%= pendingProduct[i].productInforamtion.orderStatus
-                            %>
+                            <%= pendingProduct[i].productInforamtion.orderStatus %>
                           </p>
                           <p class="text-muted mb-0">
                             <span class="font-weight-bold">Ordered Date</span> :
-                            <%=
-                            (pendingProduct[i].createdAt).toLocaleDateString()
-                            %>
+                            <%= (pendingProduct[i].createdAt).toLocaleDateString() %>
                           </p>
                         </div>
                       </div>
@@ -174,7 +168,7 @@
                 <div class="d-flex align-items-center align-self-start">
                   <span> <i class="icon-md mdi mdi-account-multiple-outline text-dark mr-2"></i></span>
                   <h3 class="mb-0">
-                    <%= totalData.totalUsers %>
+                    <%= totalData.length > 0 ? totalData.totalUsers : 0 %>
                   </h3>
                 </div>
               </div>
@@ -193,7 +187,7 @@
                 <div class="d-flex align-items-center align-self-start">
                   <span> <i class="icon-md mdi mdi-shopping text-dark mr-2"></i></span>
                   <h3 class="mb-0">
-                    <%= totalData.totalProducts %>
+                    <%= totalData ? totalData.totalProducts : 0 %>
                   </h3>
                 </div>
               </div>
@@ -212,7 +206,7 @@
                 <div class="d-flex align-items-center align-self-start">
                   <span> <i class="icon-md mdi mdi-truck text-dark mr-2"></i></span>
                   <h3 class="mb-0">
-                    <%= totalData.totalOrders %>
+                    <%= totalData.length > 0 ? totalData.totalOrders : 0 %>
                   </h3>
                 </div>
               </div>
@@ -231,7 +225,7 @@
                 <div class="d-flex align-items-center align-self-start">
                   <span> <i class="icon-md mdi mdi-tshirt-crew text-dark mr-2"></i></span>
                   <h3 class="mb-0">
-                    <%= totalData.totalBrands %>
+                    <%= totalData.length > 0 ? totalData.totalBrands : 0 %>
                   </h3>
                 </div>
               </div>
@@ -249,7 +243,7 @@
           <div class="card-body">
             <h4 class="card-title">Sales Report</h4>
             <canvas id="salesChart" style="height:250px"></canvas>
-          <input type="hidden" value="<%= JSON.stringify(salesChart) %>" id="salesReportDiagram">
+            <input type="hidden" value="<%= salesChart.length > 0 ? JSON.stringify(salesChart) : 0 %>" id="salesReportDiagram">
           </div>
       </div>
     </div>
@@ -257,7 +251,7 @@
       <div class="card">
         <div class="card-body">
           <h4 class="card-title">Category Sale</h4>
-          <input type="hidden" value="<%= JSON.stringify(categoryReport) %>" id="categoryReport">
+          <input type="hidden" value="<%= salesChart.length > 0 ? JSON.stringify(categoryReport) : 0 %>" id="categoryReport">
           <canvas id="barChart" style="height:230px"></canvas>
         </div>
       </div>

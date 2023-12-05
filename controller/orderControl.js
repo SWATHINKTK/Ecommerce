@@ -50,25 +50,28 @@ const loadOrderListViewUserSide = async (req, res, next) => {
         ]);
 
 
-        let totalCount = await orderData.aggregate([
-            {
-                $match:{
-                    userId:new mongoose.Types.ObjectId(id)
+        let totalCount = 0;
+        if(totalCount){
+            let totalCount = await orderData.aggregate([
+                {
+                    $match:{
+                        userId:new mongoose.Types.ObjectId(id)
+                    }
+                },
+                {
+                    $unwind: "$productInforamtion"
+                },
+                {
+                    $group:{
+                        _id:null,
+                        totalCount:{$sum:1}
+                    }
                 }
-            },
-            {
-                $unwind: "$productInforamtion"
-            },
-            {
-                $group:{
-                    _id:null,
-                    totalCount:{$sum:1}
-                }
-            }
-        ]);
+            ]);
 
-        
-        totalCount = Math.ceil(totalCount[0].totalCount / limit)
+            totalCount = Math.ceil(totalCount[0].totalCount / limit)
+        }
+
 
         if (orderData) {
             res.render('user/orderDetails', { title: 'View Order', login: checkLogin, user: true, orderData: order , totalCount:totalCount ,page:page});

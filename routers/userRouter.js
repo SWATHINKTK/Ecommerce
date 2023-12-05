@@ -48,6 +48,7 @@ userRouter.use(async(req,res,next) => {
 // GET Request For User 
 userRouter.get('/',userController.guestPage);
 userRouter.get('/login',auth.isUserLogout , userController.loadUserLogin);
+userRouter.get('/register',userController.LoadUserRegistrationPage);
 userRouter.get('/logout',userController.userLogout);
 userRouter.get('/otpverification',userController.loadOTPVerification);
 userRouter.get('/home',auth.isUserLogin,userController.loadHomePage);

@@ -1,0 +1,55 @@
+<%- include('../partials/header.ejs') %>
+    <section class="my-login-page">
+	<section class="login-MainSection">
+		<div class="container h-100">
+			<div class="row justify-content-md-center align-items-center h-100">
+				<div class="card-wrapper">
+					<div class="brand">
+						<img src="/public/user/img/logo.png" alt="logo">
+					</div>
+					<div class="card fat">
+						<div class="card-body">
+							<h4 class="card-title text-center">Login</h4>
+                            <div class="alert alert-danger text-center" role="alert" id="signin-alert" style="padding: 1px;display: none;">
+                            </div>
+                            <form id="signinForm" class="my-login-validation"  method="POST" novalidate>
+
+								<div class="form-group mb-3">
+									<label for="email">Username</label>
+                                    <!-- <input type="text" placeholder="Username" class="rounded-4" name="username" id="sign-in-username"> -->
+									<input type="email" placeholder="Username" name="username" id="sign-in-username" class="form-control" name="email" value="">
+                                    <span class="text-danger ml-2 validate" name="validate-signin" style="font-size: 13px;"></span>
+								</div>
+
+								<div class="form-group mb-4">
+									<label for="password">Password
+										<a href="forgot.html" class="float-right">
+											Forgot Password?
+										</a>
+									</label>
+									<input type="password" class="form-control" placeholder="Password" name="password" id="sign-in-password" >
+                                    <span class="text-danger ml-2 validate" name="validate-signin" style="font-size: 13px;"></span>
+								</div>
+
+
+								<div class="form-group m-0">
+									<button type="submit" class="btn btn-primary btn-block" id="signin-btn">
+										Login
+									</button>
+                                    
+								</div>
+								<div class="mt-4 text-center">
+									Don't have an account? <a href="/register">Register</a>
+								</div>
+							</form>
+						</div>
+					</div>
+					<div class="footer">
+						Copyright &copy; 2023 &mdash; MaleFashion
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</section>
+<%- include('../partials/footer.ejs') %>

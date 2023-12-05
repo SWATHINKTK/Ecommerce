@@ -70,16 +70,21 @@ module.exports = {
             percentageAmount: ((data.totalAmount / totalAmount) * 100).toFixed(3),
           }));
 
-          percentageData[3] = {
-            totalOrders:totalOrders,
-            totalAmount:totalAmount
-          };
 
-          percentageData[4] = {
-            date:formattedDate
-          };
+        if(percentageData.length > 0){
 
-          percentageData[5] = pendingOrders[0]
+            percentageData[3] = {
+                totalOrders:totalOrders,
+                totalAmount:totalAmount
+            };
+
+            percentageData[4] = {
+                date:formattedDate
+            };
+
+            percentageData[5] = pendingOrders[0];
+        }
+
 
 
         return percentageData
@@ -205,6 +210,8 @@ module.exports = {
                 }
             }
         ])
+
+        console.log(totalUsers)
         const totalOrders = await orderData.aggregate([
             {
                 $group:{
@@ -221,7 +228,7 @@ module.exports = {
                     totalProducts:{$sum:1}
                 }
             }
-        ])
+        ]);
 
         const totalBrands = await brandInfo.aggregate([
             {
@@ -233,12 +240,13 @@ module.exports = {
         ])
         
 
-        const totalData = {
-            totalUsers : totalUsers[0].totalUsers,
-            totalProducts : totalProducts[0].totalProducts,
-            totalOrders : totalOrders[0].totalOrders,
-            totalBrands : totalBrands[0].totalBrands
+        const totalData = { 
+            totalUsers : totalUsers.length > 0 ? totalUsers[0].totalUsers : 0,
+            totalProducts : totalProducts.length > 0 ? totalProducts[0].totalProducts : 0,
+            totalOrders : totalOrders.length > 0 ? totalOrders[0].totalOrders : 0,
+            totalBrands : totalBrands.length > 0 ? totalBrands[0].totalBrands : 0
         }
+        console.log('ssss',totalData)
 
         return totalData;
     },

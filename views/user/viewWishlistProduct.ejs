@@ -54,9 +54,10 @@
                             </li>
                             <li class="user-profile">
                                 <a href="/api/viewWishlist" class="nav-link px-0 align-middle">
-                                    <i class="fs-4 fa-regular fa-heart pr-2"></i> <span
-                                        class="ms-1 d-none d-sm-inline">Wishlist ( <%= locals.wishlistCount %>
-                                            )</span>
+                                    <i class="fs-4 fa-regular fa-heart pr-2"></i> 
+                                        <span class="ms-1 d-none d-sm-inline">
+                                            Wishlist ( <%= locals.wishlistCount ? wishlistCount : 0 %> )
+                                        </span>
                                 </a>
                             </li>
                             <li class="user-profile">
@@ -142,13 +143,13 @@
                                     </a>
                             <% } %>
                             <% } else { %>
-                                <%= wishlistData[0].productData[0] %>
                                 <div class="d-flex justify-content-center p-4">
                                     <img src="/public/user/img/wishlist_empty.svg" alt="" srcset="">
                                 </div>
 
                                 <h4 class="text-center font-weight-bold mt-3">Your Wish list is 
-                                    <span class="text-danger">Empty &#10071;</span></h4>
+                                    <span class="text-danger">Empty &#10071;</span>
+                                </h4>
 
                             <% } %>
                         </div>

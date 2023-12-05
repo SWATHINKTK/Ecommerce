@@ -107,7 +107,7 @@
                 <div class="col-lg-3 col-md-6 col-sm-6">
                     <div class="counter__item">
                         <div class="counter__item__number">
-                            <h2 class="cn_num"><%= brandData[0].totalStatusTrue %></h2>
+                            <h2 class="cn_num"><%= locals.brandData.length > 0 ? brandData[0].totalStatusTrue : '' %></h2>
                         </div>
                         <span>Total <br />Brands</span>
                     </div>
@@ -115,7 +115,7 @@
                 <div class="col-lg-3 col-md-6 col-sm-6">
                     <div class="counter__item">
                         <div class="counter__item__number">
-                            <h2 class="cn_num">98</h2>
+                            <h2 class="cn_num"><%= orderSucessRate %></h2>
                             <strong>%</strong>
                         </div>
                         <span>Success <br />Deliverys</span>

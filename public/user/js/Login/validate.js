@@ -89,28 +89,40 @@ function validateSignin(){
 
       userErrorElementReset('validate-signin');
 
+      let is_Valid = true;
+
       if(username.trim() == ''){
 
+            errorElements[0].style.display = 'block';
             errorElements[0].innerHTML = '* enter the username ';
-            return false;
+            is_Valid = false;
 
-      }else if(!emailRegex.test(username)){
+      }
+      if(!emailRegex.test(username)){
 
+            errorElements[0].style.display = 'block';
             errorElements[0].innerHTML = '* enter proper email';
-            return false;
+            is_Valid = false;
 
-      }else if(password.trim() == ''){
+      }
+      if(password.trim() == ''){
 
+            errorElements[1].style.display = 'block';
             errorElements[1].innerHTML = '* enter the password';
-            return false;
+            is_Valid = false;
 
       }else if(password.length < 4){
 
+            errorElements[1].style.display = 'block';
             errorElements[1].innerHTML = '* password must be for digit';
-            return false;
+            is_Valid = false;
 
-      }else {
-            
+      }
+      
+      if(!is_Valid){
+            return false;
+      }else{
+            alert('sss')
             return true;
       }
 
@@ -126,7 +138,8 @@ function userErrorElementReset(name){
       const errorElements = document.querySelectorAll(`span[name="${name}"]`);
       
       errorElements.forEach((val,i) => {
-          val.innerHTML = '';
+            val.style.display = 'none';
+            val.innerHTML = '';
       })
 }
 
