@@ -10,7 +10,6 @@ const app = express();
 
 
 
-
 // **** VIEW ENGINE SETUP ****
 app.set('view engine','ejs');
 

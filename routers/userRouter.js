@@ -1,7 +1,11 @@
 const express = require('express');
 const session = require('express-session');
 const moongose = require('mongoose');
+const passport = require('passport');
+require('./googleAuthentication');
 const userRouter = express();
+
+
 
 // Local Module Import 
 const userController = require('../controller/userControl');
@@ -16,7 +20,8 @@ userRouter.use(express.json())
 userRouter.use(session({
     secret : 'key',
     resave : false,
-    saveUninitialized : true
+    saveUninitialized : true,
+    cookie : {secure : false}
  }));
 
 
@@ -45,12 +50,31 @@ userRouter.use(async(req,res,next) => {
 
 
 
+
+// GOOGLE AUTHENTICATION SETUP
+ userRouter.use(passport.initialize());
+ userRouter.use(passport.session());
+ userRouter.get('/auth/google', passport.authenticate('google', { scope: ['email', 'profile'], prompt: 'select_account'  }));
+ userRouter.get('/auth/google/callback',
+    passport.authenticate('google', {
+        successRedirect: '/success',
+        failureRedirect: '/login'
+    })
+ );
+ userRouter.get('/success', userController.googleAuthenticationSucess);
+ userRouter.get('/failure', userController.googleAuthenticationFailed);
+
+
+
+
 // GET Request For User 
 userRouter.get('/',userController.guestPage);
 userRouter.get('/login',auth.isUserLogout , userController.loadUserLogin);
 userRouter.get('/register',userController.LoadUserRegistrationPage);
-userRouter.get('/logout',userController.userLogout);
 userRouter.get('/otpverification',userController.loadOTPVerification);
+userRouter.get('/forgotPassword', userController.forgotPassword)
+userRouter.get('/logout',userController.userLogout);
+
 userRouter.get('/home',auth.isUserLogin,userController.loadHomePage);
 userRouter.get('/about', userController.loadAboutPage);
 userRouter.get('/contact', userController.loadContactPage);

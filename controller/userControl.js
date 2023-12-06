@@ -112,6 +112,47 @@ const loadUserLogin = (req, res, next) => {
 
 
 
+// **** LOGIN USER DATA VERIFY AND PROVIDE THE HOME PAGE ****
+const verifyUser = async(req, res, next) => {
+    try{
+
+        const username = req.body.username;
+        const password = req.body.password;
+        
+        const usernameExist = await userData.findOne({email:username});
+        
+        if(!usernameExist){
+
+            res.json({'status':false,'message':'&#10060; check your email address' });
+
+        }else if(usernameExist.block){
+
+            res.json({'status':false,'message':'&#10060; your account is blocked'});
+
+        }else{
+
+            const check = await bcrypt.compare(password,usernameExist.password);
+
+            if(check){
+
+                req.session.userId = usernameExist._id;
+                res.json({'status':true});
+
+            }else{
+
+                res.json({'status':false,'message':' &#10060; user email & password was inccorect' })
+
+            }
+
+        }
+    }catch(error){
+        next(error);
+    }
+    
+}
+
+
+
 // ****** USER LOGOUT THEN GOTO GUSET PAGE
 const userLogout = (req, res, next) => {
     req.session.destroy((error)=>{
@@ -121,7 +162,49 @@ const userLogout = (req, res, next) => {
             res.redirect('/?login=false');
         }
     })
+};
+
+
+// GOOGLE AUTHENTICATION SUCESS
+const googleAuthenticationSucess = (req, res, next) => {
+    try {
+
+        if(req,user._id){
+            req.session.userId = req.user._id;
+            res.redirect('/home');
+        }
+        
+    } catch (error) {
+        next(error)
+    }
 }
+
+
+
+// GOOGLE AUTHENTICATION FAILED
+const googleAuthenticationFailed = (req, res, next) => {
+    try {
+        res.render('userLogin',{ admin: false, title: 'User' ,verification:'Google Authentication Some Issues.Try Again'}); 
+    } catch (error) {
+        next(error);
+    }
+}
+
+
+
+// FORGOTT PASSWORD EMAIL SENDING
+const forgotPassword = async(req, res, next) => {
+    try {
+
+        const html = `<div style="width: 100%;background: #F5FEFD;text-align:center"><h2>${user.username} Welcome Our Shopping Website</h2><h6>Verification OTP</h6><h3 style="color: red;">${otp}</h3><h2>Thank You For Joining...</h2></div>`
+        await sendEmail(user.email, html);
+
+    } catch (error) {
+        next(error)
+    }
+}
+
+
 
 
 // LOADING NEW USER REGISTER PAGE
@@ -156,7 +239,7 @@ const storeSignupData = async (req, res, next) => {
        
 
         if (emailExist) {
-            res.render('userRegistration', { admin: false,title:'Sign Up', data: '  User email is already exist' });
+            res.render('userRegistration', { admin: false,title:'Sign Up', data: 'User email is already exist' });
 
         } else {
 
@@ -346,45 +429,6 @@ const OTPCheck = async (req, res, next) => {
 
 
 
-
-// **** LOGIN USER DATA VERIFY AND PROVIDE THE HOME PAGE ****
-const verifyUser = async(req, res, next) => {
-    try{
-
-        const username = req.body.username;
-        const password = req.body.password;
-        
-        const usernameExist = await userData.findOne({email:username});
-        
-        if(!usernameExist){
-
-            res.json({'status':false,'message':'&#10060; check your email address' });
-
-        }else if(usernameExist.block){
-
-            res.json({'status':false,'message':'&#10060; your account is blocked'});
-
-        }else{
-
-            const check = await bcrypt.compare(password,usernameExist.password);
-
-            if(check){
-
-                req.session.userId = usernameExist._id;
-                res.json({'status':true});
-
-            }else{
-
-                res.json({'status':false,'message':' &#10060; user email & password was inccorect' })
-
-            }
-
-        }
-    }catch(error){
-        next(error);
-    }
-    
-}
 
 
 
@@ -1369,9 +1413,12 @@ const load404ErrorPage = (req, res) => {
 
 module.exports = {
     guestPage,
+    googleAuthenticationSucess,
+    googleAuthenticationFailed,
     LoadUserRegistrationPage,
     userLogout,
     loadUserLogin,
+    forgotPassword,
     storeSignupData,
     loadOTPVerification,
     resendOTP,

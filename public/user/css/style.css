@@ -1816,82 +1816,129 @@ form .form-control:focus {
 	width: 3rem;
 	border-radius: 4px;
 }
-.rate {
-    float: left;
-    height: 46px;
-    padding: 0 10px;
-}
-.rate:not(:checked) > input {
-    position:absolute;
-    top:-9999px;
-}
-.rate:not(:checked) > label {
-    float:right;
-    width:1em;
-    overflow:hidden;
-    white-space:nowrap;
-    cursor:pointer;.rate {
-		float: left;
-		height: 46px;
-		padding: 0 10px;
+
+/* .rating:not(:checked) > input {
+	position: absolute;
+	appearance: none;
+  }
+  
+  .rating:not(:checked) > label {
+	float: right;
+	cursor: pointer;
+	font-size: 30px;
+	color: #666;
+  }
+  
+  .rating:not(:checked) > label:before {
+	content: '★';
+  }
+  
+  .rating > input:checked + label:hover,
+  .rating > input:checked + label:hover ~ label,
+  .rating > input:checked ~ label:hover,
+  .rating > input:checked ~ label:hover ~ label,
+  .rating > label:hover ~ input:checked ~ label {
+	color: #e58e09;
+  }
+  
+  .rating:not(:checked) > label:hover,
+  .rating:not(:checked) > label:hover ~ label {
+	color: #ff9e0b;
+  }
+  
+  .rating > input:checked ~ label {
+	color: #ffa723;
+  } */
+
+  .rating {
+	display: flex;
+	flex-direction: row-reverse;
+	gap: 0.3rem;
+	--stroke: #666;
+	--fill: #ffc73a;
+  }
+  
+  .rating input {
+	appearance: unset;
+  }
+  
+  .rating label {
+	cursor: pointer;
+  }
+  
+  .rating svg {
+	width: 2rem;
+	height: 2rem;
+	overflow: visible;
+	fill: transparent;
+	stroke: var(--stroke);
+	stroke-linejoin: bevel;
+	stroke-dasharray: 0;
+	animation: idle 4s linear infinite;
+	transition: stroke 0.2s, fill 0.5s;
+  }
+  
+  @keyframes idle {
+	from {
+	  stroke-dashoffset: 24;
 	}
-	
-	.rate > input {
-		opacity: 0;
-		position: absolute;
+  }
+  
+  .rating label:hover svg {
+	stroke: var(--fill);
+  }
+  
+  .rating input:checked ~ label svg {
+	transition: 0s;
+	animation: idle 4s linear infinite, yippee 0.75s backwards;
+	fill: var(--fill);
+	stroke: var(--fill);
+	stroke-opacity: 0;
+	stroke-dasharray: 0;
+	stroke-linejoin: miter;
+	stroke-width: 8px;
+  }
+  
+  @keyframes yippee {
+	0% {
+	  transform: scale(1);
+	  fill: var(--fill);
+	  fill-opacity: 0;
+	  stroke-opacity: 1;
+	  stroke: var(--stroke);
+	  stroke-dasharray: 10;
+	  stroke-width: 1px;
+	  stroke-linejoin: bevel;
 	}
-	
-	.rate:not(:checked) > label {
-		float: right;
-		width: 1em;
-		overflow: hidden;
-		white-space: nowrap;
-		cursor: pointer;
-		font-size: 30px;
-		color: #ccc;
+  
+	30% {
+	  transform: scale(0);
+	  fill: var(--fill);
+	  fill-opacity: 0;
+	  stroke-opacity: 1;
+	  stroke: var(--stroke);
+	  stroke-dasharray: 10;
+	  stroke-width: 1px;
+	  stroke-linejoin: bevel;
 	}
-	
-	.rate:not(:checked) > label:before {
-		content: '★ ';
+  
+	30.1% {
+	  stroke: var(--fill);
+	  stroke-dasharray: 0;
+	  stroke-linejoin: miter;
+	  stroke-width: 8px;
 	}
-	
-	.rate > input:checked ~ label {
-		color: #ffc700;
+  
+	60% {
+	  transform: scale(1.2);
+	  fill: var(--fill);
 	}
-	
-	.rate:not(:checked) > label:hover,
-	.rate:not(:checked) > label:hover ~ label {
-		color: #deb217;
-	}
-	
-	.rate > input:checked + label:hover,
-	.rate > input:checked + label:hover ~ label,
-	.rate > input:checked ~ label:hover,
-	.rate > input:checked ~ label:hover ~ label,
-	.rate > label:hover ~ input:checked ~ label {
-		color: #c59b08;
-	}
-	
-    font-size:30px;
-    color:#ccc;
-}
-.rate:not(:checked) > label:before {
-    content: '★ ';
-}
-.rate > input:checked ~ label {
-    color: #ffc700;    
-}
-.rate:not(:checked) > label:hover,
-.rate:not(:checked) > label:hover ~ label {
-    color: #deb217;  
-}
-.rate > input:checked + label:hover,
-.rate > input:checked + label:hover ~ label,
-.rate > input:checked ~ label:hover,
-.rate > input:checked ~ label:hover ~ label,
-.rate > label:hover ~ input:checked ~ label {
-    color: #c59b08;
-}
+  }
+  
+  
+  
+  
+  
 
 
 .sticky {
