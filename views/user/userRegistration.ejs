@@ -10,39 +10,39 @@
 					<div class="card fat">
 						<div class="card-body">
 							<h4 class="card-title text-center">Register</h4>
-                            <h6 class="text-danger text-center" id="verification-Result">&#10060;<%= locals.data ? data : '' %></h6>
+                            <h6 class="text-danger text-center" id="verification-Result" style="display: none;"><%= locals.data ? `&#10060;$`  : '' %></h6>
                             <form id="signupForm" method="POST" action="/signup" onsubmit="return validateRegister()" novalidate>
 
                                 <input type="hidden" name="refer" id="" value="<%= locals.userId %>">
 
-								<div class="form-group mb-0">
+								<div class="form-group mb-3">
 									<label for="name">Name</label>
 									<input id="Username"  type="text" class="form-control" placeholder="Username" name="username">
-                                    <span class="text-danger ml-2" style="font-size: 13px;" name="validate-signup"></span>
+                                    <span class="text-danger ml-2 validate" style="font-size: 13px;" name="validate-signup"></span>
 								</div>
 
-								<div class="form-group mb-0">
+								<div class="form-group mb-3">
 									<label for="email">E-Mail</label>
 									<input id="email" type="email" class="form-control" placeholder="Email" name="email">
-                                    <span class="text-danger ml-2" style="font-size: 13px;" name="validate-signup"></span>
+                                    <span class="text-danger ml-2 validate" style="font-size: 13px;" name="validate-signup"></span>
 								</div>
 
-								<div class="form-group mb-0">
+								<div class="form-group mb-3">
 									<label for="password">Phone Number</label>
 									<input id="phonenumber" type="text" placeholder="Phone number" class="form-control" name="phonenumber">
-                                    <span class="text-danger ml-2" style="font-size: 13px;" name="validate-signup"></span>
+                                    <span class="text-danger ml-2 validate" style="font-size: 13px;" name="validate-signup"></span>
 								</div>
 
-                                <div class="form-group mb-0">
+                                <div class="form-group mb-3">
 									<label for="password">Password</label>
 									<input id="password" type="password" placeholder="Password" class="form-control" name="password">
-                                    <span class="text-danger ml-2" style="font-size: 13px;" name="validate-signup"></span>
+                                    <span class="text-danger ml-2 validate" style="font-size: 13px;" name="validate-signup"></span>
 								</div>
 
-                                <div class="form-group mb-0">
+                                <div class="form-group mb-3">
 									<label for="password">Confirm Password</label>
 									<input id="confirmPassword" type="password" placeholder="Confirm password" class="form-control" name="confirmPassword">
-                                    <span class="text-danger ml-2" style="font-size: 13px;" name="validate-signup"></span>
+                                    <span class="text-danger ml-2 validate" style="font-size: 13px;" name="validate-signup"></span>
 								</div>
 
 								<div class="form-group m-0">

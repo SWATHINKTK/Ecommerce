@@ -13,59 +13,82 @@ function validateRegister(){
       let password = document.getElementById('password').value;
       let confirmpassword = document.getElementById('confirmPassword').value;
 
+      console.log(username,email,phone,password,confirmpassword);
+      console.log(errorElements);
+
       
       let emailRegex= /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
 
       let phoneRegex=/^\d{10}$/;
 
-      
-
+      let is_Valid = true;
             
 
       if(username.trim() == ''){
             
-            errorElements[0].innerHTML = '* enter the username'
-            return false;
-      }else if(email.trim() == ''){
+            errorElements[0].style.display = 'block';
+            errorElements[0].innerHTML = '* enter the username';
+            is_Valid = false;
 
-            errorElements[1].innerHTML = '* enter the email'
-            return false;
-      }else if(!emailRegex.test(email)){
-               
+      } 
+      if(email.trim() == ''){
+
+            errorElements[1].style.display = 'block';
+            errorElements[1].innerHTML = '* enter the email';
+            is_Valid = false;
+
+      }
+      if(!emailRegex.test(email)){
+            
+            errorElements[1].style.display = 'block';
             errorElements[1].innerHTML = '*Enter proper format';
-            return false;
+            is_Valid = false;
 
-      }else if(phone.trim() == ''){
+      }
+      if(phone.trim() == ''){
 
+            errorElements[2].style.display = 'block';
             errorElements[2].innerHTML = '* enter the phonenumber';
-            return false;
+            is_Valid = false;
 
-      }else if(!phoneRegex.test(phone)){
+      }
+      if(!phoneRegex.test(phone)){
             
+            errorElements[2].style.display = 'block';
             errorElements[2].innerHTML= '*Enter proper format';
-            return false;
+            is_Valid = false;
 
-      }else if(password.trim() == ''){
+      }
+      if(password.trim() == ''){
             
-            errorElements[3].innerHTML = '* enter the password'
-            return false;
+            errorElements[3].style.display = 'block';
+            errorElements[3].innerHTML = '* enter the password';
+            is_Valid = false;
 
-      }else if(password.length < 4){
+      }
+      if(password.length < 4){
            
-            errorElements[3].innerHTML = '* password must be 4 digit'
-            return false;
-
-      }else if(confirmpassword.trim() == ''){
+            errorElements[3].style.display = 'block';
+            errorElements[3].innerHTML = '* password must be 4 digit';
+            is_Valid = false;
+      }
+      if(confirmpassword.trim() == ''){
             
-            errorElements[4].innerHTML = '* enter the confirm password'
+            errorElements[4].style.display = 'block';
+            errorElements[4].innerHTML = '* enter the confirm password';
+            is_Valid = false;
+
+      }
+      if(password != confirmpassword){
+
+            errorElements[4].style.display = 'block';
+            errorElements[4].innerHTML = '* password & confirm password must be same';
+            is_Valid = false;
+      }
+
+      if(!is_Valid){
             return false;
-
-      }else if(password != confirmpassword){
-
-            errorElements[4].innerHTML = '* password & confirm password must be same'
-            return false;
-      }else {
-
+      }else{
             return true;
       }
     
@@ -122,7 +145,6 @@ function validateSignin(){
       if(!is_Valid){
             return false;
       }else{
-            alert('sss')
             return true;
       }
 

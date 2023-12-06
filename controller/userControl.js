@@ -196,11 +196,11 @@ const storeSignupData = async (req, res, next) => {
                     }
 
                 } else {
-                    res.render('userAuthentication', { admin: false,title:'Sign Up', data: 'Must Enter Two Password Same' })
+                    res.render('userRegistration', { admin: false,title:'Sign Up', data: 'Must Enter Two Password Same' })
                 }
             } else {
 
-                res.render('userAuthentication', { admin: false,title:'Sign Up', data: 'Enter All Fields and Again You can register' });
+                res.render('userRegistration', { admin: false,title:'Sign Up', data: 'Enter All Fields and Again You can register' });
 
             }
         }
