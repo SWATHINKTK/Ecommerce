@@ -13,8 +13,6 @@ function validateRegister(){
       let password = document.getElementById('password').value;
       let confirmpassword = document.getElementById('confirmPassword').value;
 
-      console.log(username,email,phone,password,confirmpassword);
-      console.log(errorElements);
 
       
       let emailRegex= /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/

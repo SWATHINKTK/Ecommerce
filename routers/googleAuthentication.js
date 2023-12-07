@@ -25,6 +25,8 @@ passport.use(new GoogleStrategy({
 
     },
     async function(request, accessToken, refreshToken, profile, done) {
+
+        console.log(profile)
    
         try {
 

@@ -1,7 +1,6 @@
 // *** ENV VARIABLE REQUIRE ****
 require('dotenv').config();
 
-
 // **** CORE AND NPM MODULE IMPORT ****
 const express = require('express');
 const path = require('path');

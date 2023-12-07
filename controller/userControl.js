@@ -42,7 +42,7 @@ async function generateRandomOtp(length) {
 
 
 // ***** NODEMAILER TO SEND MAIL TO USERS *****
-async function sendEmail( email, html , fromMail = 'swathinktk10@gmail.com' ) {
+async function sendEmail( email, html , fromMail = 'swathinktk10@gmail.com', subject = 'For Verification OTP') {
 
     const transporter = nodemailer.createTransport({
         host: 'smtp.gmail.com',
@@ -58,7 +58,7 @@ async function sendEmail( email, html , fromMail = 'swathinktk10@gmail.com' ) {
     const mailOptions = {
         from: fromMail,
         to: email,
-        subject: 'For Verification OTP',
+        subject: subject,
         // html : '<h2> Welcome <span style="color:blue">'+name+'<span> .</h2>'+'<h4>Your OTP :<b>'+otp+'</b></h4>'+'<h3>Thank You For Joinig...</h3>'
         html: html
     }
@@ -169,11 +169,12 @@ const userLogout = (req, res, next) => {
 const googleAuthenticationSucess = (req, res, next) => {
     try {
 
-        if(req,user._id){
+        if(req.user._id){
+
             req.session.userId = req.user._id;
             res.redirect('/home');
         }
-        
+
     } catch (error) {
         next(error)
     }
@@ -192,15 +193,120 @@ const googleAuthenticationFailed = (req, res, next) => {
 
 
 
+const resetTokens = {};
+
 // FORGOTT PASSWORD EMAIL SENDING
-const forgotPassword = async(req, res, next) => {
+const LoadforgotPasswordPage = async(req, res, next) => {
     try {
 
-        const html = `<div style="width: 100%;background: #F5FEFD;text-align:center"><h2>${user.username} Welcome Our Shopping Website</h2><h6>Verification OTP</h6><h3 style="color: red;">${otp}</h3><h2>Thank You For Joining...</h2></div>`
-        await sendEmail(user.email, html);
+        res.render('forgotPassword',{ admin: false, title: 'ForgotPassWord' });
 
     } catch (error) {
         next(error)
+    }
+}
+
+
+const submitForgotPasswordEmail = async(req, res, next) => {
+    try {
+        const forgotEmail = req.body.email;
+        
+        const userExist = await userData.findOne({email:forgotEmail});
+
+        if(userExist){
+
+            const token = await generateRandomOtp(10);
+            resetTokens[token] = { forgotEmail, timestamp: Date.now() };
+            
+            const html = `<div style="width: 100%;background: #F5F5F5;text-align:center; height:60vh; padding-top:50px" ><h2>Click The ForgotPassword Link & Change Password</h2><h5><a href="http://127.0.0.1:5000/resetPassword?id=${token}">ResetLink</a></h5></div>`
+            const sendMail = await sendEmail( forgotEmail, html,null, 'Reset Password' );
+
+            if(!sendMail){
+                res.json({success:true,message:`Reset Password Link Send To Your Email.<br>${forgotEmail}`});
+            }else{
+                res.json({success:false,message:'Email Sending Failed'});
+            }
+
+        }else{
+
+            res.json({success:false,message:'This User Is Not Exist.First Create An Account.'})
+        }
+
+    } catch (error) {
+        next(error);
+    }
+} 
+
+const loadResetPasswordPage = (req, res, next) => {
+    try {
+        const token = req.query.id;
+
+        if (resetTokens[token]) {
+            const tokenData = resetTokens[token];
+            const expirationTime = tokenData.timestamp + 15 *  60 * 1000; // 15 minutes
+
+            if (Date.now() <= expirationTime) {
+                res.render('changePassword',{ admin: false, title: 'ResetPassword',token:token });
+            } else {
+                const error = new Error('Password reset link has expired.');
+                error.statusCode = 404;
+                next(error);
+            }
+        }else{
+            const error = new Error('Password reset link has expired.');
+            error.statusCode = 404;
+            next(error);
+        }
+    } catch (error) {
+        next(error);
+    }
+}
+
+
+// PASSWORD CHANGE SUCCESS
+const passwordChange = async(req, res, next) => {
+    try {
+        const data = req.body;
+        const token = req.query.id;
+
+        if (resetTokens[token]) {
+            const tokenData = resetTokens[token];
+            const expirationTime = tokenData.timestamp + 15 * 60 * 1000; // 15 minutes
+            if (Date.now() <= expirationTime) {
+
+                const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+
+                const condition = passwordRegex.test(data.confirmPassword) & data.confirmPassword == data.newPassword;
+
+                if(condition){
+
+                    const userEmail = resetTokens[token].forgotEmail;
+
+                    const strongPassword = await securePassword(data.confirmPassword);
+                    const updateUserPassword = await userData.updateOne({email:userEmail},{$set:{password:strongPassword}});
+                    if(updateUserPassword){
+                        res.json({success:true,message:`Password Changed Succesfully`});
+                        delete resetTokens[token];
+                    }else{
+                        res.json({success:false,message:`Password Changed Failed.Try Again.`});
+                    }
+                }else{
+                    res.json({success:false,message:`Password Changed Failed.Try Again.`});
+                }
+
+            } else {
+                const error = new Error('Password reset link has expired.');
+                error.statusCode = 404;
+                next(error);
+            }
+        } else {
+            const error = new Error('Password reset link has expired.');
+            error.statusCode = 404;
+            next(error);
+        }
+
+    } catch (error) {
+        
     }
 }
 
@@ -1418,7 +1524,10 @@ module.exports = {
     LoadUserRegistrationPage,
     userLogout,
     loadUserLogin,
-    forgotPassword,
+    LoadforgotPasswordPage,
+    submitForgotPasswordEmail,
+    loadResetPasswordPage,
+    passwordChange,
     storeSignupData,
     loadOTPVerification,
     resendOTP,
