@@ -29,7 +29,7 @@
                     
                 </div>
             </div>
-            <div class="productDetail-Img w-100" id="imageView-Div" style="overflow: hidden;">
+            <div class="productDetail-Img w-100 p-2" id="imageView-Div" style="overflow: hidden;">
                 <img src="/public/admin/assets/productImages/<%= product.productImages[0] %>" id="divInsideImage" >
             </div>
             <div class="productDetail-body">
@@ -117,13 +117,96 @@
         </div>
     </section>
 
-    <section class="mt-5 ml-4 mr-4  productDetail-lastSection">
-        <h2>Description</h2>
-        <span>&nbsp;&nbsp;&nbsp;&nbsp;<%= product.description %></span>
+    <section>
+        <div class="container mt-3 description-div" >
+            <div class="row">
+                <section class="mt-5  mr-4  productDetail-lastSection">
+                    <h2>Description</h2>
+                    <span>&nbsp;&nbsp;&nbsp;&nbsp;<%= product.description %></span>
+                </section>
+                <section class="mt-5 mr-4 mb-5 productDetail-lastSection">
+                    <h2>Specification</h2>
+                    <span>&nbsp;&nbsp;&nbsp;&nbsp;<%= product.specifications[0] %></span>
+                </section>
+            </div>
+        </div>
     </section>
-    <section class="mt-5 ml-4 mr-4 mb-5 productDetail-lastSection">
-        <h2>Specification</h2>
-        <span>&nbsp;&nbsp;&nbsp;&nbsp;<%= product.specifications[0] %></span>
+
+    <section class="my-5 p-2" style="padding-top: 60px;">
+        <section>
+			<div class="container ratingUserView" >
+				<div class="row">
+					<h3 class="font-weight-bold text-center py-3 w-100 border mb-2">Product Ratings and reviews</h3>
+					<div class="d-flex w-100 rating-two-div">
+                        <% let rates = [0, 0, 0, 0, 0]; let length = reviewData.length %>
+                        <% for (let i = 0; i < length; i++) { %>
+                          <% const rate = reviewData[i].review.rating; %>
+                          <% if (rate >= 1 && rate <= 5) { rates[rate - 1]++; } %>
+                        <% } %>
+						<div class="ratingPercentage w-md-50 border pb-4">
+							<h5 class="font-weight-bold text-center py-3 w-100">Overall Ratings (<%= length %>)</h5>
+							<div class="d-flex justify-content-center">
+								<span class="font-weight-bold">5 <i class="fa-solid fa-star px-1" style="color: #f5ab16;"></i></span>
+								<div class="progress my-2 w-50">
+									<div class="progress-bar" role="progressbar" style="width: <%= (rates[4] / length) * 100 %>%; background-color: #F4CE14;" aria-valuenow="<%= (rates[4] / length) * 100 %>" aria-valuemin="0" aria-valuemax="100"></div>
+								</div>
+							</div>
+
+							<div class="d-flex justify-content-center">
+								<span class="font-weight-bold ">4 <i class="fa-solid fa-star px-1" style="color: #f5ab16;"></i></span>
+								<div class="progress my-2 w-50">
+                                    <div class="progress-bar" role="progressbar" style="width: <%= (rates[3] / length) * 100 %>%; background-color: #F4CE14;" aria-valuenow="<%= (rates[3] / length) * 100 %>" aria-valuemin="0" aria-valuemax="100"></div>
+								</div>
+							</div>
+
+							<div class="d-flex justify-content-center">
+								<span class="font-weight-bold ">3 <i class="fa-solid fa-star px-1" style="color: #f5ab16;"></i></span>
+								<div class="progress my-2 w-50">
+                                    <div class="progress-bar" role="progressbar" style="width: <%= (rates[2] / length) * 100 %>%; background-color: #F4CE14;" aria-valuenow="<%= (rates[2] / length) * 100 %>" aria-valuemin="0" aria-valuemax="100"></div>
+								</div>
+							</div>
+
+							<div class="d-flex justify-content-center">
+								<span class="font-weight-bold ">2 <i class="fa-solid fa-star px-1" style="color: #f5ab16;"></i></span>
+								<div class="progress my-2 w-50">
+									<div class="progress-bar" role="progressbar" style="width: <%= (rates[1] / length) * 100 %>%; background-color: #F4CE14;" aria-valuenow="<%= (rates[1] / length) * 100 %>" aria-valuemin="0" aria-valuemax="100"></div>
+								</div>
+							</div>
+
+							<div class="d-flex justify-content-center">
+								<span class="font-weight-bold">1 <i class="fa-solid fa-star px-1" style="color: #f5ab16;"></i></span>
+								<div class="progress my-2 w-50">
+                                    <div class="progress-bar" role="progressbar" style="width: <%= (rates[0] / length) * 100 %>%; background-color: #F4CE14;" aria-valuenow="<%= (rates[0] / length) * 100 %>" aria-valuemin="0" aria-valuemax="100"></div>
+								</div>
+							</div>
+						</div>
+
+						<div class="eachRatings w-100 border">
+							<%for(let i = 0; i < reviewData.length; i++){%>
+								<div class="m-3 ratings mb-4">
+									<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="grey" class="bi bi-person-circle" viewBox="0 0 16 16">
+										<path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+										<path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+									</svg>
+									<span class="text-dark p-2 font-weight-bold" style="font-size: 0.9rem;"><%= reviewData[i].userData.username %></span>
+									<span>
+										<% for(let j = 1; j <=5 ; j++){ %>
+                                            <% if(j <= reviewData[i].review.rating) { %>
+											    <i class="fa-solid fa-star px-1" style="color: #e9b807;"></i>
+                                            <% }else{ %>
+											    <i class="fa-regular fa-star px-1" style="color: #9d9e9a;"></i>
+                                            <% } %>
+                                        <% } %>
+									</span>
+									<p class="pl-5 feedbacks"><%= reviewData[i].review.feedback %></p>
+								</div>
+                            <% } %>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+		</section>
     </section>
                                 
 

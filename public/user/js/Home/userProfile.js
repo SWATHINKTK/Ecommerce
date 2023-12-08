@@ -232,7 +232,7 @@ function referalLink() {
     
     // Alert the copied text
     Swal.fire({
-        // position:'Center',
+        position:'top',
         html: `<h5 class="font-weight-bold"> Share the Link Earn Money </h5>
                 <p class="font-weight-bold">Link is Already copied to Your Clipboard</p>
                 <p class="text-primary">${copyText.value}</p>`,

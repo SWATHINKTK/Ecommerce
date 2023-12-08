@@ -1,0 +1,108 @@
+<%- include('../partials/header.ejs') %>
+<%- include('../partials/navbar.ejs') %>
+
+    <!-- Breadcrumb Section Begin -->
+    <section class="breadcrumb-option">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb__text">
+                        <div class="breadcrumb__links">
+                            <a href="/home">Home</a>
+                            <span>Shop</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumb Section End -->
+
+
+    
+    <!-- Shop Section Begin -->
+    <section class="shop spad" style="background-color: #f1f3f6;">
+        <div class="container">
+            <div class="d-flex justify-content-center mb-4">
+                <h3 class="font-weight-bold">Ratings & Reviews</h3>
+            </div>    
+            <div class="row flex-nowrap main-div-productAllPage">
+                <div class="col-lg-4 col-md-4 my-3" id="filterSection-produc">
+                    <div style="background-color: #fff; padding: 1.7rem; height: 100%; box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;">
+
+                        <div class="d-flex justify-content-center" >
+                            <h5>What makes a good review</h5>
+                        </div>
+                        <hr style="border-bottom: 1px solid rgba(0, 0, 0, 0.459); ">
+    
+                        <div>
+                            <h6>Have you used this product?</h6>
+                            <p>Your review should be about your experience with the product.</p>
+                        </div>
+    
+                        <hr style="border-bottom: 1px solid rgba(0, 0, 0, 0.459); ">
+                        <div>
+                            <h6>Why review a product?</h6>
+                            <p>Your valuable feedback will help fellow shoppers decide!</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-8  my-md-3" >
+                    <div class="shop__product__option" style="background-color: #fff; padding: 1.7rem; height: 100%; box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;">
+                        <div class="row">
+                            <div class="col-md-6 col-lg-4">
+                                <img src="/public/admin/assets/productImages/<%= orderData[0].productData.productImages[0] %>" alt="" style="max-width: 200px; max-height: 200px; height: 100%; width: 100%; object-fit: cover;">
+                            </div>
+                            <div class="col-md-6">
+                                <h4 class="mb-3 font-weight-bold"><%= orderData[0].productData.productName %></h4>
+                                <p><%= orderData[0].productData.description %></p>
+                            </div>
+
+                            <div class="col-md-7 mx-auto mt-4">
+                                <form method="POST" id="ratingForm" >
+                                    <input type="hidden" name="productId" id="productReview" value="<%= orderData[0].productInforamtion.productId %>">
+                                    <input type="hidden" name="orderId" id="orderReview" value="<%= orderData[0]._id %>">
+                                    <p class=" text-center font-weight-bold">Rate This Product</p>
+                                    <div class="d-flex justify-content-center">
+                                        <div class="rating mb-2">
+                                            <input type="radio" id="star-1" name="starRadio" value="5" <%= locals.ratingData && ratingData.rating >= 5 ? 'checked' : '' %>>
+                                            <label for="star-1">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path pathLength="360" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"></path></svg>
+                                            </label>
+                                            <input type="radio" id="star-2" name="starRadio" value="4" <%= locals.ratingData && ratingData.rating == 4 ? 'checked' : '' %>>
+                                            <label for="star-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path pathLength="360" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"></path></svg>
+                                            </label>
+                                            <input type="radio" id="star-3" name="starRadio" value="3" <%= locals.ratingData && ratingData.rating == 3 ? 'checked' : '' %>>
+                                            <label for="star-3">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path pathLength="360" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"></path></svg>
+                                            </label>
+                                            <input type="radio" id="star-4" name="starRadio" value="2" <%= locals.ratingData && ratingData.rating == 2 ? 'checked' : '' %>>
+                                            <label for="star-4">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path pathLength="360" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"></path></svg>
+                                            </label>
+                                            <input type="radio" id="star-5" name="starRadio" value="1" <%= locals.ratingData && ratingData.rating == 1 ? 'checked' : '' %>>
+                                            <label for="star-5">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path pathLength="360" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"></path></svg>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <p class=" text-center text-danger" name="Feedback-validation"></p>
+                                    <div class="form-group">
+                                        <label for="message-text" class="col-form-label">Feedback:</label>
+                                        <textarea class="form-control" id="Feedback-text" rows="4" cols="5" name="feedback"><%= locals.ratingData ? ratingData.feedback : '' %></textarea>
+                                        <p class="ml-2 text-danger" name="Feedback-validation"></p>
+                                        <button type="submit" class="btn btn-warning font-weight-bold mt-2">Feedback</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+       
+    </section>
+
+<%- include('../partials/footer.ejs') %>

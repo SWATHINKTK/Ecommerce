@@ -121,7 +121,7 @@
                                                     <a href="/productdetails?id=<%= orderData[0].productData[0]._id %>">
                                                         <img class="align-self-center img-fluid"
                                                             src="/public/admin/assets/productImages/<%= orderData[0].productData[0].productImages[0] %>"
-                                                            width="250">
+                                                            width="260">
                                                     </a>
                                                 </div>
                                                 <div class="flex-fill pl-md-4" style="overflow: hidden;">
@@ -159,12 +159,12 @@
                                                                 Date()); %>, Today
                                                         </span></p>
 
-                                                    <div class="d-flex mt-4 order-progress-shippingAddress">
+                                                    <div class="d-flex mt-2 order-progress-shippingAddress">
                                                         <div>
-                                                            <h6 class=" font-weight-bold pb-2">Shipping Address : </h6>
+                                                            <h6 class=" font-weight-bold pb-1">Shipping Address : </h6>
                                                         </div>
                                                         <div class="pl-3">
-                                                            <p class="font-weight-bold mt-0">
+                                                            <p class="font-weight-bold mt-0 mb-1">
                                                                 <%= orderData[0].addressInformation.username %><span
                                                                         class="pl-4">
                                                                         <%= orderData[0].addressInformation.phonenumber
@@ -185,8 +185,11 @@
                                                             </p>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                
+                                                    <!-- <div class="p-2 mt-1 mx-auto col-md-11" style="background-color: #EEE2DE;border-radius: 7px;">
+                                                        <h6 class="font-weight-bold">Review :</h6>
+                                                    </div> -->
+                                                </div>   
+                                               
                                             </div>
 
                                             <!-- **** LOAD TIME EVENT WORKING ON PROGRESS BAR  IN JS order>js*** -->
@@ -261,6 +264,7 @@
 
 
                                         </div>
+                                       
 
                                         <!-- **** LOAD TIME EVENT WORKING ON PROGRESS BAR  IN JS order>js*** -->
                                         <% if(orderData[0].productInforamtion.orderStatus=="Canceled" ){ %>
@@ -269,48 +273,15 @@
 
                                                 <div class="card-footer p-4" id="order-progress-footer">
                                                     <div class="d-flex justify-content-between">
-                                                        <h5 class="fw-normal mb-0"><a href="#" data-toggle="modal"
-                                                                data-target="#exampleModal">Return Order</a></h5>
+                                                        <h5 class="fw-normal mb-0">
+                                                            <a href="#" data-toggle="modal" data-target="#exampleModal">Return Order</a>
+                                                        </h5>
+                                                        <h5 class="fw-normal mb-0">
+                                                            <a href="/api/review?orderId=<%= orderData[0]._id %>&productId=<%= orderData[0].productData[0]._id %>">Rating & Review</a>
+                                                        </h5>
                                                     </div>
                                                 </div>
 
-                                                <div class="card-footer p-4 d-flex justify-content-center pt-5">
-                                                    <div>
-                                                        
-                                                        <h3 class="font-weight-bold mb-2">Rating & Reviews</h3>
-                                                        <div class="d-flex justify-content-center">
-                                                            <div class="rating">
-                                                                <input type="radio" id="star-1" name="star-radio" value="star-1">
-                                                                <label for="star-1">
-                                                                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path pathLength="360" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"></path></svg>
-                                                                </label>
-                                                                <input type="radio" id="star-2" name="star-radio" value="star-1">
-                                                                <label for="star-2">
-                                                                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path pathLength="360" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"></path></svg>
-                                                                </label>
-                                                                <input type="radio" id="star-3" name="star-radio" value="star-1">
-                                                                <label for="star-3">
-                                                                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path pathLength="360" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"></path></svg>
-                                                                </label>
-                                                                <input type="radio" id="star-4" name="star-radio" value="star-1">
-                                                                <label for="star-4">
-                                                                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path pathLength="360" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"></path></svg>
-                                                                </label>
-                                                                <input type="radio" id="star-5" name="star-radio" value="star-1">
-                                                                <label for="star-5">
-                                                                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path pathLength="360" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"></path></svg>
-                                                                </label>
-                                                              </div>
-                                                        </div>
-                                                            <div class="form-group">
-                                                                <label for="message-text" class="col-form-label">Feedback:</label>
-                                                                <textarea class="form-control" id="Feedback-text"></textarea>
-                                                                <p class="ml-2 text-danger" id="Feedback-validation"></p>
-                                                                <button type="submit" class="btn btn-warning font-weight-bold">Feedback</button>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                </div>
 
                                         <% } else if(orderData[0].productInforamtion.orderStatus=='Placed' ||
                                             orderData[0].productInforamtion.orderStatus=='Shipped' ) { %>

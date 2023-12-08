@@ -2989,6 +2989,202 @@ form .form-control:focus {
 	margin-bottom: 0;
 }
 
+.wallet-Amount-btn{
+	align-self: flex-end;
+	justify-content: space-between;
+}
+
+.order-left-side{
+	border-right: 1px solid #0803588e;
+}
+.button {
+	--width: 100px;
+	--height: 34px;
+	--tooltip-height: 35px;
+	--tooltip-width: 90px;
+	--gap-between-tooltip-to-button: 7px;
+	--button-color: #1163ff;
+	--tooltip-color: #fff;
+	width: var(--width);
+	height: var(--height);
+	background: var(--button-color);
+	position: relative;
+	text-align: center;
+	border-radius: 0.45em;
+	font-family: "Arial";
+	transition: background 0.3s;
+  }
+  
+  .button::before {
+	position: absolute;
+	content: attr(data-tooltip);
+	width: var(--tooltip-width);
+	height: var(--tooltip-height);
+	background-color: var(--tooltip-color);
+	font-size: 0.9rem;
+	color: #111;
+	border-radius: .25em;
+	line-height: var(--tooltip-height);
+	bottom: calc(var(--height) + var(--gap-between-tooltip-to-button) + 10px);
+	left: calc(50% - var(--tooltip-width) / 2);
+  }
+  
+  .button::after {
+	position: absolute;
+	content: '';
+	width: 0;
+	height: 0;
+	border: 10px solid transparent;
+	border-top-color: var(--tooltip-color);
+	left: calc(50% - 10px);
+	bottom: calc(100% + var(--gap-between-tooltip-to-button) - 10px);
+  }
+  
+  .button::after,.button::before {
+	opacity: 0;
+	visibility: hidden;
+	transition: all 0.5s;
+  }
+  
+  .text {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+  }
+  
+  .button-wrapper,.text,.icon {
+	overflow: hidden;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	left: 0;
+	color: #fff;
+  }
+  
+  .text {
+	top: 0
+  }
+  
+  .text,.icon {
+	transition: top 0.5s;
+  }
+  
+  .icon {
+	color: #fff;
+	top: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+  }
+  
+  .icon svg {
+	width: 24px;
+	height: 24px;
+  }
+  
+  .button:hover {
+	background: #6c18ff;
+  }
+  
+  .button:hover .text {
+	top: -100%;
+  }
+  
+  .button:hover .icon {
+	top: 0;
+  }
+  
+  .button:hover:before,.button:hover:after {
+	opacity: 1;
+	visibility: visible;
+  }
+  
+  .button:hover:after {
+	bottom: calc(var(--height) + var(--gap-between-tooltip-to-button) - 20px);
+  }
+  
+  .button:hover:before {
+	bottom: calc(var(--height) + var(--gap-between-tooltip-to-button));
+  }
+
+
+
+
+  .gotoOrderButton {
+	width: 150px;
+	height: 35px;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	gap: 10px;
+	padding: 0px 15px;
+	background-color: rgb(66, 66, 66);
+	border-radius: 10px;
+	color: white;
+	border: none;
+	position: relative;
+	cursor: pointer;
+	transition-duration: .2s;
+  }
+  
+  .bell {
+	width: 13px;
+  }
+  
+  .bell path {
+	fill: rgb(0, 206, 62);
+  }
+  
+  .arrow {
+	position: absolute;
+	right: 0;
+	width: 30px;
+	height: 100%;
+	font-size: 18px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+  }
+  
+  .gotoOrderButton:hover {
+	background-color: rgb(77, 77, 77);
+	transition-duration: .2s;
+  }
+  
+  .gotoOrderButton:hover .arrow {
+	animation: slide-right .6s ease-out both;
+  }
+  /* arrow animation */
+  @keyframes slide-right {
+	0% {
+	  transform: translateX(-10px);
+	  opacity: 0;
+	}
+  
+	100% {
+	  transform: translateX(0);
+	  opacity: 1;
+	}
+  }
+  
+  .gotoOrderButton:active {
+	transform: translate(1px , 1px);
+	transition-duration: .2s;
+  }
+  
+  
+
+.wishlist-view{
+	box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+}
+
+.wallet-Amount-btn button{ 
+	height: 30px;
+	margin-top: 1rem;
+}
+
+
+
 /*---------------------
   Testimonial
 -----------------------*/
@@ -4273,9 +4469,48 @@ form .form-control:focus {
 	.productDetail-body{
 		padding-left: 1rem;
 		padding-top: 2rem;
+		margin-left: 1.3rem;
+	}
+	.description-div{
+		padding: 3rem;
+		padding-top:0;
+	}
+	.rating-two-div{
+		flex-direction: column;
+	}
+	.bi-person-circle{
+		display: none;
+	}
+	.wallet-Amount-btn{
+		flex-direction:column;
+		align-items: start;	
+	}
+	.wishlist-product-details{
+		padding: 1rem;
+	}
+	.wallet-Amount-btn button{ 
+		margin: 0;
+		margin-top: 1rem;
+	}
+	.wishlist-view{
+		flex-direction: column;
+	}
+	.order-detail-image img{
+		width: 100%;
+		object-fit: contain;
 	}
 	.productDetailButtons{
 		flex-direction: column;
+	}
+	.order-left-side{
+		border: none;
+		border-bottom: 1px solid #00000094;
+		padding-bottom: 2rem;
+		margin-bottom: 2rem;
+	}
+	.order-sucessfull-main-div{
+		margin: 0;
+		width: 100%;
 	}
 	.btn-buyNow{
 		margin-left: 0;

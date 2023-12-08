@@ -748,6 +748,35 @@ const loadProductDetailPage = async (req, res, next) => {
 
         const wishlist = await wishlistData.findOne({userId:req.session.userId});
 
+        const review = await productInfo.aggregate([
+            {
+                $match:{
+                    _id:new mongoose.Types.ObjectId(id)
+                }
+            },
+            {
+                $unwind:"$review"
+            },
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: 'review.userId',
+                    foreignField: '_id',
+                    as: 'userData'
+                }
+            },
+            {
+                $unwind:"$userData"
+            },
+            {
+                $project:{
+                    review:1,
+                    'userData.username':1
+                }
+            }
+        ])
+        console.log(review)
+
 
 
         for(let brand of brandData){
@@ -762,7 +791,8 @@ const loadProductDetailPage = async (req, res, next) => {
             category:categoryData, 
             dataBrand:brandData ,
             dataCart:cart, 
-            wishlistData:wishlist
+            wishlistData:wishlist,
+            reviewData:review
         });
 
 

@@ -51,8 +51,8 @@ const loadOrderListViewUserSide = async (req, res, next) => {
 
 
         let totalCount = 0;
-        if(totalCount){
-            let totalCount = await orderData.aggregate([
+        if(order.length > 0){
+            totalCount = await orderData.aggregate([
                 {
                     $match:{
                         userId:new mongoose.Types.ObjectId(id)
@@ -89,6 +89,7 @@ const loadOrderListViewUserSide = async (req, res, next) => {
 const loadOrderProgressInUserSide = async (req, res, next) => {
     try {
         const checkLogin = req.session.userId ? true : false;
+        const userId = req.session.userId;
 
         const orderId = req.query.id;
         const productId = req.query.productId;
@@ -119,11 +120,23 @@ const loadOrderProgressInUserSide = async (req, res, next) => {
             }
         ]);
 
+
+        const ratingData = order[0].productData[0]?.review?.find(review => review.userId?.toString() == userId.toString());
+        console.log(ratingData)
+
         const returnPolicy = new Date() ;
         returnPolicy.setDate((order[0].updatedAt).getDate() +7 )
   
         if (orderData) {
-            res.render('user/orderProgress', { title: 'View Order', login: checkLogin, user: true, orderData: order , returnPolicyDate:returnPolicy});
+            res.render('user/orderProgress', { 
+                title: 'View Order', 
+                login: checkLogin, 
+                user: true, 
+                orderData: order, 
+                returnPolicyDate:returnPolicy,
+                ratingData:ratingData
+            });
+
         } else {
             throw new Error('Data is Not Found');
         }
@@ -896,6 +909,146 @@ const orderReturn = async(req, res, next) => {
 
 
 
+// LOAD PRODUCT REVIEW PAGE
+const loadReviewPage = async(req, res, next) => {
+    try {
+        const checkLogin = req.session.userId ? true : false;
+
+        const orderId = req.query.orderId;
+        const productId = req.query.productId;
+        const userId = req.session.userId;
+
+        const order = await ratingProductData(orderId, productId, userId);
+
+        const ratingData = order[0].productData?.review?.find(review => review.userId?.toString() == userId.toString());
+        console.log(ratingData)
+
+        
+
+        if(order.length > 0){
+
+            res.render('user/rating', { title: 'Rating', login: checkLogin, user: true, orderData:order, ratingData:ratingData} );
+
+        }else{
+
+            const error = new Error('Invalid Request.');
+            error.statusCode = 404;
+            next(error);
+        }
+        
+        
+    } catch (error) {
+        next(error);
+    }
+}
+
+
+// SUBMIT THE PRODUCT REVIEW DATA
+const submitReviewData = async(req, res, next) => {
+    try {
+        const data = req.body;
+        const userId = req.session.userId;
+
+        const order = await ratingProductData(data.orderId, data.productId, userId);
+
+        const userReview = {
+            userId: userId,
+            rating: data.starRadio,
+            feedback: data.feedback
+        }
+
+        const existingReviewIndex = order[0].productData?.review?.findIndex((review) =>
+            review.userId?.equals(new mongoose.Types.ObjectId(userId))
+        );
+        console.log(existingReviewIndex)
+
+
+        if(existingReviewIndex ==  -1 || !existingReviewIndex){
+ 
+
+            console.log('ssssss')
+            const addReview = await productInfo.updateOne({
+                    _id:data.productId
+                },
+                {
+                    $push:{
+                        review:userReview
+                    }
+                });
+
+            if(addReview){
+                res.json({success:true});
+            }else{
+                res.json({success:false}); 
+            }
+
+        }else{
+     
+            const editReview = await productInfo.updateOne(
+                { _id: data.productId, 'review.userId': userReview.userId },
+                {
+                  $set: {
+                    'review.$.feedback': userReview.feedback,
+                    'review.$.rating': userReview.rating,
+                    'review.$.feedbackDate' : new Date()
+                  }
+                }
+            );
+
+            if(editReview){
+                res.json({success:true});
+            }else{
+                res.json({success:false}); 
+            }
+  
+        }
+        
+
+    } catch (error) {
+        next(error);
+    }
+}
+
+
+
+async function ratingProductData(orderId, productId, userId){
+    const order = await orderData.aggregate([
+        {
+            $match:{
+                _id:new mongoose.Types.ObjectId(orderId),
+                userId:new mongoose.Types.ObjectId(userId)
+            }
+        },
+        {
+            $unwind:"$productInforamtion"
+        },
+        {
+            $match:{
+                'productInforamtion.productId':new mongoose.Types.ObjectId(productId)
+            }
+        },
+        {
+            $lookup: {
+                from: 'products',
+                localField: 'productInforamtion.productId',
+                foreignField: '_id',
+                as: 'productData'
+            }
+        },
+        {
+            $unwind:'$productData'
+        }
+    ]);
+
+    if(order.length <= 0){
+        const error = new Error('Invalid Request.');
+        error.statusCode = 404;
+        next(error);
+        return;
+    }
+    return order;
+}
+
 
 
 module.exports = {
@@ -908,7 +1061,9 @@ module.exports = {
     loadOrderManagePageAdminSide,
     searchOrderAdminSide,
     searchOrderIdAdminSide,
-    updateOrderStatus
+    updateOrderStatus,
+    loadReviewPage,
+    submitReviewData
 }
 
 
@@ -918,81 +1073,3 @@ module.exports = {
 
 
 
-
-
-// // ORDER RETURN WORKING CONTROLLER
-// const orderReturn = async(req, res, next) => {
-    
-//     try {
-//         const data = req.body;
-
-
-//         const order = await orderData.findById(data.orderId);
-
-
-//         if (order) {
-
-//             // FINDING THE PRODUCT IN THAT ORDER
-//             const productToUpdate = order.productInforamtion.find(orderProduct => orderProduct.productId.equals(data.productId));
-
-//             // CHECK CONDITION FOR PRODUCT IS DELIVERECD OR NOT.DELIVERED PROUDUCT ONLY REFUND OPTION
-//             if(productToUpdate.orderStatus == 'Delivered'){
-           
-            //     // *** ORDER RETURN STATUS CHANGE ***
-            //     productToUpdate.orderStatus = 'Return';
-            //     productToUpdate.paymentStatus = 'Refund';
-            //     productToUpdate.reason = data.reason;
-            //     const updateStock = await productInfo.updateOne({ _id: data.productId }, { $inc: { stock: productToUpdate.productquantity } });
-
-            //     // Check Return Order Product Inventory Managed Or Not
-            //     if (updateStock) {
-
-            //         // Create Unique TransactionId
-            //         const nanoidModule = await import('nanoid');
-            //         nanoid = nanoidModule.nanoid;
-            //         const uniqueID = nanoid();
-
-            //         // Creating The Tranction History Store Object
-            //         const transaction = {
-            //             transactionId: uniqueID,
-            //             transactionType: 'Debit',
-            //             description: 'Product Return Refund',
-            //             amount: productToUpdate.productTotalAmount,
-            //             orderId: order._id
-            //         }
-
-            //         const returnAmount = await userData.updateOne({ _id: order.userId }, { $inc: { walletAmount: productToUpdate.productTotalAmount } }, { upsert: true });
-            //         const updateWalletTransaction = await userData.updateOne({ _id: order.userId }, { $push: { walletTransaction: transaction } }, { upsert: true });
-
-
-            //         // Checking Wallet Update Successfull
-            //         if (returnAmount && updateWalletTransaction) {
-
-            //             productToUpdate.paymentStatus = 'Refund';
-            //             const updateStatus = await order.save();
-
-            //             if (updateStatus) {
-
-            //                 res.json({ status:true });
-        
-            //             } else {
-            //                 res.json({ status:false });
-            //             }
-
-            //         }else{
-            //             throw new Error('Updation Failed');
-            //         } 
-            //     }else{
-            //         throw new Error('Product Must Be Delivered');
-            //     }
-    
-            // }else{
-            //     throw new Error('Stock Manage Error');
-            // }
-//         } else {
-//             throw new Error('Data is Not Found');
-//         }
-//     } catch (error) {
-//         next(error)
-//     }
-// }

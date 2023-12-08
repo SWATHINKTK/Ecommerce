@@ -227,58 +227,7 @@
                     <% }} %>
 
 
-                    <div class="row d-flex justify-content-end align-items-center sticky mb-2 mt-2 ">
-                        <div class="continue__btn  mr-3" >
-                            <button class="btn proceed-payment" id="proceed-payment-btn">Proceed To Payment</button>
-                        </div>
-                    </div>
-
-                    <!-- PAYMENT OPTION -->
-                    <div id="payment-options" style="display: none;">
-                        <ul class="border" type="none">
-                            <li class="border p-3">
-                                <input type="radio" name="Payment" checked value="OnlinePayment">
-                                <span class="payment-method-text pl-3"> 
-                                    <i class="fa-solid fa-globe"></i>
-                                     ONLINE Payment</span>
-                            </li>
-                            <!-- <li class="border p-3">
-                                <input type="radio" name="Payment" value="CARD">
-                                <span class="payment-method-text pl-3">
-                                    <i class="fa-solid fa-credit-card" style="color: #1f7bd1;"></i> 
-                                    Credit / Debit / ATM Card
-                                </span>
-                            </li> -->
-                            <li class="border p-3">
-                                <input type="radio" name="Payment" value="Wallet">
-                                <span class="payment-method-text pl-3">
-                                    <i class="fa-solid fa-wallet" style="color: #2a4779;"></i>
-                                    Wallet <span class="ml-2 font-weight-bold <%= locals.wallet <= 999 ? 'text-danger' : 'text-dark' %> ">( ₹ <%= locals.wallet ? wallet : 0%>)</span>
-                                </span>
-                            </li>
-                            <li class="border p-3">
-                                <input type="radio" name="Payment" value="COD">
-                                <span class="payment-method-text pl-3"> 
-                                    <i class="bi bi-cash-stack fa-lg"></i> 
-                                     Cash on Delivery</span>
-                            </li>
-                        </ul>
-
-                        <% if(single){ %>
-                            <div class="row d-flex justify-content-end align-items-center mt-3 border p-2 placeorder">
-                                <div class="continue__btn  mr-3" >
-                                    <button class="btn proceed-payment" id="placeOrder" name="placeOrderBtn" data-product-id="<%= product._id %>" data-coupon="false" data-couponId="">Place Order</button>
-                                </div>
-                            </div>
-                        <% } else { %>
-                            <div class="row d-flex justify-content-end align-items-center mt-3 border p-2 placeorder">
-                                <div class="continue__btn  mr-3" >
-                                    <button class="btn proceed-payment" id="cartPlaceOrder" name="placeOrderBtn" data-coupon="false" data-couponId="">Place Order</button>
-                                </div>
-                            </div>
-                        <% } %>
-
-                    </div>
+                    
                     <!-- END PAYMENT OPTION -->
                 </div>
 
@@ -375,6 +324,62 @@
                     </div>
                 <% } %>
             </div>
+            
+            <div class="col-lg-8">
+                <div class="row d-flex justify-content-end align-items-center sticky mb-2 mt-2 ">
+                    <div class="continue__btn  mr-3" >
+                        <button class="btn proceed-payment" id="proceed-payment-btn">Proceed To Payment</button>
+                    </div>
+                </div>
+
+                <!-- PAYMENT OPTION -->
+                <div id="payment-options" style="display: none;">
+                    <ul class="border" type="none">
+                        <li class="border p-3">
+                            <input type="radio" name="Payment" checked value="OnlinePayment">
+                            <span class="payment-method-text pl-3"> 
+                                <i class="fa-solid fa-globe"></i>
+                                ONLINE Payment</span>
+                        </li>
+                        <!-- <li class="border p-3">
+                            <input type="radio" name="Payment" value="CARD">
+                            <span class="payment-method-text pl-3">
+                                <i class="fa-solid fa-credit-card" style="color: #1f7bd1;"></i> 
+                                Credit / Debit / ATM Card
+                            </span>
+                        </li> -->
+                        <li class="border p-3">
+                            <input type="radio" name="Payment" value="Wallet">
+                            <span class="payment-method-text pl-3">
+                                <i class="fa-solid fa-wallet" style="color: #2a4779;"></i>
+                                Wallet <span class="ml-2 font-weight-bold <%= locals.wallet <= 999 ? 'text-danger' : 'text-dark' %> ">( ₹ <%= locals.wallet ? wallet : 0%>)</span>
+                            </span>
+                        </li>
+                        <li class="border p-3">
+                            <input type="radio" name="Payment" value="COD">
+                            <span class="payment-method-text pl-3"> 
+                                <i class="bi bi-cash-stack fa-lg"></i> 
+                                Cash on Delivery</span>
+                        </li>
+                    </ul>
+
+                    <% if(single){ %>
+                        <div class="row d-flex justify-content-end align-items-center mt-3 border p-2 placeorder">
+                            <div class="continue__btn  mr-3" >
+                                <button class="btn proceed-payment" id="placeOrder" name="placeOrderBtn" data-product-id="<%= product._id %>" data-coupon="false" data-couponId="">Place Order</button>
+                            </div>
+                        </div>
+                    <% } else { %>
+                        <div class="row d-flex justify-content-end align-items-center mt-3 border p-2 placeorder">
+                            <div class="continue__btn  mr-3" >
+                                <button class="btn proceed-payment" id="cartPlaceOrder" name="placeOrderBtn" data-coupon="false" data-couponId="">Place Order</button>
+                            </div>
+                        </div>
+                    <% } %>
+
+                </div>
+            </div>
+
         </div>
 </section>
 

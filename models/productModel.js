@@ -59,14 +59,25 @@ const productData = mongoose.Schema({
         type : Boolean,
         default : true
     },
-    rating : {
-        type : String,
-        default : 5
-    },
-    feedback : {
-        type : String,
-        default :'Good'
-    },
+    review :[{
+        userId:{
+            type:mongoose.Schema.Types.ObjectId,
+            require:true
+        },
+        rating:{
+            type:Number,
+            require:true
+        },
+        feedback:{
+            type:String,
+            require:true
+        },
+        feedbackDate : {
+            type : Date,
+            default:new Date()
+        }
+       
+    }],
     addDate : {
         type : Date,
         require : true

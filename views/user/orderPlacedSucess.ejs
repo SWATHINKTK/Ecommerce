@@ -1,17 +1,17 @@
 <%- include('../partials/header.ejs') %>
 <%- include('../partials/navbar.ejs') %>
-<div class="success-animation mb-5">
+<div class="success-animation mb-4 mt-4 p-3">
     <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" /><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" /></svg>
     <div class="d-flex justify-content-center mt-4">
-        <h3>Order Placed Sucessfully !...</h3>
+        <h4 class="text-center font-weight-bold">Order Placed Sucessfully !...</h4>
     </div>
 </div>
-<section>
+<section class="p-2">
     <div class="container mb-5 order-sucessfull-main-div W-50 p-4">
         <div class="row">
-            <div class="col-md-6 border-right">
+            <div class="col-md-6 order-left-side">
                 <!-- Left Side Div -->
-                <div class="left-side ordersuccess-left">
+                <div class="ordersuccess-left">
                     <h5>PRODUCT INFORMATION</h5>
                     <% for(let i=0 ; i< order.productInforamtion.length ; i++) {%>
                         <div class="mt-4 order-success-product-image mb-4 ">
@@ -37,7 +37,7 @@
                 <div class="right-side ordersuccess-right">
                     <h5>ORDER DETAILS</h5>
                     <ul type="none" class="mt-4">
-                        <li class="mt-1"><span class="pr-2 font-weight-bold">Order Id</span> : <%= order._id %></li>
+                        <li class="mt-1"><span class="pr-2 font-weight-bold">Order Id</span> : <%= order.order_id %></li>
                         <li class="mt-1"><span class="pr-2 font-weight-bold">Order Date</span> : <%= order.createdAt.toLocaleDateString() %></li>
                         <li class="mt-1"><span class="pr-2 font-weight-bold">Delivery Date</span> : 03/11/2023</li>
                         <li class="mt-4"><span class="pr-2 font-weight-bold"><%= order.addressInformation.username %>&nbsp;&nbsp; <%= order.addressInformation.phonenumber %></span></li>
@@ -50,11 +50,26 @@
                         <li class="mt-3"><span class="pr-2 font-weight-bold">Payment Method</span> : <%= order.paymentMethod %></li>
                         <li class="mt-1"><span class="pr-2 font-weight-bold">Total Price</span> : <i class="bi bi-currency-rupee text-primary font-weight-bold"></i> <span class="font-weight-bold text-primary"><%= order.totalAmount %></span></li>
                     </ul>
-                    <div class="d-flex justify-content-center mt-2">
-                        <a href="/api/viewOrder" class="btn btn-dark rounded-pill px-3">Go  To Order</a>
+                    <div class="d-flex justify-content-center align-items-center mt-4">
+                        <a href="/api/viewOrder" class="mr-4">
+                            <button class="gotoOrderButton">
+                               Go To Order
+                                <div class="arrow">›</div>
+                            </button>
+                        </a>
+                        <a href="/api/invoiceDownload?orderId=<%= order._id %>" class="mt-3 mb-3">
+                            <div class="button" data-tooltip="Download">
+                                <div class="button-wrapper">
+                                  <div class="text"><i class="bi bi-file-earmark-text-fill"></i> <span class="ml-2">Invoice</span></div>
+                                    <span class="icon">
+                                      <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15V3m0 12l-4-4m4 4l4-4M2 17l.621 2.485A2 2 0 0 0 4.561 21h14.878a2 2 0 0 0 1.94-1.515L22 17"></path></svg>
+                                    </span>
+                                </div>
+                            </div>
+                        </a>
                     </div>
                     <div class="d-flex justify-content-center mt-2">
-                        <a href="/api/invoiceDownload?orderId=<%= order._id %>" class="mt-3 mb-3">Download Invoice</a>
+                        
                     </div>
 
                 </div>
