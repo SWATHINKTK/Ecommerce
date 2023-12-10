@@ -121,8 +121,8 @@ const loadOrderProgressInUserSide = async (req, res, next) => {
         ]);
 
 
+
         const ratingData = order[0].productData[0]?.review?.find(review => review.userId?.toString() == userId.toString());
-        console.log(ratingData)
 
         const returnPolicy = new Date() ;
         returnPolicy.setDate((order[0].updatedAt).getDate() +7 )

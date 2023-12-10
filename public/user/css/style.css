@@ -1748,6 +1748,10 @@ form .form-control:focus {
 	height: 38px;
 	width: 100%;
 }
+.sort-shop{
+	width: 40%;
+	
+}
 
 
 .address-card{
@@ -2997,6 +3001,27 @@ form .form-control:focus {
 .order-left-side{
 	border-right: 1px solid #0803588e;
 }
+
+.carousel-control-prev-icon {
+    background-image: url('/public/user/img/icon/leftArrow.png');
+	/* border: 2px solid #000; */
+}
+.carousel-control-next-icon{
+	background-image: url('/public/user/img/icon/rightArrow.png');
+}
+.carousel-control-prev {
+    left: -16px;
+}
+.carousel-control-next {
+    right: -16px;
+}
+.carousel-control-next, .carousel-control-prev {
+    position: absolute;
+    top: 0;
+    bottom: 50px;
+}
+
+
 .button {
 	--width: 100px;
 	--height: 34px;
@@ -3171,7 +3196,10 @@ form .form-control:focus {
 	transform: translate(1px , 1px);
 	transition-duration: .2s;
   }
-  
+ 
+.ratingPercentage{
+	width: 50%;
+}
   
 
 .wishlist-view{
@@ -4527,7 +4555,17 @@ form .form-control:focus {
 	.productDetail-lastSection:first-child{
 		margin-left: 1px;
 	}
+	.ratingPercentage{
+		width: 100%;
+	}
+	.category-carosel{
+		flex-direction: column;
+	}
 }
+
+
+
+
 /* Tablet Device = 768px */
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {

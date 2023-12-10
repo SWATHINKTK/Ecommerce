@@ -61,6 +61,7 @@ let brand = [];
 let price = 0;
 let search = '';
 let pageNo = 1;
+let sort = 0 ;
 function selectFilteData(){
 
     category.splice(0, category.length);
@@ -97,6 +98,10 @@ function selectFilteData(){
             search = searchData.value;
         }
 
+
+    //SORT DATA
+    sort = document.getElementById('sort-Product').value;
+    
     filterServerRequest()
 }
 
@@ -141,16 +146,16 @@ if(pagination){
 async function filterServerRequest(){
   
     // FILTER CANCEL TIME REDIRECT TO SHOP PAGE
-    if(category.length == 0 && brand.length == 0 && price == 0 && search.trim() == ''){
-        window.location.href = '/allproductview'
-        return;
-    }
+    // if(category.length == 0 && brand.length == 0 && price == 0 && search.trim() == '' ){
+    //     window.location.href = '/allproductview'
+    //     return;
+    // }
 
     
     const brandData = brand.join(',');
 
     // SETTING THE URL AND THIS URL APPEND THE DATA OF FILTERING
-    let url = `/productFilter?page=${pageNo}`;
+    let url = `/productFilter?page=${pageNo}&sort=${sort}`;
 
     if(category.length > 0){
         const categoryData = category.join(',');
@@ -169,6 +174,8 @@ async function filterServerRequest(){
     if(search.trim() != ''){
         url += `&search=${search}`
     }
+
+    alert(sort)
 
     // SENDING THE ROUTER REQ
     window.location.href = url

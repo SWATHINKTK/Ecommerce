@@ -124,16 +124,17 @@
                                     <p>Showing 1 – <%= locals.totalPages %> of <%= 8 * locals.totalPages %> results</p>
                                 </div>
                             </div>
-                            <!-- <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                               
                                 <div class="shop__product__option__right">
-                                    <p>Sort by Price:</p>
-                                    <select>
-                                        <option value="">Low To High</option>
-                                        <option value="">$0 - $55</option>
-                                        <option value="">$55 - $100</option>
+                                    <p>Sort by :</p>
+                                    <select class="sort-shop" id="sort-Product" onchange="selectFilteData()">
+                                        <option value="0">Newest</option>
+                                        <option value="1">Low - High</option>
+                                        <option value="-1">High - Low</option>
                                     </select>
                                 </div>
-                            </div> -->
+                            </div>
                         </div>
                     </div>
                     <div class="row" id="productFilterDataView">

@@ -297,6 +297,23 @@
                                             </div>
                                         <% } %>
 
+
+                                        <% if(ratingData) { %>
+                                            <div class="card-footer p-4" id="order-progress-footer" style="background-color: rgba(255, 255, 255, 0.841);">
+                                                <!-- <div class="d-flex justify-content-between"> -->
+                                                    <h5 class="font-weight-bold mb-2">Review & Rating</h5>
+                                                <!-- </div> -->
+                                                <% for(let j = 1; j <=5 ; j++){ %>
+                                                    <% if(j <= ratingData.rating) { %>
+                                                        <i class="fa-solid fa-star px-1" style="color: #e9b807;"></i>
+                                                    <% }else{ %>
+                                                        <i class="fa-regular fa-star px-1" style="color: #9d9e9a;"></i>
+                                                    <% } %>
+                                                <% } %>
+                                                <h6 class="mb-0 pb-0 mt-2"><%= ratingData.feedback %></h6>
+                                            </div>
+                                        <% } %>
+
                                         
                                     </div>
                                 </div>

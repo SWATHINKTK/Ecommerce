@@ -554,52 +554,7 @@ const loadHomePage = async (req, res, next) => {
                     },
                 },
             ]),
-            orderData.aggregate([
-                {
-                  $unwind: "$productInforamtion"
-                },
-                {
-                    $match:{
-                        "productInforamtion.orderStatus":'Delivered'
-                    }
-                },
-                {
-                  $lookup: {
-                    from: "products",
-                    localField: "productInforamtion.productId",
-                    foreignField: "_id",
-                    as: "productDetails"
-                  }
-                },
-                {
-                  $unwind: "$productDetails"
-                },
-                {
-                  $lookup: {
-                    from: "categorys",
-                    localField: "productDetails.categoryIds",
-                    foreignField: "_id",
-                    as: "categoryDetails"
-                  }
-                },
-                {
-                  $unwind: "$categoryDetails"
-                },
-                {
-                  $group: {
-                    _id: "$categoryDetails._id",
-                    categoryname: { $first: "$categoryDetails.categoryname" },
-                    category_image: { $first: "$categoryDetails.category_image" },
-                    totalQuantitySold: { $sum: "$productInforamtion.productquantity" }
-                  }
-                },
-                {
-                  $sort: { totalQuantitySold: -1 }
-                },
-                {
-                  $limit: 4
-                }
-              ]),
+            category.find({}).sort({_id:-1}),
             productInfo.aggregate([
                 { $unwind: "$categoryIds" },
                 {
@@ -617,6 +572,8 @@ const loadHomePage = async (req, res, next) => {
             cartData.findOne({ userId: id }),
             wishlistData.findOne({ userId: id }),
         ]);
+
+
 
 
         res.render('index', {
@@ -649,52 +606,7 @@ const guestPage = async (req, res, next) => {
 
         // Use Promise.all to run database queries in parallel
         const [categoryData, banner, productData] = await Promise.all([
-            orderData.aggregate([
-                {
-                  $unwind: "$productInforamtion"
-                },
-                {
-                    $match:{
-                        "productInforamtion.orderStatus":'Delivered'
-                    }
-                },
-                {
-                  $lookup: {
-                    from: "products",
-                    localField: "productInforamtion.productId",
-                    foreignField: "_id",
-                    as: "productDetails"
-                  }
-                },
-                {
-                  $unwind: "$productDetails"
-                },
-                {
-                  $lookup: {
-                    from: "categorys",
-                    localField: "productDetails.categoryIds",
-                    foreignField: "_id",
-                    as: "categoryDetails"
-                  }
-                },
-                {
-                  $unwind: "$categoryDetails"
-                },
-                {
-                  $group: {
-                    _id: "$categoryDetails._id",
-                    categoryname: { $first: "$categoryDetails.categoryname" },
-                    category_image: { $first: "$categoryDetails.category_image" },
-                    totalQuantitySold: { $sum: "$productInforamtion.productquantity" }
-                  }
-                },
-                {
-                  $sort: { totalQuantitySold: -1 }
-                },
-                {
-                  $limit: 4
-                }
-              ]),
+            category.find({}).sort({_id:-1}),
             bannerData.aggregate([{ $match: { is_Listed: true } }]),
             productInfo.aggregate([
                 { $match: { status: true } },
@@ -714,7 +626,7 @@ const guestPage = async (req, res, next) => {
         ]);
 
 
-
+        console.log(productData)
         res.render('index', {
             user: true,
             login: false,
@@ -894,12 +806,14 @@ const productFilterData = async(req, res, next) => {
     try {
         const checkLogin = req.session.userId ? true : false;
 
+
         // RETRIEVE THE DATA FROM CLIENT 
         const filterCategorys = req.query.category;
         const filterBrands = req.query.brand;
         const filterPrice = req.query.price;
         const search = req.query.search;
         const page = req.query.page ? parseInt(req.query.page) : 1 ;
+        const sort = req.query.sort;
 
         // RETRIEVE BRAND AND CATEGORY DATA FOR SEARCH REAULT PAGE SIDE SETTING THE DATA
         const categoryInfo = await category.find({},{categoryname:1});
@@ -908,11 +822,12 @@ const productFilterData = async(req, res, next) => {
         const limit = 4;
 
         // AGGREGATION PIPELINE CREATION FUNCTION FUNCTION PLACED BELOW
-        let pipeline = filterPipLine(filterCategorys,filterBrands,filterPrice,categoryInfo,brand,page,search);
+        let pipeline = filterPipLine(filterCategorys,filterBrands,filterPrice,categoryInfo,brand,page,search,sort);
     
         
         // RETRIEVE PRODUCT DATA
         const productData = await productInfo.aggregate(pipeline);
+        console.log(productData)
 
 
         // IF THE PRODUCT EXIST CALCULATE THE DOCUMENT COUNT
@@ -974,7 +889,7 @@ const productFilterData = async(req, res, next) => {
 
 
 // FILTER AGGREGATION PIPLINE CREATION
-function filterPipLine(filterCategorys,filterBrands,filterPrice,categoryInfo,brand,page,search){
+function filterPipLine(filterCategorys,filterBrands,filterPrice,categoryInfo,brand,page,search,sort){
 
     let pipeline = [];
 
@@ -1039,11 +954,24 @@ function filterPipLine(filterCategorys,filterBrands,filterPrice,categoryInfo,bra
     }
 
 
+    // SORTING
+    if(sort != 0){
+        pipeline.push({
+            $sort: {
+                price: parseInt(sort)
+            }
+        });
+    }else{
+        pipeline.push({
+            $sort: {
+                _id: -1
+            }
+        });
+    }
+
+    
       // Add additional aggregations 
       pipeline = pipeline.concat([
-        {
-            $sort: { _id: -1 }
-        },
         {   $skip: (page - 1) * limit },
         {   $limit: limit * 1 }
     ]);
