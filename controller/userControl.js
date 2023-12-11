@@ -818,7 +818,7 @@ const productFilterData = async(req, res, next) => {
         const categoryInfo = await category.find({},{categoryname:1});
         const brand = await brandInfo.find({},{brand_name:1});
 
-        const limit = 4;
+        const limit = 8;
 
         // AGGREGATION PIPELINE CREATION FUNCTION FUNCTION PLACED BELOW
         let pipeline = filterPipLine(filterCategorys,filterBrands,filterPrice,categoryInfo,brand,page,search,sort);
@@ -891,7 +891,7 @@ function filterPipLine(filterCategorys,filterBrands,filterPrice,categoryInfo,bra
 
     let pipeline = [];
 
-    let limit = 4;
+    let limit = 8;
 
     // QUERY TO GET FILTER DATA FOR CATEGORY IS DONE WITH THIS STATEMENT
     if (filterCategorys) {

@@ -87,7 +87,7 @@
                                     <h5 class="font-weight-bold">Add New Address</h5>
                                 </div>
                             </a>
-                            <% if(locals.address ? true : false){ %>
+                            <% if(address.length > 0){ %>
                                 <% for(let i=0; i < address.length ;i++){ %>
                                     <div class="card col-sm-12 mt-2 address-card" id="<%= address[i]._id %>">
                                         <div class=" card-body p-3">
@@ -118,7 +118,7 @@
                                             </div>
                                         </div>
                                     </div>
-                            <% } %>
+                                <% } %>
                             <% } else {%>
 
                                 <div class="card col-sm-12 mt-2 address-card">

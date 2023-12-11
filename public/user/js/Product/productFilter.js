@@ -175,7 +175,7 @@ async function filterServerRequest(){
         url += `&search=${search}`
     }
 
-    alert(sort)
+
 
     // SENDING THE ROUTER REQ
     window.location.href = url

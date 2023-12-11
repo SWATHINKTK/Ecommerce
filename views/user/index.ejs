@@ -281,7 +281,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <% for(let i = 0; i < 3;i++) { %>
+                    <% for(let i = 0; i < 3 && dataProduct.length > 0 ;i++) { %>
                     <div class="col-lg-4 col-md-6 col-sm-6">
                         <div class="blog__item">
                             <div class="blog__item__pic set-bg" data-setbg="/public/admin/assets/productImages/<%= dataProduct[i].productImages[0] %>"></div>
