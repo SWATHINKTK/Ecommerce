@@ -159,7 +159,7 @@ if(editCheckoutAddress){
 
                 // *** REGEX FOR VALIDATION ***
                 const nameRegex = /^[a-zA-Z\s]+$/;
-                const numberRegex = /^[789]\d{9}$/;
+                const numberRegex = /^[6789]\d{9}$/;
                 const pincodeRegex = /^\d{6}$/;
 
 
@@ -362,7 +362,7 @@ function validateCheckoutAddress(fromData){
 
     // *** REGEX FOR VALIDATION ***
     const nameRegex = /^[a-zA-Z\s]+$/;
-    const numberRegex = /^[789]\d{9}$/;
+    const numberRegex = /^[6789]\d{9}$/;
     const pincodeRegex = /^\d{6}$/;
 
 

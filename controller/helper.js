@@ -145,7 +145,6 @@ module.exports = {
        
 
         const growth = ((todayTotal[0].yesterdayRevenue - yesterdayTotal[0].yesterdayRevenue )/ yesterdayTotal[0].yesterdayRevenue)*100
-        // console.log(growth)
     },
 
     leastSellingProduct:async()=>{
@@ -210,8 +209,7 @@ module.exports = {
                 }
             }
         ])
-
-        console.log(totalUsers)
+        
         const totalOrders = await orderData.aggregate([
             {
                 $group:{
@@ -246,7 +244,6 @@ module.exports = {
             totalOrders : totalOrders.length > 0 ? totalOrders[0].totalOrders : 0,
             totalBrands : totalBrands.length > 0 ? totalBrands[0].totalBrands : 0
         }
-        console.log('ssss',totalData)
 
         return totalData;
     },

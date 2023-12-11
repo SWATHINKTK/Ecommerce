@@ -357,6 +357,7 @@ if(bannerStatusChange){
 
 
 
+
 // EDIT BANNER DATA AND SUBMIT
 const submitEditBannerData = document.getElementById('editBannerForm');
 

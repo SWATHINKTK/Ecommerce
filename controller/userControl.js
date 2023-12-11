@@ -579,7 +579,7 @@ const loadHomePage = async (req, res, next) => {
         res.render('index', {
             user: true,
             login: checkLogin,
-            title: 'Brand Unlimited',
+            title: 'Mens Focus',
             dataCategory: categoryData,
             dataProduct: productData,
             dataCart: cart,
@@ -626,11 +626,10 @@ const guestPage = async (req, res, next) => {
         ]);
 
 
-        console.log(productData)
         res.render('index', {
             user: true,
             login: false,
-            title: 'Brand Unlimited',
+            title: 'Mens Focus',
             dataCategory: categoryData,
             dataProduct: productData,
             bannerData: banner
@@ -687,7 +686,7 @@ const loadProductDetailPage = async (req, res, next) => {
                 }
             }
         ])
-        console.log(review)
+
 
 
 
@@ -827,7 +826,6 @@ const productFilterData = async(req, res, next) => {
         
         // RETRIEVE PRODUCT DATA
         const productData = await productInfo.aggregate(pipeline);
-        console.log(productData)
 
 
         // IF THE PRODUCT EXIST CALCULATE THE DOCUMENT COUNT

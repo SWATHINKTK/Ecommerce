@@ -6,6 +6,7 @@
             <div class="hero__slider owl-carousel">
                 <% if(bannerData.length> 0) { %>
                     <% for(let i=0;i < bannerData.length ;i++) { %>
+                        <% if(bannerData[i].is_Listed && !bannerData[i].is_Delete) { %>
                         <div class="hero__items set-bg"
                             data-setbg="/public/admin/assets/images/bannerImages/<%= bannerData[i].backgroundImage %>">
                             <div class="container">
@@ -28,6 +29,7 @@
                                 </div>
                             </div>
                         </div>
+                        <% } %>
                     <% } %>
                 <% } else { %>
                     <div class="hero__items set-bg" data-setbg="/public/user/img/hero/hero-2.jpg">

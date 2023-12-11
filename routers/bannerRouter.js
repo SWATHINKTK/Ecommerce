@@ -24,6 +24,7 @@ bannerRouter.get('/viewbanner', auth.isAdminLogin,  bannerController.loadBannerP
 bannerRouter.get('/addBanner', auth.isAdminLogin,  bannerController.loadAddBannerPage);
 bannerRouter.post('/addBanner', bannerImage.single('bannerBackground') , auth.isAdminLogin , bannerController.addNewBanner)
 bannerRouter.patch('/statusChange', auth.isAdminLogin,  bannerController.bannerStatusChange);
+bannerRouter.get('/deleteBanner', auth.isAdminLogin,  bannerController.deleteBanner);
 bannerRouter.get('/editBanner:id', auth.isAdminLogin,  bannerController.loadEditBannerPage);
 bannerRouter.post('/editBanner', bannerImage.single('bannerBackground') , auth.isAdminLogin,  bannerController.editBannerData);
 

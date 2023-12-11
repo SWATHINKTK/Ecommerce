@@ -68,9 +68,9 @@ passport.authenticate('google', {
 
 
 // GET Request For User 
-userRouter.get('/',userController.guestPage);
+userRouter.get('/', auth.isUserLogout, userController.guestPage);
 userRouter.get('/login',auth.isUserLogout , userController.loadUserLogin);
-userRouter.get('/register',userController.LoadUserRegistrationPage);
+userRouter.get('/register',auth.isUserLogout, userController.LoadUserRegistrationPage);
 userRouter.get('/otpverification',userController.loadOTPVerification);
 userRouter.get('/forgotPassword', userController.LoadforgotPasswordPage);
 userRouter.post('/forgotPassword', userController.submitForgotPasswordEmail);

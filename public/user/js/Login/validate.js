@@ -16,8 +16,9 @@ function validateRegister(){
 
       
       let emailRegex= /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+      let phoneRegex=/^[6789]\d{9}$/;
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
 
-      let phoneRegex=/^\d{10}$/;
 
       let is_Valid = true;
             
@@ -64,10 +65,17 @@ function validateRegister(){
             is_Valid = false;
 
       }
-      if(password.length < 4){
+      if(!passwordRegex.test(password)){
+            
+            errorElements[3].style.display = 'block';
+            errorElements[3].innerHTML = '* include digit,capital and small letters';
+            is_Valid = false;
+
+      }
+      if(password.length < 6){
            
             errorElements[3].style.display = 'block';
-            errorElements[3].innerHTML = '* password must be 4 digit';
+            errorElements[3].innerHTML = '* password must be 6 digit';
             is_Valid = false;
       }
       if(confirmpassword.trim() == ''){

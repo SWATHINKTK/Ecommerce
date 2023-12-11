@@ -82,6 +82,33 @@ const bannerStatusChange = async(req, res, next) => {
 }
 
 
+// BANNER DELETE 
+const deleteBanner = async(req, res, next) => {
+    try {
+
+        const id = req.query.bannerId;
+     
+        const banner = await bannerData.findOne({_id:id});
+
+        let deleteBanner;
+        if(banner){
+            deleteBanner = await bannerData.updateOne({_id:id},{is_Delete:true});
+            res.redirect('/admin/viewbanner');
+        }else{
+            throw new Error('data not found')
+        }
+
+    } catch (error) {
+        next(error)
+    }
+}
+
+
+
+
+
+
+
 // LOAD EDIT BANNER PAGE 
 const loadEditBannerPage = async(req, res, next) => {
     try {
@@ -141,6 +168,7 @@ module.exports = {
     loadAddBannerPage,
     addNewBanner,
     bannerStatusChange,
+    deleteBanner,
     loadEditBannerPage,
     editBannerData
 }

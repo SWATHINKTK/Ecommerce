@@ -24,7 +24,11 @@ const bannerSchema = moongose.Schema({
     is_Listed: {
         type : Boolean,
         default : true 
-    }
+    },
+    is_Delete: {
+        type : Boolean,
+        default : false 
+    },
 },{timestamps: true});
 
 module.exports = moongose.model('banner',bannerSchema);

@@ -29,18 +29,16 @@
         </div>
         <a href="#" id="profile-dropdown" data-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></a>
         <div class="dropdown-menu dropdown-menu-right sidebar-dropdown preview-list" aria-labelledby="profile-dropdown">
-          <a href="#" class="dropdown-item preview-item">
-            <div class="preview-thumbnail">
-              <div class="preview-icon bg-dark rounded-circle">
-                <i class="mdi mdi-logout text-danger"></i>
+           <form method="POST" action="/admin/logout" class="dropdown-item preview-item">
+              <div class="preview-thumbnail">
+                <div class="preview-icon bg-dark rounded-circle">
+                  <i class="mdi mdi-logout text-danger"></i>
+                </div>
               </div>
-            </div>
-            <div class="preview-item-content">
-              <form method="POST" action="/admin/logout">
-                <input type="submit" class="preview-subject mb-1 bg-transparent border-0 text-white pl-2 pr-2" value="logout" />
-              </form>
-            </div>
-          </a>
+              <div class="preview-item-content">
+                  <input type="submit" class="preview-subject mb-1 bg-transparent border-0 text-white pl-2 pr-2" value="logout" />
+              </div>
+            </form>
       </div>
     </li>
     <li class="nav-item nav-category">
