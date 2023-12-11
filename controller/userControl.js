@@ -218,7 +218,7 @@ const submitForgotPasswordEmail = async(req, res, next) => {
             const token = await generateRandomOtp(10);
             resetTokens[token] = { forgotEmail, timestamp: Date.now() };
             
-            const html = `<div style="width: 100%;background: #F5F5F5;text-align:center; height:60vh; padding-top:50px" ><h2>Click The ForgotPassword Link & Change Password</h2><h5><a href="http://127.0.0.1:5000/resetPassword?id=${token}">ResetLink</a></h5></div>`
+            const html = `<div style="width: 100%;background: #F5F5F5;text-align:center; height:60vh; padding-top:50px" ><h2>Click The ForgotPassword Link & Change Password</h2><h4><a href="http://127.0.0.1:5000/resetPassword?id=${token}">ResetLink</a></h4></div>`
             const sendMail = await sendEmail( forgotEmail, html,null, 'Reset Password' );
 
             if(!sendMail){
