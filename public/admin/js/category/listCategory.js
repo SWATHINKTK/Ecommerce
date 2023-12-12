@@ -108,18 +108,23 @@ async function editCategory(value) {
             document.getElementById("dynamic_page").innerHTML = data;
 
             //*** Edit Category Page Inside js Functionality Working add Js File ***
-            const scriptSrc = "/public/admin/js/category/editCategory.js";
-            const scriptExist = document.querySelector(`script[src="${scriptSrc}"]`);
+            // const scriptSrc = "/public/admin/js/category/editCategory.js";
+            // const scriptExist = document.querySelector(`script[src="${scriptSrc}"]`);
 
-            //*** Check Script is Exist or Not .Existed it Will Be Removed***
-            if (scriptExist) {
-                scriptExist.parentNode.removeChild(scriptExist);
-            }
+            // //*** Check Script is Exist or Not .Existed it Will Be Removed***
+            // if (scriptExist) {
+            //     scriptExist.parentNode.removeChild(scriptExist);
+            // }
 
-            //*** Add The Script File ***
-            const script = document.createElement("script");
-            script.src = scriptSrc;
-            document.body.appendChild(script);
+            // //*** Add The Script File ***
+            // const script = document.createElement("script");
+            // script.src = scriptSrc;
+            // document.body.appendChild(script);
+
+            editCategoryImageConfigurations();
+            editCategoryFormSubmit();
+
+            document.querySelector('title').innerHTML = 'Edit Categorys';
 
         })
         .catch((error) => {
