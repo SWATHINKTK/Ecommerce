@@ -3,7 +3,7 @@
       <div class="card">
         <div class="card-body form-style">
           <!-- <p class="card-description" id="categorysuccess"></p> -->
-          <form class="forms-sample mb-3" id="addCategoryForm" method="POST">
+          <form class="forms-sample mb-3" id="addNewCategoryForm" method="POST">
             <div class="form-group">
               <label for="exampleInputName1">Category Name</label>
               <input type="text" class="form-control" id="categoryname" placeholder="Category Name" name="categoryname">
@@ -12,7 +12,7 @@
           
             <div class="form-group ">
               <label class="col-sm-3 col-form-label">Image</label>
-              <input type="file" class="form-control" id="categoryImage" name="categoryImage" accept="image/*" onchange="categoryImageView(this)">
+              <input type="file" class="form-control" id="categoryImageChange" name="categoryImage" accept="image/*" >
               <p class="text-danger ml-2" name="validate-category"></p>
               <div  class="ml-3" id="addCategoryImagePreview" style="display: none;">
                 <img class="category-image" id="category-img-view" src="" alt="Category Image File">

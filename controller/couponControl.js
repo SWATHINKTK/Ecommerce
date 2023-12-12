@@ -1,4 +1,19 @@
 const couponData = require('../models/couponModel');
+const crypto = require('crypto');
+
+// Generating Random Ids
+async function generateId(length) {
+
+    if (length % 2 != 0) {
+        throw new Error('Length must be even For OTP Generation.');
+    }
+
+    const randomBytes = crypto.randomBytes(length / 2);
+    const Id = randomBytes.toString('hex')
+    return Id;
+}
+
+
 
 // Load  Coupon List Window
 const loadCouponList = async(req, res, next) => {
@@ -35,9 +50,10 @@ const submitCouponData = async(req, res, next) => {
     try {
         const data = req.body;
 
-        const nanoidModule = await import('nanoid');
-        let nanoid = nanoidModule.nanoid;
-        const uniqueID = nanoid();
+        // const nanoidModule = await import('nanoid');
+        // let nanoid = nanoidModule.nanoid;
+        // const uniqueID = nanoid();
+        const uniqueID = String(await generateId(8));
 
         const condition = data.couponName.trim() != '' & data.minimumPurchase.trim() != '' & data.OfferPercentage.trim() != '' & data.startDate.trim() != '' & data.endDate.trim() != '';
         if(condition){

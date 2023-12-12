@@ -104,7 +104,6 @@ if(addBrandForm){
             const brandName = document.getElementById('brandname').value;
             const image = document.getElementById('brandImageUpload');
             var file = image.files[0];
-            console.log(image.files.length)
             let validate = document.querySelectorAll('p[name="validate-brand"]');
 
             if(brandName.trim() === ''){
@@ -121,7 +120,12 @@ if(addBrandForm){
                 //*** Creating a FormData Object ***
                 const form = document.getElementById('addBrandForm');
                 const formData = new FormData(form);
-                formData.append('brandImage',cropperAddBrand);
+
+                if(cropperAddBrand){
+                    formData.append('brandImage',cropperAddBrand);
+                    cropperAddBrand = undefined;
+                }
+                
 
                 //*** Result Printing in the request
                 const result = document.getElementById("brand-submit-result");
