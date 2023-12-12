@@ -509,7 +509,7 @@ const OTPCheck = async (req, res, next) => {
                             const refferingAmount = await userData.updateOne({ _id: refer }, { $inc: { walletAmount: 100 } }, { upsert: true });
                             const updateWalletTransaction = await userData.updateOne({ _id: refer }, { $push: { walletTransaction: transaction } }, { upsert: true });
                             
-                            const newUseUniqueId = nanoid();
+                            const newUseUniqueId = String(await generateId(8));
     
                             const newUserTransaction = {
                                 transactionId: newUseUniqueId,
