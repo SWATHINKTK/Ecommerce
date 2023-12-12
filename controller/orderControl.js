@@ -1,8 +1,6 @@
 const orderData = require('../models/orderModel');
 const { productInfo } = require('../models/productModel');
 const { userData } = require('../models/userModal');
-const puppeteer = require('puppeteer');
-const pdf = require('html-pdf');
 const crypto = require('crypto');
 const fs = require('fs');
 
