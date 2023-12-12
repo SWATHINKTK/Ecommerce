@@ -17,6 +17,20 @@ var instance = new Razorpay({
   });
 
 
+// Generating Random Ids
+async function generateId(length) {
+
+    if (length % 2 != 0) {
+        throw new Error('Length must be even For OTP Generation.');
+    }
+
+    const randomBytes = crypto.randomBytes(length / 2);
+    const Id = randomBytes.toString('hex')
+    return Id;
+}
+
+
+
 const LoadCheckoutPage = async(req, res, next) => {
 
     try{
@@ -232,14 +246,14 @@ const PlaceOrder = async(req, res, next)=>{
         
 
 
-        const { customAlphabet } = await import('nanoid');
+        // const { customAlphabet } = await import('nanoid');
 
-        const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+        // const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 
-        const idLength = 8;
-        const nanoid = customAlphabet(alphabet, idLength);
+        // const idLength = 8;
+        // const nanoid = customAlphabet(alphabet, idLength);
 
-        const uniqueID = nanoid()
+        const uniqueID = String(await generateId(8));
 
 
         // **** ORDER DATA STORING IN TO THE DB ****
@@ -296,10 +310,10 @@ const PlaceOrder = async(req, res, next)=>{
 
                 }else if(orderSucess.paymentMethod == 'Wallet'){
                     
-                    const nanoidModule = await import('nanoid');
-                    let nanoid = nanoidModule.nanoid;
+                    // const nanoidModule = await import('nanoid');
+                    // let nanoid = nanoidModule.nanoid;
 
-                    const uniqueID = nanoid();
+                    const uniqueID = String(await generateId(8));
 
                     const transaction = {
                         transactionId:uniqueID,
@@ -370,10 +384,10 @@ const PlaceOrder = async(req, res, next)=>{
 
                 }else if(orderSucess.paymentMethod == 'Wallet'){
                     
-                    const nanoidModule = await import('nanoid');
-                    let nanoid = nanoidModule.nanoid;
+                    // const nanoidModule = await import('nanoid');
+                    // let nanoid = nanoidModule.nanoid;
 
-                    const uniqueID = nanoid();
+                    const uniqueID =  String( await generateId(8));
 
                     const transaction = {
                         transactionId:uniqueID,

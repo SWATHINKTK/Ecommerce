@@ -3,9 +3,24 @@ const { productInfo } = require('../models/productModel');
 const { userData } = require('../models/userModal');
 const puppeteer = require('puppeteer');
 const pdf = require('html-pdf');
+const crypto = require('crypto');
+const fs = require('fs');
 
 
 const mongoose = require('mongoose');
+
+// Generating Random Ids
+async function generateId(length) {
+
+    if (length % 2 != 0) {
+        throw new Error('Length must be even For OTP Generation.');
+    }
+
+    const randomBytes = crypto.randomBytes(length / 2);
+    const Id = randomBytes.toString('hex')
+    return Id;
+}
+
 
 
 // ****** Load All Orders in View Order Page ******
@@ -174,9 +189,11 @@ const cancelOrder = async (req, res, next) => {
                 if (productToUpdate.paymentStatus == 'Paid') {
 
                     // Create Unique TransactionId
-                    const nanoidModule = await import('nanoid');
-                    nanoid = nanoidModule.nanoid;
-                    const uniqueID = nanoid();
+                    // const nanoidModule = await import('nanoid');
+                    // nanoid = nanoidModule.nanoid;
+                    // const uniqueID = nanoid();
+                    const uniqueID = String(await generateId(8));
+                 
 
                     // Creating The Tranction History Store Object
                     const transaction = {
@@ -280,11 +297,12 @@ const orderInvoiceDownload = async(req, res, next) => {
 
         <head>
             <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+            <script src="https://rawgit.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.js"></script>
         </head>
 
-        <body>
-            <div class="col-12 p-4">
-                <div class="card ">
+        <body class="p-4">
+            <div class="col-12" style=" height:1054px; border:1px solid #000;">
+                <div class="card" style="border:none">
                     <h2 class="card-title text-center font-weight-blod mt-5">INVOICE</h2>
                     <div class="card-body mt-5">
                         <div class="pl-4 pt-4 pr-4 pb-1">
@@ -379,37 +397,18 @@ const orderInvoiceDownload = async(req, res, next) => {
                 </div>
             </div>
         </body>
-        </html>`;
-        const pdfOptions = { format: 'Letter' };
 
-        pdf.create(divContent, pdfOptions).toFile('invoice.pdf', (err, pdfResult) => {
-            if (err) {
-            console.error(err);
-            } else {
-            console.log('PDF generated successfully:', pdfResult);
-            // Set up the response headers for PDF download
-            res.setHeader('Content-Type', 'application/pdf');
-            res.setHeader('Content-Disposition', 'attachment; filename=invoice.pdf');
-            res.setHeader('Cache-Control', 'no-cache');
-            res.setHeader('Pragma', 'no-cache');
-    
-            // Send the PDF file as the response
-            res.sendFile(pdfResult.filename, {}, (err) => {
-                if (err) {
-                    console.error('Error sending PDF:', err);
-                    const error = new Error('Server Error');
-                    next(error);
-                } else {
-                    //   Cleanup: Remove the generated PDF file
-                    fs.unlink(pdfResult.filename, (err) => {
-                        if (err) {
-                        console.error('Error deleting PDF file:', err);
-                        }
-                    });
-                }
-            });
-            }
-        });
+        <script>
+            window.onload = function () {
+                const element = document.body; // You can specify any HTML element here
+
+                html2pdf(element);
+            };
+        </script>
+        </html>`;
+        
+
+        res.send(divContent);
     
 
       } catch (error) {
@@ -532,10 +531,12 @@ const updateOrderStatus = async (req, res, next) => {
                     let updateStatus;
                     if (productToUpdate.paymentStatus == 'Paid') {
 
-                        const nanoidModule = await import('nanoid');
-                        nanoid = nanoidModule.nanoid;
+                        // const nanoidModule = await import('nanoid');
+                        // nanoid = nanoidModule.nanoid;
 
-                        const uniqueID = nanoid();
+                        // const uniqueID = nanoid();
+
+                        const uniqueID = String(await generateId(8));
 
                         const transaction = {
                             transactionId: uniqueID,
@@ -668,9 +669,11 @@ const updateOrderStatus = async (req, res, next) => {
                 if (updateStock) {
 
                     // Create Unique TransactionId
-                    const nanoidModule = await import('nanoid');
-                    nanoid = nanoidModule.nanoid;
-                    const uniqueID = nanoid();
+                    // const nanoidModule = await import('nanoid');
+                    // nanoid = nanoidModule.nanoid;
+                    // const uniqueID = nanoid();
+
+                    const uniqueID = String(await generateId(8));
 
                     // Creating The Tranction History Store Object
                     const transaction = {

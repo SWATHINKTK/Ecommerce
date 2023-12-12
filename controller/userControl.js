@@ -22,6 +22,19 @@ var instance = new Razorpay({
   });
 
 
+// Generating Random Ids
+async function generateId(length) {
+
+    if (length % 2 != 0) {
+        throw new Error('Length must be even For OTP Generation.');
+    }
+
+    const randomBytes = crypto.randomBytes(length / 2);
+    const Id = randomBytes.toString('hex')
+    return Id;
+}
+
+
 
 
 /* #####################################  ADMIN ACCESS ROUTER FUNCTIONS  ############################################# */
@@ -218,7 +231,7 @@ const submitForgotPasswordEmail = async(req, res, next) => {
             const token = await generateRandomOtp(10);
             resetTokens[token] = { forgotEmail, timestamp: Date.now() };
             
-            const html = `<div style="width: 100%;background: #F5F5F5;text-align:center; height:60vh; padding-top:50px" ><h2>Click The ForgotPassword Link & Change Password</h2><h4><a href="http://127.0.0.1:5000/resetPassword?id=${token}">ResetLink</a></h4></div>`
+            const html = `<div style="width: 100%;background: #F5F5F5;text-align:center; height:60vh; padding-top:50px" ><h2>Click The ForgotPassword Link & Change Password</h2><h4><a href="https://mensfocus.shop/resetPassword?id=${token}">ResetLink</a></h4></div>`
             const sendMail = await sendEmail( forgotEmail, html,null, 'Reset Password' );
 
             if(!sendMail){
@@ -474,10 +487,12 @@ const OTPCheck = async (req, res, next) => {
 
                         if(refer){
 
-                            const nanoidModule = await import('nanoid');
-                            nanoid = nanoidModule.nanoid;
+                            // const nanoidModule = await import('nanoid');
+                            // nanoid = nanoidModule.nanoid;
     
-                            const uniqueID = nanoid();
+                            // const uniqueID = nanoid();
+
+                            const uniqueID = String(await generateId(8));
     
                             const transaction = {
                                 transactionId: uniqueID,

@@ -77,7 +77,7 @@ function walletRazorpay(data){
         "key": "rzp_test_ydy5yr6ieKyEj4", // Enter the Key ID generated from the Dashboard
         "amount":data.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
         "currency": "INR",
-        "name": "Male Fashion",
+        "name": "Mens Focus",
         "description": "Test Transaction",
         "image": "https://example.com/your_logo",
         "order_id": data.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
@@ -95,7 +95,7 @@ function walletRazorpay(data){
             "address": "Razorpay Corporate Office"
         },
         "theme": {
-            "color": "#3399cc"
+            "color": "#000"
         }
     };
     var rzp1 = new Razorpay(options);
