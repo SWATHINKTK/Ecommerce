@@ -46,9 +46,11 @@
                                             <h6 class="text-muted mt-1 mr-2">Color &nbsp; : </h6> <input type="color" class="m-0 p-0 border-0" value="<%= orderData[i].productData[j].color %>" style="width: 25px; height: 25px;" disabled>
                                         </div>
                                         <h4 class="mt-3 font-weight-bold"> <i class="bi bi-currency-rupee"></i><%= orderData[i].productInforamtion.productTotalAmount %> <span class="text-muted small ml-2" id="adminOrderProgress-paymentStatus"> ( <%= orderData[i].productInforamtion.paymentStatus %> )</span> </h4>
-                                        <div class="alert alert-danger w-50 mt-3 text-dark p-1" role="alert">
-                                            <span class="text-dark font-weight-bold">Reason : </span> <span style="font-size: 15px;"><%= orderData[i].productInforamtion.reason %></span>
-                                        </div>
+                                        <% if(orderData[i].productInforamtion?.reason) {%>
+                                            <div class="alert alert-danger w-50 mt-3 text-dark p-1" role="alert">
+                                                <span class="text-dark font-weight-bold">Reason : </span> <span style="font-size: 15px;"><%= orderData[i].productInforamtion?.reason %></span>
+                                            </div>
+                                        <% } %>
                                         <% if(status == 'Shipped' || status == 'Placed') { %>
                                             <div name="<%= orderData[i].productData[j]._id %>">
                                                 <span class="text-muted">Status</span><br>

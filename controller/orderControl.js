@@ -500,7 +500,7 @@ const loadOrderManagePageAdminSide = async (req, res, next) => {
         ]);
 
         if (orderData) {
-            res.render('admin/manageOrder', { admin: true, title: 'Order', orderData: order });
+            res.render('admin/manageOrder', { admin: true, title: 'Manage Order', orderData: order });
         } else {
             throw new Error('Data is Not Found');
         }

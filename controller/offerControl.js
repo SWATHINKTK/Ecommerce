@@ -13,7 +13,7 @@ const loadOfferList = async(req, res, next) => {
             }
         ])
 
-        res.render('admin/viewOffer', { admin: true , offerData:offer});
+        res.render('admin/viewOffer', { admin: true , title:'Offer', offerData:offer});
     } catch (error) {
         next(error);
     }
@@ -23,7 +23,7 @@ const loadOfferList = async(req, res, next) => {
 // LOAD ADD OFFER PAGE 
 const loadAddOfferPage = (req, res, next) => {
     try {
-        res.render('admin/addOffer', { admin: true });
+        res.render('admin/addOffer', { admin: true,title:'Add Offer' });
     } catch (error) {
         next(error);
     }
@@ -74,7 +74,7 @@ const loadEditOfferPage = async(req, res, next) => {
         const startDate = dateFormat(editOffer[0].startDate);
         const endDate = dateFormat(editOffer[0].endDate);
 
-        res.render('admin/editOffer', { admin: true , editOfferData:editOffer , startDate , endDate});
+        res.render('admin/editOffer', { admin: true ,title:'Edit Offer', editOfferData:editOffer , startDate , endDate});
 
     } catch (error) {
         next(error);
@@ -135,7 +135,7 @@ const productOfferApply = async(req, res, next) => {
 
             const productPrice = parseFloat(product.MRP)
             let amount =  productPrice - (productPrice * offer.OfferPercentage / 100);
-            amount = amount.toFixed(2);
+            amount = Math.round(amount);
 
             const offerApply = await offerUpdateCategory(product._id, offer, amount);
 
@@ -224,7 +224,7 @@ const categoryOfferApply = async(req, res, next) => {
 
                 const productPrice = parseFloat(product.MRP)
                 let amount =  productPrice - (productPrice * offer.OfferPercentage / 100);
-                amount = amount.toFixed(2);
+                amount = Math.round(amount);
 
               if(product.offerId && product.offerPercentage >= offer.OfferPercentage){
               }else{    

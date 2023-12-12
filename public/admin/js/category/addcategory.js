@@ -187,7 +187,7 @@ function newCategoryFormSubmit(){
                         if (data.status) {
                             result.setAttribute('class','alert alert-success');
                             result.innerHTML = data.message;
-                            document.getElementById("addCategoryForm").reset();
+                            document.getElementById("addNewCategoryForm").reset();
                             document.getElementById('category-img-view').style.display = 'none';
                             document.getElementById('addCategoryImagePreview').style.display = 'none';
 

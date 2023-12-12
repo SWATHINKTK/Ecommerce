@@ -52,7 +52,7 @@ const loadSalesReportPage = async(req, res, next) => {
         ])
 
 
-        res.render('admin/viewSalesReport', { admin: true ,totalTrancations});
+        res.render('admin/viewSalesReport', { admin: true,title:'Sales Report' ,totalTrancations});
     } catch (error) {
         next(error)
     }
@@ -158,7 +158,7 @@ const salesReportFilter = async(req, res, next)=>{
             
         }
         
-        res.render('admin/viewSalesReport', { admin: true ,totalTrancations:transactions, date});
+        res.render('admin/viewSalesReport', { admin: true ,title:'Sales Report',totalTrancations:transactions, date});
 
 
     } catch (error) {
