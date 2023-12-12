@@ -14,8 +14,7 @@ module.exports = {
             },
             {
                 $match:{
-                    "productInforamtion.paymentStatus":'Paid',
-                    "productInforamtion.orderStatus":'Delivered'
+                    "productInforamtion.paymentStatus":'Paid'
                 }
             },
             {
@@ -55,6 +54,7 @@ module.exports = {
         ])
 
 
+
         const timestamp = Date.now();
         const formattedDate = format(new Date(timestamp), 'dd MMM yyyy, hh:mma');
 
@@ -73,17 +73,20 @@ module.exports = {
 
         if(percentageData.length > 0){
 
-            percentageData[3] = {
+            let length = percentageData.length;
+
+            percentageData[length++] = {
                 totalOrders:totalOrders,
                 totalAmount:totalAmount
             };
 
-            percentageData[4] = {
+            percentageData[length++] = {
                 date:formattedDate
             };
 
-            percentageData[5] = pendingOrders[0];
+            percentageData[length++] = pendingOrders[0];
         }
+
 
 
 
@@ -244,7 +247,6 @@ module.exports = {
             totalOrders : totalOrders.length > 0 ? totalOrders[0].totalOrders : 0,
             totalBrands : totalBrands.length > 0 ? totalBrands[0].totalBrands : 0
         }
-
         return totalData;
     },
     salesChart:async()=>{

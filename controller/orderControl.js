@@ -405,7 +405,7 @@ const orderInvoiceDownload = async(req, res, next) => {
 
                 setTimeout(function () {
                     window.history.back();
-                }, 2500);
+                }, 1600);
             };
         </script>
         </html>`;
