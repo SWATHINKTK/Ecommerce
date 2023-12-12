@@ -399,8 +399,6 @@ const orderInvoiceDownload = async(req, res, next) => {
         <script>
             window.onload = function () {
 
-                print();
-
                 const element = document.body; // You can specify any HTML element here
 
                 html2pdf(element);
