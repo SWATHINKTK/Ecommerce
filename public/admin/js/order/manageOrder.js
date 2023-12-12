@@ -76,6 +76,8 @@ updateOrderStatus.forEach((updateButton) => {
                         document.getElementById('adminOrderProgress-paymentStatus').innerHTML = '( Paid )'
                     }
 
+                    status.value == 'Return' ? window.location.reload() : ''; 
+
                     Swal.fire({
                         position:'bottom',
                         html: '<span class="font-weight-bold"><i class="mdi mdi-check-all" style="color: #2dd26c;"></i> Status Updated Successfully.</span>',

@@ -92,6 +92,12 @@ document.getElementById('editinfomation-submit').addEventListener('click',async 
             const submit = document.getElementById('editinfomation-submit');
             submit.style.display = 'none';
 
+            const cancelButton = document.getElementById('editInformation-Cancel');
+            cancelButton.style.display = 'none';
+
+            const resetPasswordLink = document.getElementById('reset-password-link');
+            resetPasswordLink.style.display = 'block';
+
            setTimeout(() => {
             result.style.display = 'none';
            }, 2000);

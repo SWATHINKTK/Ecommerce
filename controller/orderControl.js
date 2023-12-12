@@ -665,7 +665,6 @@ const updateOrderStatus = async (req, res, next) => {
                 // *** ORDER RETURN STATUS CHANGE ***
                 productToUpdate.orderStatus = 'Return';
                 productToUpdate.paymentStatus = 'Refund';
-                productToUpdate.reason = data.reason;
                 const updateStock = await productInfo.updateOne({ _id: data.productId }, { $inc: { stock: productToUpdate.productquantity } });
 
                 // Check Return Order Product Inventory Managed Or Not
