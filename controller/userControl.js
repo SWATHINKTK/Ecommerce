@@ -329,7 +329,11 @@ const passwordChange = async(req, res, next) => {
 // LOADING NEW USER REGISTER PAGE
 const LoadUserRegistrationPage = (req, res, next) => {
     try {
-        res.render('userRegistration',{ admin: false, title: 'User' }); 
+        if(req.query.refer){
+            res.render('userRegistration',{ admin: false, title: 'User' , referalId:req.query.refer });
+        }else{
+            res.render('userRegistration',{ admin: false, title: 'User' }); 
+        }
     } catch (error) {
         error.statusCode = 404;
         next(error);
