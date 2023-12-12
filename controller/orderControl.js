@@ -404,6 +404,10 @@ const orderInvoiceDownload = async(req, res, next) => {
                 const element = document.body; // You can specify any HTML element here
 
                 html2pdf(element);
+
+                setTimeout(function () {
+                    window.history.back();
+                }, 2500);
             };
         </script>
         </html>`;
