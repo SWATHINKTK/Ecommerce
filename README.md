@@ -4,6 +4,10 @@
 
 This repository houses the source code for a comprehensive e-commerce platform tailored for men's clothing. Leveraging technologies such as Node.js, Express.js, EJS, CSS, Bootstrap, Razorpay, and MongoDB, this project aims to deliver a seamless and secure shopping experience.
 
+## Explore the Website
+
+🌐 **Live Link: [Explore the Men's Clothing E-Commerce Website](https://malefocus.onrender.com)**
+
 ## Features
 
 ### User Authentication
@@ -81,5 +85,7 @@ This repository houses the source code for a comprehensive e-commerce platform t
 
 3. **Admin Capabilities:**
     - Admins can manage products, orders, offers, and coupons through the dedicated admin panel.
+
+
 
 
