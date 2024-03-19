@@ -231,7 +231,20 @@ const submitForgotPasswordEmail = async(req, res, next) => {
             const token = await generateRandomOtp(10);
             resetTokens[token] = { forgotEmail, timestamp: Date.now() };
             
-            const html = `<div style="width: 100%;background: #F5F5F5;text-align:center; height:60vh; padding-top:50px" ><h2>Click The ForgotPassword Link & Change Password</h2><h4><a href="https://mensfocus.shop/resetPassword?id=${token}">ResetLink</a></h4></div>`
+            const html = `<div style="width: 90%; background-color: #6666; padding: 20px;">
+                            <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+                                <div style="padding: 40px;">
+                                    <h2 style="font-size: 24px; color: #333333; margin-bottom: 20px; text-align: center;">Reset Your Password</h2>
+                                    <p style="font-size: 18px; color: #666666; margin-bottom: 30px; text-align: center;">Hi ${userExist.username},</p>
+                                    <p style="font-size: 18px; color: #666666; margin-bottom: 30px; text-align: center;">You've requested to reset your password. Click the button below to reset it:</p>
+                                    <div style="text-align: center; margin-bottom: 40px;">
+                                        <a href="https://yourwebsite.com/resetPassword?token=${token}" style="display: inline-block; padding: 12px 24px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px; font-size: 18px; border: none;">Reset Password</a>
+                                    </div>
+                                    <p style="font-size: 16px; color: #666666; margin-bottom: 20px; text-align: center;">If you didn't request a password reset, you can ignore this email.</p>
+                                    <p style="font-size: 16px; color: #666666; margin-bottom: 0; text-align: center;">Thank you!</p>
+                                </div>
+                            </div>
+                        </div>`
             const sendMail = await sendEmail( forgotEmail, html,null, 'Reset Password' );
 
             if(!sendMail){
@@ -332,6 +345,7 @@ const LoadUserRegistrationPage = (req, res, next) => {
         if(req.query.refer){
             res.render('userRegistration',{ admin: false, title: 'User' , referalId:req.query.refer });
         }else{
+            console.log('registration page load')
             res.render('userRegistration',{ admin: false, title: 'User' }); 
         }
     } catch (error) {
@@ -362,15 +376,18 @@ const storeSignupData = async (req, res, next) => {
        
 
         if (emailExist) {
+            console.log(emailExist)
             res.render('userRegistration', { admin: false,title:'Sign Up', data: 'User email is already exist' });
 
         } else {
-
             // Checking Register All field Data Present
             if (data.username != '' && data.email != '' && data.phonenumber != '' && data.password != '') {
+                console.log(data,1)
 
                 // Check Two Password Column Data Same
                 if (req.body.password === req.body.confirmPassword) {
+                console.log(data,2)
+
 
                     const strongPassword = await securePassword(password);
                     const user = {
@@ -391,7 +408,19 @@ const storeSignupData = async (req, res, next) => {
                         req.session.otp = otp;
                         
                         // Sending OTP to Thorough Email
-                        const html = `<div style="width: 100%;background: #F5FEFD;text-align:center"><h2>${user.username} Welcome Our Shopping Website</h2><h6>Verification OTP</h6><h3 style="color: red;">${otp}</h3><h2>Thank You For Joining...</h2></div>`
+                        const html = `<div style="width: 90%; background-color: #007bff; padding: 20px;">
+                                        <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+                                            <div style="padding: 40px;">
+                                                <h2 style="font-size: 24px; color: #333333; margin-bottom: 20px; text-align: center;">Hi ${user.username}, Welcome to Our Website!</h2>
+                                                <p style="font-size: 18px; color: #666666; margin-bottom: 30px; text-align: center;">Please use the following OTP to verify your account:</p>
+                                                <div style="text-align: center; margin-bottom: 40px;">
+                                                    <h1 style="font-size: 48px; color: #ffffff; background-color: #007bff; padding: 10px 20px; border-radius: 5px;">${otp}</h1>
+                                                </div>
+                                                <p style="font-size: 16px; color: #666666; margin-bottom: 20px; text-align: center;">This OTP is valid for a limited time.</p>
+                                                <p style="font-size: 16px; color: #666666; margin-bottom: 0; text-align: center;">Thank you for joining!</p>
+                                            </div>
+                                        </div>
+                                    </div>`
                         await sendEmail(user.email, html);
 
                         req.session.startTime = Date.now();

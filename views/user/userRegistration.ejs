@@ -10,7 +10,7 @@
 					<div class="card fat">
 						<div class="card-body">
 							<h4 class="card-title text-center">Register</h4>
-                            <h6 class="text-danger text-center" id="verification-Result" style="display: none;"><%= locals.data ? `&#10060;$`  : '' %></h6>
+                            <h6 class="text-danger text-center" id="verification-Result"><%= locals.data ? data  : '' %></h6>
                             <form id="signupForm" method="POST" action="/signup" onsubmit="return validateRegister()" novalidate>
 
                                 <input type="hidden" name="refer" id="" value="<%= locals.referalId ? referalId : '' %>">
